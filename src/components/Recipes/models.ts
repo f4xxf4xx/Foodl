@@ -22,8 +22,40 @@ export enum IngredientType {
 
 export interface Recipe {
     recipeId: number;
+    cookbookId: number;
+    recipeTypeId: number;
     name: string;
+    description: string;
+    recipeType: RecipeType;
+    duration: number;
     ingredientItems: IngredientItem[];
+    recipeSteps: RecipeStep[];
+    recipeTagItems: RecipeTagItem[];
+}
+
+export interface RecipeStep {
+    recipeStepId: number;
+    recipeId: number;
+    order: number;
+    description: string;
+    imageUrl: string;
+}
+
+export interface RecipeTagItem {
+    recipeTagItemId: number;
+    recipeId: number;
+    recipeTagId: number;
+    recipeTag: RecipeTag;
+}
+
+export interface RecipeTag {
+    recipeTagId: number;
+    name: string;
+}
+
+export interface RecipeType {
+    recipeTypeId: number;
+    name: string;
 }
 
 export interface InputAddIngredientItem {

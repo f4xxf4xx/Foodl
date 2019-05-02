@@ -1,7 +1,8 @@
 import React, { Component, PureComponent } from 'react';
 import { Fetcher } from '../../services/Fetcher';
-import { Button } from 'reactstrap';
+import { Button, Container } from 'reactstrap';
 import { Recipe, Ingredient, InputAddIngredientItem } from './models';
+import Header from '../Headers/Header';
 
 type State = {
   recipe: Recipe;
@@ -69,28 +70,37 @@ export class RecipeView extends PureComponent<any, State> {
     return (
       <div>
         <h1>{recipe.name}</h1>
-        <h2>Current ingredients</h2>
-        {recipe.ingredientItems && recipe.ingredientItems.map((ingredientItem, index) => {
-          const ingredientName = this.state.ingredients.find(ingredient => ingredient.ingredientId === ingredientItem.ingredientId).name;
-          return <li key={index}>{ingredientName}</li>
-        })}
-        <h2>Add ingredient</h2>
+        <p>{recipe.description}</p>
+        <h2>Ingredients</h2>
         <ul>
-          {ingredients.map((ingredient, index) =>
-            <li key={index}>{ingredient.name} <Button onClick={() => this.addIngredient(recipe.recipeId, ingredient.name)}>ADD TO RECIPE</Button></li>
-          )}
+          {recipe.ingredientItems && recipe.ingredientItems.map((ingredientItem, index) => {
+            //const ingredientName = this.state.ingredients.find(ingredient => ingredient.ingredientId === ingredientItem.ingredientId).name;
+            return <li key={index}>{ingredientItem.ingredient.name} <Button onClick={() => { }}>Add to cart</Button></li>
+          })}
         </ul>
+        <h2>Steps</h2>
+        <ol>
+          {recipe.recipeSteps && recipe.recipeSteps.map((recipeStep, index) => {
+            return <li key={index}>{recipeStep.description}</li>
+          })}
+        </ol>
+        <h2>Add ingredient</h2>
+        <select>
+          {ingredients.map((ingredient, index) =>
+            <option key={index}>{ingredient.name}</option>
+          )}
+        </select>
       </div>
     );
   }
 
   render() {
     return (
-      <>
+      <Container className="mt--7" fluid>
         {!this.state.loadingRecipe && !this.state.loadingIngredient &&
           this.renderRecipe()
         }
-      </>
+      </Container>
     );
   }
 }

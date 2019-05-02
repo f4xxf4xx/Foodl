@@ -19,7 +19,18 @@
     "react-scripts": "2.1.8",
     "react-spinners": "^0.5.4",
     "reactstrap": "^6.5.0",
-    "typescript": "^3.4.3"
+    "typescript": "^3.4.3",
+    "chart.js": "2.7.3",
+    "classnames": "2.2.6",
+    "moment": "2.24.0",
+    "node-sass": "4.11.0",
+    "nouislider": "13.1.1",
+    "react-chartjs-2": "2.7.4",
+    "react-copy-to-clipboard": "5.0.1",
+    "react-datetime": "2.16.3",
+    "react-google-maps": "9.4.5",
+    "@types/googlemaps": "3.30.18",
+    "@types/markerclustererplus": "2.1.33"
   },
   "scripts": {
     "start": "react-scripts start",
