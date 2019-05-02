@@ -3,20 +3,19 @@ import { Route, Switch } from "react-router-dom";
 // reactstrap components
 import { Container } from "reactstrap";
 // core components
-import AdminNavbar from "../components/Navbars/AdminNavbar.jsx";
-import AdminFooter from "../components/Footers/AdminFooter.jsx";
-import Sidebar from "../components/Sidebar/Sidebar.jsx";
+import AdminNavbar from "../components/Navbars/AdminNavbar";
+import AdminFooter from "../components/Footers/AdminFooter";
+import Sidebar from "../components/Sidebar/Sidebar";
 
-import routes from "../routes.js";
-import { RecipeView } from "../components/Recipes/RecipeView.tsx";
-import { RecipesView } from "../components/Recipes/RecipesView.tsx";
-import Index from "../views/Index.tsx";
+import routes from "../routes";
+import { RecipeView } from "../components/Recipes/RecipeView";
+import { RecipesView } from "../components/Recipes/RecipesView";
+import Index from "../views/Index";
 
-class Admin extends React.Component {
+class Admin extends React.Component<any> {
   componentDidUpdate(e) {
     document.documentElement.scrollTop = 0;
     document.scrollingElement.scrollTop = 0;
-    this.refs.mainContent.scrollTop = 0;
   }
 
   render() {

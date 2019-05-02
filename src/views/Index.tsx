@@ -29,7 +29,7 @@ import {
   chartExample2
 } from "../variables/charts";
 
-import Header from "../components/Headers/Header.jsx";
+import Header from "../components/Headers/Header";
 
 class Index extends React.Component {
   state = {

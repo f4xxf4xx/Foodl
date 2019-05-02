@@ -1,10 +1,10 @@
-import Index from "./views/Index.tsx";
-import Profile from "./views/examples/Profile.jsx";
-import Maps from "./views/examples/Maps.jsx";
-import Register from "./views/examples/Register.jsx";
-import Login from "./views/examples/Login.jsx";
-import Tables from "./views/examples/Tables.jsx";
-import Icons from "./views/examples/Icons.jsx";
+import Index from "./views/Index";
+import Profile from "./views/examples/Profile";
+import Maps from "./views/examples/Maps";
+import Register from "./views/examples/Register";
+import Login from "./views/examples/Login";
+import Tables from "./views/examples/Tables";
+import Icons from "./views/examples/Icons";
 import { RecipesView } from "./components/Recipes/RecipesView";
 import { RecipeView } from "./components/Recipes/RecipeView";
 
@@ -14,7 +14,7 @@ var routes = [
     name: "Dashboard",
     icon: "ni ni-tv-2 text-primary",
     component: Index,
-    layout: "/admin"
+    layout: ""
   },
   {
     path: "/recipes",
@@ -35,42 +35,42 @@ var routes = [
     name: "Icons",
     icon: "ni ni-planet text-blue",
     component: Icons,
-    layout: "/admin"
+    layout: ""
   },
   {
     path: "/maps",
     name: "Maps",
     icon: "ni ni-pin-3 text-orange",
     component: Maps,
-    layout: "/admin"
+    layout: ""
   },
   {
     path: "/user-profile",
     name: "User Profile",
     icon: "ni ni-single-02 text-yellow",
     component: Profile,
-    layout: "/admin"
+    layout: ""
   },
   {
     path: "/tables",
     name: "Tables",
     icon: "ni ni-bullet-list-67 text-red",
     component: Tables,
-    layout: "/admin"
+    layout: ""
   },
   {
     path: "/login",
     name: "Login",
     icon: "ni ni-key-25 text-info",
     component: Login,
-    layout: "/auth"
+    layout: ""
   },
   {
     path: "/register",
     name: "Register",
     icon: "ni ni-circle-08 text-pink",
     component: Register,
-    layout: "/auth"
+    layout: ""
   }
 ];
 export default routes;

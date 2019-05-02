@@ -21,7 +21,7 @@ import {
   UncontrolledTooltip
 } from "reactstrap";
 // core components
-import Header from "../../components/Headers/Header.jsx";
+import Header from "../../components/Headers/Header";
 
 class Tables extends React.Component {
   render() {
@@ -54,7 +54,6 @@ class Tables extends React.Component {
                         <Media className="align-items-center">
                           <a
                             className="avatar rounded-circle mr-3"
-                            href="#pablo"
                             onClick={e => e.preventDefault()}
                           >
                           </a>
@@ -76,7 +75,6 @@ class Tables extends React.Component {
                         <div className="avatar-group">
                           <a
                             className="avatar avatar-sm"
-                            href="#pablo"
                             id="tooltip742438047"
                             onClick={e => e.preventDefault()}
                           >
@@ -94,7 +92,6 @@ class Tables extends React.Component {
                           </UncontrolledTooltip>
                           <a
                             className="avatar avatar-sm"
-                            href="#pablo"
                             id="tooltip941738690"
                             onClick={e => e.preventDefault()}
                           >
@@ -112,7 +109,6 @@ class Tables extends React.Component {
                           </UncontrolledTooltip>
                           <a
                             className="avatar avatar-sm"
-                            href="#pablo"
                             id="tooltip804044742"
                             onClick={e => e.preventDefault()}
                           >
@@ -130,7 +126,6 @@ class Tables extends React.Component {
                           </UncontrolledTooltip>
                           <a
                             className="avatar avatar-sm"
-                            href="#pablo"
                             id="tooltip996637554"
                             onClick={e => e.preventDefault()}
                           >
@@ -164,7 +159,6 @@ class Tables extends React.Component {
                         <UncontrolledDropdown>
                           <DropdownToggle
                             className="btn-icon-only text-light"
-                            href="#pablo"
                             role="button"
                             size="sm"
                             color=""
@@ -200,7 +194,6 @@ class Tables extends React.Component {
                         <Media className="align-items-center">
                           <a
                             className="avatar rounded-circle mr-3"
-                            href="#pablo"
                             onClick={e => e.preventDefault()}
                           >
                           </a>
@@ -222,7 +215,6 @@ class Tables extends React.Component {
                         <div className="avatar-group">
                           <a
                             className="avatar avatar-sm"
-                            href="#pablo"
                             id="tooltip746418347"
                             onClick={e => e.preventDefault()}
                           >
@@ -240,7 +232,6 @@ class Tables extends React.Component {
                           </UncontrolledTooltip>
                           <a
                             className="avatar avatar-sm"
-                            href="#pablo"
                             id="tooltip102182364"
                             onClick={e => e.preventDefault()}
                           >
@@ -258,7 +249,6 @@ class Tables extends React.Component {
                           </UncontrolledTooltip>
                           <a
                             className="avatar avatar-sm"
-                            href="#pablo"
                             id="tooltip406489510"
                             onClick={e => e.preventDefault()}
                           >
@@ -276,7 +266,6 @@ class Tables extends React.Component {
                           </UncontrolledTooltip>
                           <a
                             className="avatar avatar-sm"
-                            href="#pablo"
                             id="tooltip476840018"
                             onClick={e => e.preventDefault()}
                           >
@@ -310,7 +299,6 @@ class Tables extends React.Component {
                         <UncontrolledDropdown>
                           <DropdownToggle
                             className="btn-icon-only text-light"
-                            href="#pablo"
                             role="button"
                             size="sm"
                             color=""
@@ -346,7 +334,6 @@ class Tables extends React.Component {
                         <Media className="align-items-center">
                           <a
                             className="avatar rounded-circle mr-3"
-                            href="#pablo"
                             onClick={e => e.preventDefault()}
                           >
                           </a>
@@ -368,7 +355,6 @@ class Tables extends React.Component {
                         <div className="avatar-group">
                           <a
                             className="avatar avatar-sm"
-                            href="#pablo"
                             id="tooltip753056318"
                             onClick={e => e.preventDefault()}
                           >
@@ -386,7 +372,6 @@ class Tables extends React.Component {
                           </UncontrolledTooltip>
                           <a
                             className="avatar avatar-sm"
-                            href="#pablo"
                             id="tooltip441753266"
                             onClick={e => e.preventDefault()}
                           >
@@ -404,7 +389,6 @@ class Tables extends React.Component {
                           </UncontrolledTooltip>
                           <a
                             className="avatar avatar-sm"
-                            href="#pablo"
                             id="tooltip188462246"
                             onClick={e => e.preventDefault()}
                           >
@@ -422,7 +406,6 @@ class Tables extends React.Component {
                           </UncontrolledTooltip>
                           <a
                             className="avatar avatar-sm"
-                            href="#pablo"
                             id="tooltip621168444"
                             onClick={e => e.preventDefault()}
                           >
@@ -456,7 +439,6 @@ class Tables extends React.Component {
                         <UncontrolledDropdown>
                           <DropdownToggle
                             className="btn-icon-only text-light"
-                            href="#pablo"
                             role="button"
                             size="sm"
                             color=""
@@ -492,7 +474,6 @@ class Tables extends React.Component {
                         <Media className="align-items-center">
                           <a
                             className="avatar rounded-circle mr-3"
-                            href="#pablo"
                             onClick={e => e.preventDefault()}
                           >
                           </a>
@@ -514,7 +495,6 @@ class Tables extends React.Component {
                         <div className="avatar-group">
                           <a
                             className="avatar avatar-sm"
-                            href="#pablo"
                             id="tooltip875258217"
                             onClick={e => e.preventDefault()}
                           >
@@ -532,7 +512,6 @@ class Tables extends React.Component {
                           </UncontrolledTooltip>
                           <a
                             className="avatar avatar-sm"
-                            href="#pablo"
                             id="tooltip834416663"
                             onClick={e => e.preventDefault()}
                           >
@@ -550,7 +529,6 @@ class Tables extends React.Component {
                           </UncontrolledTooltip>
                           <a
                             className="avatar avatar-sm"
-                            href="#pablo"
                             id="tooltip372449339"
                             onClick={e => e.preventDefault()}
                           >
@@ -568,7 +546,6 @@ class Tables extends React.Component {
                           </UncontrolledTooltip>
                           <a
                             className="avatar avatar-sm"
-                            href="#pablo"
                             id="tooltip108714769"
                             onClick={e => e.preventDefault()}
                           >
@@ -602,7 +579,6 @@ class Tables extends React.Component {
                         <UncontrolledDropdown>
                           <DropdownToggle
                             className="btn-icon-only text-light"
-                            href="#pablo"
                             role="button"
                             size="sm"
                             color=""
@@ -638,7 +614,6 @@ class Tables extends React.Component {
                         <Media className="align-items-center">
                           <a
                             className="avatar rounded-circle mr-3"
-                            href="#pablo"
                             onClick={e => e.preventDefault()}
                           >
                             <img
@@ -664,7 +639,6 @@ class Tables extends React.Component {
                         <div className="avatar-group">
                           <a
                             className="avatar avatar-sm"
-                            href="#pablo"
                             id="tooltip664029969"
                             onClick={e => e.preventDefault()}
                           >
@@ -682,7 +656,6 @@ class Tables extends React.Component {
                           </UncontrolledTooltip>
                           <a
                             className="avatar avatar-sm"
-                            href="#pablo"
                             id="tooltip806693074"
                             onClick={e => e.preventDefault()}
                           >
@@ -700,7 +673,6 @@ class Tables extends React.Component {
                           </UncontrolledTooltip>
                           <a
                             className="avatar avatar-sm"
-                            href="#pablo"
                             id="tooltip844096937"
                             onClick={e => e.preventDefault()}
                           >
@@ -718,7 +690,6 @@ class Tables extends React.Component {
                           </UncontrolledTooltip>
                           <a
                             className="avatar avatar-sm"
-                            href="#pablo"
                             id="tooltip757459971"
                             onClick={e => e.preventDefault()}
                           >
@@ -752,7 +723,6 @@ class Tables extends React.Component {
                         <UncontrolledDropdown>
                           <DropdownToggle
                             className="btn-icon-only text-light"
-                            href="#pablo"
                             role="button"
                             size="sm"
                             color=""
@@ -793,9 +763,7 @@ class Tables extends React.Component {
                     >
                       <PaginationItem className="disabled">
                         <PaginationLink
-                          href="#pablo"
                           onClick={e => e.preventDefault()}
-                          tabIndex="-1"
                         >
                           <i className="fas fa-angle-left" />
                           <span className="sr-only">Previous</span>
@@ -867,7 +835,6 @@ class Tables extends React.Component {
                         <Media className="align-items-center">
                           <a
                             className="avatar rounded-circle mr-3"
-                            href="#pablo"
                             onClick={e => e.preventDefault()}
                           >
                           </a>
@@ -889,7 +856,6 @@ class Tables extends React.Component {
                         <div className="avatar-group">
                           <a
                             className="avatar avatar-sm"
-                            href="#pablo"
                             id="tooltip731399078"
                             onClick={e => e.preventDefault()}
                           >
@@ -907,7 +873,6 @@ class Tables extends React.Component {
                           </UncontrolledTooltip>
                           <a
                             className="avatar avatar-sm"
-                            href="#pablo"
                             id="tooltip491083084"
                             onClick={e => e.preventDefault()}
                           >
@@ -925,7 +890,6 @@ class Tables extends React.Component {
                           </UncontrolledTooltip>
                           <a
                             className="avatar avatar-sm"
-                            href="#pablo"
                             id="tooltip528540780"
                             onClick={e => e.preventDefault()}
                           >
@@ -943,7 +907,6 @@ class Tables extends React.Component {
                           </UncontrolledTooltip>
                           <a
                             className="avatar avatar-sm"
-                            href="#pablo"
                             id="tooltip237898869"
                             onClick={e => e.preventDefault()}
                           >
@@ -977,7 +940,6 @@ class Tables extends React.Component {
                         <UncontrolledDropdown>
                           <DropdownToggle
                             className="btn-icon-only text-light"
-                            href="#pablo"
                             role="button"
                             size="sm"
                             color=""
@@ -1013,7 +975,6 @@ class Tables extends React.Component {
                         <Media className="align-items-center">
                           <a
                             className="avatar rounded-circle mr-3"
-                            href="#pablo"
                             onClick={e => e.preventDefault()}
                           >
                           </a>
@@ -1035,7 +996,6 @@ class Tables extends React.Component {
                         <div className="avatar-group">
                           <a
                             className="avatar avatar-sm"
-                            href="#pablo"
                             id="tooltip188614932"
                             onClick={e => e.preventDefault()}
                           >
@@ -1053,7 +1013,6 @@ class Tables extends React.Component {
                           </UncontrolledTooltip>
                           <a
                             className="avatar avatar-sm"
-                            href="#pablo"
                             id="tooltip66535734"
                             onClick={e => e.preventDefault()}
                           >
@@ -1071,7 +1030,6 @@ class Tables extends React.Component {
                           </UncontrolledTooltip>
                           <a
                             className="avatar avatar-sm"
-                            href="#pablo"
                             id="tooltip427561578"
                             onClick={e => e.preventDefault()}
                           >
@@ -1089,7 +1047,6 @@ class Tables extends React.Component {
                           </UncontrolledTooltip>
                           <a
                             className="avatar avatar-sm"
-                            href="#pablo"
                             id="tooltip904098289"
                             onClick={e => e.preventDefault()}
                           >
@@ -1123,7 +1080,6 @@ class Tables extends React.Component {
                         <UncontrolledDropdown>
                           <DropdownToggle
                             className="btn-icon-only text-light"
-                            href="#pablo"
                             role="button"
                             size="sm"
                             color=""
@@ -1159,7 +1115,6 @@ class Tables extends React.Component {
                         <Media className="align-items-center">
                           <a
                             className="avatar rounded-circle mr-3"
-                            href="#pablo"
                             onClick={e => e.preventDefault()}
                           >
                           </a>
@@ -1181,7 +1136,6 @@ class Tables extends React.Component {
                         <div className="avatar-group">
                           <a
                             className="avatar avatar-sm"
-                            href="#pablo"
                             id="tooltip707904950"
                             onClick={e => e.preventDefault()}
                           >
@@ -1194,7 +1148,6 @@ class Tables extends React.Component {
                           </UncontrolledTooltip>
                           <a
                             className="avatar avatar-sm"
-                            href="#pablo"
                             id="tooltip353988222"
                             onClick={e => e.preventDefault()}
                           >
@@ -1212,7 +1165,6 @@ class Tables extends React.Component {
                           </UncontrolledTooltip>
                           <a
                             className="avatar avatar-sm"
-                            href="#pablo"
                             id="tooltip467171202"
                             onClick={e => e.preventDefault()}
                           >
@@ -1230,7 +1182,6 @@ class Tables extends React.Component {
                           </UncontrolledTooltip>
                           <a
                             className="avatar avatar-sm"
-                            href="#pablo"
                             id="tooltip362118155"
                             onClick={e => e.preventDefault()}
                           >
@@ -1264,7 +1215,6 @@ class Tables extends React.Component {
                         <UncontrolledDropdown>
                           <DropdownToggle
                             className="btn-icon-only text-light"
-                            href="#pablo"
                             role="button"
                             size="sm"
                             color=""
@@ -1300,7 +1250,6 @@ class Tables extends React.Component {
                         <Media className="align-items-center">
                           <a
                             className="avatar rounded-circle mr-3"
-                            href="#pablo"
                             onClick={e => e.preventDefault()}
                           >
                           </a>
@@ -1322,7 +1271,6 @@ class Tables extends React.Component {
                         <div className="avatar-group">
                           <a
                             className="avatar avatar-sm"
-                            href="#pablo"
                             id="tooltip226319315"
                             onClick={e => e.preventDefault()}
                           >
@@ -1340,7 +1288,6 @@ class Tables extends React.Component {
                           </UncontrolledTooltip>
                           <a
                             className="avatar avatar-sm"
-                            href="#pablo"
                             id="tooltip711961370"
                             onClick={e => e.preventDefault()}
                           >
@@ -1358,7 +1305,6 @@ class Tables extends React.Component {
                           </UncontrolledTooltip>
                           <a
                             className="avatar avatar-sm"
-                            href="#pablo"
                             id="tooltip216246707"
                             onClick={e => e.preventDefault()}
                           >
@@ -1376,7 +1322,6 @@ class Tables extends React.Component {
                           </UncontrolledTooltip>
                           <a
                             className="avatar avatar-sm"
-                            href="#pablo"
                             id="tooltip638048561"
                             onClick={e => e.preventDefault()}
                           >
@@ -1410,7 +1355,6 @@ class Tables extends React.Component {
                         <UncontrolledDropdown>
                           <DropdownToggle
                             className="btn-icon-only text-light"
-                            href="#pablo"
                             role="button"
                             size="sm"
                             color=""
@@ -1446,7 +1390,6 @@ class Tables extends React.Component {
                         <Media className="align-items-center">
                           <a
                             className="avatar rounded-circle mr-3"
-                            href="#pablo"
                             onClick={e => e.preventDefault()}
                           >
                             <img
@@ -1472,7 +1415,6 @@ class Tables extends React.Component {
                         <div className="avatar-group">
                           <a
                             className="avatar avatar-sm"
-                            href="#pablo"
                             id="tooltip781594051"
                             onClick={e => e.preventDefault()}
                           >
@@ -1490,7 +1432,6 @@ class Tables extends React.Component {
                           </UncontrolledTooltip>
                           <a
                             className="avatar avatar-sm"
-                            href="#pablo"
                             id="tooltip840372212"
                             onClick={e => e.preventDefault()}
                           >
@@ -1508,7 +1449,6 @@ class Tables extends React.Component {
                           </UncontrolledTooltip>
                           <a
                             className="avatar avatar-sm"
-                            href="#pablo"
                             id="tooltip497647175"
                             onClick={e => e.preventDefault()}
                           >
@@ -1526,7 +1466,6 @@ class Tables extends React.Component {
                           </UncontrolledTooltip>
                           <a
                             className="avatar avatar-sm"
-                            href="#pablo"
                             id="tooltip951447946"
                             onClick={e => e.preventDefault()}
                           >
@@ -1560,7 +1499,6 @@ class Tables extends React.Component {
                         <UncontrolledDropdown>
                           <DropdownToggle
                             className="btn-icon-only text-light"
-                            href="#pablo"
                             role="button"
                             size="sm"
                             color=""

@@ -14,7 +14,7 @@ import {
   Col
 } from "reactstrap";
 // core components
-import UserHeader from "../../components/Headers/UserHeader.jsx";
+import UserHeader from "../../components/Headers/UserHeader";
 
 class Profile extends React.Component {
   render() {
@@ -44,7 +44,6 @@ class Profile extends React.Component {
                     <Button
                       className="mr-4"
                       color="info"
-                      href="#pablo"
                       onClick={e => e.preventDefault()}
                       size="sm"
                     >
@@ -53,7 +52,6 @@ class Profile extends React.Component {
                     <Button
                       className="float-right"
                       color="default"
-                      href="#pablo"
                       onClick={e => e.preventDefault()}
                       size="sm"
                     >
@@ -120,7 +118,6 @@ class Profile extends React.Component {
                     <Col className="text-right" xs="4">
                       <Button
                         color="primary"
-                        href="#pablo"
                         onClick={e => e.preventDefault()}
                         size="sm"
                       >

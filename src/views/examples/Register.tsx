@@ -30,7 +30,6 @@ class Register extends React.Component {
                 <Button
                   className="btn-neutral btn-icon mr-4"
                   color="default"
-                  href="#pablo"
                   onClick={e => e.preventDefault()}
                 >
                   <span className="btn-inner--text">Github</span>
@@ -38,7 +37,6 @@ class Register extends React.Component {
                 <Button
                   className="btn-neutral btn-icon"
                   color="default"
-                  href="#pablo"
                   onClick={e => e.preventDefault()}
                 >
                   <span className="btn-inner--text">Google</span>

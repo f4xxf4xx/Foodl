@@ -12,10 +12,9 @@ import {
   UncontrolledTooltip
 } from "reactstrap";
 // core components
-import Header from "../../components/Headers/Header.jsx";
+import Header from "../../components/Headers/Header";
 
-class Icons extends React.Component {
-  state = {};
+class Icons extends React.Component<any, any> {
   render() {
     return (
       <>

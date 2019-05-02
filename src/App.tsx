@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Route, Switch } from 'react-router';
-import AdminLayout from "./layouts/Admin.jsx";
+import AdminLayout from "./layouts/Admin";
 
 class App extends Component {
   render() {

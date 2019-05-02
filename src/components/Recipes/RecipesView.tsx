@@ -1,6 +1,6 @@
 import React, { Component, PureComponent } from 'react';
 import { Fetcher } from '../../services/Fetcher';
-import { Button } from 'reactstrap';
+import { Button, Container } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import { Recipe } from './models';
 
@@ -53,7 +53,7 @@ export class RecipesView extends PureComponent<any, State> {
     }
 
     Fetcher.delete('api/recipe/delete', deleteRecipeInput)
-      .then(response => 
+      .then(response =>
         this.setState({
           recipes: this.state.recipes.filter(i => i.recipeId !== recipeId)
         })
@@ -85,13 +85,13 @@ export class RecipesView extends PureComponent<any, State> {
 
   render() {
     return (
-      <>
+      <Container className="mt--7" fluid>
         {!this.state.loading &&
           this.renderRecipes()
         }
         <input type="text" onChange={this.updateRecipeName} value={this.state.newRecipeName}></input>
         <button onClick={this.addRecipe}>Create recipe</button>
-      </>
+      </Container>
     );
   }
 }

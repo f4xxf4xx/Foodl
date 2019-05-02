@@ -18,7 +18,7 @@ class Footer extends React.Component {
                 rel="noopener noreferrer"
                 target="_blank"
               >
-                Creative Tim
+                Foodl
               </a>
             </div>
           </Col>
@@ -31,7 +31,7 @@ class Footer extends React.Component {
                   rel="noopener noreferrer"
                   target="_blank"
                 >
-                  Creative Tim
+                  Foodl
                 </NavLink>
               </NavItem>
 
