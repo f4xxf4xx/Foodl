@@ -14,7 +14,7 @@ import {
   Col
 } from "reactstrap";
 // core components
-import UserHeader from "../../components/Headers/UserHeader";
+import UserHeader from "../Layout/UserHeader";
 
 class Profile extends React.Component {
   render() {

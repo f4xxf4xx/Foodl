@@ -1,16 +1,14 @@
 import React from "react";
 import { Route, Switch } from "react-router-dom";
-// reactstrap components
 import { Container } from "reactstrap";
-// core components
-import AdminNavbar from "../components/Navbars/AdminNavbar";
-import AdminFooter from "../components/Footers/AdminFooter";
-import Sidebar from "../components/Sidebar/Sidebar";
+import AdminFooter from "../components/Layout/AdminFooter";
+import Sidebar from "../components/Layout/Sidebar";
 
 import routes from "../routes";
 import { RecipeView } from "../components/Recipes/RecipeView";
 import { RecipesView } from "../components/Recipes/RecipesView";
-import Index from "../views/Index";
+import Index from "../components/Views/Index";
+import Icons from "../components/Views/Icons";
 
 class Admin extends React.Component<any> {
   componentDidUpdate(e) {
@@ -30,11 +28,7 @@ class Admin extends React.Component<any> {
             imgAlt: "..."
           }}
         />
-        <div className="main-content" ref="mainContent">
-          <AdminNavbar
-            {...this.props}
-            brandText={"hehe"}
-          />
+        <div className="main-content" ref="mainContent">          
           <Switch>
             <Route
               path={"/index"}
@@ -43,6 +37,10 @@ class Admin extends React.Component<any> {
             <Route
               path={"/recipes"}
               component={RecipesView}
+            />
+            <Route
+              path={"/icons"}
+              component={Icons}
             />
             <Route
               path={"/recipe/:id"}

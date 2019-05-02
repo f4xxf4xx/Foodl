@@ -1,10 +1,8 @@
 import React from "react";
-
-// reactstrap components
-import { Card, CardBody, CardTitle, Container, Row, Col } from "reactstrap";
+import { Container, Row } from "reactstrap";
 import Statistic from "./Statistic";
 
-class Header extends React.Component {
+class HeaderStatistics extends React.Component {
   render() {
     return (
       <>
@@ -45,4 +43,4 @@ class Header extends React.Component {
   }
 }
 
-export default Header;
+export default HeaderStatistics;

@@ -20,15 +20,11 @@ import {
   Row,
   UncontrolledTooltip
 } from "reactstrap";
-// core components
-import Header from "../../components/Headers/Header";
 
 class Tables extends React.Component {
   render() {
     return (
       <>
-        <Header />
-        {/* Page content */}
         <Container className="mt--7" fluid>
           {/* Table */}
           <Row>

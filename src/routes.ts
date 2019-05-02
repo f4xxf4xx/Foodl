@@ -1,33 +1,25 @@
-import Index from "./views/Index";
-import Profile from "./views/examples/Profile";
-import Maps from "./views/examples/Maps";
-import Register from "./views/examples/Register";
-import Login from "./views/examples/Login";
-import Tables from "./views/examples/Tables";
-import Icons from "./views/examples/Icons";
+import Index from "./components/Views/Index";
+import Profile from "./components/Views/Profile";
+import Maps from "./components/Views/Maps";
+import Register from "./components/Views/Register";
+import Login from "./components/Views/Login";
+import Tables from "./components/Views/Tables";
+import Icons from "./components/Views/Icons";
 import { RecipesView } from "./components/Recipes/RecipesView";
-import { RecipeView } from "./components/Recipes/RecipeView";
 
 var routes = [
   {
     path: "/index",
-    name: "Dashboard",
-    icon: "ni ni-tv-2 text-primary",
+    name: "Home",
+    icon: "fas fa-home text-primary",
     component: Index,
     layout: ""
   },
   {
     path: "/recipes",
     name: "Recipes",
-    icon: "ni ni-tv-2 text-primary",
+    icon: "fas fa-book text-orange",
     component: RecipesView,
-    layout: ""
-  },
-  {
-    path: "/recipe/:id",
-    name: "Recipe",
-    icon: "ni ni-tv-2 text-primary",
-    component: RecipeView,
     layout: ""
   },
   {

@@ -3,6 +3,9 @@ import { Fetcher } from '../../services/Fetcher';
 import { Button, Container } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import { Recipe } from './models';
+import TopNavbar from '../Layout/TopNavbar';
+import Header from '../Layout/Header';
+import CardElement from '../Layout/CardElement';
 
 type State = {
   recipes: Recipe[];
@@ -85,13 +88,23 @@ export class RecipesView extends PureComponent<any, State> {
 
   render() {
     return (
-      <Container className="mt--7" fluid>
-        {!this.state.loading &&
-          this.renderRecipes()
-        }
-        <input type="text" onChange={this.updateRecipeName} value={this.state.newRecipeName}></input>
-        <button onClick={this.addRecipe}>Create recipe</button>
-      </Container>
+      <>
+        <TopNavbar
+          title={"Recipes"}
+        />
+        <Header />
+        <Container className="mt--7" fluid>
+          <CardElement
+            col="12"
+          >
+            {!this.state.loading &&
+              this.renderRecipes()
+            }
+            <input type="text" onChange={this.updateRecipeName} value={this.state.newRecipeName}></input>
+            <button onClick={this.addRecipe}>Create recipe</button>
+          </CardElement>
+        </Container>
+      </>
     );
   }
 }

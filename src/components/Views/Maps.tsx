@@ -1,18 +1,11 @@
 import React from "react";
-// react plugin used to create google maps
 import {
   withScriptjs,
   withGoogleMap,
   GoogleMap,
   Marker
 } from "react-google-maps";
-
-// reactstrap components
 import { Card, Container, Row } from "reactstrap";
-
-// core components
-import Header from "../../components/Headers/Header";
-// mapTypeId={google.maps.MapTypeId.ROADMAP}
 const MapWrapper = withScriptjs(
   withGoogleMap(props => (
     <GoogleMap
@@ -73,8 +66,6 @@ class Maps extends React.Component {
   render() {
     return (
       <>
-        <Header />
-        {/* Page content */}
         <Container className="mt--7" fluid>
           <Row>
             <div className="col">

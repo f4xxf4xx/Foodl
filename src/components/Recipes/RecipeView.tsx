@@ -2,7 +2,6 @@ import React, { Component, PureComponent } from 'react';
 import { Fetcher } from '../../services/Fetcher';
 import { Button, Container } from 'reactstrap';
 import { Recipe, Ingredient, InputAddIngredientItem } from './models';
-import Header from '../Headers/Header';
 
 type State = {
   recipe: Recipe;
