@@ -26,9 +26,7 @@ class Icons extends React.Component<any, State> {
   render() {
     return (
       <>
-        <TopNavbar
-          title={"Icons"}
-        />
+        <TopNavbar />
         <Header />
         <Container className="mt--7" fluid>
           <Row>

@@ -2,6 +2,7 @@ import React, { Component, PureComponent } from 'react';
 import { Fetcher } from '../../services/Fetcher';
 import { Button, Container } from 'reactstrap';
 import { Recipe, Ingredient, InputAddIngredientItem } from './models';
+import { withRouter } from 'react-router-dom';
 
 type State = {
   recipe: Recipe;
@@ -10,7 +11,7 @@ type State = {
   loadingIngredient: boolean;
 }
 
-export class RecipeView extends PureComponent<any, State> {
+class RecipeView extends PureComponent<any, State> {
   constructor(props: any) {
     super(props);
     this.state = {
@@ -103,3 +104,5 @@ export class RecipeView extends PureComponent<any, State> {
     );
   }
 }
+
+export default withRouter(RecipeView);
