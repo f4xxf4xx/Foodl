@@ -8,13 +8,14 @@ type Props = {
     value: number;
     icon: string;
     bgColor: string;
+    col: string;
 }
 
 class Statistic extends React.Component<Props> {
     render() {
-        const { name, value, icon, bgColor } = this.props;
+        const { name, value, icon, bgColor, col } = this.props;
         return (
-            <Col lg="6" xl="3">
+            <Col lg={col} xl={col}>
                 <Card className="card-stats mb-4 mb-xl-0">
                     <CardBody>
                         <Row>

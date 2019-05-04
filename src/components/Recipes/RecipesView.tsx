@@ -5,9 +5,9 @@ import { Link } from 'react-router-dom';
 import { Recipe } from './models';
 import TopNavbar from '../Layout/TopNavbar';
 import Header from '../Layout/Header';
-import SectionElement from '../Layout/Section/SectionElement';
-import SectionHeaderElement from '../Layout/Section/SectionHeaderElement';
 import { withRouter } from 'react-router-dom';
+import SectionHeaderElement from '../Section/SectionHeaderElement';
+import SectionElement from '../Section/SectionElement';
 
 type State = {
     recipes: Recipe[];
@@ -100,7 +100,7 @@ class RecipesView extends PureComponent<any, State> {
         );
 
         return (
-            <SectionElement title={"New recipe"} col={"8"} button={button}>
+            <SectionElement title={"New recipe"} col="12" button={button}>
                 <CardBody>
                     <Form>
                         <h6 className="heading-small text-muted mb-4">
@@ -156,36 +156,30 @@ class RecipesView extends PureComponent<any, State> {
                 <TopNavbar />
                 <Header />
                 <Container className="mt--7" fluid>
-                    <Row>
-                        <SectionHeaderElement
-                            title={"My recipes"}
-                            subtitle={"Overview"}
-                            col="12"
-                        >
-                            <p className="text-light">
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                                ultrices arcu at sagittis aliquet. Donec convallis, felis id viverra sagittis, diam libero volutpat nunc,
-                                pretium orci augue sed urna. Ut in laoreet lectus, in luctus purus. Cras a quam turpis.
-                                Cras scelerisque hendrerit erat. Maecenas iaculis venenatis augue, a rutrum ex. Fusce vehicula urna molestie congue ultrices.
-                                Suspendisse quis nulla nec risus varius pellentesque. Nullam efficitur sapien dolor, quis tincidunt justo scelerisque ac. Fusce justo erat,
-                                ullamcorper et justo quis, efficitur egestas tellus. Integer interdum fermentum lorem, in placerat purus volutpat vitae.
-                                Ut sodales cursus dolor eget molestie. Curabitur eget laoreet ligula. Aenean venenatis lorem nisi, nec dignissim ipsum malesuada ac.
-                                In id porta tellus.Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                    <SectionHeaderElement
+                        title={"My recipes"}
+                        subtitle={"Overview"}
+                        col="12"
+                    >
+                        <p className="text-light">
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                            ultrices arcu at sagittis aliquet. Donec convallis, felis id viverra sagittis, diam libero volutpat nunc,
+                            pretium orci augue sed urna. Ut in laoreet lectus, in luctus purus. Cras a quam turpis.
+                            Cras scelerisque hendrerit erat. Maecenas iaculis venenatis augue, a rutrum ex. Fusce vehicula urna molestie congue ultrices.
+                            Suspendisse quis nulla nec risus varius pellentesque. Nullam efficitur sapien dolor, quis tincidunt justo scelerisque ac. Fusce justo erat,
+                            ullamcorper et justo quis, efficitur egestas tellus. Integer interdum fermentum lorem, in placerat purus volutpat vitae.
+                            Ut sodales cursus dolor eget molestie. Curabitur eget laoreet ligula. Aenean venenatis lorem nisi, nec dignissim ipsum malesuada ac.
+                            In id porta tellus.Lorem ipsum dolor sit amet, consectetur adipiscing elit.
                             </p>
-                        </SectionHeaderElement>
-                    </Row>
-                    <Row className="mt-5">
-                        {this.renderNewRecipeForm()}
-                    </Row>
-                    <Row className="mt-5">
-                        <SectionElement
-                            col="12"
-                        >
-                            {!this.state.loading &&
-                                this.renderRecipes()
-                            }
-                        </SectionElement>
-                    </Row>
+                    </SectionHeaderElement>
+                    {this.renderNewRecipeForm()}
+                    <SectionElement
+                        col="12"
+                    >
+                        {!this.state.loading &&
+                            this.renderRecipes()
+                        }
+                    </SectionElement>
                 </Container>
             </>
         );

@@ -15,14 +15,16 @@ class SectionElement extends React.Component<Props> {
         const { title, children, col, button } = this.props;
 
         return (
-            <Col className="mb-5 mb-xl-0" xl={col}>
-                <Card className="shadow">
-                    {title &&
-                        <SectionTitleElement title={title} button={button} />
-                    }
-                    {children}
-                </Card>
-            </Col>
+            <Row className="mt-5">
+                <Col className="mb-5 mb-xl-0" xl={col}>
+                    <Card className="shadow">
+                        {title &&
+                            <SectionTitleElement title={title} button={button} />
+                        }
+                        {children}
+                    </Card>
+                </Col>
+            </Row>
         );
     }
 }

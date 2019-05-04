@@ -1,8 +1,14 @@
 import React, { Component, PureComponent } from 'react';
 import { Fetcher } from '../../services/Fetcher';
-import { Button, Container } from 'reactstrap';
+import { Button, Container, Row, Col, Table, Media } from 'reactstrap';
 import { Recipe, Ingredient, InputAddIngredientItem } from './models';
 import { withRouter } from 'react-router-dom';
+import Statistic from '../Layout/Statistic';
+import TopNavbar from '../Layout/TopNavbar';
+import Header from '../Layout/Header';
+import SectionHeaderElement from '../Section/SectionHeaderElement';
+import SectionElement from '../Section/SectionElement';
+import AvatarElement from '../Layout/AvatarElement';
 
 type State = {
   recipe: Recipe;
@@ -64,43 +70,113 @@ class RecipeView extends PureComponent<any, State> {
       });
   }
 
-  renderRecipe() {
+  renderIngredients() {
     const { recipe, ingredients } = this.state;
+    const button = (
+      <Button onClick={() => { }}>
+        Add ingredient
+      </Button>
+    )
 
     return (
-      <div>
-        <h1>{recipe.name}</h1>
-        <p>{recipe.description}</p>
-        <h2>Ingredients</h2>
-        <ul>
-          {recipe.ingredientItems && recipe.ingredientItems.map((ingredientItem, index) => {
-            //const ingredientName = this.state.ingredients.find(ingredient => ingredient.ingredientId === ingredientItem.ingredientId).name;
-            return <li key={index}>{ingredientItem.ingredient.name} <Button onClick={() => { }}>Add to cart</Button></li>
-          })}
-        </ul>
-        <h2>Steps</h2>
-        <ol>
-          {recipe.recipeSteps && recipe.recipeSteps.map((recipeStep, index) => {
-            return <li key={index}>{recipeStep.description}</li>
-          })}
-        </ol>
-        <h2>Add ingredient</h2>
+      <SectionElement title="Ingredients" col="12" button={button}>
+        <Table className="align-items-center table-flush" responsive>
+          {/* <thead className="thead-light">
+                    <tr>
+                      <th scope="col">Project</th>
+                      <th scope="col">Budget</th>
+                      <th scope="col">Status</th>
+                      <th scope="col">Users</th>
+                      <th scope="col">Completion</th>
+                      <th scope="col" />
+                    </tr>
+                  </thead> */}
+          <tbody>
+            {recipe.ingredientItems && recipe.ingredientItems.map((ingredientItem, index) => {
+              return (
+                <tr key={index}>
+                  <th scope="row">
+                    <AvatarElement text={ingredientItem.ingredient.name} imageUrl="../../assets/img/theme/vue.jpg" />
+                  </th>
+                  <td>
+                    <Button onClick={() => { }}>Add to cart</Button>
+                  </td>
+                </tr>
+              )
+            })}
+
+
+          </tbody>
+        </Table>
         <select>
           {ingredients.map((ingredient, index) =>
             <option key={index}>{ingredient.name}</option>
           )}
         </select>
-      </div>
+      </SectionElement>
     );
   }
 
-  render() {
+  renderSteps() {
+    const { recipe } = this.state;
+
     return (
-      <Container className="mt--7" fluid>
-        {!this.state.loadingRecipe && !this.state.loadingIngredient &&
-          this.renderRecipe()
-        }
-      </Container>
+      <SectionElement title="Steps" col="12">
+        <ol>
+          {recipe.recipeSteps && recipe.recipeSteps.map((recipeStep, index) => {
+            return <li key={index}>{recipeStep.description}</li>
+          })}
+        </ol>
+      </SectionElement>
+    )
+  }
+
+  render() {
+    const { recipe, ingredients } = this.state;
+    return (
+      <>
+        <TopNavbar />
+        <Header />
+        <Container className="mt--7" fluid>
+          <SectionHeaderElement
+            title={recipe && recipe.name}
+            subtitle={"Overview"}
+            col="12"
+          >
+            <Row>
+              <Col xl="4">
+                <p className="text-light">
+                  {recipe && recipe.description}
+                </p>
+              </Col>
+              <Col xl="8">
+                <Row>
+                  <Statistic
+                    name={"Duration"}
+                    value={recipe && recipe.duration}
+                    icon={"fa-clock"}
+                    bgColor="bg-danger"
+                    col="4"
+                  />
+                  <Statistic
+                    name={"Ingredient number"}
+                    value={recipe && recipe.ingredientItems.length}
+                    icon={"fa-apple-alt"}
+                    bgColor="bg-warning"
+                    col="4"
+                  />
+                </Row>
+              </Col>
+            </Row>
+          </SectionHeaderElement>
+          {!this.state.loadingRecipe && !this.state.loadingIngredient &&
+            <>
+              {this.renderIngredients()}
+              {this.renderSteps()}
+            </>
+          }
+        </Container>
+      </>
     );
   }
 }
