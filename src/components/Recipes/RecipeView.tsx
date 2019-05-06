@@ -1,20 +1,23 @@
-import React, { Component, PureComponent } from 'react';
+import React, { PureComponent } from 'react';
 import { Fetcher } from '../../services/Fetcher';
 import { Button, Container, Row, Col, Table, Media } from 'reactstrap';
-import { Recipe, Ingredient, InputAddIngredientItem } from './models';
+import { Recipe, Ingredient, InputAddIngredientItem, IngredientItem, InputUpdateRecipeName, InputUpdateRecipeDescription } from './models';
 import { withRouter } from 'react-router-dom';
 import Statistic from '../Layout/Statistic';
 import TopNavbar from '../Layout/TopNavbar';
 import Header from '../Layout/Header';
 import SectionHeaderElement from '../Section/SectionHeaderElement';
-import SectionElement from '../Section/SectionElement';
-import AvatarElement from '../Layout/AvatarElement';
+import Input from 'reactstrap/lib/Input';
+import IngredientsElement from './IngredientsElement';
+import StepsElement from './StepsElement';
+import RecipeHeaderElement from './RecipeHeaderElement';
 
 type State = {
   recipe: Recipe;
   ingredients: Ingredient[];
   loadingRecipe: boolean;
   loadingIngredient: boolean;
+  editing: boolean;
 }
 
 class RecipeView extends PureComponent<any, State> {
@@ -24,7 +27,8 @@ class RecipeView extends PureComponent<any, State> {
       recipe: null,
       ingredients: [],
       loadingRecipe: true,
-      loadingIngredient: true
+      loadingIngredient: true,
+      editing: false
     };
   }
 
@@ -70,109 +74,73 @@ class RecipeView extends PureComponent<any, State> {
       });
   }
 
-  renderIngredients() {
-    const { recipe, ingredients } = this.state;
-    const button = (
-      <Button onClick={() => { }}>
-        Add ingredient
-      </Button>
-    )
-
-    return (
-      <SectionElement title="Ingredients" col="12" button={button}>
-        <Table className="align-items-center table-flush" responsive>
-          {/* <thead className="thead-light">
-                    <tr>
-                      <th scope="col">Project</th>
-                      <th scope="col">Budget</th>
-                      <th scope="col">Status</th>
-                      <th scope="col">Users</th>
-                      <th scope="col">Completion</th>
-                      <th scope="col" />
-                    </tr>
-                  </thead> */}
-          <tbody>
-            {recipe.ingredientItems && recipe.ingredientItems.map((ingredientItem, index) => {
-              return (
-                <tr key={index}>
-                  <th scope="row">
-                    <AvatarElement text={ingredientItem.ingredient.name} imageUrl="../../assets/img/theme/vue.jpg" />
-                  </th>
-                  <td>
-                    <Button onClick={() => { }}>Add to cart</Button>
-                  </td>
-                </tr>
-              )
-            })}
-
-
-          </tbody>
-        </Table>
-        <select>
-          {ingredients.map((ingredient, index) =>
-            <option key={index}>{ingredient.name}</option>
-          )}
-        </select>
-      </SectionElement>
-    );
+  toggleEdit = () => {
+    this.setState((prevState) => {
+      return {
+        editing: !prevState.editing
+      }
+    })
   }
 
-  renderSteps() {
+  updateRecipeName = (name: string) => {
     const { recipe } = this.state;
+    const updateRecipeName: InputUpdateRecipeName = {
+      recipeId: recipe.recipeId,
+      name: name
+    }
 
-    return (
-      <SectionElement title="Steps" col="12">
-        <ol>
-          {recipe.recipeSteps && recipe.recipeSteps.map((recipeStep, index) => {
-            return <li key={index}>{recipeStep.description}</li>
-          })}
-        </ol>
-      </SectionElement>
-    )
+    Fetcher.patch("api/Recipe/updateName", updateRecipeName)
+      .then(() => {
+        this.setState({
+          recipe: { ...recipe, name: name }
+        })
+
+      })
+  }
+  
+  updateRecipeDescription = (text: string) => {
+    const { recipe } = this.state;
+    const updateRecipeDescription: InputUpdateRecipeDescription = {
+      recipeId: recipe.recipeId,
+      text: text
+    }
+
+    Fetcher.patch("api/Recipe/updateDescription", updateRecipeDescription)
+      .then(() => {
+        this.setState({
+          recipe: { ...recipe, description: text }
+        })
+
+      })
   }
 
   render() {
-    const { recipe, ingredients } = this.state;
+    const { recipe, ingredients, editing } = this.state;
+
     return (
       <>
         <TopNavbar />
         <Header />
         <Container className="mt--7" fluid>
-          <SectionHeaderElement
-            title={recipe && recipe.name}
-            subtitle={"Overview"}
+          <RecipeHeaderElement
+            recipe={recipe}
             col="12"
-          >
-            <Row>
-              <Col xl="4">
-                <p className="text-light">
-                  {recipe && recipe.description}
-                </p>
-              </Col>
-              <Col xl="8">
-                <Row>
-                  <Statistic
-                    name={"Duration"}
-                    value={recipe && recipe.duration}
-                    icon={"fa-clock"}
-                    bgColor="bg-danger"
-                    col="4"
-                  />
-                  <Statistic
-                    name={"Ingredient number"}
-                    value={recipe && recipe.ingredientItems.length}
-                    icon={"fa-apple-alt"}
-                    bgColor="bg-warning"
-                    col="4"
-                  />
-                </Row>
-              </Col>
-            </Row>
-          </SectionHeaderElement>
+            editing={editing}
+            updateRecipeName={this.updateRecipeName}
+            updateRecipeDescription={this.updateRecipeDescription}
+            toggleEdit={this.toggleEdit}
+          />
           {!this.state.loadingRecipe && !this.state.loadingIngredient &&
             <>
-              {this.renderIngredients()}
-              {this.renderSteps()}
+              <IngredientsElement
+                editing={editing}
+                ingredients={ingredients}
+                recipe={recipe}
+                addIngredient={this.addIngredient}
+              />
+              <StepsElement
+                recipe={recipe}
+              />
             </>
           }
         </Container>

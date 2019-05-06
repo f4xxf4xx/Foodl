@@ -21,8 +21,7 @@ class Index extends React.Component {
                 <Header />
                 <Container className="mt--7" fluid>
                     <SectionHeaderElement
-                        title={"Sales value"}
-                        subtitle={"Overview"}
+                        title="Sales values"
                         col="12"
                     >
                         <p className="text-light">

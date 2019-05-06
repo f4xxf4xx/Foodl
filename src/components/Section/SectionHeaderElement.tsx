@@ -7,12 +7,13 @@ type Props = {
     title: string;
     subtitle?: string;
     col: string;
+    button?: any;
 }
 
 class SectionHeaderElement
     extends React.Component<Props> {
     render() {
-        const { title, subtitle, children, col } = this.props;
+        const { title, subtitle, children, col, button } = this.props;
 
         return (
             <Row>
@@ -25,6 +26,9 @@ class SectionHeaderElement
                                         {subtitle}
                                     </h6>
                                     <h2 className="text-white mb-0">{title}</h2>
+                                </div>
+                                <div className="col text-right">
+                                    {button}
                                 </div>
                             </Row>
                         </CardHeader>

@@ -5,7 +5,7 @@ export interface Ingredient {
 
 export interface IngredientItem {
     ingredientItemId: number;
-    quantity: number;
+    quantity: string;
     type: IngredientType;
     ingredientId: number;
     ingredient: Ingredient;
@@ -61,4 +61,14 @@ export interface RecipeType {
 export interface InputAddIngredientItem {
     recipeId: number;
     name?: string;
+}
+
+export interface InputUpdateRecipeName {
+    recipeId: number;
+    name: string;
+}
+
+export interface InputUpdateRecipeDescription {
+    recipeId: number;
+    text: string;
 }

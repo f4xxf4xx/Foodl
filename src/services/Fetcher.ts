@@ -27,6 +27,20 @@ export class Fetcher {
         return fetch(`${Fetcher.apiUri}/${uri}`, request)
             .then(response => response.json())
     }
+    
+    static patch(uri: string, body: any) {
+        const request = {
+            method: "PATCH",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            },
+            body: JSON.stringify(body)
+        };
+
+        return fetch(`${Fetcher.apiUri}/${uri}`, request)
+            .then(response => response.json())
+    }
 
     static delete(uri: string, body: any) {
         const request = {

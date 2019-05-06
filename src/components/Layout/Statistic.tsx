@@ -5,7 +5,7 @@ import { Card, CardBody, CardTitle, Container, Row, Col } from "reactstrap";
 
 type Props = {
     name: string;
-    value: number;
+    value: string;
     icon: string;
     bgColor: string;
     col: string;

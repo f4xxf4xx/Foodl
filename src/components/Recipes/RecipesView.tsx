@@ -103,9 +103,9 @@ class RecipesView extends PureComponent<any, State> {
             <SectionElement title={"New recipe"} col="12" button={button}>
                 <CardBody>
                     <Form>
-                        <h6 className="heading-small text-muted mb-4">
+                        {/* <h6 className="heading-small text-muted mb-4">
                             Information
-                        </h6>
+                        </h6> */}
                         <div className="pl-lg-4">
                             <Row>
                                 <Col lg="6">
@@ -157,7 +157,7 @@ class RecipesView extends PureComponent<any, State> {
                 <Header />
                 <Container className="mt--7" fluid>
                     <SectionHeaderElement
-                        title={"My recipes"}
+                        title="My recipes"
                         subtitle={"Overview"}
                         col="12"
                     >
