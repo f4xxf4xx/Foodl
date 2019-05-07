@@ -11,6 +11,11 @@ export const getLinks = () => {
             icon: "fas fa-book text-orange"
         },
         {
+            path: "/ingredients",
+            name: "Ingredients",
+            icon: "fas fa-book text-orange"
+        },
+        {
             path: "/icons",
             name: "Icons",
             icon: "ni ni-planet text-blue"

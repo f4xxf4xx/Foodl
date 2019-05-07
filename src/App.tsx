@@ -12,14 +12,17 @@ import Register from './components/Views/Register';
 import Auth from './layouts/Auth';
 import RecipesView from './components/Recipes/RecipesView';
 import RecipeView from './components/Recipes/RecipeView';
+import IngredientsView from './components/Ingredients/IngredientsView';
 
 class App extends Component {
   render() {
-    return (            
+    return (
+      <>         
       <Switch>
         <Route exact path='/' render={() => <MainLayout><Index/></MainLayout>}/>
         <Route path='/recipes' render={() => <MainLayout><RecipesView/></MainLayout>}/>
         <Route path='/recipe/:id' render={() => <MainLayout><RecipeView/></MainLayout>}/>
+        <Route path='/ingredients' render={() => <MainLayout><IngredientsView/></MainLayout>}/>
         <Route path='/ingredients' render={() => <MainLayout><IngredientView/></MainLayout>}/>
         <Route path='/icons' render={() => <MainLayout><Icons/></MainLayout>}/>
         <Route path='/maps' render={() => <MainLayout><Maps/></MainLayout>}/>
@@ -28,6 +31,7 @@ class App extends Component {
         <Route path='/login' render={() => <Auth><Login/></Auth>}/>
         <Route path='/register' render={() => <Auth><Register/></Auth>}/>
       </Switch>
+      </>
     );
   }
 }

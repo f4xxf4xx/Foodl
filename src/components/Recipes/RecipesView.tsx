@@ -112,7 +112,7 @@ class RecipesView extends PureComponent<any, State> {
                                     <FormGroup>
                                         <label
                                             className="form-control-label"
-                                            htmlFor="input-username"
+                                            htmlFor="input-recipe-name"
                                         >
                                             Recipe name
                                         </label>

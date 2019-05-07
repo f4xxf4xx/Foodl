@@ -1,0 +1,36 @@
+import { db } from '../../config';
+import { Ingredient } from './models';
+
+export class ingredientService {
+    public static getIngredients(): Promise<Ingredient[]> {
+        return db.collection("ingredients").get()
+            .then(data => {
+                let ingredients: Ingredient[] = [];
+                data.forEach(dt => {
+                    ingredients.push({
+                        id: dt.id,
+                        name: dt.data().name
+                    })
+                })
+                return ingredients;
+            });
+    }
+
+    public static addIngredient(name: string): Promise<Ingredient> {
+        const newIngredient: Ingredient =  {
+            name: name
+        }
+
+        return db.collection("ingredients").add(newIngredient)
+            .then(ingredient => {
+                return {
+                    id: ingredient.id,
+                    name
+                }
+            });
+    }
+
+    public static deleteIngredient(id: string): Promise<void> {
+        return db.collection("ingredients").doc(id).delete();
+    }
+}
