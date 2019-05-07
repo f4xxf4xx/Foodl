@@ -84,34 +84,34 @@ class RecipeView extends PureComponent<any, State> {
 
   updateRecipeName = (name: string) => {
     const { recipe } = this.state;
-    const updateRecipeName: InputUpdateRecipeName = {
-      recipeId: recipe.recipeId,
-      name: name
-    }
+    // const updateRecipeName: InputUpdateRecipeName = {
+    //   recipeId: recipe.id,
+    //   name: name
+    // }
 
-    Fetcher.patch("api/Recipe/updateName", updateRecipeName)
-      .then(() => {
-        this.setState({
-          recipe: { ...recipe, name: name }
-        })
+    // Fetcher.patch("api/Recipe/updateName", updateRecipeName)
+    //   .then(() => {
+    //     this.setState({
+    //       recipe: { ...recipe, name: name }
+    //     })
 
-      })
+    //   })
   }
   
   updateRecipeDescription = (text: string) => {
     const { recipe } = this.state;
-    const updateRecipeDescription: InputUpdateRecipeDescription = {
-      recipeId: recipe.recipeId,
-      text: text
-    }
+    // const updateRecipeDescription: InputUpdateRecipeDescription = {
+    //   recipeId: recipe.recipeId,
+    //   text: text
+    // }
 
-    Fetcher.patch("api/Recipe/updateDescription", updateRecipeDescription)
-      .then(() => {
-        this.setState({
-          recipe: { ...recipe, description: text }
-        })
+    // Fetcher.patch("api/Recipe/updateDescription", updateRecipeDescription)
+    //   .then(() => {
+    //     this.setState({
+    //       recipe: { ...recipe, description: text }
+    //     })
 
-      })
+    //   })
   }
 
   render() {

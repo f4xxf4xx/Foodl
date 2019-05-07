@@ -8,10 +8,13 @@ import Header from '../Layout/Header';
 import { withRouter } from 'react-router-dom';
 import SectionHeaderElement from '../Section/SectionHeaderElement';
 import SectionElement from '../Section/SectionElement';
+import { recipeService } from './recipeService';
+import { toast } from 'react-toastify';
 
 type State = {
     recipes: Recipe[];
     loading: boolean;
+    working: boolean;
     newRecipeName: string;
 }
 
@@ -21,16 +24,19 @@ class RecipesView extends PureComponent<any, State> {
         this.state = {
             recipes: [],
             loading: true,
+            working: false,
             newRecipeName: ""
         };
+    }
 
-        Fetcher.get("api/Recipe/get")
-            .then(data => {
+    componentDidMount() {
+        recipeService.getRecipes()
+            .then((recipes) => {
                 this.setState({
-                    recipes: data,
+                    recipes,
                     loading: false
                 });
-            });
+            })
     }
 
     updateRecipeName = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -38,35 +44,40 @@ class RecipesView extends PureComponent<any, State> {
     }
 
     addRecipe = () => {
-        if (this.state.newRecipeName === "") {
+        const { newRecipeName, recipes } = this.state;
+        if (newRecipeName === "") {
             return;
         }
+        this.setState({
+            working: true
+        })
 
-        const newRecipeInput = {
-            name: this.state.newRecipeName
-        }
-
-        Fetcher.post('api/Recipe/add', newRecipeInput)
-            .then((recipeId) => {
-                this.props.history.push(`/recipe/${recipeId}`);
+        recipeService.addRecipe(newRecipeName)
+            .then(recipe => {
+                this.setState({
+                    recipes: [...recipes, recipe],
+                    newRecipeName: "",
+                    working: false
+                })
+                toast.success("Added!")
             });
     }
 
-    deleteRecipe = (recipeId: number) => {
-        const deleteRecipeInput = {
-            id: recipeId
-        }
-
-        Fetcher.delete('api/recipe/delete', deleteRecipeInput)
-            .then(response =>
+    deleteRecipe(recipeId: any): any {
+        const { recipes } = this.state;
+        this.setState({ working: true })
+        recipeService.deleteRecipe(recipeId)
+            .then(() => {
                 this.setState({
-                    recipes: this.state.recipes.filter(i => i.recipeId !== recipeId)
+                    recipes: recipes.filter(i => i.id !== recipeId),
+                    working: false
                 })
-            );
+                toast.success("Deleted!");
+            })
     }
 
     renderRecipes() {
-        const { recipes } = this.state;
+        const { recipes, loading, working } = this.state;
 
         return (
             <Table className="align-items-center table-flush" responsive>
@@ -77,10 +88,10 @@ class RecipesView extends PureComponent<any, State> {
                     </tr>
                 </thead>
                 <tbody>
-                    {recipes.map((recipe, index) =>
-                        <tr key={index}>
-                            <td><Link to={`/recipe/${recipe.recipeId}`}>{recipe.name}</Link></td>
-                            <td><Button onClick={() => this.deleteRecipe(recipe.recipeId)}>DELETE</Button></td>
+                    {!loading && recipes.map((recipe) =>
+                        <tr key={recipe.id}>
+                            <td><Link to={`/recipe/${recipe.id}`}>{recipe.name}</Link></td>
+                            <td><Button onClick={() => this.deleteRecipe(recipe.id)} disabled={working}>DELETE</Button></td>
                         </tr>
                     )}
                 </tbody>
@@ -89,11 +100,13 @@ class RecipesView extends PureComponent<any, State> {
     }
 
     renderNewRecipeForm() {
+        const { working } = this.state;
         const button = (
             <Button
                 color="primary"
                 onClick={this.addRecipe}
                 size="sm"
+                disabled={working}
             >
                 Create
             </Button>
@@ -103,9 +116,6 @@ class RecipesView extends PureComponent<any, State> {
             <SectionElement title={"New recipe"} col="12" button={button}>
                 <CardBody>
                     <Form>
-                        {/* <h6 className="heading-small text-muted mb-4">
-                            Information
-                        </h6> */}
                         <div className="pl-lg-4">
                             <Row>
                                 <Col lg="6">
@@ -123,25 +133,10 @@ class RecipesView extends PureComponent<any, State> {
                                             type="text"
                                             onChange={this.updateRecipeName}
                                             value={this.state.newRecipeName}
+                                            disabled={working}
                                         />
                                     </FormGroup>
                                 </Col>
-                                {/* <Col lg="6">
-                                    <FormGroup>
-                                        <label
-                                            className="form-control-label"
-                                            htmlFor="input-email"
-                                        >
-                                            Email address
-                                        </label>
-                                        <Input
-                                            className="form-control-alternative"
-                                            id="input-email"
-                                            placeholder="jesse@example.com"
-                                            type="email"
-                                        />
-                                    </FormGroup>
-                                </Col> */}
                             </Row>
                         </div>
                     </Form>
@@ -176,9 +171,7 @@ class RecipesView extends PureComponent<any, State> {
                     <SectionElement
                         col="12"
                     >
-                        {!this.state.loading &&
-                            this.renderRecipes()
-                        }
+                        {this.renderRecipes()}
                     </SectionElement>
                 </Container>
             </>

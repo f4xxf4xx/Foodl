@@ -6,10 +6,10 @@ export class ingredientService {
         return db.collection("ingredients").get()
             .then(data => {
                 let ingredients: Ingredient[] = [];
-                data.forEach(dt => {
+                data.forEach(ingredient => {
                     ingredients.push({
-                        id: dt.id,
-                        name: dt.data().name
+                        id: ingredient.id,
+                        name: ingredient.data().name
                     })
                 })
                 return ingredients;

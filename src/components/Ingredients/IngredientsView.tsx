@@ -70,8 +70,8 @@ class IngredientsView extends PureComponent<any, State> {
                     </tr>
                 </thead>
                 <tbody>
-                    {ingredients.map((ingredient, index) =>
-                        <tr key={index}>
+                    {ingredients.map((ingredient) =>
+                        <tr key={ingredient.id}>
                             <td>{ingredient.name}</td>
                             <td>
                                 <Button
@@ -91,13 +91,13 @@ class IngredientsView extends PureComponent<any, State> {
         this.setState({ newIngredientName: e.target.value });
     }
 
-    deleteIngredient(recipeId: any): any {
+    deleteIngredient(ingredientId: any): any {
         const { ingredients } = this.state;
         this.setState({ working: true })
-        ingredientService.deleteIngredient(recipeId)
+        ingredientService.deleteIngredient(ingredientId)
             .then(() => {
                 this.setState({
-                    ingredients: ingredients.filter(i => i.id !== recipeId),
+                    ingredients: ingredients.filter(i => i.id !== ingredientId),
                     working: false
                 })
                 toast.success("Deleted!");

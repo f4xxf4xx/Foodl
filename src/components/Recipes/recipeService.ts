@@ -6,10 +6,11 @@ export class recipeService {
         return db.collection("recipes").get()
             .then(data => {
                 let recipes: Recipe[] = [];
-                data.forEach(dt => {
+                data.forEach(recipe => {
                     recipes.push({
-                        id: dt.id,
-                        name: dt.data().name
+                        id: recipe.id,
+                        name: recipe.data().name,
+                        description: recipe.data().description
                     })
                 })
                 return recipes;
@@ -18,7 +19,7 @@ export class recipeService {
 
     public static addRecipe(name: string): Promise<Recipe> {
         const newRecipe: Recipe =  {
-            name: name
+            name
         }
 
         return db.collection("recipes").add(newRecipe)

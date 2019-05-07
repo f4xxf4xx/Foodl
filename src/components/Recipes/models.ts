@@ -21,16 +21,16 @@ export enum IngredientType {
 }
 
 export interface Recipe {
-    recipeId: number;
-    cookbookId: number;
-    recipeTypeId: number;
+    id?: string;
+    cookbookId?: number;
+    recipeTypeId?: number;
     name: string;
-    description: string;
-    recipeType: RecipeType;
-    duration: number;
-    ingredientItems: IngredientItem[];
-    recipeSteps: RecipeStep[];
-    recipeTagItems: RecipeTagItem[];
+    description?: string;
+    recipeType?: RecipeType;
+    duration?: number;
+    ingredientItems?: IngredientItem[];
+    recipeSteps?: RecipeStep[];
+    recipeTagItems?: RecipeTagItem[];
 }
 
 export interface RecipeStep {
