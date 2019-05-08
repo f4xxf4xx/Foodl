@@ -1,7 +1,4 @@
-export interface Ingredient {
-    ingredientId: number;
-    name: string;
-}
+import { Ingredient } from "../Ingredients/models";
 
 export interface IngredientItem {
     ingredientItemId: number;
@@ -22,6 +19,7 @@ export enum IngredientType {
 
 export interface Recipe {
     id?: string;
+    slug: string;
     cookbookId?: number;
     recipeTypeId?: number;
     name: string;

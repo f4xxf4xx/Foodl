@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Fetcher } from '../../services/Fetcher';
 import { Button } from 'reactstrap';
 import { BarLoader } from 'react-spinners';
-import { Ingredient } from './models';
+import { Ingredient } from '../Ingredients/models';
 
 type State = {
   ingredients: Ingredient[];
@@ -45,12 +45,12 @@ export class IngredientView extends Component<{}, State> {
       .then((id) =>
         this.setState({
           newIngredientName: "",
-          ingredients: [...this.state.ingredients, { name: this.state.newIngredientName, ingredientId: id }]
+          ingredients: [...this.state.ingredients, { name: this.state.newIngredientName, id }]
         })
       );
   }
 
-  deleteIngredient = (ingredientId: number) => {
+  deleteIngredient = (ingredientId: string) => {
     const deleteIngredientInput = {
       id: ingredientId
     }
@@ -58,7 +58,7 @@ export class IngredientView extends Component<{}, State> {
     Fetcher.delete('api/Ingredient/delete', deleteIngredientInput)
       .then(response =>
         this.setState({
-          ingredients: this.state.ingredients.filter(i => i.ingredientId !== ingredientId)
+          ingredients: this.state.ingredients.filter(i => i.id !== ingredientId)
         })
       );
   }
@@ -78,7 +78,7 @@ export class IngredientView extends Component<{}, State> {
           {ingredients.map((ingredient, index) =>
             <tr key={index}>
               <td>{ingredient.name}</td>
-              <td><Button onClick={() => this.deleteIngredient(ingredient.ingredientId)}>DELETE</Button></td>
+              <td><Button onClick={() => this.deleteIngredient(ingredient.id)}>DELETE</Button></td>
             </tr>
           )}
         </tbody>

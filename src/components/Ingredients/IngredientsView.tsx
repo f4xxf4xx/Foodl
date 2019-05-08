@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React, { PureComponent, RefObject, createRef } from 'react';
 import { Ingredient } from './models';
 import { withRouter } from 'react-router-dom';
 import { ingredientService } from './ingredientService';
@@ -7,8 +7,7 @@ import TopNavbar from '../Layout/TopNavbar';
 import Header from '../Layout/Header';
 import SectionHeaderElement from '../Section/SectionHeaderElement';
 import SectionElement from '../Section/SectionElement';
-import { ToastContainer, toast } from 'react-toastify';
-
+import { toast } from 'react-toastify';
 
 type State = {
     ingredients: Ingredient[];
@@ -17,7 +16,7 @@ type State = {
     newIngredientName: string;
 }
 
-class IngredientsView extends PureComponent<any, State> {
+class IngredientsView extends PureComponent<{}, State> {
     constructor(props: any) {
         super(props);
         this.state = {
@@ -44,18 +43,24 @@ class IngredientsView extends PureComponent<any, State> {
             return;
         }
         this.setState({
-            working: true
+            working: true,
+            newIngredientName: ""
         })
 
         ingredientService.addIngredient(newIngredientName)
             .then(ingredient => {
                 this.setState({
-                    ingredients: [...ingredients, ingredient],
-                    newIngredientName: "",
+                    ingredients: [...ingredients, ingredient],                    
                     working: false
                 })
-                toast.success("Added!")
+                toast.success("Added!");
             });
+    }
+
+    handleKeyPress = (event) => {
+        if (event.charCode == 13) {
+            this.addIngredient();
+        }
     }
 
     renderIngredients() {
@@ -91,7 +96,7 @@ class IngredientsView extends PureComponent<any, State> {
         this.setState({ newIngredientName: e.target.value });
     }
 
-    deleteIngredient(ingredientId: any): any {
+    deleteIngredient(ingredientId: string): void {
         const { ingredients } = this.state;
         this.setState({ working: true })
         ingredientService.deleteIngredient(ingredientId)
@@ -120,7 +125,7 @@ class IngredientsView extends PureComponent<any, State> {
         return (
             <SectionElement title={"New ingredient"} col="12" button={button}>
                 <CardBody>
-                    <Form>
+                    <Form onSubmit={e => { e.preventDefault(); }}>
                         <div className="pl-lg-4">
                             <Row>
                                 <Col lg="6">
@@ -138,7 +143,7 @@ class IngredientsView extends PureComponent<any, State> {
                                             type="text"
                                             onChange={this.updateIngredientName}
                                             value={this.state.newIngredientName}
-                                            disabled={working}
+                                            onKeyPress={this.handleKeyPress}
                                         />
                                     </FormGroup>
                                 </Col>

@@ -1,9 +1,10 @@
 import React, { PureComponent } from 'react';
 import { Button, Table } from 'reactstrap';
-import { Recipe, Ingredient } from './models';
+import { Recipe } from './models';
 import SectionElement from '../Section/SectionElement';
 import AvatarElement from '../Layout/AvatarElement';
 import { getIngredientText } from './helper';
+import { Ingredient } from '../Ingredients/models';
 
 type Props = {
     recipe: Recipe;

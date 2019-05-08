@@ -1,16 +1,16 @@
 import React, { PureComponent } from 'react';
 import { Fetcher } from '../../services/Fetcher';
-import { Button, Container, Row, Col, Table, Media } from 'reactstrap';
-import { Recipe, Ingredient, InputAddIngredientItem, IngredientItem, InputUpdateRecipeName, InputUpdateRecipeDescription } from './models';
+import { Container } from 'reactstrap';
+import { Recipe, InputAddIngredientItem } from './models';
 import { withRouter } from 'react-router-dom';
-import Statistic from '../Layout/Statistic';
 import TopNavbar from '../Layout/TopNavbar';
 import Header from '../Layout/Header';
-import SectionHeaderElement from '../Section/SectionHeaderElement';
-import Input from 'reactstrap/lib/Input';
 import IngredientsElement from './IngredientsElement';
 import StepsElement from './StepsElement';
 import RecipeHeaderElement from './RecipeHeaderElement';
+import { recipeService } from './recipeService';
+import { ingredientService } from '../Ingredients/ingredientService';
+import { Ingredient } from '../Ingredients/models';
 
 type State = {
   recipe: Recipe;
@@ -35,7 +35,7 @@ class RecipeView extends PureComponent<any, State> {
   componentDidMount() {
     const { id } = this.props.match.params;
 
-    Fetcher.get(`api/Recipe/get/${id}`)
+    recipeService.getRecipe(id)
       .then(recipe => {
         this.setState({
           recipe,
@@ -43,7 +43,7 @@ class RecipeView extends PureComponent<any, State> {
         });
       })
 
-    Fetcher.get("api/Ingredient/get")
+    ingredientService.getIngredients()
       .then(ingredients => {
         this.setState({
           ingredients,
@@ -82,36 +82,15 @@ class RecipeView extends PureComponent<any, State> {
     })
   }
 
-  updateRecipeName = (name: string) => {
+  updateRecipe = (key: string, value: string) => {
     const { recipe } = this.state;
-    // const updateRecipeName: InputUpdateRecipeName = {
-    //   recipeId: recipe.id,
-    //   name: name
-    // }
 
-    // Fetcher.patch("api/Recipe/updateName", updateRecipeName)
-    //   .then(() => {
-    //     this.setState({
-    //       recipe: { ...recipe, name: name }
-    //     })
-
-    //   })
-  }
-  
-  updateRecipeDescription = (text: string) => {
-    const { recipe } = this.state;
-    // const updateRecipeDescription: InputUpdateRecipeDescription = {
-    //   recipeId: recipe.recipeId,
-    //   text: text
-    // }
-
-    // Fetcher.patch("api/Recipe/updateDescription", updateRecipeDescription)
-    //   .then(() => {
-    //     this.setState({
-    //       recipe: { ...recipe, description: text }
-    //     })
-
-    //   })
+    recipeService.updateRecipe(recipe.id, key, value)
+      .then(() => {
+        this.setState({
+          recipe: { ...recipe, [key]: value }
+        })
+      })
   }
 
   render() {
@@ -126,8 +105,7 @@ class RecipeView extends PureComponent<any, State> {
             recipe={recipe}
             col="12"
             editing={editing}
-            updateRecipeName={this.updateRecipeName}
-            updateRecipeDescription={this.updateRecipeDescription}
+            updateRecipe={this.updateRecipe}
             toggleEdit={this.toggleEdit}
           />
           {!this.state.loadingRecipe && !this.state.loadingIngredient &&

@@ -8,22 +8,54 @@ import Statistic from "../Layout/Statistic";
 type Props = {
     recipe: Recipe;
     editing: boolean;
-    updateRecipeName: (name: string) => void;
-    updateRecipeDescription: (text: string) => void;
+    updateRecipe: (key: string, value: string) => void;
     col: string;
     toggleEdit: () => void;
 }
 
 class RecipeHeaderElement
     extends React.Component<Props> {
-    updateRecipeName = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const { updateRecipeName } = this.props;
-        updateRecipeName(e.currentTarget.value);
+    updateRecipe = (key: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { updateRecipe } = this.props;
+        updateRecipe(key, e.currentTarget.value);
     }
-    
-    updateRecipeDescription = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const { updateRecipeDescription } = this.props;
-        updateRecipeDescription(e.currentTarget.value);
+
+    renderStatistics() {
+        const { recipe } = this.props;
+
+        return (
+            recipe &&
+            <>
+                {recipe.recipeType &&
+                    <Statistic
+                        name={"Type"}
+                        value={recipe.recipeType.name}
+                        icon={"fa-th-large"}
+                        bgColor="bg-purple"
+                        col="4"
+                    />
+                }
+                {recipe.duration &&
+                    <Statistic
+                        name={"Duration"}
+                        value={recipe.duration.toString()}
+                        icon={"fa-clock"}
+                        bgColor="bg-danger"
+                        col="4"
+                    />
+                }
+                {recipe.ingredientItems &&
+                    <Statistic
+                        name={"Ingredient number"}
+                        value={recipe.ingredientItems.length.toString()}
+                        icon={"fa-apple-alt"}
+                        bgColor="bg-warning"
+                        col="4"
+                    />
+                }
+            </>
+
+        )
     }
 
     render() {
@@ -38,7 +70,7 @@ class RecipeHeaderElement
                                 <Row className="align-items-center">
                                     <div className="col">
                                         {editing ?
-                                            <Input defaultValue={recipe.name} onBlur={this.updateRecipeName} />
+                                            <Input defaultValue={recipe.name} onBlur={this.updateRecipe("name")} />
                                             :
                                             <h2 className="text-white mb-0">{recipe.name}</h2>
                                         }
@@ -57,7 +89,7 @@ class RecipeHeaderElement
                                             <Input
                                                 defaultValue={recipe.description}
                                                 type="textarea"
-                                                onBlur={this.updateRecipeDescription}
+                                                onBlur={this.updateRecipe("description")}
                                             />
                                             :
                                             <p className="text-light">
@@ -67,27 +99,7 @@ class RecipeHeaderElement
                                     </Col>
                                     <Col xl="8">
                                         <Row>
-                                            <Statistic
-                                                name={"Type"}
-                                                value={recipe && recipe.recipeType && recipe.recipeType.name}
-                                                icon={"fa-th-large"}
-                                                bgColor="bg-purple"
-                                                col="4"
-                                            />
-                                            <Statistic
-                                                name={"Duration"}
-                                                value={recipe && recipe.duration.toString()}
-                                                icon={"fa-clock"}
-                                                bgColor="bg-danger"
-                                                col="4"
-                                            />
-                                            <Statistic
-                                                name={"Ingredient number"}
-                                                value={recipe && recipe.ingredientItems.length.toString()}
-                                                icon={"fa-apple-alt"}
-                                                bgColor="bg-warning"
-                                                col="4"
-                                            />
+                                            {this.renderStatistics()}
                                         </Row>
                                     </Col>
                                 </Row>

@@ -1,7 +1,7 @@
 import React, { Component, PureComponent } from 'react';
 import { Fetcher } from '../../services/Fetcher';
 import { Button, Container, Row, Col, Input, FormGroup, Card, CardHeader, CardBody, Form, Table } from 'reactstrap';
-import { Link } from 'react-router-dom';
+import { Link, RouteComponentProps } from 'react-router-dom';
 import { Recipe } from './models';
 import TopNavbar from '../Layout/TopNavbar';
 import Header from '../Layout/Header';
@@ -10,6 +10,7 @@ import SectionHeaderElement from '../Section/SectionHeaderElement';
 import SectionElement from '../Section/SectionElement';
 import { recipeService } from './recipeService';
 import { toast } from 'react-toastify';
+import slugify from 'react-slugify';
 
 type State = {
     recipes: Recipe[];
@@ -18,8 +19,10 @@ type State = {
     newRecipeName: string;
 }
 
-class RecipesView extends PureComponent<any, State> {
-    constructor(props: any) {
+type Props = RouteComponentProps;
+
+class RecipesView extends PureComponent<Props, State> {
+    constructor(props: Props) {
         super(props);
         this.state = {
             recipes: [],
@@ -43,6 +46,12 @@ class RecipesView extends PureComponent<any, State> {
         this.setState({ newRecipeName: e.target.value });
     }
 
+    handleKeyPress = (event) => {
+        if (event.charCode == 13) {
+            this.addRecipe();
+        }
+    }
+
     addRecipe = () => {
         const { newRecipeName, recipes } = this.state;
         if (newRecipeName === "") {
@@ -59,7 +68,7 @@ class RecipesView extends PureComponent<any, State> {
                     newRecipeName: "",
                     working: false
                 })
-                toast.success("Added!")
+                this.props.history.push(`/recipe/${recipe.id}`);
             });
     }
 
@@ -115,7 +124,7 @@ class RecipesView extends PureComponent<any, State> {
         return (
             <SectionElement title={"New recipe"} col="12" button={button}>
                 <CardBody>
-                    <Form>
+                    <Form onSubmit={e => { e.preventDefault(); }}>
                         <div className="pl-lg-4">
                             <Row>
                                 <Col lg="6">
@@ -134,6 +143,7 @@ class RecipesView extends PureComponent<any, State> {
                                             onChange={this.updateRecipeName}
                                             value={this.state.newRecipeName}
                                             disabled={working}
+                                            onKeyPress={this.handleKeyPress}
                                         />
                                     </FormGroup>
                                 </Col>
