@@ -82,4 +82,8 @@ export class recipeService {
         return db.collection("recipes").doc(id).collection("ingredientItems").add(ingredientItem)
             .then(() => ingredientItem)
     }
+
+    public static deleteIngredientItem(id: string, ingredientItemId: string): Promise<void> {
+        return db.collection("recipes").doc(id).collection("ingredientItems").doc(ingredientItemId).delete();
+    }
 }

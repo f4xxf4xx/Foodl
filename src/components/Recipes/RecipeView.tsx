@@ -10,9 +10,11 @@ import RecipeHeaderElement from './RecipeHeaderElement';
 import { recipeService } from './recipeService';
 import { ingredientService } from '../Ingredients/ingredientService';
 import { Ingredient } from '../Ingredients/models';
+import { toast } from 'react-toastify';
 
 type State = {
   recipe: Recipe;
+  working: boolean;
   ingredients: Ingredient[];
   ingredientItems: IngredientItem[];
   loadingRecipe: boolean;
@@ -26,6 +28,7 @@ class RecipeView extends PureComponent<any, State> {
     super(props);
     this.state = {
       recipe: null,
+      working: false,
       ingredients: [],
       ingredientItems: [],
       loadingRecipe: true,
@@ -66,14 +69,34 @@ class RecipeView extends PureComponent<any, State> {
   addIngredient = (newIngredientItem: IngredientItem) => {
     const { ingredients, recipe, ingredientItems } = this.state;
 
+    this.setState({
+      working: true
+    })
+
     if (!ingredients.find(i => i.name === newIngredientItem.name)) {
       ingredientService.addIngredient(newIngredientItem.name);
     }
     recipeService.addIngredientItem(recipe.id, newIngredientItem)
       .then(() => {
         this.setState({
-          ingredientItems: [...ingredientItems, newIngredientItem]
+          ingredientItems: [...ingredientItems, newIngredientItem],
+          working: false
         });
+        toast.success("Added!");
+      })
+  }
+
+  deleteIngredient = (ingredientItemId: string) => {
+    const { recipe, ingredientItems } = this.state;
+
+    this.setState({ working: true });
+    recipeService.deleteIngredientItem(recipe.id, ingredientItemId)
+      .then(() => {
+        this.setState({
+          ingredientItems: ingredientItems.filter(i => i.id != ingredientItemId),
+          working: false
+        })
+        toast.success("Deleted!");
       })
   }
 
@@ -118,6 +141,7 @@ class RecipeView extends PureComponent<any, State> {
                 ingredients={ingredients}
                 ingredientItems={ingredientItems}
                 addIngredient={this.addIngredient}
+                deleteIngredient={this.deleteIngredient}
               />
               <StepsElement
                 recipe={recipe}

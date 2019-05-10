@@ -13,6 +13,7 @@ type Props = {
     ingredientItems: IngredientItem[];
     editing: boolean;
     addIngredient: (newIngredientItem: IngredientItem) => void
+    deleteIngredient: (ingredientItemId: string) => void
 }
 
 type State = {
@@ -72,7 +73,7 @@ class IngredientsElement extends PureComponent<Props, State> {
     }
 
     render() {
-        const { ingredientItems, editing, ingredients } = this.props;
+        const { ingredientItems, editing, ingredients, deleteIngredient } = this.props;
         const { newIngredientItem, currentSelectIngredient, currentSelectType } = this.state;
 
         const ingredientOptions = ingredients.map(ingredient => {
@@ -98,7 +99,7 @@ class IngredientsElement extends PureComponent<Props, State> {
                                         </th>
                                         <td>
                                             {editing ?
-                                                <Button onClick={() => { }}>Delete ingredient</Button>
+                                                <Button onClick={() => { deleteIngredient(ingredientItem.id) }}>Delete ingredient</Button>
                                                 :
                                                 <Button onClick={() => { }}>Add to cart</Button>
                                             }
