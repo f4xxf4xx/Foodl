@@ -1,7 +1,6 @@
 import React, { PureComponent } from 'react';
-import { Fetcher } from '../../services/Fetcher';
 import { Container } from 'reactstrap';
-import { Recipe, InputAddIngredientItem } from './models';
+import { Recipe, IngredientItem } from './models';
 import { withRouter } from 'react-router-dom';
 import TopNavbar from '../Layout/TopNavbar';
 import Header from '../Layout/Header';
@@ -15,8 +14,10 @@ import { Ingredient } from '../Ingredients/models';
 type State = {
   recipe: Recipe;
   ingredients: Ingredient[];
+  ingredientItems: IngredientItem[];
   loadingRecipe: boolean;
   loadingIngredient: boolean;
+  loadingIngredientItems: boolean;
   editing: boolean;
 }
 
@@ -26,8 +27,10 @@ class RecipeView extends PureComponent<any, State> {
     this.state = {
       recipe: null,
       ingredients: [],
+      ingredientItems: [],
       loadingRecipe: true,
       loadingIngredient: true,
+      loadingIngredientItems: true,
       editing: false
     };
   }
@@ -43,6 +46,14 @@ class RecipeView extends PureComponent<any, State> {
         });
       })
 
+    recipeService.getIngredientItems(id)
+      .then(ingredientItems => {
+        this.setState({
+          ingredientItems,
+          loadingIngredientItems: false
+        });
+      })
+
     ingredientService.getIngredients()
       .then(ingredients => {
         this.setState({
@@ -52,26 +63,18 @@ class RecipeView extends PureComponent<any, State> {
       });
   }
 
-  addIngredient = (recipeId: number, name: string) => {
-    const { ingredients } = this.state;
-    const newIngredientInput: InputAddIngredientItem = {
-      recipeId: recipeId,
-      name: undefined
-    }
+  addIngredient = (newIngredientItem: IngredientItem) => {
+    const { ingredients, recipe, ingredientItems } = this.state;
 
-    if (ingredients.find(i => i.name === name)) {
-      newIngredientInput.name = name;
+    if (!ingredients.find(i => i.name === newIngredientItem.name)) {
+      ingredientService.addIngredient(newIngredientItem.name);
     }
-
-    Fetcher.post('api/Recipe/add/ingredient', newIngredientInput)
+    recipeService.addIngredientItem(recipe.id, newIngredientItem)
       .then(() => {
-        Fetcher.get(`api/Recipe/get/${recipeId}`)
-          .then(recipe => {
-            this.setState({
-              recipe
-            });
-          })
-      });
+        this.setState({
+          ingredientItems: [...ingredientItems, newIngredientItem]
+        });
+      })
   }
 
   toggleEdit = () => {
@@ -94,7 +97,7 @@ class RecipeView extends PureComponent<any, State> {
   }
 
   render() {
-    const { recipe, ingredients, editing } = this.state;
+    const { recipe, ingredients, ingredientItems, editing } = this.state;
 
     return (
       <>
@@ -113,7 +116,7 @@ class RecipeView extends PureComponent<any, State> {
               <IngredientsElement
                 editing={editing}
                 ingredients={ingredients}
-                recipe={recipe}
+                ingredientItems={ingredientItems}
                 addIngredient={this.addIngredient}
               />
               <StepsElement

@@ -1,4 +1,4 @@
-import { IngredientType, IngredientItem, RecipeType } from "./models";
+import { IngredientType, IngredientItem } from "./models";
 
 export const getIngredientText = (ingredientItem: IngredientItem) => {
     let quantity = ingredientItem.quantity;
@@ -6,7 +6,7 @@ export const getIngredientText = (ingredientItem: IngredientItem) => {
         quantity = getCupQuantities(quantity);
     }
 
-    return `${ingredientItem.quantity} ${getIngredientTypeText(ingredientItem.type)} ${ingredientItem.ingredient.name.toLowerCase()}`
+    return `${ingredientItem.quantity} ${getIngredientTypeText(ingredientItem.type)} ${ingredientItem.name.toLowerCase()}`
 }
 
 export const getCupQuantities = (quantity: string): string => {
@@ -22,7 +22,7 @@ export const getCupQuantities = (quantity: string): string => {
     }
 }
 
-export const getIngredientTypeText = (ingredientType: IngredientType) => {
+export const getIngredientTypeText = (ingredientType: string) => {
     switch (ingredientType) {
         case IngredientType.Unit:
             return "";
@@ -35,4 +35,29 @@ export const getIngredientTypeText = (ingredientType: IngredientType) => {
         case IngredientType.Teaspoon:
             return "teaspoon(s)";
     }
+}
+
+export const getIngredientTypeOptions = () => {
+    return [
+        {
+            value: IngredientType.Cup,
+            label: "cup(s)"
+        },
+        {
+            value: IngredientType.Gram,
+            label: "gram(s)"
+        },
+        {
+            value: IngredientType.Tablespoon,
+            label: "tablespoon(s)"
+        },
+        {
+            value: IngredientType.Teaspoon,
+            label: "teaspoon(s)"
+        },
+        {
+            value: IngredientType.Unit,
+            label: "unit(s)"
+        },
+    ]
 }

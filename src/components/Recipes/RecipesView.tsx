@@ -180,6 +180,7 @@ class RecipesView extends PureComponent<Props, State> {
                     {this.renderNewRecipeForm()}
                     <SectionElement
                         col="12"
+                        marginTop="3"
                     >
                         {this.renderRecipes()}
                     </SectionElement>

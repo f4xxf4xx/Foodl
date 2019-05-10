@@ -29,7 +29,7 @@ class RecipeHeaderElement
                 {recipe.recipeType &&
                     <Statistic
                         name={"Type"}
-                        value={recipe.recipeType.name}
+                        value={recipe.recipeType}
                         icon={"fa-th-large"}
                         bgColor="bg-purple"
                         col="4"

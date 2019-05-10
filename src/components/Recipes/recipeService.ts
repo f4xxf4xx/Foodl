@@ -1,5 +1,5 @@
 import { db } from '../../config';
-import { Recipe } from './models';
+import { Recipe, IngredientItem } from './models';
 import slugify from 'react-slugify';
 
 export class recipeService {
@@ -8,12 +8,13 @@ export class recipeService {
             .then(data => {
                 let recipes: Recipe[] = [];
                 data.forEach(recipe => {
-                    recipes.push({
+                    const item: Recipe = {
                         id: recipe.id,
                         slug: recipe.data().slug,
                         name: recipe.data().name,
                         description: recipe.data().description
-                    })
+                    }
+                    recipes.push(item)
                 })
                 return recipes;
             });
@@ -48,7 +49,7 @@ export class recipeService {
                 }
             });
     }
-    
+
     public static updateRecipe(id: string, key: string, value: string): Promise<void> {
         return db.collection("recipes").doc(id).update({
             [key]: value
@@ -57,5 +58,28 @@ export class recipeService {
 
     public static deleteRecipe(id: string): Promise<void> {
         return db.collection("recipes").doc(id).delete();
+    }
+
+    public static getIngredientItems(id: string): Promise<IngredientItem[]> {
+        return db.collection("recipes").doc(id).collection("ingredientItems").get()
+            .then(data => {
+                let ingredientItems: IngredientItem[] = [];
+                data.forEach(ingredientItem => {
+                    const item: IngredientItem = {
+                        id: ingredientItem.id,
+                        name: ingredientItem.data().name,
+                        quantity: ingredientItem.data().quantity,
+                        type: ingredientItem.data().type
+                    }
+                    ingredientItems.push(item);
+                })
+
+                return ingredientItems;
+            })
+    }
+
+    public static addIngredientItem(id: string, ingredientItem: IngredientItem): Promise<IngredientItem> {
+        return db.collection("recipes").doc(id).collection("ingredientItems").add(ingredientItem)
+            .then(() => ingredientItem)
     }
 }

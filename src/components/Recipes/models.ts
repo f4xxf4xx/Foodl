@@ -1,72 +1,28 @@
 import { Ingredient } from "../Ingredients/models";
 
 export interface IngredientItem {
-    ingredientItemId: number;
+    id?: string;
     quantity: string;
-    type: IngredientType;
-    ingredientId: number;
-    ingredient: Ingredient;
-    recipeId: number;
+    type: string;
+    name: string;
 }
 
 export enum IngredientType {
-    Cup,
-    Tablespoon,
-    Teaspoon,
-    Unit,
-    Gram
+    Cup = "cup",
+    Tablespoon = "tablespoon",
+    Teaspoon = "teaspoon",
+    Unit = "unit",
+    Gram = "gram"
 }
 
 export interface Recipe {
     id?: string;
-    slug: string;
-    cookbookId?: number;
-    recipeTypeId?: number;
     name: string;
     description?: string;
-    recipeType?: RecipeType;
+    slug: string;
+    recipeType?: string;
     duration?: number;
     ingredientItems?: IngredientItem[];
-    recipeSteps?: RecipeStep[];
-    recipeTagItems?: RecipeTagItem[];
-}
-
-export interface RecipeStep {
-    recipeStepId: number;
-    recipeId: number;
-    order: number;
-    description: string;
-    imageUrl: string;
-}
-
-export interface RecipeTagItem {
-    recipeTagItemId: number;
-    recipeId: number;
-    recipeTagId: number;
-    recipeTag: RecipeTag;
-}
-
-export interface RecipeTag {
-    recipeTagId: number;
-    name: string;
-}
-
-export interface RecipeType {
-    recipeTypeId: number;
-    name: string;
-}
-
-export interface InputAddIngredientItem {
-    recipeId: number;
-    name?: string;
-}
-
-export interface InputUpdateRecipeName {
-    recipeId: number;
-    name: string;
-}
-
-export interface InputUpdateRecipeDescription {
-    recipeId: number;
-    text: string;
+    tags?: string[];
+    cuisine?: string;
 }

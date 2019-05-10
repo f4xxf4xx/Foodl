@@ -1,6 +1,6 @@
 import React from "react";
 import {
-    Card, CardHeader, CardBody, Row, Col, Button, Table
+    Card, Row, Col,
 } from "reactstrap";
 import SectionTitleElement from "./SectionTitleElement";
 
@@ -8,14 +8,15 @@ type Props = {
     title?: string;
     button?: any;
     col: string;
+    marginTop?: string;
 }
 
 class SectionElement extends React.Component<Props> {
     render() {
-        const { title, children, col, button } = this.props;
+        const { title, children, col, button, marginTop } = this.props;
 
         return (
-            <Row className="mt-5">
+            <Row className={`mt-${marginTop || 5}`}>
                 <Col className="mb-5 mb-xl-0" xl={col}>
                     <Card className="shadow">
                         {title &&
