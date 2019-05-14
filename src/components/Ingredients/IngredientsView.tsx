@@ -1,60 +1,74 @@
-import React, { PureComponent, RefObject, createRef } from 'react';
-import { Ingredient } from './models';
-import { withRouter } from 'react-router-dom';
-import { ingredientService } from './ingredientService';
+import React, { PureComponent } from 'react';
+import { withRouter, RouteProps } from 'react-router-dom';
 import { Table, Button, Container, Input, CardBody, Form, Row, Col, FormGroup } from 'reactstrap';
 import TopNavbar from '../Layout/TopNavbar';
 import Header from '../Layout/Header';
 import SectionHeaderElement from '../Section/SectionHeaderElement';
 import SectionElement from '../Section/SectionElement';
 import { toast } from 'react-toastify';
+import { connect } from 'react-redux';
+import { compose, bindActionCreators, Dispatch } from 'redux';
+import * as ingredientActions from './ingredientActions';
+import { Ingredient } from './models';
+import { IngredientState } from './ingredientReducer';
+import { ingredientService } from './ingredientService';
 
 type State = {
-    ingredients: Ingredient[];
-    loading: boolean;
-    working: boolean;
     newIngredientName: string;
 }
 
-class IngredientsView extends PureComponent<{}, State> {
-    constructor(props: any) {
+type StateProps = {
+    ingredients: Ingredient[];
+    loading: boolean;
+}
+
+type DispatchProps = {
+    beginFetch: typeof ingredientActions.beginFetch;
+    fetchIngredientsSuccess: typeof ingredientActions.fetchIngredientsSuccess;
+    fetchIngredientsFailure: typeof ingredientActions.fetchIngredientsFailure;
+    deleteIngredientSuccess: typeof ingredientActions.deleteIngredientSuccess;
+}
+
+type Props = StateProps & DispatchProps & RouteProps;
+
+class IngredientsViewBase extends PureComponent<Props, State> {
+    constructor(props: Props) {
         super(props);
         this.state = {
-            ingredients: [],
-            loading: true,
-            working: false,
             newIngredientName: ""
         };
     }
 
     componentDidMount() {
-        ingredientService.getIngredients()
+        this.props.beginFetch();
+        return ingredientService.getIngredients()
             .then(ingredients => {
-                this.setState({
-                    ingredients,
-                    loading: false
-                });
+                this.props.fetchIngredientsSuccess(ingredients)
+            })
+            .catch(error => {
+                this.props.fetchIngredientsFailure(error)
             });
     }
 
     addIngredient = () => {
-        const { newIngredientName, ingredients } = this.state;
+        const { newIngredientName } = this.state;
+        const { ingredients } = this.props;
         if (newIngredientName === "") {
             return;
         }
         this.setState({
-            working: true,
             newIngredientName: ""
         })
 
-        ingredientService.addIngredient(newIngredientName)
-            .then(ingredient => {
-                this.setState({
-                    ingredients: [...ingredients, ingredient],                    
-                    working: false
-                })
-                toast.success("Added!");
-            });
+        // ingredientService.addIngredient(newIngredientName)
+        //     .then(ingredient => {
+
+        //         this.setState({
+        //             ingredients: [...ingredients, ingredient],
+        //             working: false
+        //         })
+        //         toast.success("Added!");
+        //     });
     }
 
     handleKeyPress = (event) => {
@@ -64,7 +78,7 @@ class IngredientsView extends PureComponent<{}, State> {
     }
 
     renderIngredients() {
-        const { ingredients, working } = this.state;
+        const { ingredients, loading } = this.props;
 
         return (
             <Table className="align-items-center table-flush" responsive>
@@ -80,7 +94,7 @@ class IngredientsView extends PureComponent<{}, State> {
                             <td>{ingredient.name}</td>
                             <td>
                                 <Button
-                                    disabled={working}
+                                    disabled={loading}
                                     onClick={() => this.deleteIngredient(ingredient.id)}>
                                     DELETE
                             </Button>
@@ -97,26 +111,22 @@ class IngredientsView extends PureComponent<{}, State> {
     }
 
     deleteIngredient(ingredientId: string): void {
-        const { ingredients } = this.state;
-        this.setState({ working: true })
+        this.props.beginFetch();
         ingredientService.deleteIngredient(ingredientId)
             .then(() => {
-                this.setState({
-                    ingredients: ingredients.filter(i => i.id !== ingredientId),
-                    working: false
-                })
+                this.props.deleteIngredientSuccess(ingredientId);
                 toast.success("Deleted!");
             })
     }
 
     renderNewIngredientForm() {
-        const { working } = this.state;
+        const { loading } = this.props;
         const button = (
             <Button
                 color="primary"
                 onClick={this.addIngredient}
                 size="sm"
-                disabled={working}
+                disabled={loading}
             >
                 Add
             </Button>
@@ -156,6 +166,7 @@ class IngredientsView extends PureComponent<{}, State> {
     }
 
     render() {
+        const { loading } = this.props;
         return (
             <>
                 <TopNavbar />
@@ -173,9 +184,7 @@ class IngredientsView extends PureComponent<{}, State> {
                     <SectionElement
                         col="12"
                     >
-                        {!this.state.loading &&
-                            this.renderIngredients()
-                        }
+                        {!loading && this.renderIngredients()}
                     </SectionElement>
                 </Container>
             </>
@@ -183,4 +192,24 @@ class IngredientsView extends PureComponent<{}, State> {
     }
 }
 
-export default withRouter(IngredientsView);
+const mapStateToProps = (state: any) => {
+    return {
+        ingredients: state.ingredients.ingredients,
+        loading: state.ingredients.loading
+    }
+}
+
+const mapDispatchToProps = (dispatch: Dispatch) => {
+    return {
+        beginFetch: bindActionCreators(ingredientActions.beginFetch, dispatch),
+        fetchIngredientsSuccess: bindActionCreators(ingredientActions.fetchIngredientsSuccess, dispatch),
+        fetchIngredientsFailure: bindActionCreators(ingredientActions.fetchIngredientsFailure, dispatch),
+        deleteIngredientSuccess: bindActionCreators(ingredientActions.deleteIngredientSuccess, dispatch)
+    }
+}
+
+const IngredientsView = compose(
+    connect<StateProps, DispatchProps>(mapStateToProps, mapDispatchToProps)
+)(IngredientsViewBase)
+
+export default IngredientsView;
