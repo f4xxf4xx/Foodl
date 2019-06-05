@@ -1,6 +1,5 @@
 import React from "react";
-import { Container } from "reactstrap";
-import AdminFooter from "../components/Layout/AdminFooter";
+import Footer from "../components/Layout/Footer";
 import Sidebar from "../components/Layout/Sidebar";
 
 class MainLayout extends React.Component<any> {
@@ -10,11 +9,9 @@ class MainLayout extends React.Component<any> {
         <Sidebar
           {...this.props}
         />
-        <div className="main-content" ref="mainContent">          
+        <div>
           {this.props.children}
-          <Container fluid>
-            <AdminFooter />
-          </Container>
+          <Footer />
         </div>
       </>
     );

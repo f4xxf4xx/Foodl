@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Fetcher } from '../../../services/Fetcher';
-import { Button } from 'reactstrap';
 import { BarLoader } from 'react-spinners';
 import { Ingredient } from '../../Ingredients/models';
 
@@ -67,7 +66,7 @@ export class IngredientView extends Component<{}, State> {
     const { ingredients } = this.state;
 
     return (
-      <table className='table table-striped'>
+      <table>
         <thead>
           <tr>
             <th>Ingredient</th>
@@ -78,7 +77,7 @@ export class IngredientView extends Component<{}, State> {
           {ingredients.map((ingredient, index) =>
             <tr key={index}>
               <td>{ingredient.name}</td>
-              <td><Button onClick={() => this.deleteIngredient(ingredient.id)}>DELETE</Button></td>
+              <td><a onClick={() => this.deleteIngredient(ingredient.id)}>DELETE</a></td>
             </tr>
           )}
         </tbody>

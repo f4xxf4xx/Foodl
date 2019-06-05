@@ -1,8 +1,6 @@
 import React, { Component, PureComponent } from 'react';
-import { Button, Container, Row, Col, Input, FormGroup, Card, CardHeader, CardBody, Form, Table } from 'reactstrap';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { Recipe } from '../models';
-import TopNavbar from '../../Layout/TopNavbar';
 import Header from '../../Layout/Header';
 import { withRouter } from 'react-router-dom';
 import SectionHeaderElement from '../../Section/SectionHeaderElement';
@@ -38,7 +36,7 @@ class RecipesView extends PureComponent<Props, State> {
                     recipes,
                     loading: false
                 });
-            })
+            });
     }
 
     updateRecipeName = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -46,7 +44,7 @@ class RecipesView extends PureComponent<Props, State> {
     }
 
     handleKeyPress = (event) => {
-        if (event.charCode == 13) {
+        if (event.charCode === 13) {
             this.addRecipe();
         }
     }
@@ -58,7 +56,7 @@ class RecipesView extends PureComponent<Props, State> {
         }
         this.setState({
             working: true
-        })
+        });
 
         recipeService.addRecipe(newRecipeName)
             .then(recipe => {
@@ -79,17 +77,17 @@ class RecipesView extends PureComponent<Props, State> {
                 this.setState({
                     recipes: recipes.filter(i => i.id !== recipeId),
                     working: false
-                })
+                });
                 toast.success("Deleted!");
-            })
+            });
     }
 
     renderRecipes() {
         const { recipes, loading, working } = this.state;
 
         return (
-            <Table className="align-items-center table-flush" responsive>
-                <thead className="thead-light">
+            <table>
+                <thead>
                     <tr>
                         <th scope="col">Recipes</th>
                         <th scope="col">Delete</th>
@@ -99,57 +97,54 @@ class RecipesView extends PureComponent<Props, State> {
                     {!loading && recipes.map((recipe) =>
                         <tr key={recipe.id}>
                             <td><Link to={`/recipe/${recipe.id}`}>{recipe.name}</Link></td>
-                            <td><Button onClick={() => this.deleteRecipe(recipe.id)} disabled={working}>DELETE</Button></td>
+                            <td>
+                                <a
+                                    onClick={() => this.deleteRecipe(recipe.id)}
+                                // disabled={working}
+                                >
+                                    DELETE
+                                </a>
+                            </td>
                         </tr>
                     )}
                 </tbody>
-            </Table>
+            </table>
         );
     }
 
     renderNewRecipeForm() {
         const { working } = this.state;
         const button = (
-            <Button
-                color="primary"
+            <a
                 onClick={this.addRecipe}
-                size="sm"
-                disabled={working}
+            // disabled={working}
             >
                 Create
-            </Button>
+            </a>
         );
 
         return (
-            <SectionElement title={"New recipe"} col="12" button={button}>
-                <CardBody>
-                    <Form onSubmit={e => { e.preventDefault(); }}>
-                        <div className="pl-lg-4">
-                            <Row>
-                                <Col lg="6">
-                                    <FormGroup>
-                                        <label
-                                            className="form-control-label"
-                                            htmlFor="input-recipe-name"
-                                        >
-                                            Recipe name
+            <SectionElement title={"New recipe"} button={button}>
+                <form onSubmit={e => { e.preventDefault(); }}>
+                    <div className="pl-lg-4">
+                        <label
+                            className="form-control-label"
+                            htmlFor="input-recipe-name"
+                        >
+                            Recipe name
                                         </label>
-                                        <Input
-                                            className="form-control-alternative"
-                                            id="input-recipe-name"
-                                            placeholder="Recipe name"
-                                            type="text"
-                                            onChange={this.updateRecipeName}
-                                            value={this.state.newRecipeName}
-                                            disabled={working}
-                                            onKeyPress={this.handleKeyPress}
-                                        />
-                                    </FormGroup>
-                                </Col>
-                            </Row>
-                        </div>
-                    </Form>
-                </CardBody>
+                        <input
+                            className="form-control-alternative"
+                            id="input-recipe-name"
+                            placeholder="Recipe name"
+                            type="text"
+                            onChange={this.updateRecipeName}
+                            value={this.state.newRecipeName}
+                            disabled={working}
+                            onKeyPress={this.handleKeyPress}
+                        />
+                    </div>
+                </form>
             </SectionElement>
         )
     }
@@ -157,33 +152,30 @@ class RecipesView extends PureComponent<Props, State> {
     render() {
         return (
             <>
-                <TopNavbar />
                 <Header />
-                <Container className="mt--7" fluid>
-                    <SectionHeaderElement
-                        title="My recipes"
-                        subtitle={"Overview"}
-                        col="12"
-                    >
-                        <p className="text-light">
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                            ultrices arcu at sagittis aliquet. Donec convallis, felis id viverra sagittis, diam libero volutpat nunc,
-                            pretium orci augue sed urna. Ut in laoreet lectus, in luctus purus. Cras a quam turpis.
-                            Cras scelerisque hendrerit erat. Maecenas iaculis venenatis augue, a rutrum ex. Fusce vehicula urna molestie congue ultrices.
-                            Suspendisse quis nulla nec risus varius pellentesque. Nullam efficitur sapien dolor, quis tincidunt justo scelerisque ac. Fusce justo erat,
-                            ullamcorper et justo quis, efficitur egestas tellus. Integer interdum fermentum lorem, in placerat purus volutpat vitae.
-                            Ut sodales cursus dolor eget molestie. Curabitur eget laoreet ligula. Aenean venenatis lorem nisi, nec dignissim ipsum malesuada ac.
-                            In id porta tellus.Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                <SectionHeaderElement
+                    title="My recipes"
+                    subtitle={"Overview"}
+                >
+                    <p className="text-light">
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                        ultrices arcu at sagittis aliquet. Donec convallis, felis id viverra sagittis, diam libero volutpat nunc,
+                        pretium orci augue sed urna. Ut in laoreet lectus, in luctus purus. Cras a quam turpis.
+                        Cras scelerisque hendrerit erat. Maecenas iaculis venenatis augue, a rutrum ex.
+                        Fusce vehicula urna molestie congue ultrices.
+                        Suspendisse quis nulla nec risus varius pellentesque. Nullam efficitur sapien dolor,
+                        uis tincidunt justo scelerisque ac. Fusce justo erat,
+                        ullamcorper et justo quis, efficitur egestas tellus. Integer interdum fermentum lorem,
+                        in placerat purus volutpat vitae.
+                        Ut sodales cursus dolor eget molestie. Curabitur eget laoreet ligula. Aenean venenatis
+                        lorem nisi, nec dignissim ipsum malesuada ac.
+                        In id porta tellus.Lorem ipsum dolor sit amet, consectetur adipiscing elit.
                             </p>
-                    </SectionHeaderElement>
-                    {this.renderNewRecipeForm()}
-                    <SectionElement
-                        col="12"
-                        marginTop="3"
-                    >
-                        {this.renderRecipes()}
-                    </SectionElement>
-                </Container>
+                </SectionHeaderElement>
+                {this.renderNewRecipeForm()}
+                <SectionElement>
+                    {this.renderRecipes()}
+                </SectionElement>
             </>
         );
     }

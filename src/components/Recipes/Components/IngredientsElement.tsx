@@ -1,5 +1,4 @@
 import React, { PureComponent } from 'react';
-import { Button, Table, Form, Row, Col, FormGroup, Input, CardBody } from 'reactstrap';
 import { Recipe, IngredientItem } from '../models';
 import SectionElement from '../../Section/SectionElement';
 import AvatarElement from '../../Layout/AvatarElement';
@@ -12,8 +11,8 @@ type Props = {
     ingredients: Ingredient[];
     ingredientItems: IngredientItem[];
     editing: boolean;
-    addIngredient: (newIngredientItem: IngredientItem) => void
-    deleteIngredient: (ingredientItemId: string) => void
+    addIngredient: (newIngredientItem: IngredientItem) => void;
+    deleteIngredient: (ingredientItemId: string) => void;
 }
 
 type State = {
@@ -84,107 +83,74 @@ class IngredientsElement extends PureComponent<Props, State> {
         })
 
         return (
-            <SectionElement
-                title="Ingredients"
-                col="12"
-            >
-                <CardBody>
-                    <Table className="align-items-center table-flush" responsive>
-                        <tbody>
-                            {ingredientItems && ingredientItems.map((ingredientItem, index) => {
-                                return (
-                                    <tr key={index}>
-                                        <th scope="row">
-                                            <AvatarElement text={getIngredientText(ingredientItem)} imageUrl="../../assets/img/theme/vue.jpg" />
-                                        </th>
-                                        <td>
-                                            {editing ?
-                                                <Button onClick={() => { deleteIngredient(ingredientItem.id) }}>Delete ingredient</Button>
-                                                :
-                                                <Button onClick={() => { }}>Add to cart</Button>
-                                            }
-                                        </td>
-                                    </tr>
-                                )
-                            })}
-                        </tbody>
-                    </Table>
-                    <hr className="my-4" />
-                    {editing &&
-                        <Form onSubmit={e => { e.preventDefault(); }}>
-                            <h6 className="heading-small text-muted mb-4">
-                                Add ingredient
-                            </h6>
-                            <div className="pl-lg-4">
-                                <Row>
-                                    <Col>
-                                        <FormGroup>
-                                            <label
-                                                className="form-control-label"
-                                                htmlFor="input-ingredient"
-                                            >
-                                                Ingredient
-                                        </label>
-                                            <Creatable
-                                                id="input-ingredient"
-                                                options={ingredientOptions}
-                                                value={currentSelectIngredient}
-                                                onChange={this.updateFormName}
-                                            />
-                                        </FormGroup>
-                                    </Col>
-                                </Row>
-                                <Row>
-                                    <Col lg="6">
-                                        <FormGroup>
-                                            <label
-                                                className="form-control-label"
-                                                htmlFor="input-quantity"
-                                            >
-                                                Quantity
-                                        </label>
-                                            <Input
-                                                id="input-quantity"
-                                                placeholder="Quantity"
-                                                type="text"
-                                                value={newIngredientItem.quantity}
-                                                onChange={this.updateFormQuantity}
-                                            />
-                                        </FormGroup>
-                                    </Col>
-                                    <Col lg="6">
-                                        <FormGroup>
-                                            <label
-                                                className="form-control-label"
-                                                htmlFor="input-type"
-                                            >
-                                                Type
-                                        </label>
-                                            <Select
-                                                id="input-type"
-                                                options={getIngredientTypeOptions()}
-                                                value={currentSelectType}
-                                                onChange={this.updateFormType}
-                                            />
-                                        </FormGroup>
-                                    </Col>
-                                </Row>
-                                <Row>
-                                    <Col>
-                                        <FormGroup>
-                                            <Button
-                                                color="primary"
-                                                onClick={this.addIngredient}
-                                            >
-                                                Add
-                                            </Button>
-                                        </FormGroup>
-                                    </Col>
-                                </Row>
-                            </div>
-                        </Form>
-                    }
-                </CardBody>
+            <SectionElement title="Ingredients">
+                <table>
+                    <tbody>
+                        {ingredientItems && ingredientItems.map((ingredientItem, index) => {
+                            return (
+                                <tr key={index}>
+                                    <th scope="row">
+                                        <AvatarElement
+                                            text={getIngredientText(ingredientItem)}
+                                            imageUrl="../../assets/img/theme/vue.jpg"
+                                        />
+                                    </th>
+                                    <td>
+                                        {editing ?
+                                            <a onClick={() => { deleteIngredient(ingredientItem.id) }}>Delete ingredient</a>
+                                            :
+                                            <a onClick={() => { }}>Add to cart</a>
+                                        }
+                                    </td>
+                                </tr>
+                            )
+                        })}
+                    </tbody>
+                </table>
+                <hr />
+                {editing &&
+                    <form onSubmit={e => { e.preventDefault(); }}>
+                        <h6>
+                            Add ingredient
+                        </h6>
+                        <div>
+                            <label htmlFor="input-ingredient">
+                                Ingredient
+                            </label>
+                            <Creatable
+                                id="input-ingredient"
+                                options={ingredientOptions}
+                                value={currentSelectIngredient}
+                                onChange={this.updateFormName}
+                            />
+                            <label htmlFor="input-quantity">
+                                Quantity
+                            </label>
+                            <input
+                                id="input-quantity"
+                                placeholder="Quantity"
+                                type="text"
+                                value={newIngredientItem.quantity}
+                                onChange={this.updateFormQuantity}
+                            />
+                            <label htmlFor="input-type">
+                                Type
+                            </label>
+                            <Select
+                                id="input-type"
+                                options={getIngredientTypeOptions()}
+                                value={currentSelectType}
+                                onChange={this.updateFormType}
+                            />
+                            <a
+                                color="primary"
+                                onClick={this.addIngredient}
+                            >
+                                Add
+                            </a>
+                        </div>
+                    </form>
+                }
             </SectionElement>
         );
     }

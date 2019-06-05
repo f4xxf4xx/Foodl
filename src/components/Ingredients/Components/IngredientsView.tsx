@@ -1,26 +1,24 @@
-import React, { PureComponent } from 'react';
-import { withRouter, RouteProps } from 'react-router-dom';
-import { Table, Button, Container, Input, CardBody, Form, Row, Col, FormGroup } from 'reactstrap';
-import TopNavbar from '../../Layout/TopNavbar';
-import Header from '../../Layout/Header';
-import SectionHeaderElement from '../../Section/SectionHeaderElement';
-import SectionElement from '../../Section/SectionElement';
-import { toast } from 'react-toastify';
-import { connect } from 'react-redux';
-import { compose, bindActionCreators, Dispatch } from 'redux';
-import * as ingredientActions from '../ingredientActions';
-import { Ingredient } from '../models';
-import { ingredientService } from '../ingredientService';
+import React, { PureComponent } from "react";
+import { RouteProps } from "react-router-dom";
+import Header from "../../Layout/Header";
+import SectionHeaderElement from "../../Section/SectionHeaderElement";
+import SectionElement from "../../Section/SectionElement";
+import { toast } from "react-toastify";
+import { connect } from "react-redux";
+import { compose, bindActionCreators, Dispatch } from "redux";
+import * as ingredientActions from "../ingredientActions";
+import { Ingredient } from "../models";
+import { ingredientService } from "../ingredientService";
 
 type State = {
     newIngredientName: string;
-}
+};
 
 type StateProps = {
     ingredients: Ingredient[];
     loading: boolean;
     updating: boolean;
-}
+};
 
 type DispatchProps = {
     fetchIngredientsStart: typeof ingredientActions.deleteIngredientBegin;
@@ -32,7 +30,7 @@ type DispatchProps = {
     deleteIngredientBegin: typeof ingredientActions.deleteIngredientBegin;
     deleteIngredientSuccess: typeof ingredientActions.deleteIngredientSuccess;
     deleteIngredientFailure: typeof ingredientActions.deleteIngredientFailure;
-}
+};
 
 type Props = StateProps & DispatchProps & RouteProps;
 
@@ -48,10 +46,10 @@ class IngredientsViewBase extends PureComponent<Props, State> {
         this.props.fetchIngredientsStart();
         return ingredientService.getIngredients()
             .then(ingredients => {
-                this.props.fetchIngredientsSuccess(ingredients)
+                this.props.fetchIngredientsSuccess(ingredients);
             })
             .catch(error => {
-                this.props.fetchIngredientsFailure(error)
+                this.props.fetchIngredientsFailure(error);
             });
     }
 
@@ -68,15 +66,15 @@ class IngredientsViewBase extends PureComponent<Props, State> {
                 toast.success("Added!");
                 this.setState({
                     newIngredientName: ""
-                })
+                });
             })
             .catch(() => {
-                toast.error("Error adding the ingredient.")
-            })
+                toast.error("Error adding the ingredient.");
+            });
     }
 
     handleKeyPress = (event) => {
-        if (event.charCode == 13) {
+        if (event.charCode === 13) {
             this.addIngredient();
         }
     }
@@ -85,11 +83,11 @@ class IngredientsViewBase extends PureComponent<Props, State> {
         const { ingredients, updating } = this.props;
 
         return (
-            <Table className="align-items-center table-flush" responsive>
-                <thead className="thead-light">
+            <table>
+                <thead>
                     <tr>
-                        <th scope="col">Ingredients</th>
-                        <th scope="col">Delete</th>
+                        <th>Ingredients</th>
+                        <th>Delete</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -97,16 +95,16 @@ class IngredientsViewBase extends PureComponent<Props, State> {
                         <tr key={ingredient.id}>
                             <td>{ingredient.name}</td>
                             <td>
-                                <Button
-                                    disabled={updating}
+                                <a
+                                    // disabled={updating}
                                     onClick={() => this.deleteIngredient(ingredient.id)}>
                                     DELETE
-                            </Button>
+                                </a>
                             </td>
                         </tr>
                     )}
                 </tbody>
-            </Table>
+            </table>
         );
     }
 
@@ -123,52 +121,43 @@ class IngredientsViewBase extends PureComponent<Props, State> {
             })
             .catch(() => {
                 toast.error("Error deleting the ingredient.")
-            })
+            });
     }
 
     renderNewIngredientForm() {
         const { updating } = this.props;
         const button = (
-            <Button
-                color="primary"
+            <a
                 onClick={this.addIngredient}
-                size="sm"
-                disabled={updating}
+            // disabled={updating}
             >
                 Add
-            </Button>
+            </a>
         );
 
         return (
-            <SectionElement title={"New ingredient"} col="12" button={button}>
-                <CardBody>
-                    <Form onSubmit={e => { e.preventDefault(); }}>
-                        <div className="pl-lg-4">
-                            <Row>
-                                <Col lg="6">
-                                    <FormGroup>
-                                        <label
-                                            className="form-control-label"
-                                            htmlFor="input-ingredient-name"
-                                        >
-                                            Ingredient name
+            <>
+                <h2>New ingredient</h2>
+                <form onSubmit={e => { e.preventDefault(); }}>
+                    <div>
+                        <label
+                            className="form-control-label"
+                            htmlFor="input-ingredient-name"
+                        >
+                            Ingredient name
                                         </label>
-                                        <Input
-                                            className="form-control-alternative"
-                                            id="input-ingredient-name"
-                                            placeholder="Ingredient name"
-                                            type="text"
-                                            onChange={this.updateIngredientName}
-                                            value={this.state.newIngredientName}
-                                            onKeyPress={this.handleKeyPress}
-                                        />
-                                    </FormGroup>
-                                </Col>
-                            </Row>
-                        </div>
-                    </Form>
-                </CardBody>
-            </SectionElement>
+                        <input
+                            className="form-control-alternative"
+                            id="input-ingredient-name"
+                            placeholder="Ingredient name"
+                            type="text"
+                            onChange={this.updateIngredientName}
+                            value={this.state.newIngredientName}
+                            onKeyPress={this.handleKeyPress}
+                        />
+                    </div>
+                </form>
+            </>
         )
     }
 
@@ -176,24 +165,18 @@ class IngredientsViewBase extends PureComponent<Props, State> {
         const { loading } = this.props;
         return (
             <>
-                <TopNavbar />
                 <Header />
-                <Container className="mt--7" fluid>
-                    <SectionHeaderElement
-                        title="Ingredients"
-                        col="12"
-                    >
-                        <p className="text-light">
-                            Here lies the list of possible ingredients
+                <SectionHeaderElement
+                    title="Ingredients"
+                >
+                    <p className="text-light">
+                        Here lies the list of possible ingredients
                         </p>
-                    </SectionHeaderElement>
-                    {this.renderNewIngredientForm()}
-                    <SectionElement
-                        col="12"
-                    >
-                        {!loading && this.renderIngredients()}
-                    </SectionElement>
-                </Container>
+                </SectionHeaderElement>
+                {this.renderNewIngredientForm()}
+                <SectionElement>
+                    {!loading && this.renderIngredients()}
+                </SectionElement>
             </>
         );
     }
@@ -204,8 +187,8 @@ const mapStateToProps = (state: any) => {
         ingredients: state.ingredients.ingredients,
         loading: state.ingredients.loading,
         updating: state.ingredients.updating
-    }
-}
+    };
+};
 
 const mapDispatchToProps = (dispatch: Dispatch) => {
     return {
@@ -218,11 +201,11 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
         deleteIngredientBegin: bindActionCreators(ingredientActions.deleteIngredientBegin, dispatch),
         deleteIngredientSuccess: bindActionCreators(ingredientActions.deleteIngredientSuccess, dispatch),
         deleteIngredientFailure: bindActionCreators(ingredientActions.deleteIngredientFailure, dispatch)
-    }
-}
+    };
+};
 
 const IngredientsView = compose(
     connect<StateProps, DispatchProps>(mapStateToProps, mapDispatchToProps)
-)(IngredientsViewBase)
+)(IngredientsViewBase);
 
 export default IngredientsView;

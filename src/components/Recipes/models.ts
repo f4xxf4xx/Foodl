@@ -1,5 +1,3 @@
-import { Ingredient } from "../Ingredients/models";
-
 export interface IngredientItem {
     id?: string;
     quantity: string;
