@@ -16,7 +16,6 @@ class AvatarElement extends React.Component<Props> {
                 >
                     <img
                         alt={text}
-                        src={require("../../assets/img/theme/vue.jpg")}
                     />
                 </a>
                 <span className="mb-0 text-sm">
