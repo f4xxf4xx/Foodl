@@ -9,6 +9,8 @@ import { compose, bindActionCreators, Dispatch } from "redux";
 import * as ingredientActions from "../ingredientActions";
 import { Ingredient } from "../models";
 import { ingredientService } from "../ingredientService";
+import Button from '@material-ui/core/Button';
+import { TableHead, TableRow, Table, TableCell, TableBody, Paper, Typography, FormLabel, TextField } from "@material-ui/core";
 
 type State = {
     newIngredientName: string;
@@ -83,28 +85,32 @@ class IngredientsViewBase extends PureComponent<Props, State> {
         const { ingredients, updating } = this.props;
 
         return (
-            <table>
-                <thead>
-                    <tr>
-                        <th>Ingredients</th>
-                        <th>Delete</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {ingredients.map((ingredient) =>
-                        <tr key={ingredient.id}>
-                            <td>{ingredient.name}</td>
-                            <td>
-                                <a
-                                    // disabled={updating}
-                                    onClick={() => this.deleteIngredient(ingredient.id)}>
-                                    DELETE
-                                </a>
-                            </td>
-                        </tr>
-                    )}
-                </tbody>
-            </table>
+            <Paper>
+                <Table>
+                    <TableHead>
+                        <TableRow>
+                            <TableCell component="th">Ingredients</TableCell>
+                            <TableCell component="th">Delete</TableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {ingredients.map((ingredient) =>
+                            <TableRow key={ingredient.id}>
+                                <TableCell>{ingredient.name}</TableCell>
+                                <TableCell>
+                                    <Button
+                                        variant="contained"
+                                        color="primary"
+                                        disabled={updating}
+                                        onClick={() => this.deleteIngredient(ingredient.id)}>
+                                        DELETE
+                                </Button>
+                                </TableCell>
+                            </TableRow>
+                        )}
+                    </TableBody>
+                </Table>
+            </Paper>
         );
     }
 
@@ -126,24 +132,16 @@ class IngredientsViewBase extends PureComponent<Props, State> {
 
     renderNewIngredientForm() {
         const { updating } = this.props;
-        const button = (
-            <a
-                onClick={this.addIngredient}
-            // disabled={updating}
-            >
-                Add
-            </a>
-        );
 
         return (
             <>
-                <h2>New ingredient</h2>
+                <Typography variant="h4">New ingredient</Typography>
                 <form onSubmit={e => { e.preventDefault(); }}>
                     <div>
-                        <label htmlFor="input-ingredient-name">
+                        <FormLabel htmlFor="input-ingredient-name">
                             Ingredient name
-                                        </label>
-                        <input
+                        </FormLabel>
+                        <TextField
                             id="input-ingredient-name"
                             placeholder="Ingredient name"
                             type="text"
@@ -152,6 +150,14 @@ class IngredientsViewBase extends PureComponent<Props, State> {
                             onKeyPress={this.handleKeyPress}
                         />
                     </div>
+                    <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={this.addIngredient}
+                        disabled={updating}
+                    >
+                        Add
+                    </Button>
                 </form>
             </>
         )
@@ -165,9 +171,9 @@ class IngredientsViewBase extends PureComponent<Props, State> {
                 <SectionHeaderElement
                     title="Ingredients"
                 >
-                    <p>
+                    <Typography>
                         Here lies the list of possible ingredients
-                    </p>
+                    </Typography>
                 </SectionHeaderElement>
                 {this.renderNewIngredientForm()}
                 <SectionElement>

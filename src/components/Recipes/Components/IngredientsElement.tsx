@@ -6,6 +6,7 @@ import { getIngredientText, getIngredientTypeOptions } from '../helper';
 import { Ingredient } from '../../Ingredients/models';
 import Select from 'react-select';
 import Creatable from 'react-select/lib/Creatable';
+import { Table, TableBody, Divider, TableRow, TableCell, Button, Typography } from '@material-ui/core';
 
 type Props = {
     ingredients: Ingredient[];
@@ -84,35 +85,35 @@ class IngredientsElement extends PureComponent<Props, State> {
 
         return (
             <SectionElement title="Ingredients">
-                <table>
-                    <tbody>
+                <Table>
+                    <TableBody>
                         {ingredientItems && ingredientItems.map((ingredientItem, index) => {
                             return (
-                                <tr key={index}>
-                                    <th scope="row">
+                                <TableRow key={index}>
+                                    <TableCell component="th" scope="row">
                                         <AvatarElement
                                             text={getIngredientText(ingredientItem)}
                                             imageUrl="../../assets/img/theme/vue.jpg"
                                         />
-                                    </th>
-                                    <td>
+                                    </TableCell>
+                                    <TableCell>
                                         {editing ?
                                             <a onClick={() => { deleteIngredient(ingredientItem.id) }}>Delete ingredient</a>
                                             :
                                             <a onClick={() => { }}>Add to cart</a>
                                         }
-                                    </td>
-                                </tr>
+                                    </TableCell>
+                                </TableRow>
                             )
                         })}
-                    </tbody>
-                </table>
-                <hr />
+                    </TableBody>
+                </Table>
+                <Divider />
                 {editing &&
                     <form onSubmit={e => { e.preventDefault(); }}>
-                        <h6>
+                        <Typography variant="h6">
                             Add ingredient
-                        </h6>
+                        </Typography>
                         <div>
                             <label htmlFor="input-ingredient">
                                 Ingredient
@@ -142,12 +143,13 @@ class IngredientsElement extends PureComponent<Props, State> {
                                 value={currentSelectType}
                                 onChange={this.updateFormType}
                             />
-                            <a
+                            <Button
+                                variant="contained"
                                 color="primary"
                                 onClick={this.addIngredient}
                             >
                                 Add
-                            </a>
+                            </Button>
                         </div>
                     </form>
                 }

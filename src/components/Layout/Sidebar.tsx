@@ -1,6 +1,6 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
-import { getLinks } from "../../layouts/links";
+import { getLinks } from "./links";
 
 type Props = {
   location?: any;

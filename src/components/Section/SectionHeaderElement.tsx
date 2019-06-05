@@ -1,4 +1,5 @@
 import React from "react";
+import { Typography } from "@material-ui/core";
 
 type Props = {
     title: string;
@@ -14,10 +15,10 @@ class SectionHeaderElement
         return (
             <>
                 <div>
-                    <h6>
+                    <Typography variant="h6">
                         {subtitle}
-                    </h6>
-                    <h2>{title}</h2>
+                    </Typography>
+                    <Typography variant="h2">{title}</Typography>
                 </div>
                 <div>
                     {button}

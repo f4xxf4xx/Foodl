@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Route, Switch } from "react-router";
-import MainLayout from "./layouts/MainLayout";
+import MainLayout from "./components/Layout/MainLayout";
 import { IngredientView } from "./components/Recipes/Components/IngredientView";
 import RecipesView from "./components/Recipes/Components/RecipesView";
 import RecipeView from "./components/Recipes/Components/RecipeView";
@@ -16,7 +16,7 @@ class App extends Component {
           <Route path="/recipe/:id" render={() => <MainLayout><RecipeView /></MainLayout>} />
           <Route path="/ingredients" render={() => <MainLayout><IngredientsView /></MainLayout>} />
           <Route path="/ingredients" render={() => <MainLayout><IngredientView /></MainLayout>} />/>
-      </Switch>
+        </Switch>
       </>
     );
   }

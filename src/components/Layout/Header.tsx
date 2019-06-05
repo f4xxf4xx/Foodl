@@ -1,11 +1,12 @@
 import React from "react";
+import { Typography } from "@material-ui/core";
 
 class Header extends React.Component {
   render() {
     return (
-      <div>
-        HEADER
-      </div>
+      <Typography variant="h1">
+        FOODL
+      </Typography>
     );
   }
 }

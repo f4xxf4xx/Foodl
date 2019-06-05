@@ -1,6 +1,7 @@
 import React from "react";
 import { Recipe, IngredientItem } from "../models";
 import Statistic from "../../Layout/Statistic";
+import { Typography } from "@material-ui/core";
 
 type Props = {
     recipe: Recipe;
@@ -59,7 +60,7 @@ class RecipeHeaderElement
                         {editing ?
                             <input defaultValue={recipe.name} onBlur={this.updateRecipe("name")} />
                             :
-                            <h2>{recipe.name}</h2>
+                            <Typography variant="h2">{recipe.name}</Typography>
                         }
                     </div>
                     <div>
@@ -75,9 +76,9 @@ class RecipeHeaderElement
                             onBlur={this.updateRecipe("description")}
                         />
                         :
-                        <p>
+                        <Typography>
                             {recipe.description}
-                        </p>
+                        </Typography>
                     }
                     {this.renderStatistics()}
                     </div>

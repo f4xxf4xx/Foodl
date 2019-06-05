@@ -8,6 +8,7 @@ import SectionElement from '../../Section/SectionElement';
 import { recipeService } from '../recipeService';
 import { toast } from 'react-toastify';
 import slugify from 'react-slugify';
+import { TableHead, TableBody, TableRow, TableCell, Table, Button, Typography } from '@material-ui/core';
 
 type State = {
     recipes: Recipe[];
@@ -86,41 +87,45 @@ class RecipesView extends PureComponent<Props, State> {
         const { recipes, loading, working } = this.state;
 
         return (
-            <table>
-                <thead>
-                    <tr>
-                        <th scope="col">Recipes</th>
-                        <th scope="col">Delete</th>
-                    </tr>
-                </thead>
-                <tbody>
+            <Table>
+                <TableHead>
+                    <TableRow>
+                        <TableCell component="th" scope="col">Recipes</TableCell>
+                        <TableCell component="th"  scope="col">Delete</TableCell>
+                    </TableRow>
+                </TableHead>
+                <TableBody>
                     {!loading && recipes.map((recipe) =>
-                        <tr key={recipe.id}>
-                            <td><Link to={`/recipe/${recipe.id}`}>{recipe.name}</Link></td>
-                            <td>
-                                <a
+                        <TableRow key={recipe.id}>
+                            <TableCell><Link to={`/recipe/${recipe.id}`}>{recipe.name}</Link></TableCell>
+                            <TableCell>
+                                <Button
+                                    variant="contained"
+                                    color="primary"
                                     onClick={() => this.deleteRecipe(recipe.id)}
-                                // disabled={working}
+                                    disabled={working}
                                 >
                                     DELETE
-                                </a>
-                            </td>
-                        </tr>
+                                </Button>
+                            </TableCell>
+                        </TableRow>
                     )}
-                </tbody>
-            </table>
+                </TableBody>
+            </Table>
         );
     }
 
     renderNewRecipeForm() {
         const { working } = this.state;
         const button = (
-            <a
+            <Button
+                variant="contained"
+                color="primary"
                 onClick={this.addRecipe}
-            // disabled={working}
+                disabled={working}
             >
                 Create
-            </a>
+            </Button>
         );
 
         return (
@@ -153,7 +158,7 @@ class RecipesView extends PureComponent<Props, State> {
                     title="My recipes"
                     subtitle={"Overview"}
                 >
-                    <p>
+                    <Typography variant="body2">
                         Lorem ipsum dolor sit amet, consectetur adipiscing elit.
                         ultrices arcu at sagittis aliquet. Donec convallis, felis id viverra sagittis, diam libero volutpat nunc,
                         pretium orci augue sed urna. Ut in laoreet lectus, in luctus purus. Cras a quam turpis.
@@ -166,7 +171,7 @@ class RecipesView extends PureComponent<Props, State> {
                         Ut sodales cursus dolor eget molestie. Curabitur eget laoreet ligula. Aenean venenatis
                         lorem nisi, nec dignissim ipsum malesuada ac.
                         In id porta tellus.Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                            </p>
+                    </Typography>
                 </SectionHeaderElement>
                 {this.renderNewRecipeForm()}
                 <SectionElement>

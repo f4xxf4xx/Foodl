@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Fetcher } from '../../../services/Fetcher';
 import { BarLoader } from 'react-spinners';
 import { Ingredient } from '../../Ingredients/models';
+import { Table, TableHead, TableBody, TableRow, TableCell, Button } from '@material-ui/core';
 
 type State = {
   ingredients: Ingredient[];
@@ -66,22 +67,30 @@ export class IngredientView extends Component<{}, State> {
     const { ingredients } = this.state;
 
     return (
-      <table>
-        <thead>
-          <tr>
-            <th>Ingredient</th>
-            <th>Delete</th>
-          </tr>
-        </thead>
-        <tbody>
+      <Table>
+        <TableHead>
+          <TableRow>
+            <TableCell component="th">Ingredient</TableCell>
+            <TableCell component="th">Delete</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
           {ingredients.map((ingredient, index) =>
-            <tr key={index}>
-              <td>{ingredient.name}</td>
-              <td><a onClick={() => this.deleteIngredient(ingredient.id)}>DELETE</a></td>
-            </tr>
+            <TableRow key={index}>
+              <TableCell>{ingredient.name}</TableCell>
+              <TableCell>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={() => this.deleteIngredient(ingredient.id)}
+                >
+                  DELETE
+              </Button>
+              </TableCell>
+            </TableRow>
           )}
-        </tbody>
-      </table>
+        </TableBody>
+      </Table>
     );
   }
 

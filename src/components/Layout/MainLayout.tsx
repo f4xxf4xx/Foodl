@@ -1,11 +1,12 @@
 import React from "react";
-import Footer from "../components/Layout/Footer";
-import Sidebar from "../components/Layout/Sidebar";
+import Dashboard from "./Dashboard";
+import Footer from "./Footer";
+import Sidebar from "./Sidebar";
 
 class MainLayout extends React.Component<any> {
   render() {
     return (
-      <>
+      <div>
         <Sidebar
           {...this.props}
         />
@@ -13,7 +14,7 @@ class MainLayout extends React.Component<any> {
           {this.props.children}
           <Footer />
         </div>
-      </>
+      </div>
     );
   }
 }
