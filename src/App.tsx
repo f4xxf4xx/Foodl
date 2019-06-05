@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Route, Switch } from 'react-router';
 import MainLayout from "./layouts/MainLayout";
 import Index from './components/Views/Index';
-import { IngredientView } from './components/Recipes/IngredientView';
+import { IngredientView } from './components/Recipes/Components/IngredientView';
 import Icons from './components/Views/Icons';
 import Maps from './components/Views/Maps';
 import Profile from './components/Views/Profile';
@@ -10,9 +10,9 @@ import Tables from './components/Views/Tables';
 import Login from './components/Views/Login';
 import Register from './components/Views/Register';
 import Auth from './layouts/Auth';
-import RecipesView from './components/Recipes/RecipesView';
-import RecipeView from './components/Recipes/RecipeView';
-import IngredientsView from './components/Ingredients/IngredientsView';
+import RecipesView from './components/Recipes/Components/RecipesView';
+import RecipeView from './components/Recipes/Components/RecipeView';
+import IngredientsView from './components/Ingredients/Components/IngredientsView';
 
 class App extends Component {
   render() {

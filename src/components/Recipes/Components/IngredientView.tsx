@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import { Fetcher } from '../../services/Fetcher';
+import { Fetcher } from '../../../services/Fetcher';
 import { Button } from 'reactstrap';
 import { BarLoader } from 'react-spinners';
-import { Ingredient } from '../Ingredients/models';
+import { Ingredient } from '../../Ingredients/models';
 
 type State = {
   ingredients: Ingredient[];

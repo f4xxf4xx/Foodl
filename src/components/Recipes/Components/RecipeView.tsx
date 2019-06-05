@@ -1,15 +1,15 @@
 import React, { PureComponent } from 'react';
 import { Container } from 'reactstrap';
-import { Recipe, IngredientItem } from './models';
+import { Recipe, IngredientItem } from '../models';
 import { withRouter } from 'react-router-dom';
-import TopNavbar from '../Layout/TopNavbar';
-import Header from '../Layout/Header';
+import TopNavbar from '../../Layout/TopNavbar';
+import Header from '../../Layout/Header';
 import IngredientsElement from './IngredientsElement';
 import StepsElement from './StepsElement';
 import RecipeHeaderElement from './RecipeHeaderElement';
-import { recipeService } from './recipeService';
-import { ingredientService } from '../Ingredients/ingredientService';
-import { Ingredient } from '../Ingredients/models';
+import { recipeService } from '../recipeService';
+import { ingredientService } from '../../Ingredients/ingredientService';
+import { Ingredient } from '../../Ingredients/models';
 import { toast } from 'react-toastify';
 
 type State = {
@@ -129,6 +129,7 @@ class RecipeView extends PureComponent<any, State> {
         <Container className="mt--7" fluid>
           <RecipeHeaderElement
             recipe={recipe}
+            ingredientItems={ingredientItems}
             col="12"
             editing={editing}
             updateRecipe={this.updateRecipe}

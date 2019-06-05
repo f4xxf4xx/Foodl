@@ -1,17 +1,16 @@
 import React, { PureComponent } from 'react';
 import { withRouter, RouteProps } from 'react-router-dom';
 import { Table, Button, Container, Input, CardBody, Form, Row, Col, FormGroup } from 'reactstrap';
-import TopNavbar from '../Layout/TopNavbar';
-import Header from '../Layout/Header';
-import SectionHeaderElement from '../Section/SectionHeaderElement';
-import SectionElement from '../Section/SectionElement';
+import TopNavbar from '../../Layout/TopNavbar';
+import Header from '../../Layout/Header';
+import SectionHeaderElement from '../../Section/SectionHeaderElement';
+import SectionElement from '../../Section/SectionElement';
 import { toast } from 'react-toastify';
 import { connect } from 'react-redux';
 import { compose, bindActionCreators, Dispatch } from 'redux';
-import * as ingredientActions from './ingredientActions';
-import { Ingredient } from './models';
-import { IngredientState } from './ingredientReducer';
-import { ingredientService } from './ingredientService';
+import * as ingredientActions from '../ingredientActions';
+import { Ingredient } from '../models';
+import { ingredientService } from '../ingredientService';
 
 type State = {
     newIngredientName: string;
@@ -20,13 +19,19 @@ type State = {
 type StateProps = {
     ingredients: Ingredient[];
     loading: boolean;
+    updating: boolean;
 }
 
 type DispatchProps = {
-    beginFetch: typeof ingredientActions.beginFetch;
+    fetchIngredientsStart: typeof ingredientActions.deleteIngredientBegin;
     fetchIngredientsSuccess: typeof ingredientActions.fetchIngredientsSuccess;
     fetchIngredientsFailure: typeof ingredientActions.fetchIngredientsFailure;
+    addIngredientBegin: typeof ingredientActions.addIngredientBegin;
+    addIngredientSuccess: typeof ingredientActions.addIngredientSuccess;
+    addIngredientFailure: typeof ingredientActions.addIngredientFailure;
+    deleteIngredientBegin: typeof ingredientActions.deleteIngredientBegin;
     deleteIngredientSuccess: typeof ingredientActions.deleteIngredientSuccess;
+    deleteIngredientFailure: typeof ingredientActions.deleteIngredientFailure;
 }
 
 type Props = StateProps & DispatchProps & RouteProps;
@@ -40,7 +45,7 @@ class IngredientsViewBase extends PureComponent<Props, State> {
     }
 
     componentDidMount() {
-        this.props.beginFetch();
+        this.props.fetchIngredientsStart();
         return ingredientService.getIngredients()
             .then(ingredients => {
                 this.props.fetchIngredientsSuccess(ingredients)
@@ -52,23 +57,22 @@ class IngredientsViewBase extends PureComponent<Props, State> {
 
     addIngredient = () => {
         const { newIngredientName } = this.state;
-        const { ingredients } = this.props;
         if (newIngredientName === "") {
             return;
         }
-        this.setState({
-            newIngredientName: ""
-        })
 
-        // ingredientService.addIngredient(newIngredientName)
-        //     .then(ingredient => {
-
-        //         this.setState({
-        //             ingredients: [...ingredients, ingredient],
-        //             working: false
-        //         })
-        //         toast.success("Added!");
-        //     });
+        this.props.addIngredientBegin();
+        ingredientService.addIngredient(newIngredientName)
+            .then((ingredient) => {
+                this.props.addIngredientSuccess(ingredient);
+                toast.success("Added!");
+                this.setState({
+                    newIngredientName: ""
+                })
+            })
+            .catch(() => {
+                toast.error("Error adding the ingredient.")
+            })
     }
 
     handleKeyPress = (event) => {
@@ -78,7 +82,7 @@ class IngredientsViewBase extends PureComponent<Props, State> {
     }
 
     renderIngredients() {
-        const { ingredients, loading } = this.props;
+        const { ingredients, updating } = this.props;
 
         return (
             <Table className="align-items-center table-flush" responsive>
@@ -94,7 +98,7 @@ class IngredientsViewBase extends PureComponent<Props, State> {
                             <td>{ingredient.name}</td>
                             <td>
                                 <Button
-                                    disabled={loading}
+                                    disabled={updating}
                                     onClick={() => this.deleteIngredient(ingredient.id)}>
                                     DELETE
                             </Button>
@@ -111,22 +115,25 @@ class IngredientsViewBase extends PureComponent<Props, State> {
     }
 
     deleteIngredient(ingredientId: string): void {
-        this.props.beginFetch();
+        this.props.deleteIngredientBegin();
         ingredientService.deleteIngredient(ingredientId)
             .then(() => {
                 this.props.deleteIngredientSuccess(ingredientId);
                 toast.success("Deleted!");
             })
+            .catch(() => {
+                toast.error("Error deleting the ingredient.")
+            })
     }
 
     renderNewIngredientForm() {
-        const { loading } = this.props;
+        const { updating } = this.props;
         const button = (
             <Button
                 color="primary"
                 onClick={this.addIngredient}
                 size="sm"
-                disabled={loading}
+                disabled={updating}
             >
                 Add
             </Button>
@@ -195,16 +202,22 @@ class IngredientsViewBase extends PureComponent<Props, State> {
 const mapStateToProps = (state: any) => {
     return {
         ingredients: state.ingredients.ingredients,
-        loading: state.ingredients.loading
+        loading: state.ingredients.loading,
+        updating: state.ingredients.updating
     }
 }
 
 const mapDispatchToProps = (dispatch: Dispatch) => {
     return {
-        beginFetch: bindActionCreators(ingredientActions.beginFetch, dispatch),
+        fetchIngredientsStart: bindActionCreators(ingredientActions.fetchIngredientsBegin, dispatch),
         fetchIngredientsSuccess: bindActionCreators(ingredientActions.fetchIngredientsSuccess, dispatch),
         fetchIngredientsFailure: bindActionCreators(ingredientActions.fetchIngredientsFailure, dispatch),
-        deleteIngredientSuccess: bindActionCreators(ingredientActions.deleteIngredientSuccess, dispatch)
+        addIngredientBegin: bindActionCreators(ingredientActions.addIngredientBegin, dispatch),
+        addIngredientSuccess: bindActionCreators(ingredientActions.addIngredientSuccess, dispatch),
+        addIngredientFailure: bindActionCreators(ingredientActions.addIngredientFailure, dispatch),
+        deleteIngredientBegin: bindActionCreators(ingredientActions.deleteIngredientBegin, dispatch),
+        deleteIngredientSuccess: bindActionCreators(ingredientActions.deleteIngredientSuccess, dispatch),
+        deleteIngredientFailure: bindActionCreators(ingredientActions.deleteIngredientFailure, dispatch)
     }
 }
 

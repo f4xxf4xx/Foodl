@@ -2,11 +2,12 @@ import React from "react";
 import {
     Card, CardHeader, CardBody, Row, Col, Input, Button
 } from "reactstrap";
-import { Recipe } from "./models";
-import Statistic from "../Layout/Statistic";
+import { Recipe, IngredientItem } from "../models";
+import Statistic from "../../Layout/Statistic";
 
 type Props = {
     recipe: Recipe;
+    ingredientItems: IngredientItem[];
     editing: boolean;
     updateRecipe: (key: string, value: string) => void;
     col: string;
@@ -21,7 +22,7 @@ class RecipeHeaderElement
     }
 
     renderStatistics() {
-        const { recipe } = this.props;
+        const { recipe, ingredientItems } = this.props;
 
         return (
             recipe &&
@@ -44,10 +45,10 @@ class RecipeHeaderElement
                         col="4"
                     />
                 }
-                {recipe.ingredientItems &&
+                {ingredientItems &&
                     <Statistic
                         name={"Ingredient number"}
-                        value={recipe.ingredientItems.length.toString()}
+                        value={ingredientItems.length.toString()}
                         icon={"fa-apple-alt"}
                         bgColor="bg-warning"
                         col="4"

@@ -22,7 +22,6 @@ export interface Recipe {
     slug: string;
     recipeType?: string;
     duration?: number;
-    ingredientItems?: IngredientItem[];
     tags?: string[];
     cuisine?: string;
 }

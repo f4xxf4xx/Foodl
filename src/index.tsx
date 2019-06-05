@@ -12,6 +12,7 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { configureStore } from 'redux-starter-kit'
 import { ingredientReducer } from './components/Ingredients/ingredientReducer';
+import { recipeReducer } from './components/Recipes/recipeReducer';
 
 const baseUrl = document.getElementsByTagName('base')[0].getAttribute('href');
 const rootElement = document.getElementById('root');
@@ -26,7 +27,8 @@ toast.configure({
 
 const store = configureStore({
   reducer: {
-    ingredients: ingredientReducer
+    ingredients: ingredientReducer,
+    recipes: recipeReducer
   }
 })
 

@@ -1,14 +1,13 @@
 import React, { Component, PureComponent } from 'react';
-import { Fetcher } from '../../services/Fetcher';
 import { Button, Container, Row, Col, Input, FormGroup, Card, CardHeader, CardBody, Form, Table } from 'reactstrap';
 import { Link, RouteComponentProps } from 'react-router-dom';
-import { Recipe } from './models';
-import TopNavbar from '../Layout/TopNavbar';
-import Header from '../Layout/Header';
+import { Recipe } from '../models';
+import TopNavbar from '../../Layout/TopNavbar';
+import Header from '../../Layout/Header';
 import { withRouter } from 'react-router-dom';
-import SectionHeaderElement from '../Section/SectionHeaderElement';
-import SectionElement from '../Section/SectionElement';
-import { recipeService } from './recipeService';
+import SectionHeaderElement from '../../Section/SectionHeaderElement';
+import SectionElement from '../../Section/SectionElement';
+import { recipeService } from '../recipeService';
 import { toast } from 'react-toastify';
 import slugify from 'react-slugify';
 

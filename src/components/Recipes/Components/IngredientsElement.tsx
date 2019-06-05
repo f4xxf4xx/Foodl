@@ -1,10 +1,10 @@
 import React, { PureComponent } from 'react';
 import { Button, Table, Form, Row, Col, FormGroup, Input, CardBody } from 'reactstrap';
-import { Recipe, IngredientItem } from './models';
-import SectionElement from '../Section/SectionElement';
-import AvatarElement from '../Layout/AvatarElement';
-import { getIngredientText, getIngredientTypeOptions } from './helper';
-import { Ingredient } from '../Ingredients/models';
+import { Recipe, IngredientItem } from '../models';
+import SectionElement from '../../Section/SectionElement';
+import AvatarElement from '../../Layout/AvatarElement';
+import { getIngredientText, getIngredientTypeOptions } from '../helper';
+import { Ingredient } from '../../Ingredients/models';
 import Select from 'react-select';
 import Creatable from 'react-select/lib/Creatable';
 
