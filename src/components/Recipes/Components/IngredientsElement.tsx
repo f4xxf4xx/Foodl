@@ -1,12 +1,11 @@
 import React, { PureComponent } from 'react';
 import { Recipe, IngredientItem } from '../models';
 import SectionElement from '../../Section/SectionElement';
-import AvatarElement from '../../Layout/AvatarElement';
 import { getIngredientText, getIngredientTypeOptions } from '../helper';
 import { Ingredient } from '../../Ingredients/models';
 import Select from 'react-select';
 import Creatable from 'react-select/lib/Creatable';
-import { Table, TableBody, Divider, TableRow, TableCell, Button, Typography } from '@material-ui/core';
+import { Table, TableBody, Divider, TableRow, TableCell, Button, Typography, Avatar } from '@material-ui/core';
 
 type Props = {
     ingredients: Ingredient[];
@@ -91,16 +90,28 @@ class IngredientsElement extends PureComponent<Props, State> {
                             return (
                                 <TableRow key={index}>
                                     <TableCell component="th" scope="row">
-                                        <AvatarElement
-                                            text={getIngredientText(ingredientItem)}
-                                            imageUrl="../../assets/img/theme/vue.jpg"
+                                        <Avatar
+                                            alt={getIngredientText(ingredientItem)}
+                                            src="../../assets/img/theme/vue.jpg"
                                         />
                                     </TableCell>
                                     <TableCell>
                                         {editing ?
-                                            <a onClick={() => { deleteIngredient(ingredientItem.id) }}>Delete ingredient</a>
+                                            <Button
+                                                variant="contained"
+                                                color="primary"
+                                                onClick={() => { deleteIngredient(ingredientItem.id) }}
+                                            >
+                                                Delete ingredient
+                                            </Button>
                                             :
-                                            <a onClick={() => { }}>Add to cart</a>
+                                            <Button
+                                                variant="contained"
+                                                color="primary"
+                                                onClick={() => { }}
+                                            >
+                                                Add to cart
+                                            </Button>
                                         }
                                     </TableCell>
                                 </TableRow>

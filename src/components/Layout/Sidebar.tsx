@@ -1,30 +1,47 @@
 import React from "react";
-import { NavLink } from "react-router-dom";
 import { getLinks } from "./links";
+import InboxIcon from '@material-ui/icons/MoveToInbox';
+import MailIcon from '@material-ui/icons/Mail';
+import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
+import { Drawer, List, ListItem, ListItemIcon, ListItemText } from '@material-ui/core';
+import { Link } from "react-router-dom";
+const drawerWidth = 240;
 
-type Props = {
-  location?: any;
-};
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    drawer: {
+      width: drawerWidth,
+      flexShrink: 0,
+    },
+    drawerPaper: {
+      width: drawerWidth,
+    },
+    toolbar: theme.mixins.toolbar,
+  }),
+);
 
-class Sidebar extends React.Component<Props> {
-  createLinks = (routes) => {
-    return routes.map((prop, key) => {
-      return (
-          <NavLink
-            to={prop.path}
-          >
-            <i className={prop.icon} />
-            {prop.name}
-          </NavLink>
-      );
-    });
-  };
+function Sidebar() {
+    const classes = useStyles();
 
-  render() {
     return (
-        this.createLinks(getLinks())
+      <Drawer
+        className={classes.drawer}
+        variant="permanent"
+        classes={{
+          paper: classes.drawerPaper,
+        }}
+      >
+        <div className={classes.toolbar} />
+        <List>
+          {getLinks().map((prop, key) =>
+            <ListItem key={key} button>
+              <ListItemIcon>{key % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
+              <ListItemText primary={prop.name} />
+            </ListItem>
+          )}
+        </List>
+      </Drawer>
     );
-  }
 }
 
 export default Sidebar;

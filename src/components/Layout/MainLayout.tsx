@@ -1,20 +1,21 @@
 import React from "react";
-import Dashboard from "./Dashboard";
-import Footer from "./Footer";
 import Sidebar from "./Sidebar";
+import {
+    CssBaseline
+} from '@material-ui/core';
+import { TopBar } from "./TopBar";
 
 class MainLayout extends React.Component<any> {
   render() {
     return (
-      <div>
-        <Sidebar
-          {...this.props}
-        />
-        <div>
-          {this.props.children}
-          <Footer />
+      <div style={{display: 'flex'}}>
+            <CssBaseline />
+            <TopBar />
+            <Sidebar />
+            <main style={{flexGrow: 1, padding: 5, marginTop: 70}}>
+                {this.props.children}
+            </main>
         </div>
-      </div>
     );
   }
 }

@@ -8,7 +8,7 @@ import SectionElement from '../../Section/SectionElement';
 import { recipeService } from '../recipeService';
 import { toast } from 'react-toastify';
 import slugify from 'react-slugify';
-import { TableHead, TableBody, TableRow, TableCell, Table, Button, Typography } from '@material-ui/core';
+import { TableHead, TableBody, TableRow, TableCell, Table, Button, Typography, Paper } from '@material-ui/core';
 
 type State = {
     recipes: Recipe[];
@@ -87,31 +87,33 @@ class RecipesView extends PureComponent<Props, State> {
         const { recipes, loading, working } = this.state;
 
         return (
-            <Table>
-                <TableHead>
-                    <TableRow>
-                        <TableCell component="th" scope="col">Recipes</TableCell>
-                        <TableCell component="th"  scope="col">Delete</TableCell>
-                    </TableRow>
-                </TableHead>
-                <TableBody>
-                    {!loading && recipes.map((recipe) =>
-                        <TableRow key={recipe.id}>
-                            <TableCell><Link to={`/recipe/${recipe.id}`}>{recipe.name}</Link></TableCell>
-                            <TableCell>
-                                <Button
-                                    variant="contained"
-                                    color="primary"
-                                    onClick={() => this.deleteRecipe(recipe.id)}
-                                    disabled={working}
-                                >
-                                    DELETE
-                                </Button>
-                            </TableCell>
+            <Paper>
+                <Table>
+                    <TableHead>
+                        <TableRow>
+                            <TableCell component="th" scope="col">Recipes</TableCell>
+                            <TableCell component="th" scope="col">Delete</TableCell>
                         </TableRow>
-                    )}
-                </TableBody>
-            </Table>
+                    </TableHead>
+                    <TableBody>
+                        {!loading && recipes.map((recipe) =>
+                            <TableRow key={recipe.id}>
+                                <TableCell><Link to={`/recipe/${recipe.id}`}>{recipe.name}</Link></TableCell>
+                                <TableCell>
+                                    <Button
+                                        variant="contained"
+                                        color="primary"
+                                        onClick={() => this.deleteRecipe(recipe.id)}
+                                        disabled={working}
+                                    >
+                                        DELETE
+                                </Button>
+                                </TableCell>
+                            </TableRow>
+                        )}
+                    </TableBody>
+                </Table>
+            </Paper>
         );
     }
 
