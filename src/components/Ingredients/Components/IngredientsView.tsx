@@ -1,8 +1,8 @@
 import React, { PureComponent } from "react";
 import { RouteProps } from "react-router-dom";
 import Header from "../../Layout/Header";
-import SectionHeaderElement from "../../Section/SectionHeaderElement";
-import SectionElement from "../../Section/SectionElement";
+import SectionHeaderElement from "../../Layout/Section/SectionHeaderElement";
+import SectionElement from "../../Layout/Section/SectionElement";
 import { toast } from "react-toastify";
 import { connect } from "react-redux";
 import { compose, bindActionCreators, Dispatch } from "redux";
@@ -167,7 +167,6 @@ class IngredientsViewBase extends PureComponent<Props, State> {
         const { loading } = this.props;
         return (
             <>
-                <Header />
                 <SectionHeaderElement
                     title="Ingredients"
                 >

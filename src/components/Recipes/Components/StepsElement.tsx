@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import { Recipe } from '../models';
-import SectionElement from '../../Section/SectionElement';
+import SectionElement from '../../Layout/Section/SectionElement';
 
 type Props = {
     recipe: Recipe;

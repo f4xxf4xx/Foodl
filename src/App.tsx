@@ -5,13 +5,14 @@ import { IngredientView } from "./components/Recipes/Components/IngredientView";
 import RecipesView from "./components/Recipes/Components/RecipesView";
 import RecipeView from "./components/Recipes/Components/RecipeView";
 import IngredientsView from "./components/Ingredients/Components/IngredientsView";
+import HomePage from "./components/Layout/HomePage";
 
 class App extends Component {
   render() {
     return (
       <>
         <Switch>
-          <Route exact path="/" render={() => <MainLayout><RecipesView /></MainLayout>} />
+          <Route exact path="/" render={() => <MainLayout><HomePage /></MainLayout>} />
           <Route path="/recipes" render={() => <MainLayout><RecipesView /></MainLayout>} />
           <Route path="/recipe/:id" render={() => <MainLayout><RecipeView /></MainLayout>} />
           <Route path="/ingredients" render={() => <MainLayout><IngredientsView /></MainLayout>} />

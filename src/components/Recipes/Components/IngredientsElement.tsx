@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import { Recipe, IngredientItem } from '../models';
-import SectionElement from '../../Section/SectionElement';
+import SectionElement from '../../Layout/Section/SectionElement';
 import { getIngredientText, getIngredientTypeOptions } from '../helper';
 import { Ingredient } from '../../Ingredients/models';
 import Select from 'react-select';

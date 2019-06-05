@@ -21,27 +21,29 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 function Sidebar() {
-    const classes = useStyles();
+  const classes = useStyles();
 
-    return (
-      <Drawer
-        className={classes.drawer}
-        variant="permanent"
-        classes={{
-          paper: classes.drawerPaper,
-        }}
-      >
-        <div className={classes.toolbar} />
-        <List>
-          {getLinks().map((prop, key) =>
+  return (
+    <Drawer
+      className={classes.drawer}
+      variant="permanent"
+      classes={{
+        paper: classes.drawerPaper,
+      }}
+    >
+      <div className={classes.toolbar} />
+      <List>
+        {getLinks().map((prop, key) =>
+          <Link to={prop.path}>
             <ListItem key={key} button>
               <ListItemIcon>{key % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
               <ListItemText primary={prop.name} />
             </ListItem>
-          )}
-        </List>
-      </Drawer>
-    );
+          </Link>
+        )}
+      </List>
+    </Drawer >
+  );
 }
 
 export default Sidebar;
