@@ -126,15 +126,11 @@ class RecipesView extends PureComponent<Props, State> {
         return (
             <SectionElement title={"New recipe"} button={button}>
                 <form onSubmit={e => { e.preventDefault(); }}>
-                    <div className="pl-lg-4">
-                        <label
-                            className="form-control-label"
-                            htmlFor="input-recipe-name"
-                        >
+                    <div>
+                        <label htmlFor="input-recipe-name">
                             Recipe name
-                                        </label>
+                        </label>
                         <input
-                            className="form-control-alternative"
                             id="input-recipe-name"
                             placeholder="Recipe name"
                             type="text"
@@ -157,7 +153,7 @@ class RecipesView extends PureComponent<Props, State> {
                     title="My recipes"
                     subtitle={"Overview"}
                 >
-                    <p className="text-light">
+                    <p>
                         Lorem ipsum dolor sit amet, consectetur adipiscing elit.
                         ultrices arcu at sagittis aliquet. Donec convallis, felis id viverra sagittis, diam libero volutpat nunc,
                         pretium orci augue sed urna. Ut in laoreet lectus, in luctus purus. Cras a quam turpis.

@@ -59,7 +59,7 @@ class RecipeHeaderElement
                         {editing ?
                             <input defaultValue={recipe.name} onBlur={this.updateRecipe("name")} />
                             :
-                            <h2 className="text-white mb-0">{recipe.name}</h2>
+                            <h2>{recipe.name}</h2>
                         }
                     </div>
                     <div>
@@ -75,7 +75,7 @@ class RecipeHeaderElement
                             onBlur={this.updateRecipe("description")}
                         />
                         :
-                        <p className="text-light">
+                        <p>
                             {recipe.description}
                         </p>
                     }

@@ -140,14 +140,10 @@ class IngredientsViewBase extends PureComponent<Props, State> {
                 <h2>New ingredient</h2>
                 <form onSubmit={e => { e.preventDefault(); }}>
                     <div>
-                        <label
-                            className="form-control-label"
-                            htmlFor="input-ingredient-name"
-                        >
+                        <label htmlFor="input-ingredient-name">
                             Ingredient name
                                         </label>
                         <input
-                            className="form-control-alternative"
                             id="input-ingredient-name"
                             placeholder="Ingredient name"
                             type="text"
@@ -169,9 +165,9 @@ class IngredientsViewBase extends PureComponent<Props, State> {
                 <SectionHeaderElement
                     title="Ingredients"
                 >
-                    <p className="text-light">
+                    <p>
                         Here lies the list of possible ingredients
-                        </p>
+                    </p>
                 </SectionHeaderElement>
                 {this.renderNewIngredientForm()}
                 <SectionElement>
