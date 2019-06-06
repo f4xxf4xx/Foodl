@@ -18,12 +18,12 @@ type StateProps = {
 };
 
 type DispatchProps = {
-    fetchIngredientsBegin: typeof ingredientActions.deleteIngredientBegin;
-    fetchIngredientsSuccess: typeof ingredientActions.fetchIngredientsSuccess;
-    fetchIngredientsFailure: typeof ingredientActions.fetchIngredientsFailure;
-    deleteIngredientBegin: typeof ingredientActions.deleteIngredientBegin;
-    deleteIngredientSuccess: typeof ingredientActions.deleteIngredientSuccess;
-    deleteIngredientFailure: typeof ingredientActions.deleteIngredientFailure;
+    fetchIngredientsStart: typeof ingredientActions.fetchIngredientsStart;
+    fetchIngredientsStop: typeof ingredientActions.fetchIngredientsStop;
+    updateIngredientsStart: typeof ingredientActions.updateIngredientsStart;
+    updateIngredientsStop: typeof ingredientActions.updateIngredientsStop;
+    updateIngredients: typeof ingredientActions.updateIngredients;
+    deleteIngredient: typeof ingredientActions.deleteIngredient;
 };
 
 type Props = StateProps & DispatchProps & RouteProps;
@@ -31,10 +31,16 @@ type Props = StateProps & DispatchProps & RouteProps;
 class IngredientsViewBase extends PureComponent<Props> {
     componentDidMount() {
         if (this.props.ingredients.length === 0) {
-            this.props.fetchIngredientsBegin();
+            this.props.fetchIngredientsStart();
             return ingredientService.getIngredients()
-                .then(ingredients => this.props.fetchIngredientsSuccess(ingredients))
-                .catch(error => this.props.fetchIngredientsFailure(error));
+                .then(ingredients => {
+                    this.props.fetchIngredientsStop();
+                    this.props.updateIngredients(ingredients);
+                })
+                .catch(() => {
+                    toast.error("Error fetching the ingredients");
+                    this.props.fetchIngredientsStop();
+                });
         }
     }
 
@@ -76,13 +82,17 @@ class IngredientsViewBase extends PureComponent<Props> {
     }
 
     deleteIngredient(ingredientId: string): void {
-        this.props.deleteIngredientBegin();
+        this.props.updateIngredientsStart();
         ingredientService.deleteIngredient(ingredientId)
             .then(() => {
-                this.props.deleteIngredientSuccess(ingredientId);
+                this.props.deleteIngredient(ingredientId);
+                this.props.updateIngredientsStop();
                 toast.success("Deleted!");
             })
-            .catch(() => toast.error("Error deleting the ingredient."));
+            .catch(() => {
+                this.props.updateIngredientsStop();
+                toast.error("Error deleting the ingredient!")
+        });
     }
 
     render() {
@@ -110,12 +120,12 @@ const mapStateToProps = (state: any) => {
 
 const mapDispatchToProps = (dispatch: Dispatch) => {
     return {
-        fetchIngredientsBegin: bindActionCreators(ingredientActions.fetchIngredientsBegin, dispatch),
-        fetchIngredientsSuccess: bindActionCreators(ingredientActions.fetchIngredientsSuccess, dispatch),
-        fetchIngredientsFailure: bindActionCreators(ingredientActions.fetchIngredientsFailure, dispatch),
-        deleteIngredientBegin: bindActionCreators(ingredientActions.deleteIngredientBegin, dispatch),
-        deleteIngredientSuccess: bindActionCreators(ingredientActions.deleteIngredientSuccess, dispatch),
-        deleteIngredientFailure: bindActionCreators(ingredientActions.deleteIngredientFailure, dispatch)
+        fetchIngredientsStart: bindActionCreators(ingredientActions.fetchIngredientsStart, dispatch),
+        fetchIngredientsStop: bindActionCreators(ingredientActions.fetchIngredientsStop, dispatch),
+        updateIngredientsStart: bindActionCreators(ingredientActions.updateIngredientsStart, dispatch),
+        updateIngredientsStop: bindActionCreators(ingredientActions.updateIngredientsStop, dispatch),
+        updateIngredients: bindActionCreators(ingredientActions.updateIngredients, dispatch),
+        deleteIngredient: bindActionCreators(ingredientActions.deleteIngredient, dispatch)
     };
 };
 

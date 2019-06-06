@@ -17,9 +17,9 @@ type State = {
 };
 
 type DispatchProps = {
-    addIngredientBegin: typeof ingredientActions.addIngredientBegin;
-    addIngredientSuccess: typeof ingredientActions.addIngredientSuccess;
-    addIngredientFailure: typeof ingredientActions.addIngredientFailure;
+    updateIngredientsStart: typeof ingredientActions.updateIngredientsStart;
+    updateIngredientsStop: typeof ingredientActions.updateIngredientsStop;
+    addIngredient: typeof ingredientActions.addIngredient;
 };
 
 type Props = OwnProps & DispatchProps & RouteProps;
@@ -38,16 +38,20 @@ class AddIngredientFormBase extends PureComponent<Props, State> {
             return;
         }
 
-        this.props.addIngredientBegin();
+        this.props.updateIngredientsStart();
         ingredientService.addIngredient(newIngredientName)
             .then((ingredient) => {
-                this.props.addIngredientSuccess(ingredient);
+                this.props.updateIngredientsStop();
+                this.props.addIngredient(ingredient);
                 toast.success("Added!");
                 this.setState({
                     newIngredientName: ""
                 });
             })
-            .catch(() => toast.error("Error adding the ingredient."))
+            .catch(() => {
+                this.props.updateIngredientsStop();
+                toast.error("Error adding the ingredient.")
+            })
     }
 
     handleKeyPress = (event) => {
@@ -103,9 +107,9 @@ const mapStateToProps = (state: any) => {
 
 const mapDispatchToProps = (dispatch: Dispatch) => {
     return {
-        addIngredientBegin: bindActionCreators(ingredientActions.addIngredientBegin, dispatch),
-        addIngredientSuccess: bindActionCreators(ingredientActions.addIngredientSuccess, dispatch),
-        addIngredientFailure: bindActionCreators(ingredientActions.addIngredientFailure, dispatch)
+        updateIngredientsStart: bindActionCreators(ingredientActions.updateIngredientsStart, dispatch),
+        updateIngredientsStop: bindActionCreators(ingredientActions.updateIngredientsStop, dispatch),
+        addIngredient: bindActionCreators(ingredientActions.addIngredient, dispatch)
     };
 };
 

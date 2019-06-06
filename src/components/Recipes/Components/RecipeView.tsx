@@ -40,9 +40,9 @@ type DispatchProps = {
   updateRecipeBegin: typeof recipeActions.updateRecipeBegin;
   updateRecipeSuccess: typeof recipeActions.updateRecipeSuccess;
   updateRecipeFailure: typeof recipeActions.updateRecipeFailure;
-  fetchIngredientsBegin: typeof ingredientActions.fetchIngredientsBegin;
-  fetchIngredientsSuccess: typeof ingredientActions.fetchIngredientsSuccess;
-  fetchIngredientsFailure: typeof ingredientActions.fetchIngredientsFailure;
+  // fetchIngredientsBegin: typeof ingredientActions.fetchIngredientsBegin;
+  // fetchIngredientsSuccess: typeof ingredientActions.fetchIngredientsSuccess;
+  // fetchIngredientsFailure: typeof ingredientActions.fetchIngredientsFailure;
   fetchIngredientItemsBegin: typeof recipeActions.fetchIngredientItemsBegin;
   fetchIngredientItemsSuccess: typeof recipeActions.fetchIngredientItemsSuccess;
   fetchIngredientItemsFailure: typeof recipeActions.fetchIngredientItemsFailure;
@@ -89,8 +89,10 @@ class RecipeViewBase extends PureComponent<Props, State> {
 
     if (this.props.ingredients) {
       ingredientService.getIngredients()
-        .then(ingredients => this.props.fetchIngredientsSuccess(ingredients))
-        .catch(() => this.props.fetchIngredientsFailure())
+        .then(ingredients => {}//this.props.fetchIngredientsSuccess(ingredients)
+        )
+        .catch(() => {}//this.props.fetchIngredientsFailure()
+        )
       }
   }
 
@@ -198,9 +200,9 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
       updateRecipeSuccess: bindActionCreators(recipeActions.updateRecipeSuccess, dispatch),
       updateRecipeFailure: bindActionCreators(recipeActions.updateRecipeFailure, dispatch),
       deleteRecipeFailure: bindActionCreators(recipeActions.deleteRecipeFailure, dispatch),
-      fetchIngredientsBegin: bindActionCreators(ingredientActions.fetchIngredientsBegin, dispatch),
-      fetchIngredientsSuccess: bindActionCreators(ingredientActions.fetchIngredientsSuccess, dispatch),
-      fetchIngredientsFailure: bindActionCreators(ingredientActions.fetchIngredientsFailure, dispatch),
+      // fetchIngredientsBegin: bindActionCreators(ingredientActions.fetchIngredientsBegin, dispatch),
+      // fetchIngredientsSuccess: bindActionCreators(ingredientActions.fetchIngredientsSuccess, dispatch),
+      // fetchIngredientsFailure: bindActionCreators(ingredientActions.fetchIngredientsFailure, dispatch),
       fetchIngredientItemsBegin: bindActionCreators(recipeActions.fetchIngredientItemsBegin, dispatch),
       fetchIngredientItemsSuccess: bindActionCreators(recipeActions.fetchIngredientItemsSuccess, dispatch),
       fetchIngredientItemsFailure: bindActionCreators(recipeActions.fetchIngredientItemsFailure, dispatch),

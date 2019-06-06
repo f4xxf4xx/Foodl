@@ -24,12 +24,12 @@ type StateProps = {
 };
 
 type DispatchProps = {
-    fetchRecipesBegin: typeof recipeActions.deleteRecipeBegin;
-    fetchRecipesSuccess: typeof recipeActions.fetchRecipesSuccess;
-    fetchRecipesFailure: typeof recipeActions.fetchRecipesFailure;
-    deleteRecipeBegin: typeof recipeActions.deleteRecipeBegin;
-    deleteRecipeSuccess: typeof recipeActions.deleteRecipeSuccess;
-    deleteRecipeFailure: typeof recipeActions.deleteRecipeFailure;
+    fetchRecipesStart: typeof recipeActions.fetchRecipesStart;
+    fetchRecipesStop: typeof recipeActions.fetchRecipesStop;
+    updateRecipesStart: typeof recipeActions.updateRecipesStart;
+    updateRecipesStop: typeof recipeActions.updateRecipesStop;
+    updateRecipes: typeof recipeActions.updateRecipes;
+    deleteRecipe: typeof recipeActions.deleteRecipe;
 };
 
 type Props = StateProps & RouteComponentProps & DispatchProps;
@@ -44,20 +44,31 @@ class RecipesViewBase extends PureComponent<Props, State> {
 
     componentDidMount() {
         if (this.props.recipes.length === 0) {
-            this.props.fetchRecipesBegin();
+            this.props.fetchRecipesStart();
             recipeService.getRecipes()
-                .then((recipes) => this.props.fetchRecipesSuccess(recipes))
-                .catch(error => this.props.fetchRecipesFailure(error))
+                .then((recipes) => {
+                    this.props.updateRecipes(recipes);
+                    this.props.fetchRecipesStop()
+                })
+                .catch(() => {
+                    this.props.fetchRecipesStop();
+                    toast.error("Error fetching the recipes");
+                })
         }
     }
 
     deleteRecipe(recipeId: any): any {
-        this.props.deleteRecipeBegin();
+        this.props.updateRecipesStart();
         recipeService.deleteRecipe(recipeId)
             .then(() => {
-                this.props.deleteRecipeSuccess(recipeId);
+                this.props.deleteRecipe(recipeId);
+                this.props.updateRecipesStop();
                 toast.success("Deleted!");
-            });
+            })
+            .catch(() => {
+                this.props.updateRecipesStop();
+                toast.error("Error deleting the recipe");
+            })
     }
 
     renderRecipes() {
@@ -132,12 +143,10 @@ const mapStateToProps = (state: any) => {
 
 const mapDispatchToProps = (dispatch: Dispatch) => {
     return {
-        fetchRecipesBegin: bindActionCreators(recipeActions.fetchRecipesBegin, dispatch),
-        fetchRecipesSuccess: bindActionCreators(recipeActions.fetchRecipesSuccess, dispatch),
-        fetchRecipesFailure: bindActionCreators(recipeActions.fetchRecipesFailure, dispatch),
-        deleteRecipeBegin: bindActionCreators(recipeActions.deleteRecipeBegin, dispatch),
-        deleteRecipeSuccess: bindActionCreators(recipeActions.deleteRecipeSuccess, dispatch),
-        deleteRecipeFailure: bindActionCreators(recipeActions.deleteRecipeFailure, dispatch)
+        fetchRecipesStart: bindActionCreators(recipeActions.fetchRecipesStart, dispatch),
+        fetchRecipesStop: bindActionCreators(recipeActions.fetchRecipesStop, dispatch),
+        updateRecipes: bindActionCreators(recipeActions.updateRecipes, dispatch),
+        deleteRecipe: bindActionCreators(recipeActions.deleteRecipe, dispatch),
     };
 };
 
