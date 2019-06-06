@@ -1,7 +1,7 @@
 import React from "react";
 import { Recipe, IngredientItem } from "../models";
 import Statistic from "../../Layout/Statistic";
-import { Typography } from "@material-ui/core";
+import { Typography, Button, TextField } from "@material-ui/core";
 
 type Props = {
     recipe: Recipe;
@@ -58,29 +58,31 @@ class RecipeHeaderElement
                 <>
                     <div>
                         {editing ?
-                            <input defaultValue={recipe.name} onBlur={this.updateRecipe("name")} />
+                            <TextField defaultValue={recipe.name} onBlur={this.updateRecipe("name")} />
                             :
-                            <Typography variant="h2">{recipe.name}</Typography>
+                            <Typography variant="h3">{recipe.name}</Typography>
                         }
                     </div>
                     <div>
-                        <a onClick={toggleEdit}>
+                        <Button variant="contained" color="primary" onClick={toggleEdit}>
                             {editing ? "Stop editing" : "Edit"}
-                        </a>
+                        </Button>
                     </div>
                     <div>
-                    {editing ?
-                        <input
-                            defaultValue={recipe.description}
-                            type="textarea"
-                            onBlur={this.updateRecipe("description")}
-                        />
-                        :
-                        <Typography>
-                            {recipe.description}
-                        </Typography>
-                    }
-                    {this.renderStatistics()}
+                        {editing ?
+                            <TextField
+                                defaultValue={recipe.description}
+                                multiline
+                                onBlur={this.updateRecipe("description")}
+                            />
+                            :
+                            <Typography>
+                                {recipe.description}
+                            </Typography>
+                        }
+                    </div>
+                    <div>
+                        {this.renderStatistics()}
                     </div>
                 </>
                 : null

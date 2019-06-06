@@ -47,6 +47,7 @@ export const recipeReducer = createReducer(initialState, {
     },
     ADD_RECIPE_SUCCESS: (state, action) => {
         state.updatingRecipes = false;
+        state.currentRecipe = action.payload;
         state.recipes.push(action.payload);
     },
     ADD_RECIPE_FAILURE: (state, action) => {
@@ -63,6 +64,26 @@ export const recipeReducer = createReducer(initialState, {
     DELETE_RECIPE_FAILURE: (state, action) => {
         state.updatingRecipes = false;        
         state.error = action.payload.error;
+    },
+    UPDATE_RECIPE_BEGIN: (state, action) => {
+        state.updatingRecipes = true;
+    },
+    UPDATE_RECIPE_SUCCESS: (state, action) => {
+        state.updatingRecipes = false;
+        state.currentRecipe = action.payload;
+    },
+    UPDATE_RECIPE_FAILURE: (state, action) => {
+        state.updatingRecipes = false;
+    },
+    FETCH_RECIPE_BEGIN: (state, action) => {
+        state.loadingRecipe = true;
+    },
+    FETCH_RECIPE_SUCCESS: (state, action) => {
+        state.loadingRecipe = false;
+        state.currentRecipe = action.payload;
+    },
+    FETCH_RECIPE_FAILURE: (state, action) => {
+        state.loadingRecipe = false;
     },
     FETCH_INGREDIENTITEMS_BEGIN: (state, action) => {
         state.loadingIngredientItems = true;

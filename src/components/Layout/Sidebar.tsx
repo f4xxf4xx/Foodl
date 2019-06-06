@@ -34,8 +34,8 @@ function Sidebar() {
       <div className={classes.toolbar} />
       <List>
         {getLinks().map((prop, key) =>
-          <Link to={prop.path}>
-            <ListItem key={key} button>
+          <Link key={key} to={prop.path}>
+            <ListItem button>
               <ListItemIcon>{key % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
               <ListItemText primary={prop.name} />
             </ListItem>

@@ -1,90 +1,67 @@
 import React, { Component, PureComponent } from 'react';
 import { Link, RouteComponentProps } from 'react-router-dom';
-import { Recipe } from '../models';
-import Header from '../../Layout/Header';
+import { Recipe, IngredientItem } from '../models';
 import { withRouter } from 'react-router-dom';
-import SectionHeaderElement from '../../Layout/Section/SectionHeaderElement';
-import SectionElement from '../../Layout/Section/SectionElement';
 import { recipeService } from '../recipeService';
 import { toast } from 'react-toastify';
 import slugify from 'react-slugify';
-import { TableHead, TableBody, TableRow, TableCell, Table, Button, Typography, Paper } from '@material-ui/core';
+import { TableHead, TableBody, TableRow, TableCell, Table, Button, Typography, Paper, FormLabel, TextField } from '@material-ui/core';
+import * as recipeActions from '../recipeActions';
+import { compose, Dispatch, bindActionCreators } from 'redux';
+import { connect } from "react-redux";
+import AddRecipeForm from './AddRecipeForm';
+import { Loader } from 'semantic-ui-react';
 
 type State = {
-    recipes: Recipe[];
-    loading: boolean;
-    working: boolean;
     newRecipeName: string;
-}
+};
 
-type Props = RouteComponentProps;
+type StateProps = {
+    recipes: Recipe[];
+    loadingRecipes: boolean;
+    updatingRecipes: boolean;
+    error: string;
+};
 
-class RecipesView extends PureComponent<Props, State> {
+type DispatchProps = {
+    fetchRecipesBegin: typeof recipeActions.deleteRecipeBegin;
+    fetchRecipesSuccess: typeof recipeActions.fetchRecipesSuccess;
+    fetchRecipesFailure: typeof recipeActions.fetchRecipesFailure;
+    deleteRecipeBegin: typeof recipeActions.deleteRecipeBegin;
+    deleteRecipeSuccess: typeof recipeActions.deleteRecipeSuccess;
+    deleteRecipeFailure: typeof recipeActions.deleteRecipeFailure;
+};
+
+type Props = StateProps & RouteComponentProps & DispatchProps;
+
+class RecipesViewBase extends PureComponent<Props, State> {
     constructor(props: Props) {
         super(props);
         this.state = {
-            recipes: [],
-            loading: true,
-            working: false,
             newRecipeName: ""
         };
     }
 
     componentDidMount() {
-        recipeService.getRecipes()
-            .then((recipes) => {
-                this.setState({
-                    recipes,
-                    loading: false
-                });
-            });
-    }
-
-    updateRecipeName = (e: React.ChangeEvent<HTMLInputElement>) => {
-        this.setState({ newRecipeName: e.target.value });
-    }
-
-    handleKeyPress = (event) => {
-        if (event.charCode === 13) {
-            this.addRecipe();
+        if (this.props.recipes.length === 0) {
+            this.props.fetchRecipesBegin();
+            recipeService.getRecipes()
+                .then((recipes) => this.props.fetchRecipesSuccess(recipes))
+                .catch(error => this.props.fetchRecipesFailure(error))
         }
-    }
-
-    addRecipe = () => {
-        const { newRecipeName, recipes } = this.state;
-        if (newRecipeName === "") {
-            return;
-        }
-        this.setState({
-            working: true
-        });
-
-        recipeService.addRecipe(newRecipeName)
-            .then(recipe => {
-                this.setState({
-                    recipes: [...recipes, recipe],
-                    newRecipeName: "",
-                    working: false
-                })
-                this.props.history.push(`/recipe/${recipe.id}`);
-            });
     }
 
     deleteRecipe(recipeId: any): any {
-        const { recipes } = this.state;
-        this.setState({ working: true })
+        this.props.deleteRecipeBegin();
         recipeService.deleteRecipe(recipeId)
             .then(() => {
-                this.setState({
-                    recipes: recipes.filter(i => i.id !== recipeId),
-                    working: false
-                });
+                this.props.deleteRecipeSuccess(recipeId);
                 toast.success("Deleted!");
             });
     }
 
     renderRecipes() {
-        const { recipes, loading, working } = this.state;
+        const { recipes, loadingRecipes, updatingRecipes } = this.props;
 
         return (
             <Paper>
@@ -96,92 +73,76 @@ class RecipesView extends PureComponent<Props, State> {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {!loading && recipes.map((recipe) =>
-                            <TableRow key={recipe.id}>
-                                <TableCell><Link to={`/recipe/${recipe.id}`}>{recipe.name}</Link></TableCell>
-                                <TableCell>
-                                    <Button
-                                        variant="contained"
-                                        color="primary"
-                                        onClick={() => this.deleteRecipe(recipe.id)}
-                                        disabled={working}
-                                    >
-                                        DELETE
+                        {loadingRecipes ?
+                            <Loader active inline='centered' />
+                            : recipes.map((recipe) =>
+                                <TableRow key={recipe.id}>
+                                    <TableCell><Link to={`/recipe/${recipe.id}`}>{recipe.name}</Link></TableCell>
+                                    <TableCell>
+                                        <Button
+                                            variant="contained"
+                                            color="primary"
+                                            onClick={() => this.deleteRecipe(recipe.id)}
+                                            disabled={updatingRecipes}
+                                        >
+                                            DELETE
                                 </Button>
-                                </TableCell>
-                            </TableRow>
-                        )}
+                                    </TableCell>
+                                </TableRow>
+                            )}
                     </TableBody>
                 </Table>
             </Paper>
         );
     }
 
-    renderNewRecipeForm() {
-        const { working } = this.state;
-        const button = (
-            <Button
-                variant="contained"
-                color="primary"
-                onClick={this.addRecipe}
-                disabled={working}
-            >
-                Create
-            </Button>
-        );
-
-        return (
-            <SectionElement title={"New recipe"} button={button}>
-                <form onSubmit={e => { e.preventDefault(); }}>
-                    <div>
-                        <label htmlFor="input-recipe-name">
-                            Recipe name
-                        </label>
-                        <input
-                            id="input-recipe-name"
-                            placeholder="Recipe name"
-                            type="text"
-                            onChange={this.updateRecipeName}
-                            value={this.state.newRecipeName}
-                            disabled={working}
-                            onKeyPress={this.handleKeyPress}
-                        />
-                    </div>
-                </form>
-            </SectionElement>
-        )
-    }
-
     render() {
         return (
             <>
-                <Header />
-                <SectionHeaderElement
-                    title="My recipes"
-                    subtitle={"Overview"}
-                >
-                    <Typography variant="body2">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                        ultrices arcu at sagittis aliquet. Donec convallis, felis id viverra sagittis, diam libero volutpat nunc,
-                        pretium orci augue sed urna. Ut in laoreet lectus, in luctus purus. Cras a quam turpis.
-                        Cras scelerisque hendrerit erat. Maecenas iaculis venenatis augue, a rutrum ex.
-                        Fusce vehicula urna molestie congue ultrices.
-                        Suspendisse quis nulla nec risus varius pellentesque. Nullam efficitur sapien dolor,
-                        uis tincidunt justo scelerisque ac. Fusce justo erat,
-                        ullamcorper et justo quis, efficitur egestas tellus. Integer interdum fermentum lorem,
-                        in placerat purus volutpat vitae.
-                        Ut sodales cursus dolor eget molestie. Curabitur eget laoreet ligula. Aenean venenatis
-                        lorem nisi, nec dignissim ipsum malesuada ac.
-                        In id porta tellus.Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                    </Typography>
-                </SectionHeaderElement>
-                {this.renderNewRecipeForm()}
-                <SectionElement>
-                    {this.renderRecipes()}
-                </SectionElement>
+                <Typography variant="h2">My recipes</Typography>
+                <Typography paragraph>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                    ultrices arcu at sagittis aliquet. Donec convallis, felis id viverra sagittis, diam libero volutpat nunc,
+                    pretium orci augue sed urna. Ut in laoreet lectus, in luctus purus. Cras a quam turpis.
+                    Cras scelerisque hendrerit erat. Maecenas iaculis venenatis augue, a rutrum ex.
+                    Fusce vehicula urna molestie congue ultrices.
+                    Suspendisse quis nulla nec risus varius pellentesque. Nullam efficitur sapien dolor,
+                    uis tincidunt justo scelerisque ac. Fusce justo erat,
+                    ullamcorper et justo quis, efficitur egestas tellus. Integer interdum fermentum lorem,
+                    in placerat purus volutpat vitae.
+                    Ut sodales cursus dolor eget molestie. Curabitur eget laoreet ligula. Aenean venenatis
+                    lorem nisi, nec dignissim ipsum malesuada ac.
+                    In id porta tellus.Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                </Typography>
+                <AddRecipeForm />
+                {this.renderRecipes()}
             </>
         );
     }
 }
 
-export default withRouter(RecipesView);
+const mapStateToProps = (state: any) => {
+    return {
+        recipes: state.recipes.recipes,
+        loadingRecipes: state.recipes.loadingRecipes,
+        updatingRecipes: state.recipes.updatingRecipes,
+        error: state.recipes.error
+    };
+};
+
+const mapDispatchToProps = (dispatch: Dispatch) => {
+    return {
+        fetchRecipesBegin: bindActionCreators(recipeActions.fetchRecipesBegin, dispatch),
+        fetchRecipesSuccess: bindActionCreators(recipeActions.fetchRecipesSuccess, dispatch),
+        fetchRecipesFailure: bindActionCreators(recipeActions.fetchRecipesFailure, dispatch),
+        deleteRecipeBegin: bindActionCreators(recipeActions.deleteRecipeBegin, dispatch),
+        deleteRecipeSuccess: bindActionCreators(recipeActions.deleteRecipeSuccess, dispatch),
+        deleteRecipeFailure: bindActionCreators(recipeActions.deleteRecipeFailure, dispatch)
+    };
+};
+
+const RecipesView = compose(
+    connect<StateProps, DispatchProps>(mapStateToProps, mapDispatchToProps)
+)(withRouter(RecipesViewBase));
+
+export default RecipesView;

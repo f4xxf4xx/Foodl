@@ -1,6 +1,5 @@
 import React, { PureComponent } from 'react';
 import { Recipe, IngredientItem } from '../models';
-import SectionElement from '../../Layout/Section/SectionElement';
 import { getIngredientText, getIngredientTypeOptions } from '../helper';
 import { Ingredient } from '../../Ingredients/models';
 import Select from 'react-select';
@@ -75,25 +74,25 @@ class IngredientsElement extends PureComponent<Props, State> {
         const { ingredientItems, editing, ingredients, deleteIngredient } = this.props;
         const { newIngredientItem, currentSelectIngredient, currentSelectType } = this.state;
 
-        const ingredientOptions = ingredients.map(ingredient => {
+        const ingredientOptions = ingredients ? ingredients.map(ingredient => {
             return {
                 value: ingredient.id,
                 label: ingredient.name
             }
-        })
+        }) : [];
 
         return (
-            <SectionElement title="Ingredients">
+            <>
+                <Typography variant="h5">Ingredients</Typography>
                 <Table>
                     <TableBody>
                         {ingredientItems && ingredientItems.map((ingredientItem, index) => {
                             return (
                                 <TableRow key={index}>
                                     <TableCell component="th" scope="row">
-                                        <Avatar
-                                            alt={getIngredientText(ingredientItem)}
-                                            src="../../assets/img/theme/vue.jpg"
-                                        />
+                                        <Typography>
+                                            {getIngredientText(ingredientItem)}
+                                        </Typography>
                                     </TableCell>
                                     <TableCell>
                                         {editing ?
@@ -164,7 +163,7 @@ class IngredientsElement extends PureComponent<Props, State> {
                         </div>
                     </form>
                 }
-            </SectionElement>
+            </>
         );
     }
 }
