@@ -2,13 +2,8 @@ import React, { PureComponent } from 'react';
 import { Recipe } from '../models';
 import { Typography } from '@material-ui/core';
 
-type Props = {
-    recipe: Recipe;
-}
-
-class StepsElement extends PureComponent<Props> {
+class StepsElement extends PureComponent {
     render() {
-        const { recipe } = this.props;
 
         return (
             <>

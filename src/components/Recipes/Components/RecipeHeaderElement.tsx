@@ -2,24 +2,51 @@ import React from "react";
 import { Recipe, IngredientItem } from "../models";
 import Statistic from "../../Layout/Statistic";
 import { Typography, Button, TextField } from "@material-ui/core";
+import { compose, Dispatch, bindActionCreators } from 'redux';
+import { connect } from "react-redux";
+import { Loader } from 'semantic-ui-react';
+import * as recipeActions from '../recipeActions';
+import { recipeService } from "../recipeService";
+import { toast } from "react-toastify";
 
-type Props = {
+type StateProps = {
     recipe: Recipe;
     ingredientItems: IngredientItem[];
+    loadingIngredientItems: boolean;
+};
+
+type OwnProps = {
     editing: boolean;
-    updateRecipe: (key: string, value: string) => void;
     toggleEdit: () => void;
+};
+
+type DispatchProps = {
+    updateRecipeStart: typeof recipeActions.updateRecipeStart;
+    updateRecipeStop: typeof recipeActions.updateRecipeStop;
+    updateRecipe: typeof recipeActions.updateRecipe;
 }
 
-class RecipeHeaderElement
-    extends React.Component<Props> {
+type Props = OwnProps & StateProps & DispatchProps;
+
+class RecipeHeaderElementBase extends React.Component<Props> {
     updateRecipe = (key: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
-        const { updateRecipe } = this.props;
-        updateRecipe(key, e.currentTarget.value);
+        const { recipe } = this.props;
+        const value = e.currentTarget.value;
+
+        this.props.updateRecipeStart();
+        recipeService.updateRecipe(recipe.id, key, value)
+            .then(() => {
+                this.props.updateRecipe({ ...recipe, [key]: value });
+                toast.success("Updated!");
+            })
+            .catch(() => {
+                this.props.updateRecipeStop();
+                toast.error("Error updating the recipe!");
+            })
     }
 
     renderStatistics() {
-        const { recipe, ingredientItems } = this.props;
+        const { recipe, ingredientItems, loadingIngredientItems } = this.props;
 
         return (
             recipe &&
@@ -38,7 +65,9 @@ class RecipeHeaderElement
                         icon={"fa-clock"}
                     />
                 }
-                {ingredientItems &&
+                {loadingIngredientItems ?
+                    <Loader active inline='centered' />
+                    :
                     <Statistic
                         name={"Ingredient number"}
                         value={ingredientItems.length.toString()}
@@ -46,7 +75,6 @@ class RecipeHeaderElement
                     />
                 }
             </>
-
         )
     }
 
@@ -89,5 +117,25 @@ class RecipeHeaderElement
         );
     }
 }
+
+const mapStateToProps = (state: any) => {
+    return {
+        recipe: state.recipe.recipe,
+        ingredientItems: state.recipe.ingredientItems,
+        loadingIngredientItems: state.recipe.loadingIngredientItems
+    };
+};
+
+const mapDispatchToProps = (dispatch: Dispatch) => {
+    return {
+        updateRecipeStart: bindActionCreators(recipeActions.updateRecipeStart, dispatch),
+        updateRecipeStop: bindActionCreators(recipeActions.updateRecipeStop, dispatch),
+        updateRecipe: bindActionCreators(recipeActions.updateRecipe, dispatch)
+    };
+};
+
+const RecipeHeaderElement = compose(
+    connect<StateProps, DispatchProps>(mapStateToProps, mapDispatchToProps)
+)(RecipeHeaderElementBase);
 
 export default RecipeHeaderElement;

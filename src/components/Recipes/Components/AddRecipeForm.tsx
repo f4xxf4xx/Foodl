@@ -3,9 +3,10 @@ import { RouteComponentProps } from 'react-router-dom';
 import { withRouter } from 'react-router-dom';
 import { recipeService } from '../recipeService';
 import { Button, Typography, FormLabel, TextField } from '@material-ui/core';
-import * as recipeActions from '../recipeActions';
 import { compose, Dispatch, bindActionCreators } from 'redux';
 import { connect } from "react-redux";
+import * as recipesActions from '../recipesActions';
+import { toast } from 'react-toastify';
 
 type State = {
     newRecipeName: string;
@@ -16,9 +17,9 @@ type StateProps = {
 };
 
 type DispatchProps = {
-    addRecipeBegin: typeof recipeActions.addRecipeBegin;
-    addRecipeSuccess: typeof recipeActions.addRecipeSuccess;
-    addRecipeFailure: typeof recipeActions.addRecipeFailure;
+    updateRecipesStart: typeof recipesActions.updateRecipesStart;
+    updateRecipesStop: typeof recipesActions.updateRecipesStop;
+    addRecipe: typeof recipesActions.addRecipe;
 };
 
 type Props = StateProps & RouteComponentProps & DispatchProps;
@@ -47,16 +48,20 @@ class AddRecipeFormBase extends PureComponent<Props, State> {
             return;
         }
 
-        this.props.addRecipeBegin();
+        this.props.updateRecipesStart();
         recipeService.addRecipe(newRecipeName)
             .then(recipe => {
-                this.props.addRecipeSuccess(recipe);
+                this.props.addRecipe(recipe);
+                this.props.updateRecipesStop();
                 this.setState({
                     newRecipeName: "",
                 })
                 this.props.history.push(`/recipe/${recipe.id}`);
             })
-            .catch(() => this.props.addRecipeFailure());
+            .catch(() => {
+                this.props.updateRecipesStop();
+                toast.error("Error add the recipe!");
+            });
     }
 
     render() {
@@ -104,9 +109,9 @@ const mapStateToProps = (state: any) => {
 
 const mapDispatchToProps = (dispatch: Dispatch) => {
     return {
-        addRecipeBegin: bindActionCreators(recipeActions.addRecipeBegin, dispatch),
-        addRecipeSuccess: bindActionCreators(recipeActions.addRecipeSuccess, dispatch),
-        addRecipeFailure: bindActionCreators(recipeActions.addRecipeFailure, dispatch),
+        updateRecipesStart: bindActionCreators(recipesActions.updateRecipesStart, dispatch),
+        updateRecipesStop: bindActionCreators(recipesActions.updateRecipesStop, dispatch),
+        addRecipe: bindActionCreators(recipesActions.addRecipe, dispatch),
     };
 };
 

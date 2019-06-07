@@ -13,8 +13,8 @@ import AddIngredientForm from "./AddIngredientForm";
 
 type StateProps = {
     ingredients: Ingredient[];
-    loading: boolean;
-    updating: boolean;
+    loadingIngredients: boolean;
+    updatingIngredients: boolean;
 };
 
 type DispatchProps = {
@@ -45,11 +45,11 @@ class IngredientsViewBase extends PureComponent<Props> {
     }
 
     renderIngredients() {
-        const { ingredients, updating, loading } = this.props;
+        const { ingredients, updatingIngredients, loadingIngredients } = this.props;
 
         return (
             <Paper>
-                {loading ?
+                {loadingIngredients ?
                     <Loader active inline='centered' />
                     :
                     <Table>
@@ -67,7 +67,7 @@ class IngredientsViewBase extends PureComponent<Props> {
                                         <Button
                                             variant="contained"
                                             color="primary"
-                                            disabled={updating}
+                                            disabled={updatingIngredients}
                                             onClick={() => this.deleteIngredient(ingredient.id)}>
                                             DELETE
                                 </Button>
@@ -96,14 +96,14 @@ class IngredientsViewBase extends PureComponent<Props> {
     }
 
     render() {
-        const { updating } = this.props;
+        const { updatingIngredients } = this.props;
         return (
             <>
                 <Typography variant="h2">Ingredients</Typography>
                 <Typography variant="subtitle1">
                     Here lies the list of possible ingredients
                 </Typography>
-                <AddIngredientForm updating={updating} />
+                <AddIngredientForm updating={updatingIngredients} />
                 {this.renderIngredients()}
             </>
         );
@@ -113,8 +113,8 @@ class IngredientsViewBase extends PureComponent<Props> {
 const mapStateToProps = (state: any) => {
     return {
         ingredients: state.ingredients.ingredients,
-        loading: state.ingredients.loading,
-        updating: state.ingredients.updating
+        loadingIngredients: state.ingredients.loadingIngredients,
+        updatingIngredients: state.ingredients.updatingIngredients
     };
 };
 

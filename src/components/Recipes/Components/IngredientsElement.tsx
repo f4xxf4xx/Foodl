@@ -1,171 +1,149 @@
 import React, { PureComponent } from 'react';
 import { Recipe, IngredientItem } from '../models';
-import { getIngredientText, getIngredientTypeOptions } from '../helper';
-import { Ingredient } from '../../Ingredients/models';
-import Select from 'react-select';
-import Creatable from 'react-select/lib/Creatable';
-import { Table, TableBody, Divider, TableRow, TableCell, Button, Typography, Avatar } from '@material-ui/core';
+import { getIngredientText } from '../helper';
+import { Table, TableBody, Divider, TableRow, TableCell, Button, Typography, Paper } from '@material-ui/core';
+import * as recipeActions from '../recipeActions';
+import { recipeService } from '../recipeService';
+import { toast } from 'react-toastify';
+import AddIngredientItemForm from './AddIngredientItemForm';
+import { compose, Dispatch, bindActionCreators } from 'redux';
+import { connect } from "react-redux";
+import { Loader } from 'semantic-ui-react';
+import { RouteComponentProps } from 'react-router-dom';
 
-type Props = {
-    ingredients: Ingredient[];
-    ingredientItems: IngredientItem[];
+interface OwnProps {
     editing: boolean;
-    addIngredient: (newIngredientItem: IngredientItem) => void;
-    deleteIngredient: (ingredientItemId: string) => void;
+    id: string;
 }
 
-type State = {
-    newIngredientItem: IngredientItem;
-    currentSelectIngredient: any;
-    currentSelectType: any;
+type StateProps = {
+    recipe: Recipe;
+    ingredientItems: IngredientItem[];
+    loadingIngredientItems: boolean;
 }
 
-class IngredientsElement extends PureComponent<Props, State> {
-    constructor(props: any) {
-        super(props);
-        this.state = {
-            newIngredientItem: {
-                name: "",
-                quantity: "",
-                type: ""
-            },
-            currentSelectIngredient: null,
-            currentSelectType: null
-        };
+type DispatchProps = {
+    fetchIngredientItemsStart: typeof recipeActions.fetchIngredientItemsStart;
+    fetchIngredientItemsStop: typeof recipeActions.fetchIngredientItemsStop;
+    updateIngredientItemsStart: typeof recipeActions.updateIngredientItemsStart;
+    updateIngredientItemsStop: typeof recipeActions.updateIngredientItemsStop;
+    updateIngredientItems: typeof recipeActions.updateIngredientItems;
+    deleteIngredientItem: typeof recipeActions.deleteIngredientItem;
+}
+
+type Props = OwnProps & StateProps & RouteComponentProps & DispatchProps;
+
+class IngredientsElementBase extends PureComponent<Props> {
+    componentDidMount() {
+        const { id } = this.props;
+
+        if (this.props.ingredientItems.length == 0) {
+            this.props.fetchIngredientItemsStart()
+            recipeService.getIngredientItems(id)
+                .then((ingredientItems) => {
+                    if (ingredientItems.length > 0) {
+                        this.props.updateIngredientItems(ingredientItems);
+                    }
+                    this.props.fetchIngredientItemsStop();
+                })
+                .catch(() => {
+                    this.props.fetchIngredientItemsStop();
+                    toast.error("Error fetching the ingredient items!");
+                })
+        }
     }
 
-    updateFormName = (e: any) => {
-        const { newIngredientItem } = this.state;
-        this.setState({
-            newIngredientItem: { ...newIngredientItem, name: e.label },
-            currentSelectIngredient: e
-        });
-    }
+    deleteIngredientItem = (ingredientItemId: string) => {
+        const { recipe } = this.props;
 
-    updateFormQuantity = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const { newIngredientItem } = this.state;
-        this.setState({ newIngredientItem: { ...newIngredientItem, quantity: e.target.value } });
-    }
-
-    updateFormType = (e: any) => {
-        const { newIngredientItem } = this.state;
-        this.setState({
-            newIngredientItem: { ...newIngredientItem, type: e.value },
-            currentSelectType: e
-        });
-    }
-
-    addIngredient = () => {
-        const { addIngredient } = this.props;
-        const { newIngredientItem } = this.state;
-
-        addIngredient(newIngredientItem);
-        this.setState({
-            newIngredientItem: {
-                ...newIngredientItem, name: "",
-                quantity: "", type: ""
-            },
-            currentSelectIngredient: null,
-            currentSelectType: null
-        })
+        this.props.updateIngredientItemsStart();
+        recipeService.deleteIngredientItem(recipe.id, ingredientItemId)
+            .then(() => {
+                this.props.deleteIngredientItem(recipe.id);
+                this.props.updateIngredientItemsStop();
+                toast.success("Deleted!");
+            })
+            .catch(() => {
+                this.props.updateIngredientItemsStop();
+                toast.error("Error deleting the ingredient item!");
+            });
     }
 
     render() {
-        const { ingredientItems, editing, ingredients, deleteIngredient } = this.props;
-        const { newIngredientItem, currentSelectIngredient, currentSelectType } = this.state;
-
-        const ingredientOptions = ingredients ? ingredients.map(ingredient => {
-            return {
-                value: ingredient.id,
-                label: ingredient.name
-            }
-        }) : [];
+        const { ingredientItems, editing, loadingIngredientItems } = this.props;
 
         return (
             <>
                 <Typography variant="h5">Ingredients</Typography>
-                <Table>
-                    <TableBody>
-                        {ingredientItems && ingredientItems.map((ingredientItem, index) => {
-                            return (
-                                <TableRow key={index}>
-                                    <TableCell component="th" scope="row">
-                                        <Typography>
-                                            {getIngredientText(ingredientItem)}
-                                        </Typography>
-                                    </TableCell>
-                                    <TableCell>
-                                        {editing ?
-                                            <Button
-                                                variant="contained"
-                                                color="primary"
-                                                onClick={() => { deleteIngredient(ingredientItem.id) }}
-                                            >
-                                                Delete ingredient
+                <Paper>
+                    {loadingIngredientItems ?
+                        <Loader active inline='centered' />
+                        :
+                        <Table>
+                            <TableBody>
+                                {ingredientItems.map((ingredientItem, index) => {
+                                    return (
+                                        <TableRow key={index}>
+                                            <TableCell component="th" scope="row">
+                                                <Typography>
+                                                    {getIngredientText(ingredientItem)}
+                                                </Typography>
+                                            </TableCell>
+                                            <TableCell>
+                                                {editing ?
+                                                    <Button
+                                                        variant="contained"
+                                                        color="primary"
+                                                        onClick={() => this.deleteIngredientItem(ingredientItem.id)}
+                                                    >
+                                                        Delete ingredient
                                             </Button>
-                                            :
-                                            <Button
-                                                variant="contained"
-                                                color="primary"
-                                                onClick={() => { }}
-                                            >
-                                                Add to cart
+                                                    :
+                                                    <Button
+                                                        variant="contained"
+                                                        color="primary"
+                                                        onClick={() => { }}
+                                                    >
+                                                        Add to cart
                                             </Button>
-                                        }
-                                    </TableCell>
-                                </TableRow>
-                            )
-                        })}
-                    </TableBody>
-                </Table>
+                                                }
+                                            </TableCell>
+                                        </TableRow>
+                                    )
+                                })
+                                }
+                            </TableBody>
+                        </Table>
+                    }
+                </Paper>
                 <Divider />
-                {editing &&
-                    <form onSubmit={e => { e.preventDefault(); }}>
-                        <Typography variant="h6">
-                            Add ingredient
-                        </Typography>
-                        <div>
-                            <label htmlFor="input-ingredient">
-                                Ingredient
-                            </label>
-                            <Creatable
-                                id="input-ingredient"
-                                options={ingredientOptions}
-                                value={currentSelectIngredient}
-                                onChange={this.updateFormName}
-                            />
-                            <label htmlFor="input-quantity">
-                                Quantity
-                            </label>
-                            <input
-                                id="input-quantity"
-                                placeholder="Quantity"
-                                type="text"
-                                value={newIngredientItem.quantity}
-                                onChange={this.updateFormQuantity}
-                            />
-                            <label htmlFor="input-type">
-                                Type
-                            </label>
-                            <Select
-                                id="input-type"
-                                options={getIngredientTypeOptions()}
-                                value={currentSelectType}
-                                onChange={this.updateFormType}
-                            />
-                            <Button
-                                variant="contained"
-                                color="primary"
-                                onClick={this.addIngredient}
-                            >
-                                Add
-                            </Button>
-                        </div>
-                    </form>
-                }
+                <AddIngredientItemForm editing={editing} />
             </>
         );
     }
 }
+
+const mapStateToProps = (state: any) => {
+    return {
+        recipe: state.recipe.recipe,
+        ingredientItems: state.recipe.ingredientItems,
+        loadingIngredientItems: state.recipe.loadingIngredientItems
+    };
+};
+
+const mapDispatchToProps = (dispatch: Dispatch) => {
+    return {
+        fetchIngredientItemsStart: bindActionCreators(recipeActions.fetchIngredientItemsStart, dispatch),
+        fetchIngredientItemsStop: bindActionCreators(recipeActions.fetchIngredientItemsStop, dispatch),
+        updateIngredientItemsStart: bindActionCreators(recipeActions.updateIngredientItemsStart, dispatch),
+        updateIngredientItemsStop: bindActionCreators(recipeActions.updateIngredientItemsStop, dispatch),
+        updateIngredientItems: bindActionCreators(recipeActions.updateIngredientItems, dispatch),
+        deleteIngredientItem: bindActionCreators(recipeActions.deleteIngredientItem, dispatch),
+    };
+};
+
+const IngredientsElement = compose(
+    connect<StateProps, DispatchProps, OwnProps>(mapStateToProps, mapDispatchToProps)
+)(IngredientsElementBase);
 
 export default IngredientsElement;

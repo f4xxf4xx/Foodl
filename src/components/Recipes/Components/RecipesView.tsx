@@ -6,7 +6,7 @@ import { recipeService } from '../recipeService';
 import { toast } from 'react-toastify';
 import slugify from 'react-slugify';
 import { TableHead, TableBody, TableRow, TableCell, Table, Button, Typography, Paper, FormLabel, TextField } from '@material-ui/core';
-import * as recipeActions from '../recipeActions';
+import * as recipesActions from '../recipesActions';
 import { compose, Dispatch, bindActionCreators } from 'redux';
 import { connect } from "react-redux";
 import AddRecipeForm from './AddRecipeForm';
@@ -18,18 +18,19 @@ type State = {
 
 type StateProps = {
     recipes: Recipe[];
-    loadingRecipes: boolean;
-    updatingRecipes: boolean;
+    loading: boolean;
+    updating: boolean;
     error: string;
 };
 
 type DispatchProps = {
-    fetchRecipesStart: typeof recipeActions.fetchRecipesStart;
-    fetchRecipesStop: typeof recipeActions.fetchRecipesStop;
-    updateRecipesStart: typeof recipeActions.updateRecipesStart;
-    updateRecipesStop: typeof recipeActions.updateRecipesStop;
-    updateRecipes: typeof recipeActions.updateRecipes;
-    deleteRecipe: typeof recipeActions.deleteRecipe;
+    fetchRecipesStart: typeof recipesActions.fetchRecipesStart;
+    fetchRecipesStop: typeof recipesActions.fetchRecipesStop;
+    updateRecipesStart: typeof recipesActions.updateRecipesStart;
+    updateRecipesStop: typeof recipesActions.updateRecipesStop;
+    updateRecipes: typeof recipesActions.updateRecipes;
+    addRecipe: typeof recipesActions.addRecipe;
+    deleteRecipe: typeof recipesActions.deleteRecipe;
 };
 
 type Props = StateProps & RouteComponentProps & DispatchProps;
@@ -72,21 +73,22 @@ class RecipesViewBase extends PureComponent<Props, State> {
     }
 
     renderRecipes() {
-        const { recipes, loadingRecipes, updatingRecipes } = this.props;
+        const { recipes, loading, updating } = this.props;
 
         return (
             <Paper>
-                <Table>
-                    <TableHead>
-                        <TableRow>
-                            <TableCell component="th" scope="col">Recipes</TableCell>
-                            <TableCell component="th" scope="col">Delete</TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {loadingRecipes ?
-                            <Loader active inline='centered' />
-                            : recipes.map((recipe) =>
+                {loading ?
+                    <Loader active inline='centered' />
+                    :
+                    <Table>
+                        <TableHead>
+                            <TableRow>
+                                <TableCell component="th" scope="col">Recipes</TableCell>
+                                <TableCell component="th" scope="col">Delete</TableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {recipes.map((recipe) =>
                                 <TableRow key={recipe.id}>
                                     <TableCell><Link to={`/recipe/${recipe.id}`}>{recipe.name}</Link></TableCell>
                                     <TableCell>
@@ -94,15 +96,16 @@ class RecipesViewBase extends PureComponent<Props, State> {
                                             variant="contained"
                                             color="primary"
                                             onClick={() => this.deleteRecipe(recipe.id)}
-                                            disabled={updatingRecipes}
+                                            disabled={updating}
                                         >
                                             DELETE
                                 </Button>
                                     </TableCell>
                                 </TableRow>
                             )}
-                    </TableBody>
-                </Table>
+                        </TableBody>
+                    </Table>
+                }
             </Paper>
         );
     }
@@ -135,18 +138,20 @@ class RecipesViewBase extends PureComponent<Props, State> {
 const mapStateToProps = (state: any) => {
     return {
         recipes: state.recipes.recipes,
-        loadingRecipes: state.recipes.loadingRecipes,
-        updatingRecipes: state.recipes.updatingRecipes,
-        error: state.recipes.error
+        loading: state.recipes.loading,
+        updating: state.recipes.updating
     };
 };
 
 const mapDispatchToProps = (dispatch: Dispatch) => {
     return {
-        fetchRecipesStart: bindActionCreators(recipeActions.fetchRecipesStart, dispatch),
-        fetchRecipesStop: bindActionCreators(recipeActions.fetchRecipesStop, dispatch),
-        updateRecipes: bindActionCreators(recipeActions.updateRecipes, dispatch),
-        deleteRecipe: bindActionCreators(recipeActions.deleteRecipe, dispatch),
+        fetchRecipesStart: bindActionCreators(recipesActions.fetchRecipesStart, dispatch),
+        fetchRecipesStop: bindActionCreators(recipesActions.fetchRecipesStop, dispatch),
+        updateRecipesStart: bindActionCreators(recipesActions.updateRecipesStart, dispatch),
+        updateRecipesStop: bindActionCreators(recipesActions.updateRecipesStop, dispatch),
+        updateRecipes: bindActionCreators(recipesActions.updateRecipes, dispatch),
+        addRecipe: bindActionCreators(recipesActions.addRecipe, dispatch),
+        deleteRecipe: bindActionCreators(recipesActions.deleteRecipe, dispatch),
     };
 };
 

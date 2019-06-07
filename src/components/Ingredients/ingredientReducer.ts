@@ -3,28 +3,28 @@ import { Ingredient } from "./models";
 
 export type IngredientState = {
     ingredients: Ingredient[];
-    loading: boolean;
-    updating: boolean;
+    loadingIngredients: boolean;
+    updatingIngredients: boolean;
 }
 
 const initialState: IngredientState = {
     ingredients: [],
-    loading: false,
-    updating: false
+    loadingIngredients: false,
+    updatingIngredients: false
 }
 
 export const ingredientReducer = createReducer(initialState, {
     FETCH_INGREDIENTS_START: (state) => {
-        state.loading = true;
+        state.loadingIngredients = true;
     },
     FETCH_INGREDIENTS_STOP: (state) => {
-        state.loading = false;
+        state.loadingIngredients = false;
     },
     UPDATE_INGREDIENTS_START: (state) => {
-        state.updating = true;
+        state.updatingIngredients = true;
     },
     UPDATE_INGREDIENTS_STOP: (state) => {
-        state.updating = false;
+        state.updatingIngredients = false;
     },
     UPDATE_INGREDIENTS: (state, action) => {
         state.ingredients = action.payload;
