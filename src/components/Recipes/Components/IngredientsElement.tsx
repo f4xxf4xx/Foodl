@@ -17,7 +17,6 @@ interface OwnProps {
 }
 
 type StateProps = {
-    recipe: Recipe;
     ingredientItems: IngredientItem[];
     loadingIngredientItems: boolean;
 }
@@ -54,12 +53,12 @@ class IngredientsElementBase extends PureComponent<Props> {
     }
 
     deleteIngredientItem = (ingredientItemId: string) => {
-        const { recipe } = this.props;
+        const { id } = this.props;
 
         this.props.updateIngredientItemsStart();
-        recipeService.deleteIngredientItem(recipe.id, ingredientItemId)
+        recipeService.deleteIngredientItem(id, ingredientItemId)
             .then(() => {
-                this.props.deleteIngredientItem(recipe.id);
+                this.props.deleteIngredientItem(id);
                 this.props.updateIngredientItemsStop();
                 toast.success("Deleted!");
             })
@@ -125,7 +124,6 @@ class IngredientsElementBase extends PureComponent<Props> {
 
 const mapStateToProps = (state: any) => {
     return {
-        recipe: state.recipe.recipe,
         ingredientItems: state.recipe.ingredientItems,
         loadingIngredientItems: state.recipe.loadingIngredientItems
     };

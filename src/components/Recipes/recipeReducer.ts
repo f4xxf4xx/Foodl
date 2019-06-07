@@ -47,6 +47,9 @@ export const recipeReducer = createReducer(initialState, {
     UPDATE_RECIPE: (state, action) => {
         state.recipe = action.payload;
     },
+    UPDATE_INGREDIENTITEMS: (state, action) => {
+        state.ingredientItems = action.payload;
+    },
     ADD_INGREDIENTITEM: (state, action) => {
         state.ingredientItems.push(action.payload);
     },

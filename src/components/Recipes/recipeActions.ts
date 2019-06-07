@@ -9,6 +9,6 @@ export const fetchIngredientItemsStop = createAction("FETCH_INGREDIENTITEMS_STOP
 export const updateIngredientItemsStart = createAction("UPDATE_INGREDIENTITEMS_START");
 export const updateIngredientItemsStop = createAction("UPDATE_INGREDIENTITEMS_STOP");
 export const updateRecipe = createAction("UPDATE_RECIPE");
-export const updateIngredientItems = createAction("UPDATE_INGREDIENT_ITEMS");
+export const updateIngredientItems = createAction("UPDATE_INGREDIENTITEMS");
 export const addIngredientItem = createAction("ADD_INGREDIENTITEM");
 export const deleteIngredientItem = createAction("DELETE_INGREDIENTITEM");
