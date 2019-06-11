@@ -6,7 +6,7 @@ import { compose, bindActionCreators, Dispatch } from "redux";
 import * as ingredientActions from "../ingredientActions";
 import { ingredientService } from "../ingredientService";
 import Button from '@material-ui/core/Button';
-import { Typography, FormLabel, TextField } from "@material-ui/core";
+import { Typography, FormLabel, TextField, Paper } from "@material-ui/core";
 
 type OwnProps = {
     updating: boolean;
@@ -67,13 +67,13 @@ class AddIngredientFormBase extends PureComponent<Props, State> {
     render() {
         const { updating } = this.props;
         return (
-            <>
+            <Paper>
                 <Typography variant="h5">New ingredient</Typography>
                 <form onSubmit={e => { e.preventDefault(); }}>
                     <div>
                         <FormLabel htmlFor="input-ingredient-name">
                             Ingredient name
-                    </FormLabel>
+                        </FormLabel>
                         <TextField
                             id="input-ingredient-name"
                             placeholder="Ingredient name"
@@ -90,9 +90,9 @@ class AddIngredientFormBase extends PureComponent<Props, State> {
                         disabled={updating}
                     >
                         Add
-                </Button>
+                    </Button>
                 </form>
-            </>
+            </Paper>
         );
     }
 }

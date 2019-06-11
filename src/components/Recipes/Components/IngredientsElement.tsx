@@ -58,7 +58,7 @@ class IngredientsElementBase extends PureComponent<Props> {
         this.props.updateIngredientItemsStart();
         recipeService.deleteIngredientItem(id, ingredientItemId)
             .then(() => {
-                this.props.deleteIngredientItem(id);
+                this.props.deleteIngredientItem(ingredientItemId);
                 this.props.updateIngredientItemsStop();
                 toast.success("Deleted!");
             })
@@ -96,7 +96,7 @@ class IngredientsElementBase extends PureComponent<Props> {
                                                         onClick={() => this.deleteIngredientItem(ingredientItem.id)}
                                                     >
                                                         Delete ingredient
-                                            </Button>
+                                                    </Button>
                                                     :
                                                     <Button
                                                         variant="contained"
@@ -104,7 +104,7 @@ class IngredientsElementBase extends PureComponent<Props> {
                                                         onClick={() => { }}
                                                     >
                                                         Add to cart
-                                            </Button>
+                                                    </Button>
                                                 }
                                             </TableCell>
                                         </TableRow>

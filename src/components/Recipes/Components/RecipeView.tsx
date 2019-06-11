@@ -84,7 +84,7 @@ class RecipeViewBase extends PureComponent<Props, State> {
           :
           <>
             <IngredientsElement editing={editing} id={id} />
-            <StepsElement />
+            <StepsElement editing={editing} id={id} />
           </>
         }
       </>

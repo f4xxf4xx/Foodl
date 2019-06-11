@@ -23,3 +23,9 @@ export interface Recipe {
     tags?: string[];
     cuisine?: string;
 }
+
+export interface Step {
+    id?: string;
+    order: number;
+    text: string;
+}

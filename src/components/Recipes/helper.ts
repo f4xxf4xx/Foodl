@@ -1,25 +1,32 @@
 import { IngredientType, IngredientItem } from "./models";
 
 export const getIngredientText = (ingredientItem: IngredientItem) => {
-    let quantity = ingredientItem.quantity;
-    if (ingredientItem.type === IngredientType.Cup) {
-        quantity = getCupQuantities(quantity);
-    }
+    const quantity = getNumericQuantity(ingredientItem.quantity);
 
-    return `${ingredientItem.quantity} ${getIngredientTypeText(ingredientItem.type)} ${ingredientItem.name.toLowerCase()}`
+    return `${quantity} ${getIngredientTypeText(ingredientItem.type)} ${ingredientItem.name.toLowerCase()}`
 }
 
-export const getCupQuantities = (quantity: string): string => {
-    switch (quantity) {
-        case "0.5":
-            return "½";
+export const getNumericQuantity = (quantity: string): string => {
+    const number = parseFloat(quantity);
+    const flooredNumber = Math.floor(number);
+    const decimal = number - flooredNumber;
+    let decimalText = "";
+
+    switch (decimal.toString()) {
         case "0.25":
-            return "¼";
+            decimalText = "¼";
+            break;
+        case "0.5":
+            decimalText = "½";
+            break;
         case "0.75":
-            return "¾";
+            decimalText = "¾";
+            break;
         default:
-            return quantity;
+            "";
     }
+
+    return `${flooredNumber > 0 ? flooredNumber : ""}${decimalText}`
 }
 
 export const getIngredientTypeText = (ingredientType: string) => {

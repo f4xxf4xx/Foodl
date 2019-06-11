@@ -1,5 +1,5 @@
 import { db } from '../../config';
-import { Recipe, IngredientItem } from './models';
+import { Recipe, IngredientItem, Step } from './models';
 import slugify from 'react-slugify';
 
 export class recipeService {
@@ -78,6 +78,25 @@ export class recipeService {
             })
     }
 
+    public static getSteps(id: string): Promise<Step[]> {
+        return db.collection("recipes").doc(id).collection("steps").get()
+            .then(data => {
+                let steps: Step[] = [];
+                data.forEach(step => {
+                    const item: Step = {
+                        id: step.id,
+                        text: step.data().text,
+                        order: step.data().order
+                    }
+                    steps.push(item);
+                })
+
+                //steps.sort(s => s.order);
+
+                return steps;
+            })
+    }
+
     public static addIngredientItem(id: string, ingredientItem: IngredientItem): Promise<IngredientItem> {
         return db.collection("recipes").doc(id).collection("ingredientItems").add(ingredientItem)
             .then(() => ingredientItem)
@@ -85,5 +104,14 @@ export class recipeService {
 
     public static deleteIngredientItem(id: string, ingredientItemId: string): Promise<void> {
         return db.collection("recipes").doc(id).collection("ingredientItems").doc(ingredientItemId).delete();
+    }
+    
+    public static addStep(id: string, step: Step): Promise<Step> {
+        return db.collection("recipes").doc(id).collection("steps").add(step)
+            .then(() => step)
+    }
+
+    public static deleteStep(id: string, stepId: string): Promise<void> {
+        return db.collection("recipes").doc(id).collection("steps").doc(stepId).delete();
     }
 }

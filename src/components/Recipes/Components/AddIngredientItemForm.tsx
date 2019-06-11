@@ -4,7 +4,7 @@ import { getIngredientText, getIngredientTypeOptions } from '../helper';
 import { Ingredient } from '../../Ingredients/models';
 import Select from 'react-select';
 import Creatable from 'react-select/lib/Creatable';
-import { Table, TableBody, Divider, TableRow, TableCell, Button, Typography, Avatar, FormLabel, TextField } from '@material-ui/core';
+import { Table, TableBody, Divider, TableRow, TableCell, Button, Typography, Avatar, FormLabel, TextField, Paper } from '@material-ui/core';
 import * as recipeActions from '../recipeActions';
 import * as ingredientActions from '../../Ingredients/ingredientActions';
 import { compose, Dispatch, bindActionCreators } from 'redux';
@@ -98,7 +98,13 @@ class AddIngredientItemFormBase extends PureComponent<Props, State> {
         const { ingredients, recipe } = this.props;
 
         if (!ingredients.find(i => i.name === newIngredientItem.name)) {
-            this.props.addIngredient(newIngredientItem.name);
+            ingredientService.addIngredient(newIngredientItem.name)
+                .then((ingredient) => {
+                    this.props.addIngredient(ingredient);
+                })
+                .catch(() => {
+                    toast.error("Error adding the ingredient.")
+                })
         }
 
         this.props.updateIngredientItemsStart();
@@ -134,7 +140,7 @@ class AddIngredientItemFormBase extends PureComponent<Props, State> {
         }) : [];
 
         return (
-            <>
+            <Paper>
                 {editing &&
                     <form onSubmit={e => { e.preventDefault(); }}>
                         <Typography variant="h6">
@@ -179,7 +185,7 @@ class AddIngredientItemFormBase extends PureComponent<Props, State> {
                         </div>
                     </form>
                 }
-            </>
+            </Paper>
         );
     }
 }
