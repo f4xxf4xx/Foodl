@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { Step } from '../models';
+import { Step, Recipe } from '../models';
 import { Table, TableBody, Divider, TableRow, TableCell, Button, Typography, Paper } from '@material-ui/core';
 import * as recipeActions from '../recipeActions';
 import { recipeService } from '../recipeService';
@@ -8,10 +8,11 @@ import { compose, Dispatch, bindActionCreators } from 'redux';
 import { connect } from "react-redux";
 import { Loader } from 'semantic-ui-react';
 import { RouteComponentProps } from 'react-router-dom';
+import AddStepForm from './AddStepForm';
 
 interface OwnProps {
-    editing: boolean;
     id: string;
+    editing: boolean;
 }
 
 type StateProps = {
@@ -34,20 +35,19 @@ class StepsElementBase extends PureComponent<Props> {
     componentDidMount() {
         const { id } = this.props;
 
-        if (this.props.steps.length == 0) {
-            this.props.fetchStepsStart()
-            recipeService.getSteps(id)
-                .then((steps) => {
-                    if (steps.length > 0) {
-                        this.props.updateSteps(steps);
-                    }
-                    this.props.fetchStepsStop();
-                })
-                .catch(() => {
-                    this.props.fetchStepsStart();
-                    toast.error("Error fetching the ingredient items!");
-                })
-        }
+        this.props.fetchStepsStart()
+        recipeService.getSteps(id)
+            .then((steps) => {
+                if (steps.length > 0) {
+                    this.props.updateSteps(steps);
+                }
+                this.props.fetchStepsStop();
+            })
+            .catch(() => {
+                this.props.fetchStepsStart();
+                toast.error("Error fetching the ingredient items!");
+            })
+
     }
 
     deleteStep = (stepId: string) => {
@@ -111,6 +111,7 @@ class StepsElementBase extends PureComponent<Props> {
                     }
                 </Paper>
                 <Divider />
+                <AddStepForm editing={editing} currentStepCount={(steps.length + 1)} />
             </>
         );
     }

@@ -44,7 +44,7 @@ type DispatchProps = {
 type Props = OwnProps & StateProps & DispatchProps;
 
 class AddIngredientItemFormBase extends PureComponent<Props, State> {
-    constructor(props: any) {
+    constructor(props: Props) {
         super(props);
         this.state = {
             newIngredientItem: {

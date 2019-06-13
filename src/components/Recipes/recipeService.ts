@@ -79,7 +79,9 @@ export class recipeService {
     }
 
     public static getSteps(id: string): Promise<Step[]> {
-        return db.collection("recipes").doc(id).collection("steps").get()
+        return db.collection("recipes").doc(id).collection("steps")
+            .orderBy("order")
+            .get()
             .then(data => {
                 let steps: Step[] = [];
                 data.forEach(step => {
@@ -90,8 +92,6 @@ export class recipeService {
                     }
                     steps.push(item);
                 })
-
-                //steps.sort(s => s.order);
 
                 return steps;
             })
@@ -105,7 +105,7 @@ export class recipeService {
     public static deleteIngredientItem(id: string, ingredientItemId: string): Promise<void> {
         return db.collection("recipes").doc(id).collection("ingredientItems").doc(ingredientItemId).delete();
     }
-    
+
     public static addStep(id: string, step: Step): Promise<Step> {
         return db.collection("recipes").doc(id).collection("steps").add(step)
             .then(() => step)

@@ -22,5 +22,5 @@ export const fetchStepsStop = createAction("FETCH_STEPS_STOP");
 export const updateStepsStart = createAction("UPDATE_STEPS_START");
 export const updateStepsStop = createAction("UPDATE_STEPS_STOP");
 export const updateSteps = createAction("UPDATE_STEPS");
-export const updateStep = createAction("ADD_STEP");
+export const addStep = createAction("ADD_STEP");
 export const deleteStep = createAction("DELETE_STEP");

@@ -34,14 +34,28 @@ class IngredientsViewBase extends PureComponent<Props> {
             this.props.fetchIngredientsStart();
             return ingredientService.getIngredients()
                 .then(ingredients => {
-                    this.props.fetchIngredientsStop();
                     this.props.updateIngredients(ingredients);
+                    this.props.fetchIngredientsStop();
                 })
                 .catch(() => {
                     toast.error("Error fetching the ingredients");
                     this.props.fetchIngredientsStop();
                 });
         }
+    }  
+
+    deleteIngredient(ingredientId: string): void {
+        this.props.updateIngredientsStart();
+        ingredientService.deleteIngredient(ingredientId)
+            .then(() => {
+                this.props.deleteIngredient(ingredientId);
+                this.props.updateIngredientsStop();
+                toast.success("Deleted!");
+            })
+            .catch(() => {
+                this.props.updateIngredientsStop();
+                toast.error("Error deleting the ingredient!")
+        });
     }
 
     renderIngredients() {
@@ -79,20 +93,6 @@ class IngredientsViewBase extends PureComponent<Props> {
                 }
             </Paper>
         );
-    }
-
-    deleteIngredient(ingredientId: string): void {
-        this.props.updateIngredientsStart();
-        ingredientService.deleteIngredient(ingredientId)
-            .then(() => {
-                this.props.deleteIngredient(ingredientId);
-                this.props.updateIngredientsStop();
-                toast.success("Deleted!");
-            })
-            .catch(() => {
-                this.props.updateIngredientsStop();
-                toast.error("Error deleting the ingredient!")
-        });
     }
 
     render() {

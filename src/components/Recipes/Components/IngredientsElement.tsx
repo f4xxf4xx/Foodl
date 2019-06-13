@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { Recipe, IngredientItem } from '../models';
+import { IngredientItem } from '../models';
 import { getIngredientText } from '../helper';
 import { Table, TableBody, Divider, TableRow, TableCell, Button, Typography, Paper } from '@material-ui/core';
 import * as recipeActions from '../recipeActions';
@@ -12,8 +12,8 @@ import { Loader } from 'semantic-ui-react';
 import { RouteComponentProps } from 'react-router-dom';
 
 interface OwnProps {
-    editing: boolean;
     id: string;
+    editing: boolean;
 }
 
 type StateProps = {
