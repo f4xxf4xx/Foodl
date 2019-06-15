@@ -11,9 +11,19 @@ export const getLinks = () => {
             icon: "library_books"
         },
         {
+            path: "/cart",
+            name: "Cart",
+            icon: "shopping_cart"
+        }
+    ];
+}
+
+export const getAdminLinks = () => {
+    return [
+        {
             path: "/ingredients",
             name: "Ingredients",
             icon: "local_pizza"
         }
-    ];
+    ]
 }

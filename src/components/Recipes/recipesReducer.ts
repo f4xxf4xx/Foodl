@@ -3,28 +3,28 @@ import { Recipe } from "./models";
 
 export type RecipesState = {
     recipes: Recipe[];
-    loading: boolean;
-    updating: boolean;
+    loadingRecipes: boolean;
+    updatingRecipes: boolean;
 }
 
-const initialState: RecipesState = {
+const initialRecipesState: RecipesState = {
     recipes: [],
-    loading: false,
-    updating: false
+    loadingRecipes: false,
+    updatingRecipes: false
 }
 
-export const recipesReducer = createReducer(initialState, {
+export const recipesReducer = createReducer(initialRecipesState, {
     FETCH_RECIPES_START: (state) => {
-        state.loading = true;
+        state.loadingRecipes = true;
     },
     FETCH_RECIPES_STOP: (state) => {
-        state.loading = false;
+        state.loadingRecipes = false;
     },
     UPDATE_RECIPES_START: (state) => {
-        state.updating = false;
+        state.updatingRecipes = false;
     },
     UPDATE_RECIPES_STOP: (state) => {
-        state.updating = false;
+        state.updatingRecipes = false;
     },
     UPDATE_RECIPES: (state, action) => {
         state.recipes = action.payload;

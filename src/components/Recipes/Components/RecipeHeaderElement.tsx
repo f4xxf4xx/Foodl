@@ -1,5 +1,5 @@
 import React from "react";
-import { Recipe, IngredientItem } from "../models";
+import { Recipe, IngredientItem, Cuisine } from "../models";
 import { Typography, Button, TextField, Icon, Chip } from "@material-ui/core";
 import { compose, Dispatch, bindActionCreators } from 'redux';
 import { connect } from "react-redux";
@@ -7,12 +7,12 @@ import { Loader } from 'semantic-ui-react';
 import * as recipeActions from '../recipeActions';
 import { recipeService } from "../recipeService";
 import { toast } from "react-toastify";
+import Creatable from 'react-select/lib/Creatable';
 
 type StateProps = {
     recipe: Recipe;
-    ingredientItems: IngredientItem[];
-    loadingIngredientItems: boolean;
     updatingRecipe: boolean;
+    cuisines: Cuisine[];
 };
 
 type OwnProps = {
@@ -24,6 +24,7 @@ type DispatchProps = {
     updateRecipeStart: typeof recipeActions.updateRecipeStart;
     updateRecipeStop: typeof recipeActions.updateRecipeStop;
     updateRecipe: typeof recipeActions.updateRecipe;
+    addCuisine: typeof recipeActions.addCuisine;
 }
 
 type Props = OwnProps & StateProps & DispatchProps;
@@ -46,9 +47,44 @@ class RecipeHeaderElementBase extends React.Component<Props> {
             })
     }
 
-    renderStatistics() {
-        const { recipe, ingredientItems, loadingIngredientItems } = this.props;
+    updateCuisine = (e: any) => {
+        const { recipe, cuisines } = this.props;
+        const value = e.label;
 
+        if (!cuisines.find(i => i.name === value)) {
+            recipeService.addCuisine(value)
+                .then((cuisine) => {
+                    this.props.addCuisine(cuisine);
+                })
+                .catch(() => {
+                    toast.error("Error adding the new cuisine.")
+                })
+        }
+
+        this.props.updateRecipeStart();
+        recipeService.updateRecipe(recipe.id, "cuisine", value)
+            .then(() => {
+                this.props.updateRecipe({ ...recipe, ["cuisine"]: value });
+                this.props.updateRecipeStop();
+                toast.success("Updated!");
+            })
+            .catch(() => {
+                this.props.updateRecipeStop();
+                toast.error("Error updating the recipe!");
+            })
+    }
+
+    renderInfo() {
+        const { recipe, cuisines, editing, updatingRecipe } = this.props;
+
+        const cuisineOptions = cuisines ? cuisines.map(cuisine => {
+            return {
+                value: cuisine.id,
+                label: cuisine.name
+            }
+        }) : [];
+
+        const matchingCuisine = cuisines ? cuisines.find(cuisine => cuisine.name === recipe.cuisine) : null
         return (
             recipe &&
             <>
@@ -60,7 +96,15 @@ class RecipeHeaderElementBase extends React.Component<Props> {
                         color="primary"
                     />
                 }
-                {recipe.duration &&
+                {editing ?
+                    <TextField
+                        placeholder="Duration in minutes"
+                        defaultValue={recipe.duration}
+                        onBlur={this.updateRecipe("duration")}
+                        disabled={updatingRecipe}
+                    />
+                    :
+                    recipe.duration &&
                     <Chip
                         size="small"
                         icon={<Icon>timer</Icon>}
@@ -68,14 +112,22 @@ class RecipeHeaderElementBase extends React.Component<Props> {
                         color="primary"
                     />
                 }
-                {loadingIngredientItems ?
-                    <Loader active inline='centered' />
+                {editing ?
+                    <Creatable
+                        id="input-ingredient"
+                        options={cuisineOptions}
+                        value={matchingCuisine && {
+                            value: matchingCuisine.id,
+                            label: matchingCuisine.name
+                        }}
+                        onChange={this.updateCuisine}
+                    />
                     :
+                    recipe.cuisine &&
                     <Chip
                         size="small"
-                        icon={<Icon>local_pizza</Icon>}
-                        label={`${ingredientItems.length.toString()} ingredients`}
-                        color="primary"
+                        label={recipe.cuisine}
+                        color="secondary"
                     />
                 }
             </>
@@ -105,20 +157,7 @@ class RecipeHeaderElementBase extends React.Component<Props> {
                         }
                     </div>
                     <div>
-                        {/* {editing ?
-                            <TextField
-                                defaultValue={recipe.description}
-                                multiline
-                                onBlur={this.updateRecipe("description")}
-                            />
-                            :
-                            <Typography>
-                                {recipe.description}
-                            </Typography>
-                        } */}
-                    </div>
-                    <div>
-                        {this.renderStatistics()}
+                        {this.renderInfo()}
                     </div>
                 </>
                 : null
@@ -129,9 +168,8 @@ class RecipeHeaderElementBase extends React.Component<Props> {
 const mapStateToProps = (state: any) => {
     return {
         recipe: state.recipe.recipe,
-        ingredientItems: state.recipe.ingredientItems,
-        loadingIngredientItems: state.recipe.loadingIngredientItems,
-        updatingRecipe: state.recipe.updatingRecipe
+        updatingRecipe: state.recipe.updatingRecipe,
+        cuisines: state.cuisines.cuisines
     };
 };
 
@@ -139,7 +177,8 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
     return {
         updateRecipeStart: bindActionCreators(recipeActions.updateRecipeStart, dispatch),
         updateRecipeStop: bindActionCreators(recipeActions.updateRecipeStop, dispatch),
-        updateRecipe: bindActionCreators(recipeActions.updateRecipe, dispatch)
+        updateRecipe: bindActionCreators(recipeActions.updateRecipe, dispatch),
+        addCuisine: bindActionCreators(recipeActions.addCuisine, dispatch)
     };
 };
 

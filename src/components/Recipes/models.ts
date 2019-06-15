@@ -29,3 +29,8 @@ export interface Step {
     order: number;
     text: string;
 }
+
+export interface Cuisine {
+    id?: string;
+    name: string;
+}

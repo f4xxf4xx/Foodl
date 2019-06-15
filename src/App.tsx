@@ -6,6 +6,7 @@ import RecipesView from "./components/Recipes/Components/RecipesView";
 import RecipeView from "./components/Recipes/Components/RecipeView";
 import IngredientsView from "./components/Ingredients/Components/IngredientsView";
 import HomePage from "./components/Layout/HomePage";
+import CartView from "./components/Cart/Components/CartView";
 
 class App extends Component {
   render() {
@@ -17,6 +18,7 @@ class App extends Component {
           <Route path="/recipe/:id" render={() => <MainLayout><RecipeView /></MainLayout>} />
           <Route path="/ingredients" render={() => <MainLayout><IngredientsView /></MainLayout>} />
           <Route path="/ingredients" render={() => <MainLayout><IngredientView /></MainLayout>} />/>
+          <Route path="/cart" render={() => <MainLayout><CartView /></MainLayout>} />/>
         </Switch>
       </>
     );

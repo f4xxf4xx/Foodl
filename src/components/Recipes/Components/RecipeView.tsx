@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { Recipe } from '../models';
+import { Recipe, Cuisine } from '../models';
 import { withRouter } from 'react-router-dom';
 import IngredientsElement from './IngredientsElement';
 import StepsElement from './StepsElement';
@@ -19,12 +19,17 @@ type State = {
 type StateProps = {
     recipe: Recipe;
     loadingRecipe: boolean;
+    cuisines: Cuisine[];
 };
 
 type DispatchProps = {
     fetchRecipeStart: typeof recipeActions.fetchRecipeStart;
     fetchRecipeStop: typeof recipeActions.fetchRecipeStop;
     updateRecipe: typeof recipeActions.updateRecipe;
+    fetchCuisinesStart: typeof recipeActions.fetchCuisinesStart;
+    fetchCuisinesStop: typeof recipeActions.fetchCuisinesStart;
+    updateCuisines: typeof recipeActions.updateCuisines;
+    addCuisine: typeof recipeActions.addCuisine;
 };
 
 type RouterProps = {
@@ -57,6 +62,19 @@ class RecipeViewBase extends PureComponent<Props, State> {
                 toast.error("Error fetching the recipe!")
             });
 
+        if (this.props.cuisines.length === 0) {
+            this.props.fetchCuisinesStart();
+            recipeService.getCuisines()
+                .then(cuisines => {
+                    this.props.updateCuisines(cuisines);
+                    this.props.fetchCuisinesStop();
+                })
+                .catch(() => {
+                    this.props.fetchCuisinesStop();
+                    toast.error("Error fetching the cuisines.");
+                })
+        }
+
     }
 
     toggleEdit = () => {
@@ -77,7 +95,7 @@ class RecipeViewBase extends PureComponent<Props, State> {
                 <RecipeHeaderElement
                     editing={editing}
                     toggleEdit={this.toggleEdit}
-                />
+                />                
                 {loadingRecipe ?
                     <Loader active inline='centered' />
                     :
@@ -94,7 +112,8 @@ class RecipeViewBase extends PureComponent<Props, State> {
 const mapStateToProps = (state: any) => {
     return {
         recipe: state.recipe.recipe,
-        loadingRecipe: state.recipe.loadingRecipe
+        loadingRecipe: state.recipe.loadingRecipe,
+        cuisines: state.cuisines.cuisines
     };
 };
 
@@ -102,7 +121,11 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
     return {
         fetchRecipeStart: bindActionCreators(recipeActions.fetchRecipeStart, dispatch),
         fetchRecipeStop: bindActionCreators(recipeActions.fetchRecipeStop, dispatch),
-        updateRecipe: bindActionCreators(recipeActions.updateRecipe, dispatch)
+        updateRecipe: bindActionCreators(recipeActions.updateRecipe, dispatch),
+        fetchCuisinesStart: bindActionCreators(recipeActions.fetchCuisinesStart, dispatch),
+        fetchCuisinesStop: bindActionCreators(recipeActions.fetchCuisinesStop, dispatch),
+        updateCuisines: bindActionCreators(recipeActions.updateCuisines, dispatch),
+        addCuisine: bindActionCreators(recipeActions.addCuisine, dispatch),
     };
 };
 

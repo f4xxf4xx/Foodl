@@ -9,6 +9,7 @@ import { connect } from "react-redux";
 import { Loader } from 'semantic-ui-react';
 import { RouteComponentProps } from 'react-router-dom';
 import AddStepForm from './AddStepForm';
+import { SortableContainer, SortableElement } from 'react-sortable-hoc';
 
 interface OwnProps {
     id: string;
@@ -33,7 +34,66 @@ type DispatchProps = {
 
 type Props = OwnProps & StateProps & RouteComponentProps & DispatchProps;
 
-class StepsElementBase extends PureComponent<Props> {    
+const SortableStep = SortableElement(({ step, index, editing, updatingSteps, updateStep, deleteStep }) => {
+    return (
+        <TableRow key={index}>
+            <TableCell component="th" scope="row">
+                <Typography>
+                    {step.order}
+                </Typography>
+            </TableCell>
+            <TableCell>
+                {editing ?
+                    <TextField
+                        id="input-step-text"
+                        placeholder="Step text"
+                        type="text"
+                        defaultValue={step.text}
+                        onBlur={updateStep(step, "text")}
+                        disabled={updatingSteps}
+                    />
+                    :
+                    <Typography>
+                        {step.text}
+                    </Typography>
+
+                }
+            </TableCell>
+            <TableCell>
+                {editing &&
+                    <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={() => deleteStep(step.id)}
+                        disabled={updatingSteps}
+                    >
+                        Delete step
+                    </Button>
+                }
+            </TableCell>
+        </TableRow>
+    )
+});
+
+const SortableSteps = SortableContainer(({ steps, editing, updatingSteps, updateStep, deleteStep }) => {
+    return (
+        <ul>
+            {steps.map((step, index) => (
+                <SortableStep
+                    key={step.id}
+                    index={index}
+                    step={step}
+                    editing={editing}
+                    updatingSteps={updatingSteps}
+                    updateStep={updateStep}
+                    deleteStep={deleteStep}
+                />
+            ))}
+        </ul>
+    );
+});
+
+class StepsElementBase extends PureComponent<Props> {
     componentDidMount() {
         const { id } = this.props;
 
@@ -74,8 +134,8 @@ class StepsElementBase extends PureComponent<Props> {
         this.props.updateStepsStart();
         recipeService.updateStepText(this.props.id, step.id, value)
             .then(() => {
-                this.props.updateStep({...step, [key]: value});
-                this.props.updateStepsStop();              
+                this.props.updateStep({ ...step, [key]: value });
+                this.props.updateStepsStop();
             })
             .catch(() => {
                 this.props.updateStepsStop();
@@ -83,8 +143,57 @@ class StepsElementBase extends PureComponent<Props> {
             })
     }
 
+    onSortEnd = ({ oldIndex, newIndex }) => {
+
+    };
+
+    renderSteps() {
+        const { steps, editing, updatingSteps } = this.props;
+
+        return (
+            steps.map((step, index) => (
+                <TableRow key={index}>
+                    <TableCell component="th" scope="row">
+                        <Typography>
+                            {step.order}
+                        </Typography>
+                    </TableCell>
+                    <TableCell>
+                        {editing ?
+                            <TextField
+                                id="input-step-text"
+                                placeholder="Step text"
+                                type="text"
+                                defaultValue={step.text}
+                                onBlur={this.updateStep(step, "text")}
+                                disabled={updatingSteps}
+                            />
+                            :
+                            <Typography>
+                                {step.text}
+                            </Typography>
+
+                        }
+                    </TableCell>
+                    <TableCell>
+                        {editing &&
+                            <Button
+                                variant="contained"
+                                color="primary"
+                                onClick={() => this.deleteStep(step.id)}
+                                disabled={updatingSteps}
+                            >
+                                Delete step
+                            </Button>
+                        }
+                    </TableCell>
+                </TableRow>
+            ))
+        )
+    }
+
     render() {
-        const { steps, editing, loadingSteps, updatingSteps } = this.props;
+        const { loadingSteps, editing, steps } = this.props;
 
         return (
             <>
@@ -95,47 +204,7 @@ class StepsElementBase extends PureComponent<Props> {
                         :
                         <Table>
                             <TableBody>
-                                {steps.map((step, index) => {
-                                    return (
-                                        <TableRow key={index}>
-                                            <TableCell component="th" scope="row">
-                                                <Typography>
-                                                    {step.order}
-                                                </Typography>
-                                            </TableCell>
-                                            <TableCell>
-                                                {editing ?
-                                                    <TextField
-                                                        id="input-step-text"
-                                                        placeholder="Step text"
-                                                        type="text"
-                                                        defaultValue={step.text}
-                                                        onBlur={this.updateStep(step, "text")}
-                                                        disabled={updatingSteps}
-                                                    />
-                                                    :
-                                                    <Typography>
-                                                        {step.text}
-                                                    </Typography>
-
-                                                }
-                                            </TableCell>
-                                            <TableCell>
-                                                {editing &&
-                                                    <Button
-                                                        variant="contained"
-                                                        color="primary"
-                                                        onClick={() => this.deleteStep(step.id)}
-                                                        disabled={updatingSteps}
-                                                    >
-                                                        Delete step
-                                                    </Button>
-                                                }
-                                            </TableCell>
-                                        </TableRow>
-                                    )
-                                })
-                                }
+                                {this.renderSteps()}
                             </TableBody>
                         </Table>
                     }

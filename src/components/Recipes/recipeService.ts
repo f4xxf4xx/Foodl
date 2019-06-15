@@ -1,5 +1,5 @@
 import { db } from '../../config';
-import { Recipe, IngredientItem, Step } from './models';
+import { Recipe, IngredientItem, Step, Cuisine } from './models';
 import slugify from 'react-slugify';
 
 export class recipeService {
@@ -27,7 +27,9 @@ export class recipeService {
                     id: data.id,
                     slug: data.data().slug,
                     name: data.data().name,
-                    description: data.data().description
+                    description: data.data().description,
+                    cuisine: data.data().cuisine,
+                    duration: data.data().duration
                 }
                 return recipe;
             });
@@ -68,8 +70,8 @@ export class recipeService {
 
     public static getIngredientItems(id: string): Promise<IngredientItem[]> {
         return db.collection("recipes").doc(id).collection("ingredientItems")
-        .orderBy("name")
-        .get()
+            .orderBy("name")
+            .get()
             .then(data => {
                 let ingredientItems: IngredientItem[] = [];
                 data.forEach(ingredientItem => {
@@ -108,7 +110,7 @@ export class recipeService {
     public static addIngredientItem(id: string, ingredientItem: IngredientItem): Promise<IngredientItem> {
         return db.collection("recipes").doc(id).collection("ingredientItems").add(ingredientItem)
             .then((data) => {
-                return {...ingredientItem, id: data.id}
+                return { ...ingredientItem, id: data.id }
             })
     }
 
@@ -119,11 +121,42 @@ export class recipeService {
     public static addStep(id: string, step: Step): Promise<Step> {
         return db.collection("recipes").doc(id).collection("steps").add(step)
             .then((data) => {
-                return {...step, id: data.id}
+                return { ...step, id: data.id }
             })
     }
 
     public static deleteStep(id: string, stepId: string): Promise<void> {
         return db.collection("recipes").doc(id).collection("steps").doc(stepId).delete();
+    }
+
+    public static getCuisines(): Promise<Cuisine[]> {
+        return db.collection("cuisines")
+            .orderBy("name")
+            .get()
+            .then(data => {
+                let cuisines: Cuisine[] = [];
+                data.forEach(cuisine => {
+                    const item: Cuisine = {
+                        id: cuisine.id,
+                        name: cuisine.data().name
+                    }
+                    cuisines.push(item)
+                })
+                return cuisines;
+            })
+    }
+
+    public static addCuisine(name: string): Promise<Cuisine> {
+        const newCuisine: Cuisine = {
+            name: name
+        }
+
+        return db.collection("cuisines").add(newCuisine)
+            .then(cuisine => {
+                return {
+                    id: cuisine.id,
+                    name
+                }
+            });
     }
 }

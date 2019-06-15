@@ -1,5 +1,5 @@
 import { createReducer } from "redux-starter-kit";
-import { Recipe, IngredientItem, Step } from "./models";
+import { Recipe, IngredientItem, Step, Cuisine } from "./models";
 
 export type RecipeState = {
     recipe: Recipe;
@@ -13,7 +13,7 @@ export type RecipeState = {
     updatingSteps: boolean
 }
 
-const initialState: RecipeState = {
+const initialRecipeState: RecipeState = {
     recipe: null,
     ingredientItems: [],
     steps: [],
@@ -25,7 +25,7 @@ const initialState: RecipeState = {
     updatingSteps: false
 }
 
-export const recipeReducer = createReducer(initialState, {
+export const recipeReducer = createReducer(initialRecipeState, {
     FETCH_RECIPE_START: (state) => {
         state.loadingRecipe = true;
     },
@@ -91,4 +91,31 @@ export const recipeReducer = createReducer(initialState, {
     DELETE_STEP: (state, action) => {
         state.steps = state.steps.filter(i => i.id !== action.payload);
     },
+});
+
+const initialCuisinesState: CuisinesState = {
+    cuisines: [],
+    loadingCuisines: false,
+    updatingCuisines: false
+}
+
+export type CuisinesState = {
+    cuisines: Cuisine[];
+    loadingCuisines: boolean;
+    updatingCuisines: boolean;
+}
+
+export const cuisinesReducer = createReducer(initialCuisinesState, {
+    FETCH_CUISINES_START: (state) => {
+        state.loadingCuisines = true;
+    },
+    FETCH_CUISINES_STOP: (state) => {
+        state.loadingCuisines = false;
+    },
+    ADD_CUISINE: (state, action) => {
+        state.cuisines.push(action.payload);
+    },
+    UPDATE_CUISINES: (state, action) => {
+        state.cuisines = action.payload;
+    }
 });
