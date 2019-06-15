@@ -3,17 +3,17 @@ export const getLinks = () => {
         {
             path: "/",
             name: "Home",
-            icon: "fas fa-home text-primary"
+            icon: "home"
         },
         {
             path: "/recipes",
             name: "Recipes",
-            icon: "fas fa-book text-orange"
+            icon: "library_books"
         },
         {
             path: "/ingredients",
             name: "Ingredients",
-            icon: "fas fa-apple-alt text-green"
+            icon: "local_pizza"
         }
     ];
 }

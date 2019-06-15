@@ -2,8 +2,6 @@ import React, { PureComponent } from 'react';
 import { RouteComponentProps } from 'react-router-dom';
 import { withRouter } from 'react-router-dom';
 import { Typography } from '@material-ui/core';
-import HeaderStatistics from './HeaderStatistics';
-
 
 type Props = RouteComponentProps;
 
@@ -26,7 +24,7 @@ class HomePage extends PureComponent<Props> {
                     lorem nisi, nec dignissim ipsum malesuada ac.
                     In id porta tellus.Lorem ipsum dolor sit amet, consectetur adipiscing elit.
                 </Typography>
-                <HeaderStatistics />
+                {/* <HeaderStatistics /> */}
             </>
         );
     }

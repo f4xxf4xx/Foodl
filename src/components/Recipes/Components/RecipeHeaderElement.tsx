@@ -1,7 +1,6 @@
 import React from "react";
 import { Recipe, IngredientItem } from "../models";
-import Statistic from "../../Layout/Statistic";
-import { Typography, Button, TextField } from "@material-ui/core";
+import { Typography, Button, TextField, Icon, Chip } from "@material-ui/core";
 import { compose, Dispatch, bindActionCreators } from 'redux';
 import { connect } from "react-redux";
 import { Loader } from 'semantic-ui-react';
@@ -13,6 +12,7 @@ type StateProps = {
     recipe: Recipe;
     ingredientItems: IngredientItem[];
     loadingIngredientItems: boolean;
+    updatingRecipe: boolean;
 };
 
 type OwnProps = {
@@ -37,6 +37,7 @@ class RecipeHeaderElementBase extends React.Component<Props> {
         recipeService.updateRecipe(recipe.id, key, value)
             .then(() => {
                 this.props.updateRecipe({ ...recipe, [key]: value });
+                this.props.updateRecipeStop();
                 toast.success("Updated!");
             })
             .catch(() => {
@@ -52,26 +53,29 @@ class RecipeHeaderElementBase extends React.Component<Props> {
             recipe &&
             <>
                 {recipe.recipeType &&
-                    <Statistic
-                        name={"Type"}
-                        value={recipe.recipeType}
-                        icon={"fa-th-large"}
+                    <Chip
+                        size="small"
+                        icon={<Icon>local_pizza</Icon>}
+                        label={recipe.recipeType}
+                        color="primary"
                     />
                 }
                 {recipe.duration &&
-                    <Statistic
-                        name={"Duration"}
-                        value={recipe.duration.toString()}
-                        icon={"fa-clock"}
+                    <Chip
+                        size="small"
+                        icon={<Icon>timer</Icon>}
+                        label={`${recipe.duration} minutes`}
+                        color="primary"
                     />
                 }
                 {loadingIngredientItems ?
                     <Loader active inline='centered' />
                     :
-                    <Statistic
-                        name={"Ingredient number"}
-                        value={ingredientItems.length.toString()}
-                        icon={"fa-apple-alt"}
+                    <Chip
+                        size="small"
+                        icon={<Icon>local_pizza</Icon>}
+                        label={`${ingredientItems.length.toString()} ingredients`}
+                        color="primary"
                     />
                 }
             </>
@@ -79,18 +83,11 @@ class RecipeHeaderElementBase extends React.Component<Props> {
     }
 
     render() {
-        const { recipe, editing, toggleEdit } = this.props;
+        const { recipe, editing, toggleEdit, updatingRecipe } = this.props;
 
         return (
             recipe ?
                 <>
-                    <div>
-                        {editing ?
-                            <TextField defaultValue={recipe.name} onBlur={this.updateRecipe("name")} />
-                            :
-                            <Typography variant="h3">{recipe.name}</Typography>
-                        }
-                    </div>
                     <div>
                         <Button variant="contained" color="primary" onClick={toggleEdit}>
                             {editing ? "Stop editing" : "Edit"}
@@ -98,6 +95,17 @@ class RecipeHeaderElementBase extends React.Component<Props> {
                     </div>
                     <div>
                         {editing ?
+                            <TextField
+                                defaultValue={recipe.name}
+                                onBlur={this.updateRecipe("name")}
+                                disabled={updatingRecipe}
+                            />
+                            :
+                            <Typography variant="h3">{recipe.name}</Typography>
+                        }
+                    </div>
+                    <div>
+                        {/* {editing ?
                             <TextField
                                 defaultValue={recipe.description}
                                 multiline
@@ -107,7 +115,7 @@ class RecipeHeaderElementBase extends React.Component<Props> {
                             <Typography>
                                 {recipe.description}
                             </Typography>
-                        }
+                        } */}
                     </div>
                     <div>
                         {this.renderStatistics()}
@@ -122,7 +130,8 @@ const mapStateToProps = (state: any) => {
     return {
         recipe: state.recipe.recipe,
         ingredientItems: state.recipe.ingredientItems,
-        loadingIngredientItems: state.recipe.loadingIngredientItems
+        loadingIngredientItems: state.recipe.loadingIngredientItems,
+        updatingRecipe: state.recipe.updatingRecipe
     };
 };
 

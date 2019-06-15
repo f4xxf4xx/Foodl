@@ -67,7 +67,9 @@ export class recipeService {
     }
 
     public static getIngredientItems(id: string): Promise<IngredientItem[]> {
-        return db.collection("recipes").doc(id).collection("ingredientItems").get()
+        return db.collection("recipes").doc(id).collection("ingredientItems")
+        .orderBy("name")
+        .get()
             .then(data => {
                 let ingredientItems: IngredientItem[] = [];
                 data.forEach(ingredientItem => {
@@ -105,7 +107,9 @@ export class recipeService {
 
     public static addIngredientItem(id: string, ingredientItem: IngredientItem): Promise<IngredientItem> {
         return db.collection("recipes").doc(id).collection("ingredientItems").add(ingredientItem)
-            .then(() => ingredientItem)
+            .then((data) => {
+                return {...ingredientItem, id: data.id}
+            })
     }
 
     public static deleteIngredientItem(id: string, ingredientItemId: string): Promise<void> {
@@ -114,7 +118,9 @@ export class recipeService {
 
     public static addStep(id: string, step: Step): Promise<Step> {
         return db.collection("recipes").doc(id).collection("steps").add(step)
-            .then(() => step)
+            .then((data) => {
+                return {...step, id: data.id}
+            })
     }
 
     public static deleteStep(id: string, stepId: string): Promise<void> {

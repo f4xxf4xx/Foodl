@@ -19,6 +19,7 @@ interface OwnProps {
 type StateProps = {
     ingredientItems: IngredientItem[];
     loadingIngredientItems: boolean;
+    updatingIngredientItems: boolean;
 }
 
 type DispatchProps = {
@@ -69,7 +70,7 @@ class IngredientsElementBase extends PureComponent<Props> {
     }
 
     render() {
-        const { ingredientItems, editing, loadingIngredientItems } = this.props;
+        const { ingredientItems, editing, loadingIngredientItems, updatingIngredientItems } = this.props;
 
         return (
             <>
@@ -104,6 +105,7 @@ class IngredientsElementBase extends PureComponent<Props> {
                                                         variant="contained"
                                                         color="primary"
                                                         onClick={() => this.deleteIngredientItem(ingredientItem.id)}
+                                                        disabled={updatingIngredientItems}
                                                     >
                                                         Delete ingredient
                                                     </Button>
@@ -135,7 +137,8 @@ class IngredientsElementBase extends PureComponent<Props> {
 const mapStateToProps = (state: any) => {
     return {
         ingredientItems: state.recipe.ingredientItems,
-        loadingIngredientItems: state.recipe.loadingIngredientItems
+        loadingIngredientItems: state.recipe.loadingIngredientItems,
+        updatingIngredientItems: state.recipe.updatingIngredientItems
     };
 };
 

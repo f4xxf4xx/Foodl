@@ -18,10 +18,7 @@ interface OwnProps {
 type StateProps = {
     steps: Step[];
     loadingSteps: boolean;
-}
-
-type State = {
-    tempStepText: string;
+    updatingSteps: boolean;
 }
 
 type DispatchProps = {
@@ -36,14 +33,7 @@ type DispatchProps = {
 
 type Props = OwnProps & StateProps & RouteComponentProps & DispatchProps;
 
-class StepsElementBase extends PureComponent<Props, State> {
-    constructor(props: Props) {
-        super(props);
-        this.state = {
-            tempStepText: ""
-        };
-    }
-    
+class StepsElementBase extends PureComponent<Props> {    
     componentDidMount() {
         const { id } = this.props;
 
@@ -78,16 +68,13 @@ class StepsElementBase extends PureComponent<Props, State> {
             });
     }
 
-    updateTempText = (e: React.ChangeEvent<HTMLInputElement>) => {
-        this.setState({ tempStepText: e.target.value });
-    }
+    updateStep = (step: Step, key: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
+        const value = e.target.value;
 
-    updateStepText = (step: Step) => (e: React.ChangeEvent<HTMLInputElement>) => {
-        const text = e.target.value;
         this.props.updateStepsStart();
-        recipeService.updateStepText(this.props.id, step.id, text)
+        recipeService.updateStepText(this.props.id, step.id, value)
             .then(() => {
-                this.props.updateStep({...step, text: text});
+                this.props.updateStep({...step, [key]: value});
                 this.props.updateStepsStop();              
             })
             .catch(() => {
@@ -97,7 +84,7 @@ class StepsElementBase extends PureComponent<Props, State> {
     }
 
     render() {
-        const { steps, editing, loadingSteps } = this.props;
+        const { steps, editing, loadingSteps, updatingSteps } = this.props;
 
         return (
             <>
@@ -122,9 +109,9 @@ class StepsElementBase extends PureComponent<Props, State> {
                                                         id="input-step-text"
                                                         placeholder="Step text"
                                                         type="text"
-                                                        onChange={this.updateTempText}
                                                         defaultValue={step.text}
-                                                        onBlur={this.updateStepText(step)}
+                                                        onBlur={this.updateStep(step, "text")}
+                                                        disabled={updatingSteps}
                                                     />
                                                     :
                                                     <Typography>
@@ -139,6 +126,7 @@ class StepsElementBase extends PureComponent<Props, State> {
                                                         variant="contained"
                                                         color="primary"
                                                         onClick={() => this.deleteStep(step.id)}
+                                                        disabled={updatingSteps}
                                                     >
                                                         Delete step
                                                     </Button>
@@ -162,7 +150,8 @@ class StepsElementBase extends PureComponent<Props, State> {
 const mapStateToProps = (state: any) => {
     return {
         steps: state.recipe.steps,
-        loadingSteps: state.recipe.loadingSteps
+        loadingSteps: state.recipe.loadingSteps,
+        updatingSteps: state.recipe.updatingSteps
     };
 };
 

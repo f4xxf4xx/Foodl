@@ -3,7 +3,7 @@ import { getLinks } from "./links";
 import InboxIcon from '@material-ui/icons/MoveToInbox';
 import MailIcon from '@material-ui/icons/Mail';
 import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
-import { Drawer, List, ListItem, ListItemIcon, ListItemText } from '@material-ui/core';
+import { Drawer, List, ListItem, ListItemIcon, ListItemText, Icon } from '@material-ui/core';
 import { Link } from "react-router-dom";
 const drawerWidth = 240;
 
@@ -36,7 +36,7 @@ function Sidebar() {
         {getLinks().map((prop, key) =>
           <Link key={key} to={prop.path}>
             <ListItem button>
-              <ListItemIcon>{key % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
+              <ListItemIcon><Icon>{prop.icon}</Icon></ListItemIcon>
               <ListItemText primary={prop.name} />
             </ListItem>
           </Link>

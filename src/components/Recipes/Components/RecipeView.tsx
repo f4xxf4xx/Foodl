@@ -13,22 +13,22 @@ import { compose, Dispatch, bindActionCreators } from 'redux';
 import { connect } from "react-redux";
 
 type State = {
-  editing: boolean;
+    editing: boolean;
 };
 
 type StateProps = {
-  recipe: Recipe;
-  loadingRecipe: boolean;
+    recipe: Recipe;
+    loadingRecipe: boolean;
 };
 
 type DispatchProps = {
-  fetchRecipeStart: typeof recipeActions.fetchRecipeStart;
-  fetchRecipeStop: typeof recipeActions.fetchRecipeStop;
-  updateRecipe: typeof recipeActions.updateRecipe;
+    fetchRecipeStart: typeof recipeActions.fetchRecipeStart;
+    fetchRecipeStop: typeof recipeActions.fetchRecipeStop;
+    updateRecipe: typeof recipeActions.updateRecipe;
 };
 
 type RouterProps = {
-  id: string;
+    id: string;
 }
 
 interface OwnProps extends RouteComponentProps<RouterProps> { }
@@ -36,78 +36,78 @@ interface OwnProps extends RouteComponentProps<RouterProps> { }
 type Props = OwnProps & StateProps & RouteComponentProps & DispatchProps;
 
 class RecipeViewBase extends PureComponent<Props, State> {
-  constructor(props: Props) {
-    super(props);
-    this.state = {
-      editing: false
-    };
-  }
+    constructor(props: Props) {
+        super(props);
+        this.state = {
+            editing: false
+        };
+    }
 
-  componentDidMount() {
-    const { id } = this.props.match.params;
+    componentDidMount() {
+        const { id } = this.props.match.params;
 
-    this.props.fetchRecipeStart();
-    recipeService.getRecipe(id)
-      .then(recipe => {
-        this.props.updateRecipe(recipe);
-        this.props.fetchRecipeStop();
-      })
-      .catch(() => {
-        this.props.fetchRecipeStop();
-        toast.error("Error fetching the recipe!")
-      });
+        this.props.fetchRecipeStart();
+        recipeService.getRecipe(id)
+            .then(recipe => {
+                this.props.updateRecipe(recipe);
+                this.props.fetchRecipeStop();
+            })
+            .catch(() => {
+                this.props.fetchRecipeStop();
+                toast.error("Error fetching the recipe!")
+            });
 
-  }
+    }
 
-  toggleEdit = () => {
-    this.setState((prevState) => {
-      return {
-        editing: !prevState.editing
-      }
-    })
-  }
+    toggleEdit = () => {
+        this.setState((prevState) => {
+            return {
+                editing: !prevState.editing
+            }
+        })
+    }
 
-  render() {
-    const { loadingRecipe } = this.props;
-    const { id } = this.props.match.params;
-    const { editing } = this.state;
+    render() {
+        const { loadingRecipe } = this.props;
+        const { id } = this.props.match.params;
+        const { editing } = this.state;
 
-    return (
-      <>
-        <RecipeHeaderElement
-          editing={editing}
-          toggleEdit={this.toggleEdit}
-        />
-        {loadingRecipe ?
-          <Loader active inline='centered' />
-          :
-          <>
-            <IngredientsElement editing={editing} id={id} />
-            <StepsElement editing={editing} id={id} />
-          </>
-        }
-      </>
-    );
-  }
+        return (
+            <>
+                <RecipeHeaderElement
+                    editing={editing}
+                    toggleEdit={this.toggleEdit}
+                />
+                {loadingRecipe ?
+                    <Loader active inline='centered' />
+                    :
+                    <>
+                        <IngredientsElement editing={editing} id={id} />
+                        <StepsElement editing={editing} id={id} />
+                    </>
+                }
+            </>
+        );
+    }
 }
 
 const mapStateToProps = (state: any) => {
-  return {
-    recipe: state.recipe.recipe,
-    loadingRecipe: state.recipe.loadingRecipe
-  };
+    return {
+        recipe: state.recipe.recipe,
+        loadingRecipe: state.recipe.loadingRecipe
+    };
 };
 
 const mapDispatchToProps = (dispatch: Dispatch) => {
-  return {
-    fetchRecipeStart: bindActionCreators(recipeActions.fetchRecipeStart, dispatch),
-    fetchRecipeStop: bindActionCreators(recipeActions.fetchRecipeStop, dispatch),
-    updateRecipe: bindActionCreators(recipeActions.updateRecipe, dispatch)
-  };
+    return {
+        fetchRecipeStart: bindActionCreators(recipeActions.fetchRecipeStart, dispatch),
+        fetchRecipeStop: bindActionCreators(recipeActions.fetchRecipeStop, dispatch),
+        updateRecipe: bindActionCreators(recipeActions.updateRecipe, dispatch)
+    };
 };
 
 const RecipeView = compose(
-  connect<StateProps, DispatchProps>(mapStateToProps, mapDispatchToProps)
+    connect<StateProps, DispatchProps>(mapStateToProps, mapDispatchToProps)
 )(withRouter(RecipeViewBase));
 
 export default RecipeView;
