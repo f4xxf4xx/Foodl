@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import { IngredientItem } from '../models';
-import { getIngredientText } from '../helper';
+import { getNumericQuantity, getIngredientTypeText } from '../helper';
 import { Table, TableBody, Divider, TableRow, TableCell, Button, Typography, Paper } from '@material-ui/core';
 import * as recipeActions from '../recipeActions';
 import { recipeService } from '../recipeService';
@@ -83,9 +83,19 @@ class IngredientsElementBase extends PureComponent<Props> {
                                 {ingredientItems.map((ingredientItem, index) => {
                                     return (
                                         <TableRow key={index}>
-                                            <TableCell component="th" scope="row">
+                                            <TableCell>
                                                 <Typography>
-                                                    {getIngredientText(ingredientItem)}
+                                                    {getNumericQuantity(ingredientItem.quantity)}
+                                                </Typography>
+                                            </TableCell>
+                                            <TableCell>
+                                                <Typography>
+                                                    {getIngredientTypeText(ingredientItem.type)}
+                                                </Typography>
+                                            </TableCell>
+                                            <TableCell>
+                                                <Typography>
+                                                    {ingredientItem.name.toLowerCase()}
                                                 </Typography>
                                             </TableCell>
                                             <TableCell>

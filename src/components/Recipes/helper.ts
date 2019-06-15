@@ -1,11 +1,5 @@
 import { IngredientType, IngredientItem } from "./models";
 
-export const getIngredientText = (ingredientItem: IngredientItem) => {
-    const quantity = getNumericQuantity(ingredientItem.quantity);
-
-    return `${quantity} ${getIngredientTypeText(ingredientItem.type)} ${ingredientItem.name.toLowerCase()}`
-}
-
 export const getNumericQuantity = (quantity: string): string => {
     const number = parseFloat(quantity);
     const flooredNumber = Math.floor(number);

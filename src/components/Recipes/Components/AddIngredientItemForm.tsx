@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import { Recipe, IngredientItem } from '../models';
-import { getIngredientText, getIngredientTypeOptions } from '../helper';
+import { getIngredientTypeOptions } from '../helper';
 import { Ingredient } from '../../Ingredients/models';
 import Select from 'react-select';
 import Creatable from 'react-select/lib/Creatable';
@@ -97,6 +97,12 @@ class AddIngredientItemFormBase extends PureComponent<Props, State> {
         const { newIngredientItem } = this.state;
         const { ingredients, recipe } = this.props;
 
+        if(newIngredientItem.name === ""
+        || newIngredientItem.quantity === ""
+        || newIngredientItem.type === "") {
+            return false;
+        }
+
         if (!ingredients.find(i => i.name === newIngredientItem.name)) {
             ingredientService.addIngredient(newIngredientItem.name)
                 .then((ingredient) => {
@@ -147,15 +153,6 @@ class AddIngredientItemFormBase extends PureComponent<Props, State> {
                             Add ingredient
                         </Typography>
                         <div>
-                            <FormLabel htmlFor="input-ingredient">
-                                Ingredient
-                            </FormLabel>
-                            <Creatable
-                                id="input-ingredient"
-                                options={ingredientOptions}
-                                value={currentSelectIngredient}
-                                onChange={this.updateFormName}
-                            />
                             <FormLabel htmlFor="input-quantity">
                                 Quantity
                             </FormLabel>
@@ -174,6 +171,15 @@ class AddIngredientItemFormBase extends PureComponent<Props, State> {
                                 options={getIngredientTypeOptions()}
                                 value={currentSelectType}
                                 onChange={this.updateFormType}
+                            />
+                            <FormLabel htmlFor="input-ingredient">
+                                Ingredient
+                            </FormLabel>
+                            <Creatable
+                                id="input-ingredient"
+                                options={ingredientOptions}
+                                value={currentSelectIngredient}
+                                onChange={this.updateFormName}
                             />
                             <Button
                                 variant="contained"

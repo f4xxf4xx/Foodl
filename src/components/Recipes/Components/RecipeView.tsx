@@ -46,18 +46,17 @@ class RecipeViewBase extends PureComponent<Props, State> {
   componentDidMount() {
     const { id } = this.props.match.params;
 
-    if (this.props.recipe === null) {
-      this.props.fetchRecipeStart();
-      recipeService.getRecipe(id)
-        .then(recipe => {
-          this.props.updateRecipe(recipe);
-          this.props.fetchRecipeStop();
-        })
-        .catch(() => {
-          this.props.fetchRecipeStop();
-          toast.error("Error fetching the recipe!")
-        });
-    }    
+    this.props.fetchRecipeStart();
+    recipeService.getRecipe(id)
+      .then(recipe => {
+        this.props.updateRecipe(recipe);
+        this.props.fetchRecipeStop();
+      })
+      .catch(() => {
+        this.props.fetchRecipeStop();
+        toast.error("Error fetching the recipe!")
+      });
+
   }
 
   toggleEdit = () => {

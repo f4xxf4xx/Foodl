@@ -71,6 +71,14 @@ export const recipeReducer = createReducer(initialState, {
     UPDATE_STEPS: (state, action) => {
         state.steps = action.payload;
     },
+    UPDATE_STEP: (state, action) => {
+        state.steps = state.steps.map((item) => {
+            if(item.id === action.payload.id) {
+                return action.payload;
+            }
+            return item;
+        })
+    },
     ADD_INGREDIENTITEM: (state, action) => {
         state.ingredientItems.push(action.payload);
     },

@@ -3,7 +3,9 @@ import { Ingredient } from './models';
 
 export class ingredientService {
     public static getIngredients(): Promise<Ingredient[]> {
-        return db.collection("ingredients").get()
+        return db.collection("ingredients")
+        .orderBy("name")
+        .get()
             .then(data => {
                 let ingredients: Ingredient[] = [];
                 data.forEach(ingredient => {

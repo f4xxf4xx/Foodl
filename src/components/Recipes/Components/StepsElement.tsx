@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import { Step, Recipe } from '../models';
-import { Table, TableBody, Divider, TableRow, TableCell, Button, Typography, Paper } from '@material-ui/core';
+import { Table, TableBody, Divider, TableRow, TableCell, Button, Typography, Paper, TextField } from '@material-ui/core';
 import * as recipeActions from '../recipeActions';
 import { recipeService } from '../recipeService';
 import { toast } from 'react-toastify';
@@ -20,18 +20,30 @@ type StateProps = {
     loadingSteps: boolean;
 }
 
+type State = {
+    tempStepText: string;
+}
+
 type DispatchProps = {
     fetchStepsStart: typeof recipeActions.fetchStepsStart;
     fetchStepsStop: typeof recipeActions.fetchStepsStop;
     updateStepsStart: typeof recipeActions.updateStepsStart;
     updateStepsStop: typeof recipeActions.updateStepsStop;
     updateSteps: typeof recipeActions.updateSteps;
+    updateStep: typeof recipeActions.updateStep;
     deleteStep: typeof recipeActions.deleteStep;
 }
 
 type Props = OwnProps & StateProps & RouteComponentProps & DispatchProps;
 
-class StepsElementBase extends PureComponent<Props> {
+class StepsElementBase extends PureComponent<Props, State> {
+    constructor(props: Props) {
+        super(props);
+        this.state = {
+            tempStepText: ""
+        };
+    }
+    
     componentDidMount() {
         const { id } = this.props;
 
@@ -66,6 +78,24 @@ class StepsElementBase extends PureComponent<Props> {
             });
     }
 
+    updateTempText = (e: React.ChangeEvent<HTMLInputElement>) => {
+        this.setState({ tempStepText: e.target.value });
+    }
+
+    updateStepText = (step: Step) => (e: React.ChangeEvent<HTMLInputElement>) => {
+        const text = e.target.value;
+        this.props.updateStepsStart();
+        recipeService.updateStepText(this.props.id, step.id, text)
+            .then(() => {
+                this.props.updateStep({...step, text: text});
+                this.props.updateStepsStop();              
+            })
+            .catch(() => {
+                this.props.updateStepsStop();
+                toast.error("Error updating the step");
+            })
+    }
+
     render() {
         const { steps, editing, loadingSteps } = this.props;
 
@@ -87,9 +117,21 @@ class StepsElementBase extends PureComponent<Props> {
                                                 </Typography>
                                             </TableCell>
                                             <TableCell>
-                                                <Typography>
-                                                    {step.text}
-                                                </Typography>
+                                                {editing ?
+                                                    <TextField
+                                                        id="input-step-text"
+                                                        placeholder="Step text"
+                                                        type="text"
+                                                        onChange={this.updateTempText}
+                                                        defaultValue={step.text}
+                                                        onBlur={this.updateStepText(step)}
+                                                    />
+                                                    :
+                                                    <Typography>
+                                                        {step.text}
+                                                    </Typography>
+
+                                                }
                                             </TableCell>
                                             <TableCell>
                                                 {editing &&
@@ -131,6 +173,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
         updateStepsStart: bindActionCreators(recipeActions.updateStepsStart, dispatch),
         updateStepsStop: bindActionCreators(recipeActions.updateStepsStop, dispatch),
         updateSteps: bindActionCreators(recipeActions.updateSteps, dispatch),
+        updateStep: bindActionCreators(recipeActions.updateStep, dispatch),
         deleteStep: bindActionCreators(recipeActions.deleteStep, dispatch),
     };
 };

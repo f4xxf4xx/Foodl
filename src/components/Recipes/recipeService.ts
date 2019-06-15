@@ -56,6 +56,12 @@ export class recipeService {
         })
     }
 
+    public static updateStepText(recipeId: string, stepId: string, text: string): Promise<void> {
+        return db.collection("recipes").doc(recipeId).collection("steps").doc(stepId).update({
+            text
+        })
+    }
+
     public static deleteRecipe(id: string): Promise<void> {
         return db.collection("recipes").doc(id).delete();
     }
