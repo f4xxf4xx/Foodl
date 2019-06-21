@@ -2,11 +2,13 @@ import React, { PureComponent } from 'react';
 import { RouteComponentProps } from 'react-router-dom';
 import { withRouter } from 'react-router-dom';
 import { recipeService } from '../recipeService';
-import { Button, Typography, FormLabel, TextField } from '@material-ui/core';
+import { Button, Typography, FormLabel, TextField, Box } from '@material-ui/core';
 import { compose, Dispatch, bindActionCreators } from 'redux';
 import { connect } from "react-redux";
 import * as recipesActions from '../recipesActions';
 import { toast } from 'react-toastify';
+import { ButtonPrimary } from '../../Layout/Styles/Buttons';
+import { StyledPaper } from '../../Layout/Styles/Sections';
 
 type State = {
     newRecipeName: string;
@@ -67,33 +69,28 @@ class AddRecipeFormBase extends PureComponent<Props, State> {
     render() {
         const { updatingRecipes } = this.props;
         return (
-            <>
-                <Typography variant="h5">New recipe</Typography>
-                <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={this.addRecipe}
-                    disabled={updatingRecipes}
-                >
-                    Create
-                </Button>
+            <StyledPaper>
+                <Typography variant="h6">New recipe</Typography>
                 <form onSubmit={e => { e.preventDefault(); }}>
-                    <div>
-                        <FormLabel htmlFor="input-recipe-name">
-                            Recipe name
-                        </FormLabel>
+                    <Box>
                         <TextField
                             id="input-recipe-name"
-                            placeholder="Recipe name"
+                            label="Recipe name"
                             type="text"
                             onChange={this.updateRecipeName}
                             value={this.state.newRecipeName}
                             disabled={updatingRecipes}
                             onKeyPress={this.handleKeyPress}
                         />
-                    </div>
+                    </Box>
+                    <ButtonPrimary
+                        onClick={this.addRecipe}
+                        disabled={updatingRecipes}
+                    >
+                        Create
+                    </ButtonPrimary>
                 </form>
-            </>
+            </StyledPaper>
         )
     }
 }

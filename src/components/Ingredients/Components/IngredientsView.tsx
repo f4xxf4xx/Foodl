@@ -6,10 +6,11 @@ import { compose, bindActionCreators, Dispatch } from "redux";
 import * as ingredientActions from "../ingredientActions";
 import { Ingredient } from "../models";
 import { ingredientService } from "../ingredientService";
-import Button from '@material-ui/core/Button';
 import { TableHead, TableRow, Table, TableCell, TableBody, Paper, Typography, FormLabel, TextField } from "@material-ui/core";
 import { Dimmer, Loader, Image, Segment } from 'semantic-ui-react'
 import AddIngredientForm from "./AddIngredientForm";
+import { ButtonError } from "../../Layout/Styles/Buttons";
+import { Title } from "../../Layout/Styles/Sections";
 
 type StateProps = {
     ingredients: Ingredient[];
@@ -42,7 +43,7 @@ class IngredientsViewBase extends PureComponent<Props> {
                     this.props.fetchIngredientsStop();
                 });
         }
-    }  
+    }
 
     deleteIngredient(ingredientId: string): void {
         this.props.updateIngredientsStart();
@@ -55,7 +56,7 @@ class IngredientsViewBase extends PureComponent<Props> {
             .catch(() => {
                 this.props.updateIngredientsStop();
                 toast.error("Error deleting the ingredient!")
-        });
+            });
     }
 
     renderIngredients() {
@@ -78,13 +79,12 @@ class IngredientsViewBase extends PureComponent<Props> {
                                 <TableRow key={ingredient.id}>
                                     <TableCell>{ingredient.name}</TableCell>
                                     <TableCell>
-                                        <Button
-                                            variant="contained"
-                                            color="primary"
+                                        <ButtonError
                                             disabled={updatingIngredients}
-                                            onClick={() => this.deleteIngredient(ingredient.id)}>
+                                            onClick={() => this.deleteIngredient(ingredient.id)}
+                                        >
                                             DELETE
-                                </Button>
+                                        </ButtonError>
                                     </TableCell>
                                 </TableRow>
                             )}
@@ -99,7 +99,7 @@ class IngredientsViewBase extends PureComponent<Props> {
         const { updatingIngredients } = this.props;
         return (
             <>
-                <Typography variant="h2">Ingredients</Typography>
+                <Title>Ingredients</Title>
                 <Typography variant="subtitle1">
                     Here lies the list of possible ingredients
                 </Typography>

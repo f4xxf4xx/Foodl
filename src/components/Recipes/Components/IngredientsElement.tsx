@@ -13,6 +13,7 @@ import { Loader } from 'semantic-ui-react';
 import { RouteComponentProps } from 'react-router-dom';
 import { cartService } from '../../Cart/cartService';
 import { Ingredient } from '../../Ingredients/models';
+import { ButtonPrimary, ButtonError } from '../../Layout/Styles/Buttons';
 
 interface OwnProps {
     id: string;
@@ -46,20 +47,19 @@ class IngredientsElementBase extends PureComponent<Props> {
         const { id, ingredientItems, fetchIngredientItemsStart, fetchIngredientItemsStop,
             updateIngredientItems, cartItems, fetchCartItemsStart, fetchCartItemsStop, updateCartItems } = this.props;
 
-        if (ingredientItems.length == 0) {
-            fetchIngredientItemsStart()
-            recipeService.getIngredientItems(id)
-                .then((ingredientItems) => {
-                    if (ingredientItems.length > 0) {
-                        updateIngredientItems(ingredientItems);
-                    }
-                    fetchIngredientItemsStop();
-                })
-                .catch(() => {
-                    fetchIngredientItemsStop();
-                    toast.error("Error fetching the ingredient items!");
-                })
-        }
+        fetchIngredientItemsStart()
+        recipeService.getIngredientItems(id)
+            .then((ingredientItems) => {
+                if (ingredientItems.length > 0) {
+                    updateIngredientItems(ingredientItems);
+                }
+                fetchIngredientItemsStop();
+            })
+            .catch(() => {
+                fetchIngredientItemsStop();
+                toast.error("Error fetching the ingredient items!");
+            })
+
 
         if (cartItems.length == 0) {
             fetchCartItemsStart()
@@ -109,24 +109,16 @@ class IngredientsElementBase extends PureComponent<Props> {
 
         if (inCart) {
             return (
-                <Button
-                    variant="contained"
-                    color="primary"
-                    disabled={true}
-                >
+                <ButtonPrimary disabled={true}>
                     Already in cart
-                </Button>
+                </ButtonPrimary>
             )
         }
 
         return (
-            <Button
-                variant="contained"
-                color="primary"
-                onClick={() => this.addCartItem(ingredientItem)}
-            >
+            <ButtonPrimary onClick={() => this.addCartItem(ingredientItem)}>
                 Add to cart
-            </Button>
+            </ButtonPrimary>
         )
     }
 
@@ -162,14 +154,14 @@ class IngredientsElementBase extends PureComponent<Props> {
                                             </TableCell>
                                             <TableCell>
                                                 {editing ?
-                                                    <Button
+                                                    <ButtonError
                                                         variant="contained"
                                                         color="primary"
                                                         onClick={() => this.deleteIngredientItem(ingredientItem.id)}
                                                         disabled={updatingIngredientItems}
                                                     >
                                                         Delete ingredient
-                                                    </Button>
+                                                    </ButtonError>
                                                     :
                                                     this.renderAddToCartButton(ingredientItem)
                                                 }

@@ -10,6 +10,7 @@ import { Loader } from 'semantic-ui-react';
 import { RouteComponentProps } from 'react-router-dom';
 import AddStepForm from './AddStepForm';
 import { SortableContainer, SortableElement } from 'react-sortable-hoc';
+import { ButtonError } from '../../Layout/Styles/Buttons';
 
 interface OwnProps {
     id: string;
@@ -61,14 +62,14 @@ const SortableStep = SortableElement(({ step, index, editing, updatingSteps, upd
             </TableCell>
             <TableCell>
                 {editing &&
-                    <Button
+                    <ButtonError
                         variant="contained"
                         color="primary"
                         onClick={() => deleteStep(step.id)}
                         disabled={updatingSteps}
                     >
                         Delete step
-                    </Button>
+                    </ButtonError>
                 }
             </TableCell>
         </TableRow>
@@ -177,14 +178,14 @@ class StepsElementBase extends PureComponent<Props> {
                     </TableCell>
                     <TableCell>
                         {editing &&
-                            <Button
+                            <ButtonError
                                 variant="contained"
                                 color="primary"
                                 onClick={() => this.deleteStep(step.id)}
                                 disabled={updatingSteps}
                             >
                                 Delete step
-                            </Button>
+                            </ButtonError>
                         }
                     </TableCell>
                 </TableRow>

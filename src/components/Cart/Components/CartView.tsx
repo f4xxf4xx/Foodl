@@ -7,8 +7,10 @@ import * as cartActions from "../cartActions";
 import { cartService } from "../cartService";
 import Button from '@material-ui/core/Button';
 import { TableHead, TableRow, Table, TableCell, TableBody, Paper, Typography, FormLabel, TextField } from "@material-ui/core";
-import { Dimmer, Loader, Image, Segment } from 'semantic-ui-react'
+import { Loader} from 'semantic-ui-react'
 import { Ingredient } from "../../Ingredients/models";
+import { ButtonError } from "../../Layout/Styles/Buttons";
+import { Title } from "../../Layout/Styles/Sections";
 
 type StateProps = {
     cartItems: Ingredient[];
@@ -93,14 +95,12 @@ class CartViewBase extends PureComponent<Props> {
                                         <TableRow key={cartItem.id}>
                                             <TableCell>{cartItem.name}</TableCell>
                                             <TableCell>
-                                                <Button
-                                                    variant="contained"
-                                                    color="primary"
+                                                <ButtonError
                                                     disabled={updatingCartItems}
                                                     onClick={() => this.deleteCartItem(cartItem.id)}
                                                 >
                                                     DELETE
-                                                </Button>
+                                                </ButtonError>
                                             </TableCell>
                                         </TableRow>
                                     )}
@@ -120,15 +120,13 @@ class CartViewBase extends PureComponent<Props> {
     render() {
         return (
             <>
-                <Typography variant="h2">Cart</Typography>
+                <Title>Cart</Title>
                 {this.props.cartItems.length > 0 &&
-                    <Button
-                        variant="contained"
-                        color="secondary"
-                        onClick={() => this.deleteAllCartItems()}
-                    >
-                        Delete all items
-                    </Button>
+                    <div>
+                        <ButtonError height="48" onClick={() => this.deleteAllCartItems()}>
+                            Delete all items
+                        </ButtonError>
+                    </div>
                 }
                 {this.renderCartItems()}
             </>

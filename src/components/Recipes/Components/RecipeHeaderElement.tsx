@@ -1,6 +1,6 @@
 import React from "react";
 import { Recipe, IngredientItem, Cuisine } from "../models";
-import { Typography, Button, TextField, Icon, Chip } from "@material-ui/core";
+import { Typography, Button, TextField, Icon, Chip, Box, Grid } from "@material-ui/core";
 import { compose, Dispatch, bindActionCreators } from 'redux';
 import { connect } from "react-redux";
 import { Loader } from 'semantic-ui-react';
@@ -8,6 +8,8 @@ import * as recipeActions from '../recipeActions';
 import { recipeService } from "../recipeService";
 import { toast } from "react-toastify";
 import Creatable from 'react-select/lib/Creatable';
+import { Title } from "../../Layout/Styles/Sections";
+import { ButtonPrimary } from "../../Layout/Styles/Buttons";
 
 type StateProps = {
     recipe: Recipe;
@@ -140,25 +142,27 @@ class RecipeHeaderElementBase extends React.Component<Props> {
         return (
             recipe ?
                 <>
-                    <div>
-                        <Button variant="contained" color="primary" onClick={toggleEdit}>
-                            {editing ? "Stop editing" : "Edit"}
-                        </Button>
-                    </div>
-                    <div>
-                        {editing ?
-                            <TextField
-                                defaultValue={recipe.name}
-                                onBlur={this.updateRecipe("name")}
-                                disabled={updatingRecipe}
-                            />
-                            :
-                            <Typography variant="h3">{recipe.name}</Typography>
-                        }
-                    </div>
-                    <div>
+                    <Grid justify="space-between" container>
+                        <Grid item>
+                            {editing ?
+                                <TextField
+                                    defaultValue={recipe.name}
+                                    onBlur={this.updateRecipe("name")}
+                                    disabled={updatingRecipe}
+                                />
+                                :
+                                <Title>{recipe.name}</Title>
+                            }
+                        </Grid>
+                        <Grid item>
+                            <ButtonPrimary onClick={toggleEdit}>
+                                {editing ? "Stop editing" : "Edit"}
+                            </ButtonPrimary>
+                        </Grid>
+                    </Grid>
+                    <Box>
                         {this.renderInfo()}
-                    </div>
+                    </Box>
                 </>
                 : null
         );

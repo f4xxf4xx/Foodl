@@ -4,7 +4,7 @@ import { getIngredientTypeOptions } from '../helper';
 import { Ingredient } from '../../Ingredients/models';
 import Select from 'react-select';
 import Creatable from 'react-select/lib/Creatable';
-import { Table, TableBody, Divider, TableRow, TableCell, Button, Typography, Avatar, FormLabel, TextField, Paper } from '@material-ui/core';
+import { Table, TableBody, Divider, TableRow, TableCell, Button, Typography, Avatar, FormLabel, TextField, Paper, Box } from '@material-ui/core';
 import * as recipeActions from '../recipeActions';
 import * as ingredientActions from '../../Ingredients/ingredientActions';
 import { compose, Dispatch, bindActionCreators } from 'redux';
@@ -13,6 +13,9 @@ import { Loader } from 'semantic-ui-react';
 import { recipeService } from '../recipeService';
 import { toast } from 'react-toastify';
 import { ingredientService } from '../../Ingredients/ingredientService';
+import { StyledPaper } from '../../Layout/Styles/Sections';
+import { InputWrapper } from '../../Layout/Styles/Forms';
+import { ButtonPrimary } from '../../Layout/Styles/Buttons';
 
 type OwnProps = {
     editing: boolean;
@@ -97,9 +100,9 @@ class AddIngredientItemFormBase extends PureComponent<Props, State> {
         const { newIngredientItem } = this.state;
         const { ingredients, recipe } = this.props;
 
-        if(newIngredientItem.name === ""
-        || newIngredientItem.quantity === ""
-        || newIngredientItem.type === "") {
+        if (newIngredientItem.name === ""
+            || newIngredientItem.quantity === ""
+            || newIngredientItem.type === "") {
             return false;
         }
 
@@ -146,52 +149,55 @@ class AddIngredientItemFormBase extends PureComponent<Props, State> {
         }) : [];
 
         return (
-            <Paper>
+            <>
                 {editing &&
-                    <form onSubmit={e => { e.preventDefault(); }}>
-                        <Typography variant="h6">
-                            Add ingredient
-                        </Typography>
-                        <div>
-                            <FormLabel htmlFor="input-quantity">
-                                Quantity
-                            </FormLabel>
-                            <TextField
-                                id="input-quantity"
-                                placeholder="Quantity"
-                                type="text"
-                                value={newIngredientItem.quantity}
-                                onChange={this.updateFormQuantity}
-                            />
-                            <FormLabel htmlFor="input-type">
-                                Type
-                            </FormLabel>
-                            <Select
-                                id="input-type"
-                                options={getIngredientTypeOptions()}
-                                value={currentSelectType}
-                                onChange={this.updateFormType}
-                            />
-                            <FormLabel htmlFor="input-ingredient">
-                                Ingredient
-                            </FormLabel>
-                            <Creatable
-                                id="input-ingredient"
-                                options={ingredientOptions}
-                                value={currentSelectIngredient}
-                                onChange={this.updateFormName}
-                            />
-                            <Button
-                                variant="contained"
-                                color="primary"
-                                onClick={this.addIngredient}
-                            >
-                                Add
-                            </Button>
-                        </div>
-                    </form>
+                    <StyledPaper>
+                        <form onSubmit={e => { e.preventDefault(); }}>
+                            <Typography variant="h6">
+                                Add ingredient
+                            </Typography>
+                            <InputWrapper>
+                                <TextField
+                                    id="input-quantity"
+                                    label="Quantity"
+                                    type="text"
+                                    value={newIngredientItem.quantity}
+                                    onChange={this.updateFormQuantity}
+                                    fullWidth
+                                />
+                            </InputWrapper>
+                            <InputWrapper>
+                                <FormLabel htmlFor="input-type">
+                                    Type
+                                </FormLabel>
+                                <Select
+                                    id="input-type"
+                                    label="type"
+                                    options={getIngredientTypeOptions()}
+                                    value={currentSelectType}
+                                    onChange={this.updateFormType}
+                                />
+                            </InputWrapper>
+                            <InputWrapper>
+                                <FormLabel htmlFor="input-ingredient">
+                                    Ingredient
+                                </FormLabel>
+                                <Creatable
+                                    id="input-ingredient"
+                                    options={ingredientOptions}
+                                    value={currentSelectIngredient}
+                                    onChange={this.updateFormName}
+                                />
+                                <ButtonPrimary
+                                    onClick={this.addIngredient}
+                                >
+                                    Add
+                                </ButtonPrimary>
+                            </InputWrapper>
+                        </form>
+                    </StyledPaper>
                 }
-            </Paper>
+            </>
         );
     }
 }

@@ -5,8 +5,9 @@ import { connect } from "react-redux";
 import { compose, bindActionCreators, Dispatch } from "redux";
 import * as ingredientActions from "../ingredientActions";
 import { ingredientService } from "../ingredientService";
-import Button from '@material-ui/core/Button';
-import { Typography, FormLabel, TextField, Paper } from "@material-ui/core";
+import { Typography, FormLabel, TextField, Paper, Box, Grid } from "@material-ui/core";
+import { ButtonPrimary } from "../../Layout/Styles/Buttons";
+import { StyledPaper } from "../../Layout/Styles/Sections";
 
 type OwnProps = {
     updating: boolean;
@@ -66,33 +67,30 @@ class AddIngredientFormBase extends PureComponent<Props, State> {
 
     render() {
         const { updating } = this.props;
+
         return (
-            <Paper>
-                <Typography variant="h5">New ingredient</Typography>
+            <StyledPaper>
+                <Typography variant="h6">New ingredient</Typography>
                 <form onSubmit={e => { e.preventDefault(); }}>
-                    <div>
-                        <FormLabel htmlFor="input-ingredient-name">
-                            Ingredient name
-                        </FormLabel>
+                    <Box>
                         <TextField
                             id="input-ingredient-name"
-                            placeholder="Ingredient name"
+                            label="Ingredient name"
                             type="text"
                             onChange={this.updateIngredientName}
                             value={this.state.newIngredientName}
                             onKeyPress={this.handleKeyPress}
+                            fullWidth
                         />
-                    </div>
-                    <Button
-                        variant="contained"
-                        color="primary"
+                    </Box>
+                    <ButtonPrimary
                         onClick={this.addIngredient}
                         disabled={updating}
                     >
                         Add
-                    </Button>
+                    </ButtonPrimary>
                 </form>
-            </Paper>
+            </StyledPaper>
         );
     }
 }

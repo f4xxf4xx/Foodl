@@ -92,14 +92,14 @@ class RecipeViewBase extends PureComponent<Props, State> {
 
         return (
             <>
-                <RecipeHeaderElement
-                    editing={editing}
-                    toggleEdit={this.toggleEdit}
-                />                
                 {loadingRecipe ?
                     <Loader active inline='centered' />
                     :
                     <>
+                        <RecipeHeaderElement
+                            editing={editing}
+                            toggleEdit={this.toggleEdit}
+                        />
                         <IngredientsElement editing={editing} id={id} />
                         <StepsElement editing={editing} id={id} />
                     </>

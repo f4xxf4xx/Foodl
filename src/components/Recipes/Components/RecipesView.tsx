@@ -11,6 +11,8 @@ import { compose, Dispatch, bindActionCreators } from 'redux';
 import { connect } from "react-redux";
 import AddRecipeForm from './AddRecipeForm';
 import { Loader } from 'semantic-ui-react';
+import { ButtonPrimary, ButtonError } from '../../Layout/Styles/Buttons';
+import { Title } from '../../Layout/Styles/Sections';
 
 type State = {
     newRecipeName: string;
@@ -92,14 +94,12 @@ class RecipesViewBase extends PureComponent<Props, State> {
                                 <TableRow key={recipe.id}>
                                     <TableCell><Link to={`/recipe/${recipe.id}`}>{recipe.name}</Link></TableCell>
                                     <TableCell>
-                                        <Button
-                                            variant="contained"
-                                            color="primary"
+                                        <ButtonError
                                             onClick={() => this.deleteRecipe(recipe.id)}
                                             disabled={updating}
                                         >
                                             DELETE
-                                </Button>
+                                        </ButtonError>
                                     </TableCell>
                                 </TableRow>
                             )}
@@ -113,7 +113,7 @@ class RecipesViewBase extends PureComponent<Props, State> {
     render() {
         return (
             <>
-                <Typography variant="h2">My recipes</Typography>
+                <Title>My recipes</Title>
                 <Typography paragraph>
                     Lorem ipsum dolor sit amet, consectetur adipiscing elit.
                     ultrices arcu at sagittis aliquet. Donec convallis, felis id viverra sagittis, diam libero volutpat nunc,

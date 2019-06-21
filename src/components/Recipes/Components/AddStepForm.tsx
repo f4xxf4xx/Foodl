@@ -2,13 +2,15 @@ import React, { PureComponent } from 'react';
 import { Recipe, Step } from '../models';
 import Select from 'react-select';
 import Creatable from 'react-select/lib/Creatable';
-import { Table, TableBody, Divider, TableRow, TableCell, Button, Typography, Avatar, FormLabel, TextField, Paper } from '@material-ui/core';
+import { Table, TableBody, Divider, TableRow, TableCell, Button, Typography, Avatar, FormLabel, TextField, Paper, Box } from '@material-ui/core';
 import * as recipeActions from '../recipeActions';
 import { compose, Dispatch, bindActionCreators } from 'redux';
 import { connect } from "react-redux";
 import { Loader } from 'semantic-ui-react';
 import { recipeService } from '../recipeService';
 import { toast } from 'react-toastify';
+import { ButtonPrimary } from '../../Layout/Styles/Buttons';
+import { StyledPaper } from '../../Layout/Styles/Sections';
 
 type OwnProps = {
     editing: boolean;
@@ -84,34 +86,33 @@ class AddStepFormBase extends PureComponent<Props, State> {
         const { newStep } = this.state;
 
         return (
-            <Paper>
+            <>
                 {editing &&
-                    <form onSubmit={e => { e.preventDefault(); }}>
-                        <Typography variant="h6">
-                            Add step
-                        </Typography>
-                        <div>
-                            <FormLabel htmlFor="input-quantity">
-                                Text
-                            </FormLabel>
-                            <TextField
-                                id="input-text"
-                                placeholder="Text"
-                                multiline={true}
-                                value={newStep.text}
-                                onChange={this.updateFormText}
-                            />
-                            <Button
+                    <StyledPaper>
+                        <form onSubmit={e => { e.preventDefault(); }}>
+                            <Typography variant="h6">
+                                Add step
+                            </Typography>
+                            <Box>
+                                <TextField
+                                    id="input-text"
+                                    label="Text"
+                                    multiline={true}
+                                    value={newStep.text}
+                                    onChange={this.updateFormText}
+                                />
+                            </Box>
+                            <ButtonPrimary
                                 variant="contained"
                                 color="primary"
                                 onClick={this.addStep}
                             >
                                 Add
-                            </Button>
-                        </div>
-                    </form>
+                            </ButtonPrimary>
+                        </form>
+                    </StyledPaper>
                 }
-            </Paper>
+            </>
         );
     }
 }
