@@ -8,15 +8,21 @@ export const ButtonPrimary = styled(Button)`
     border-radius: 3px;
     border: 0;
     color: white;    
-    padding: 0 30px;
+    padding: 0 15px;
     box-shadow: 0 2px 3px 2px rgba(65, 175, 255, .3);
-    margin:5px;
+    margin-top:5px;
 
     &:hover {
       box-shadow: 0 3px 5px 3px rgba(65, 170, 255, .3);
     }
 
-    height: ${props => props.height ? `${props.height}px` : "35px" }
+    width: 100%;
+
+    height: ${props => props.height ? `${props.height}px` : "35px"};
+
+    & > span {
+      white-space: nowrap;
+    }
   }
 `;
 
@@ -34,6 +40,8 @@ export const ButtonError = styled(Button)`
       box-shadow: 0 3px 5px 3px rgba(255, 105, 135, .3);
     }
 
-    height: ${props => props.height ? `${props.height}px` : "35px" }
+    width: max-content;
+
+    height: ${props => props.height ? `${props.height}px` : "35px"}
   }
 `;

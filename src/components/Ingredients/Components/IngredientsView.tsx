@@ -31,18 +31,17 @@ type Props = StateProps & DispatchProps & RouteProps;
 
 class IngredientsViewBase extends PureComponent<Props> {
     componentDidMount() {
-        if (this.props.ingredients.length === 0) {
-            this.props.fetchIngredientsStart();
-            return ingredientService.getIngredients()
-                .then(ingredients => {
-                    this.props.updateIngredients(ingredients);
-                    this.props.fetchIngredientsStop();
-                })
-                .catch(() => {
-                    toast.error("Error fetching the ingredients");
-                    this.props.fetchIngredientsStop();
-                });
-        }
+        this.props.fetchIngredientsStart();
+        return ingredientService.getIngredients()
+            .then(ingredients => {
+                this.props.updateIngredients(ingredients);
+                this.props.fetchIngredientsStop();
+            })
+            .catch(() => {
+                toast.error("Error fetching the ingredients");
+                this.props.fetchIngredientsStop();
+            });
+
     }
 
     deleteIngredient(ingredientId: string): void {

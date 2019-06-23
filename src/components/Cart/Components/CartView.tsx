@@ -11,6 +11,7 @@ import { Loader} from 'semantic-ui-react'
 import { Ingredient } from "../../Ingredients/models";
 import { ButtonError } from "../../Layout/Styles/Buttons";
 import { Title } from "../../Layout/Styles/Sections";
+import AddCartItemForm from "./AddCartItemForm";
 
 type StateProps = {
     cartItems: Ingredient[];
@@ -121,6 +122,7 @@ class CartViewBase extends PureComponent<Props> {
         return (
             <>
                 <Title>Cart</Title>
+                <AddCartItemForm updating={this.props.updatingCartItems} />
                 {this.props.cartItems.length > 0 &&
                     <div>
                         <ButtonError height="48" onClick={() => this.deleteAllCartItems()}>

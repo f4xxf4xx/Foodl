@@ -97,9 +97,7 @@ class AddIngredientFormBase extends PureComponent<Props, State> {
 
 const mapStateToProps = (state: any) => {
     return {
-        ingredients: state.ingredients.ingredients,
-        loading: state.ingredients.loading,
-        updating: state.ingredients.updating
+        ingredients: state.ingredients.ingredients
     };
 };
 
