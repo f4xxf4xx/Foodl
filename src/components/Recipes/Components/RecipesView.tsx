@@ -4,15 +4,19 @@ import { Recipe, IngredientItem } from '../models';
 import { withRouter } from 'react-router-dom';
 import { recipeService } from '../recipeService';
 import { toast } from 'react-toastify';
-import slugify from 'react-slugify';
-import { TableHead, TableBody, TableRow, TableCell, Table, Button, Typography, Paper, FormLabel, TextField } from '@material-ui/core';
+import { Typography, Paper, CardHeader, IconButton, CardContent, CardActions, CardActionArea, Grid } from '@material-ui/core';
 import * as recipesActions from '../recipesActions';
 import { compose, Dispatch, bindActionCreators } from 'redux';
 import { connect } from "react-redux";
 import AddRecipeForm from './AddRecipeForm';
 import { Loader } from 'semantic-ui-react';
-import { ButtonPrimary, ButtonError } from '../../Layout/Styles/Buttons';
 import { Title } from '../../Layout/Styles/Sections';
+import DeleteIcon from '@material-ui/icons/Delete';
+import ShareIcon from '@material-ui/icons/Share';
+import MoreVertIcon from '@material-ui/icons/MoreVert';
+import { StyledCardMedia } from './Styles/StyledCardMedia';
+import { StyledCard } from './Styles/StyledCard';
+import { StyledAvatar } from './Styles/StyledAvatar';
 
 type State = {
     newRecipeName: string;
@@ -75,38 +79,44 @@ class RecipesViewBase extends PureComponent<Props, State> {
     }
 
     renderRecipes() {
-        const { recipes, loading, updating } = this.props;
+        const { recipes, loading, history } = this.props;
 
         return (
-            <Paper>
+            <Grid container spacing={2}>
                 {loading ?
                     <Loader active inline='centered' />
                     :
-                    <Table>
-                        <TableHead>
-                            <TableRow>
-                                <TableCell component="th" scope="col">Recipes</TableCell>
-                                <TableCell component="th" scope="col">Delete</TableCell>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {recipes.map((recipe) =>
-                                <TableRow key={recipe.id}>
-                                    <TableCell><Link to={`/recipe/${recipe.id}`}>{recipe.name}</Link></TableCell>
-                                    <TableCell>
-                                        <ButtonError
-                                            onClick={() => this.deleteRecipe(recipe.id)}
-                                            disabled={updating}
-                                        >
-                                            DELETE
-                                        </ButtonError>
-                                    </TableCell>
-                                </TableRow>
-                            )}
-                        </TableBody>
-                    </Table>
+                    recipes.map((recipe) =>
+                        <Grid key={recipe.id} item xs={4}>
+                            <StyledCard>
+                                <CardActionArea onClick={() => history.push(`/recipe/${recipe.id}`)}>
+                                    <CardHeader
+                                        title={recipe.name}
+                                    />
+                                    <StyledCardMedia
+                                        component={'img'}
+                                        src="https://material-ui.com/static/images/cards/paella.jpg"
+                                        title="Paella dish"
+                                    />
+                                    <CardContent>
+                                        <Typography variant="body2" color="textSecondary" component="p">
+                                            {recipe.description}
+                                        </Typography>
+                                    </CardContent>
+                                </CardActionArea>
+                                <CardActions disableSpacing>
+                                    <IconButton aria-label="Share recipe">
+                                        <ShareIcon />
+                                    </IconButton>
+                                    <IconButton aria-label="Delete recipe" onClick={() => this.deleteRecipe(recipe.id)}>
+                                        <DeleteIcon />
+                                    </IconButton>
+                                </CardActions>
+                            </StyledCard>
+                        </Grid>
+                    )
                 }
-            </Paper>
+            </Grid>
         );
     }
 
