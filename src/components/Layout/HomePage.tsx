@@ -51,7 +51,7 @@ class HomePageBase extends PureComponent<Props, State> {
         return (
             <>
                 <Title>Welcome on Foodl</Title>
-                {signedIn &&
+                {
                     <>
                         {user ?
                             <div>

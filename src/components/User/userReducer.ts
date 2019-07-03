@@ -9,7 +9,7 @@ const initialState: UserState = {
 }
 
 export const userReducer = createReducer(initialState, {
-    USER_SIGNIN: (state) => {
+    USER_SIGNIN: (state, action) => {
         state.signedIn = true;
     },
     USER_SIGNOUT: (state) => {
