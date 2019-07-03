@@ -3,18 +3,22 @@ import Sidebar from "./Sidebar";
 import {
   CssBaseline
 } from '@material-ui/core';
-import { Header } from "./Header";
 import firebase, { UserInfo } from "firebase";
 import { Dispatch, bindActionCreators, compose } from "redux";
 import { connect } from "react-redux";
 import * as userActions from './../User/userActions';
+import Header from "./Header";
+
+type StateProps = {
+  signedIn: boolean;
+}
 
 type DispatchProps = {
   userSignIn: typeof userActions.userSignIn;
   userSignOut: typeof userActions.userSignOut;
 };
 
-type Props = DispatchProps;
+type Props = StateProps & DispatchProps;
 
 class MainLayoutBase extends React.Component<Props> {
   componentDidMount() {
@@ -31,11 +35,13 @@ class MainLayoutBase extends React.Component<Props> {
   }
 
   render() {
+    const { signedIn } = this.props;
+
     return (
       <div style={{ display: 'flex' }}>
         <CssBaseline />
         <Header />
-        <Sidebar />
+        {signedIn && <Sidebar />}
         <main style={{ flexGrow: 1, padding: 5, marginTop: 70 }}>
           {this.props.children}
         </main>
@@ -43,6 +49,12 @@ class MainLayoutBase extends React.Component<Props> {
     );
   }
 }
+
+const mapStateToProps = (state: any) => {
+  return {
+      signedIn: state.user.signedIn
+  };
+};
 
 const mapDispatchToProps = (dispatch: Dispatch) => {
   return {
@@ -52,7 +64,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
 };
 
 const MainLayout = compose(
-  connect<{}, DispatchProps>(null, mapDispatchToProps)
+  connect<StateProps, DispatchProps>(mapStateToProps, mapDispatchToProps)
 )(MainLayoutBase);
 
 export default MainLayout;
