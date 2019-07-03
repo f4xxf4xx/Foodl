@@ -4,6 +4,6 @@ import { CardMedia, Card } from '@material-ui/core';
 
 export const StyledCard = styled(Card)`
   && {
-      height:300px;
+    height:300px;
   }
 `;

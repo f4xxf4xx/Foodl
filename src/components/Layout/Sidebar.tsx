@@ -1,60 +1,78 @@
 import React from "react";
-import { getLinks, getAdminLinks } from "./links";
-import InboxIcon from '@material-ui/icons/MoveToInbox';
-import MailIcon from '@material-ui/icons/Mail';
-import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
-import { Drawer, List, ListItem, ListItemIcon, ListItemText, Icon, Divider } from '@material-ui/core';
+import { getLinks, getAdminLinks, getLoggedOnLinks } from "./links";
+import { List, ListItem, ListItemIcon, ListItemText, Icon, Divider } from '@material-ui/core';
 import { Link } from "react-router-dom";
-const drawerWidth = 240;
+import { StyledDrawer } from "./Styles/StyledDrawer";
+import { compose } from "redux";
+import { connect } from "react-redux";
+import * as firebase from "firebase";
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    drawer: {
-      width: drawerWidth,
-      flexShrink: 0,
-    },
-    drawerPaper: {
-      width: drawerWidth,
-    },
-    toolbar: theme.mixins.toolbar,
-  }),
-);
+type State = {
+  signedIn: boolean;
+}
 
-function Sidebar() {
-  const classes = useStyles();
+type Props = {};
 
-  return (
-    <Drawer
-      className={classes.drawer}
-      variant="permanent"
-      classes={{
-        paper: classes.drawerPaper,
-      }}
-    >
-      <div className={classes.toolbar} />
-      <List>
-        {getLinks().map((prop, key) =>
-          <Link key={key} to={prop.path}>
-            <ListItem button>
-              <ListItemIcon><Icon>{prop.icon}</Icon></ListItemIcon>
-              <ListItemText primary={prop.name} />
-            </ListItem>
-          </Link>
-        )}
-      </List>
-      <Divider />
-      <List>
-        {getAdminLinks().map((prop, key) =>
-          <Link key={key} to={prop.path}>
-            <ListItem button>
-              <ListItemIcon><Icon>{prop.icon}</Icon></ListItemIcon>
-              <ListItemText primary={prop.name} />
-            </ListItem>
-          </Link>
-        )}
-      </List>
-    </Drawer >
-  );
+class Sidebar extends React.Component<Props, State> {
+  constructor(props: Props) {
+    super(props);
+    this.state = {
+      signedIn: false
+    };
+  }
+
+  componentDidMount() {
+    firebase.auth().onAuthStateChanged(
+      (user) => {
+        if (user) {
+          this.setState({ signedIn: true })
+        }
+      }
+    );
+  }
+
+  render() {
+    const { signedIn } = this.state;
+
+    return (
+      <StyledDrawer
+        variant="permanent"
+      >
+        <div style={{ minHeight: 64 }} />
+        <List>
+          {getLinks().map((prop, key) =>
+            <Link key={key} to={prop.path}>
+              <ListItem button>
+                <ListItemIcon><Icon>{prop.icon}</Icon></ListItemIcon>
+                <ListItemText primary={prop.name} />
+              </ListItem>
+            </Link>
+          )}
+          {signedIn &&
+            getLoggedOnLinks().map((prop, key) =>
+              <Link key={key} to={prop.path}>
+                <ListItem button>
+                  <ListItemIcon><Icon>{prop.icon}</Icon></ListItemIcon>
+                  <ListItemText primary={prop.name} />
+                </ListItem>
+              </Link>
+            )
+          }
+        </List>
+        <Divider />
+        <List>
+          {getAdminLinks().map((prop, key) =>
+            <Link key={key} to={prop.path}>
+              <ListItem button>
+                <ListItemIcon><Icon>{prop.icon}</Icon></ListItemIcon>
+                <ListItemText primary={prop.name} />
+              </ListItem>
+            </Link>
+          )}
+        </List>
+      </StyledDrawer>
+    );
+  }
 }
 
 export default Sidebar;

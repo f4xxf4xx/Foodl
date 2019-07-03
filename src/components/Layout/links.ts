@@ -4,7 +4,12 @@ export const getLinks = () => {
             path: "/",
             name: "Home",
             icon: "home"
-        },
+        }
+    ];
+}
+
+export const getLoggedOnLinks = () => {
+    return [
         {
             path: "/recipes",
             name: "Recipes",

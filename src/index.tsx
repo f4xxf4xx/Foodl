@@ -10,6 +10,7 @@ import { ingredientReducer } from './components/Ingredients/ingredientReducer';
 import { recipeReducer, cuisinesReducer } from './components/Recipes/recipeReducer';
 import { recipesReducer } from './components/Recipes/recipesReducer';
 import { cartReducer } from './components/Cart/cartReducer';
+import { userReducer } from './components/User/userReducer';
 
 const baseUrl = document.getElementsByTagName('base')[0].getAttribute('href');
 const rootElement = document.getElementById('root');
@@ -28,7 +29,8 @@ const store = configureStore({
     recipe: recipeReducer,
     recipes: recipesReducer,
     cart: cartReducer,
-    cuisines: cuisinesReducer
+    cuisines: cuisinesReducer,
+    user: userReducer
   }
 })
 
