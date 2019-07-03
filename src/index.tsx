@@ -11,22 +11,10 @@ import { recipeReducer, cuisinesReducer, RecipeState } from './store/recipes/rec
 import { recipesReducer, RecipesState } from './store/recipes/recipesReducer';
 import { cartReducer, CartState } from './store/cart/cartReducer';
 import { userReducer, UserState } from './store/users/userReducer';
-import { reactReduxFirebase, getFirebase, firebaseReducer } from 'react-redux-firebase';
-import { reduxFirestore, getFirestore, firestoreReducer } from 'redux-firestore';
+import { firebaseReducer, ReactReduxFirebaseProvider } from 'react-redux-firebase';
+import { createFirestoreInstance, firestoreReducer } from 'redux-firestore';
 import { CuisinesState } from './store/recipes/recipeReducer';
-import thunk from "redux-thunk";
 import { firebase } from './config'
-
-const baseUrl = document.getElementsByTagName('base')[0].getAttribute('href');
-const rootElement = document.getElementById('root');
-toast.configure({
-  position: "top-right",
-  autoClose: 5000,
-  hideProgressBar: true,
-  closeOnClick: true,
-  pauseOnHover: true,
-  draggable: true
-})
 
 export interface ApplicationState {
   ingredients: IngredientState;
@@ -53,19 +41,34 @@ const store = configureStore({
     users: userReducer,
     firebase: firebaseReducer,
     firestore: firestoreReducer
-  },
-  enhancers: [
-    reactReduxFirebase(firebase, rrfConfig), 
-    reduxFirestore(firebase)
-  ],
-  middleware: [thunk.withExtraArgument({getFirebase, getFirestore})]
+  }
+})
+
+const rrfProps = {
+  firebase,
+  config: rrfConfig,
+  dispatch: store.dispatch,
+  createFirestoreInstance
+}
+
+const baseUrl = document.getElementsByTagName('base')[0].getAttribute('href');
+const rootElement = document.getElementById('root');
+toast.configure({
+  position: "top-right",
+  autoClose: 5000,
+  hideProgressBar: true,
+  closeOnClick: true,
+  pauseOnHover: true,
+  draggable: true
 })
 
 ReactDOM.render(
   <Provider store={store}>
-    <BrowserRouter basename={baseUrl}>
-      <App />
-    </BrowserRouter>
+    <ReactReduxFirebaseProvider {...rrfProps}>
+      <BrowserRouter basename={baseUrl}>
+        <App />
+      </BrowserRouter>
+    </ReactReduxFirebaseProvider>
   </Provider>
   ,
   rootElement);

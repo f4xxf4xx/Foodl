@@ -161,13 +161,8 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
     deleteRecipe: bindActionCreators(recipesActions.deleteRecipe, dispatch),
 });
 
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(firestoreConnect([{collection: 'recipes'}])(RecipesViewBase))
+const RecipesView = compose(
+    connect<StateProps, DispatchProps>(mapStateToProps, mapDispatchToProps)
+)(withRouter(RecipesViewBase));
 
-// const RecipesView = compose(
-//     connect<StateProps, DispatchProps>(mapStateToProps, mapDispatchToProps)
-// )(withRouter(RecipesViewBase));
-
-// export default RecipesView;
+export default RecipesView;
