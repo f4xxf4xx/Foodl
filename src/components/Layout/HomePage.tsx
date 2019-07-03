@@ -4,6 +4,7 @@ import { Title } from './Styles/Sections';
 import * as firebase from 'firebase';
 import { compose } from "redux";
 import { connect } from "react-redux";
+import { ApplicationState } from '../..';
 
 type StateProps = {
     signedIn: boolean;
@@ -49,11 +50,9 @@ class HomePageBase extends PureComponent<Props> {
     }
 }
 
-const mapStateToProps = (state: any) => {
-    return {
-        signedIn: state.user.signedIn
-    };
-};
+const mapStateToProps = (state: ApplicationState) => ({
+    signedIn: state.users.signedIn
+});
 
 
 const HomePage = compose(

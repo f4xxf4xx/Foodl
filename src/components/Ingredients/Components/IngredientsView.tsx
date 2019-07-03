@@ -3,14 +3,15 @@ import { RouteProps } from "react-router-dom";
 import { toast } from "react-toastify";
 import { connect } from "react-redux";
 import { compose, bindActionCreators, Dispatch } from "redux";
-import * as ingredientActions from "../ingredientActions";
+import * as ingredientActions from "../../../store/ingredients/ingredientActions";
 import { Ingredient } from "../models";
-import { ingredientService } from "../ingredientService";
+import { ingredientService } from "../../../services/ingredientService";
 import { TableHead, TableRow, Table, TableCell, TableBody, Paper, Typography, FormLabel, TextField } from "@material-ui/core";
 import { Dimmer, Loader, Image, Segment } from 'semantic-ui-react'
 import AddIngredientForm from "./AddIngredientForm";
 import { ButtonError } from "../../Layout/Styles/Buttons";
 import { Title } from "../../Layout/Styles/Sections";
+import { ApplicationState } from "../../..";
 
 type StateProps = {
     ingredients: Ingredient[];
@@ -109,24 +110,20 @@ class IngredientsViewBase extends PureComponent<Props> {
     }
 }
 
-const mapStateToProps = (state: any) => {
-    return {
-        ingredients: state.ingredients.ingredients,
-        loadingIngredients: state.ingredients.loadingIngredients,
-        updatingIngredients: state.ingredients.updatingIngredients
-    };
-};
+const mapStateToProps = (state: ApplicationState) => ({
+    ingredients: state.ingredients.ingredients,
+    loadingIngredients: state.ingredients.loadingIngredients,
+    updatingIngredients: state.ingredients.updatingIngredients
+});
 
-const mapDispatchToProps = (dispatch: Dispatch) => {
-    return {
-        fetchIngredientsStart: bindActionCreators(ingredientActions.fetchIngredientsStart, dispatch),
-        fetchIngredientsStop: bindActionCreators(ingredientActions.fetchIngredientsStop, dispatch),
-        updateIngredientsStart: bindActionCreators(ingredientActions.updateIngredientsStart, dispatch),
-        updateIngredientsStop: bindActionCreators(ingredientActions.updateIngredientsStop, dispatch),
-        updateIngredients: bindActionCreators(ingredientActions.updateIngredients, dispatch),
-        deleteIngredient: bindActionCreators(ingredientActions.deleteIngredient, dispatch)
-    };
-};
+const mapDispatchToProps = (dispatch: Dispatch) => ({
+    fetchIngredientsStart: bindActionCreators(ingredientActions.fetchIngredientsStart, dispatch),
+    fetchIngredientsStop: bindActionCreators(ingredientActions.fetchIngredientsStop, dispatch),
+    updateIngredientsStart: bindActionCreators(ingredientActions.updateIngredientsStart, dispatch),
+    updateIngredientsStop: bindActionCreators(ingredientActions.updateIngredientsStop, dispatch),
+    updateIngredients: bindActionCreators(ingredientActions.updateIngredients, dispatch),
+    deleteIngredient: bindActionCreators(ingredientActions.deleteIngredient, dispatch)
+});
 
 const IngredientsView = compose(
     connect<StateProps, DispatchProps>(mapStateToProps, mapDispatchToProps)

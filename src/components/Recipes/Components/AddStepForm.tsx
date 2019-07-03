@@ -3,14 +3,15 @@ import { Recipe, Step } from '../models';
 import Select from 'react-select';
 import Creatable from 'react-select/lib/Creatable';
 import { Table, TableBody, Divider, TableRow, TableCell, Button, Typography, Avatar, FormLabel, TextField, Paper, Box } from '@material-ui/core';
-import * as recipeActions from '../recipeActions';
+import * as recipeActions from '../../../store/recipes/recipeActions';
 import { compose, Dispatch, bindActionCreators } from 'redux';
 import { connect } from "react-redux";
 import { Loader } from 'semantic-ui-react';
-import { recipeService } from '../recipeService';
+import { recipeService } from '../../../services/recipeService';
 import { toast } from 'react-toastify';
 import { ButtonPrimary } from '../../Layout/Styles/Buttons';
 import { StyledPaper } from '../../Layout/Styles/Sections';
+import { ApplicationState } from '../../..';
 
 type OwnProps = {
     editing: boolean;
@@ -117,23 +118,19 @@ class AddStepFormBase extends PureComponent<Props, State> {
     }
 }
 
-const mapStateToProps = (state: any) => {
-    return {
-        recipe: state.recipe.recipe,
-        steps: state.recipe.steps,
-        loadingSteps: state.recipe.loadingSteps
-    };
-};
+const mapStateToProps = (state: ApplicationState) => ({
+    recipe: state.recipe.recipe,
+    steps: state.recipe.steps,
+    loadingSteps: state.recipe.loadingSteps
+});
 
-const mapDispatchToProps = (dispatch: Dispatch) => {
-    return {
-        updateStepsStart: bindActionCreators(recipeActions.updateStepsStart, dispatch),
-        updateStepsStop: bindActionCreators(recipeActions.updateStepsStop, dispatch),
-        addStep: bindActionCreators(recipeActions.addStep, dispatch),
-        fetchStepsStart: bindActionCreators(recipeActions.fetchStepsStart, dispatch),
-        fetchStepsStop: bindActionCreators(recipeActions.fetchStepsStop, dispatch)
-    };
-};
+const mapDispatchToProps = (dispatch: Dispatch) => ({
+    updateStepsStart: bindActionCreators(recipeActions.updateStepsStart, dispatch),
+    updateStepsStop: bindActionCreators(recipeActions.updateStepsStop, dispatch),
+    addStep: bindActionCreators(recipeActions.addStep, dispatch),
+    fetchStepsStart: bindActionCreators(recipeActions.fetchStepsStart, dispatch),
+    fetchStepsStop: bindActionCreators(recipeActions.fetchStepsStop, dispatch)
+});
 
 const AddStepForm = compose(
     connect<StateProps, DispatchProps>(mapStateToProps, mapDispatchToProps)

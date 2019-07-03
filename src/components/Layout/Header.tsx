@@ -4,9 +4,10 @@ import { StyledAppBar } from "./Styles/StyledAppBar";
 import { StyledLink } from "./Styles/StyledLink";
 import { RouteComponentProps, withRouter } from "react-router-dom";
 import { bindActionCreators, Dispatch, compose } from "redux";
-import * as userActions from './../User/userActions';
+import * as userActions from '../../store/users/userActions';
 import { connect } from "react-redux";
 import * as firebase from "firebase";
+import { ApplicationState } from "../..";
 
 type StateProps = {
   signedIn: boolean;
@@ -56,9 +57,9 @@ class HeaderBase extends React.Component<Props> {
   }
 }
 
-const mapStateToProps = (state: any) => {
+const mapStateToProps = (state: ApplicationState) => {
   return {
-      signedIn: state.user.signedIn
+      signedIn: state.users.signedIn
   };
 };
 

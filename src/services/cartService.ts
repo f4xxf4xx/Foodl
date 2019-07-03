@@ -1,5 +1,5 @@
-import { db } from '../../config';
-import { Ingredient } from '../Ingredients/models';
+import { db } from '../config';
+import { Ingredient } from '../components/Ingredients/models';
 
 export class cartService {
     public static getCartItems(): Promise<Ingredient[]> {

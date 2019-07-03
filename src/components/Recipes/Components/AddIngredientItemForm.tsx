@@ -5,17 +5,18 @@ import { Ingredient } from '../../Ingredients/models';
 import Select from 'react-select';
 import Creatable from 'react-select/lib/Creatable';
 import { Table, TableBody, Divider, TableRow, TableCell, Button, Typography, Avatar, FormLabel, TextField, Paper, Box } from '@material-ui/core';
-import * as recipeActions from '../recipeActions';
-import * as ingredientActions from '../../Ingredients/ingredientActions';
+import * as recipeActions from '../../../store/recipes/recipeActions';
+import * as ingredientActions from '../../../store/ingredients/ingredientActions';
 import { compose, Dispatch, bindActionCreators } from 'redux';
 import { connect } from "react-redux";
 import { Loader } from 'semantic-ui-react';
-import { recipeService } from '../recipeService';
+import { recipeService } from '../../../services/recipeService';
 import { toast } from 'react-toastify';
-import { ingredientService } from '../../Ingredients/ingredientService';
+import { ingredientService } from '../../../services/ingredientService';
 import { StyledPaper } from '../../Layout/Styles/Sections';
 import { InputWrapper } from '../../Layout/Styles/Forms';
 import { ButtonPrimary } from '../../Layout/Styles/Buttons';
+import { ApplicationState } from '../../..';
 
 type OwnProps = {
     editing: boolean;
@@ -202,26 +203,22 @@ class AddIngredientItemFormBase extends PureComponent<Props, State> {
     }
 }
 
-const mapStateToProps = (state: any) => {
-    return {
-        recipe: state.recipe.recipe,
-        ingredients: state.ingredients.ingredients,
-        loadingIngredients: state.ingredients.loadingIngredients
-    };
-};
+const mapStateToProps = (state: ApplicationState) => ({
+    recipe: state.recipe.recipe,
+    ingredients: state.ingredients.ingredients,
+    loadingIngredients: state.ingredients.loadingIngredients
+});
 
-const mapDispatchToProps = (dispatch: Dispatch) => {
-    return {
-        updateIngredientItemsStart: bindActionCreators(recipeActions.updateIngredientItemsStart, dispatch),
-        updateIngredientItemsStop: bindActionCreators(recipeActions.updateIngredientItemsStop, dispatch),
-        updateIngredientItems: bindActionCreators(recipeActions.updateIngredientItems, dispatch),
-        addIngredientItem: bindActionCreators(recipeActions.addIngredientItem, dispatch),
-        updateIngredients: bindActionCreators(ingredientActions.updateIngredients, dispatch),
-        fetchIngredientsStart: bindActionCreators(ingredientActions.fetchIngredientsStart, dispatch),
-        fetchIngredientsStop: bindActionCreators(ingredientActions.fetchIngredientsStop, dispatch),
-        addIngredient: bindActionCreators(ingredientActions.addIngredient, dispatch),
-    };
-};
+const mapDispatchToProps = (dispatch: Dispatch) => ({
+    updateIngredientItemsStart: bindActionCreators(recipeActions.updateIngredientItemsStart, dispatch),
+    updateIngredientItemsStop: bindActionCreators(recipeActions.updateIngredientItemsStop, dispatch),
+    updateIngredientItems: bindActionCreators(recipeActions.updateIngredientItems, dispatch),
+    addIngredientItem: bindActionCreators(recipeActions.addIngredientItem, dispatch),
+    updateIngredients: bindActionCreators(ingredientActions.updateIngredients, dispatch),
+    fetchIngredientsStart: bindActionCreators(ingredientActions.fetchIngredientsStart, dispatch),
+    fetchIngredientsStop: bindActionCreators(ingredientActions.fetchIngredientsStop, dispatch),
+    addIngredient: bindActionCreators(ingredientActions.addIngredient, dispatch),
+});
 
 const AddIngredientItemForm = compose(
     connect<StateProps, DispatchProps>(mapStateToProps, mapDispatchToProps)

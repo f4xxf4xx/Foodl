@@ -3,11 +3,12 @@ import { RouteProps } from "react-router-dom";
 import { toast } from "react-toastify";
 import { connect } from "react-redux";
 import { compose, bindActionCreators, Dispatch } from "redux";
-import * as ingredientActions from "../ingredientActions";
-import { ingredientService } from "../ingredientService";
+import * as ingredientActions from "../../../store/ingredients/ingredientActions";
+import { ingredientService } from "../../../services/ingredientService";
 import { Typography, FormLabel, TextField, Paper, Box, Grid } from "@material-ui/core";
 import { ButtonPrimary } from "../../Layout/Styles/Buttons";
 import { StyledPaper } from "../../Layout/Styles/Sections";
+import { ApplicationState } from "../../..";
 
 type OwnProps = {
     updating: boolean;
@@ -95,19 +96,15 @@ class AddIngredientFormBase extends PureComponent<Props, State> {
     }
 }
 
-const mapStateToProps = (state: any) => {
-    return {
-        ingredients: state.ingredients.ingredients
-    };
-};
+const mapStateToProps = (state: ApplicationState) => ({
+    ingredients: state.ingredients.ingredients
+});
 
-const mapDispatchToProps = (dispatch: Dispatch) => {
-    return {
-        updateIngredientsStart: bindActionCreators(ingredientActions.updateIngredientsStart, dispatch),
-        updateIngredientsStop: bindActionCreators(ingredientActions.updateIngredientsStop, dispatch),
-        addIngredient: bindActionCreators(ingredientActions.addIngredient, dispatch)
-    };
-};
+const mapDispatchToProps = (dispatch: Dispatch) => ({
+    updateIngredientsStart: bindActionCreators(ingredientActions.updateIngredientsStart, dispatch),
+    updateIngredientsStop: bindActionCreators(ingredientActions.updateIngredientsStop, dispatch),
+    addIngredient: bindActionCreators(ingredientActions.addIngredient, dispatch)
+});
 
 const AddIngredientForm = compose(
     connect<{}, DispatchProps>(mapStateToProps, mapDispatchToProps)

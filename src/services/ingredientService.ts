@@ -1,5 +1,5 @@
-import { db } from '../../config';
-import { Ingredient } from './models';
+import { db } from '../config';
+import { Ingredient } from '../components/Ingredients/models';
 
 export class ingredientService {
     public static getIngredients(): Promise<Ingredient[]> {

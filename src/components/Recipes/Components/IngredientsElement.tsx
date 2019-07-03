@@ -2,18 +2,19 @@ import React, { PureComponent } from 'react';
 import { IngredientItem } from '../models';
 import { getNumericQuantity, getIngredientTypeText } from '../helper';
 import { Table, TableBody, Divider, TableRow, TableCell, Button, Typography, Paper } from '@material-ui/core';
-import * as recipeActions from '../recipeActions';
-import * as cartActions from '../../Cart/cartActions';
-import { recipeService } from '../recipeService';
+import * as recipeActions from '../../../store/recipes/recipeActions';
+import * as cartActions from '../../../store/cart/cartActions';
+import { recipeService } from '../../../services/recipeService';
 import { toast } from 'react-toastify';
 import AddIngredientItemForm from './AddIngredientItemForm';
 import { compose, Dispatch, bindActionCreators } from 'redux';
 import { connect } from "react-redux";
 import { Loader } from 'semantic-ui-react';
 import { RouteComponentProps } from 'react-router-dom';
-import { cartService } from '../../Cart/cartService';
+import { cartService } from '../../../services/cartService';
 import { Ingredient } from '../../Ingredients/models';
 import { ButtonPrimary, ButtonError } from '../../Layout/Styles/Buttons';
+import { ApplicationState } from '../../..';
 
 interface OwnProps {
     id: string;
@@ -181,29 +182,25 @@ class IngredientsElementBase extends PureComponent<Props> {
     }
 }
 
-const mapStateToProps = (state: any) => {
-    return {
-        ingredientItems: state.recipe.ingredientItems,
-        cartItems: state.cart.cartItems,
-        loadingIngredientItems: state.recipe.loadingIngredientItems,
-        updatingIngredientItems: state.recipe.updatingIngredientItems
-    };
-};
+const mapStateToProps = (state: ApplicationState) => ({
+    ingredientItems: state.recipe.ingredientItems,
+    cartItems: state.cart.cartItems,
+    loadingIngredientItems: state.recipe.loadingIngredientItems,
+    updatingIngredientItems: state.recipe.updatingIngredientItems
+});
 
-const mapDispatchToProps = (dispatch: Dispatch) => {
-    return {
-        fetchIngredientItemsStart: bindActionCreators(recipeActions.fetchIngredientItemsStart, dispatch),
-        fetchIngredientItemsStop: bindActionCreators(recipeActions.fetchIngredientItemsStop, dispatch),
-        fetchCartItemsStart: bindActionCreators(cartActions.fetchCartItemsStart, dispatch),
-        fetchCartItemsStop: bindActionCreators(cartActions.fetchCartItemsStop, dispatch),
-        updateIngredientItemsStart: bindActionCreators(recipeActions.updateIngredientItemsStart, dispatch),
-        updateIngredientItemsStop: bindActionCreators(recipeActions.updateIngredientItemsStop, dispatch),
-        updateIngredientItems: bindActionCreators(recipeActions.updateIngredientItems, dispatch),
-        updateCartItems: bindActionCreators(cartActions.updateCartItems, dispatch),
-        deleteIngredientItem: bindActionCreators(recipeActions.deleteIngredientItem, dispatch),
-        addCartItem: bindActionCreators(cartActions.addCartItem, dispatch)
-    };
-};
+const mapDispatchToProps = (dispatch: Dispatch) => ({
+    fetchIngredientItemsStart: bindActionCreators(recipeActions.fetchIngredientItemsStart, dispatch),
+    fetchIngredientItemsStop: bindActionCreators(recipeActions.fetchIngredientItemsStop, dispatch),
+    fetchCartItemsStart: bindActionCreators(cartActions.fetchCartItemsStart, dispatch),
+    fetchCartItemsStop: bindActionCreators(cartActions.fetchCartItemsStop, dispatch),
+    updateIngredientItemsStart: bindActionCreators(recipeActions.updateIngredientItemsStart, dispatch),
+    updateIngredientItemsStop: bindActionCreators(recipeActions.updateIngredientItemsStop, dispatch),
+    updateIngredientItems: bindActionCreators(recipeActions.updateIngredientItems, dispatch),
+    updateCartItems: bindActionCreators(cartActions.updateCartItems, dispatch),
+    deleteIngredientItem: bindActionCreators(recipeActions.deleteIngredientItem, dispatch),
+    addCartItem: bindActionCreators(cartActions.addCartItem, dispatch)
+});
 
 const IngredientsElement = compose(
     connect<StateProps, DispatchProps, OwnProps>(mapStateToProps, mapDispatchToProps)

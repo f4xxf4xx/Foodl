@@ -4,12 +4,13 @@ import { Typography, Button, TextField, Icon, Chip, Box, Grid } from "@material-
 import { compose, Dispatch, bindActionCreators } from 'redux';
 import { connect } from "react-redux";
 import { Loader } from 'semantic-ui-react';
-import * as recipeActions from '../recipeActions';
-import { recipeService } from "../recipeService";
+import * as recipeActions from '../../../store/recipes/recipeActions';
+import { recipeService } from "../../../services/recipeService";
 import { toast } from "react-toastify";
 import Creatable from 'react-select/lib/Creatable';
 import { Title } from "../../Layout/Styles/Sections";
 import { ButtonPrimary } from "../../Layout/Styles/Buttons";
+import { ApplicationState } from "../../..";
 
 type StateProps = {
     recipe: Recipe;
@@ -169,22 +170,18 @@ class RecipeHeaderElementBase extends React.Component<Props> {
     }
 }
 
-const mapStateToProps = (state: any) => {
-    return {
-        recipe: state.recipe.recipe,
-        updatingRecipe: state.recipe.updatingRecipe,
-        cuisines: state.cuisines.cuisines
-    };
-};
+const mapStateToProps = (state: ApplicationState) => ({
+    recipe: state.recipe.recipe,
+    updatingRecipe: state.recipe.updatingRecipe,
+    cuisines: state.cuisines.cuisines
+});
 
-const mapDispatchToProps = (dispatch: Dispatch) => {
-    return {
-        updateRecipeStart: bindActionCreators(recipeActions.updateRecipeStart, dispatch),
-        updateRecipeStop: bindActionCreators(recipeActions.updateRecipeStop, dispatch),
-        updateRecipe: bindActionCreators(recipeActions.updateRecipe, dispatch),
-        addCuisine: bindActionCreators(recipeActions.addCuisine, dispatch)
-    };
-};
+const mapDispatchToProps = (dispatch: Dispatch) => ({
+    updateRecipeStart: bindActionCreators(recipeActions.updateRecipeStart, dispatch),
+    updateRecipeStop: bindActionCreators(recipeActions.updateRecipeStop, dispatch),
+    updateRecipe: bindActionCreators(recipeActions.updateRecipe, dispatch),
+    addCuisine: bindActionCreators(recipeActions.addCuisine, dispatch)
+});
 
 const RecipeHeaderElement = compose(
     connect<StateProps, DispatchProps>(mapStateToProps, mapDispatchToProps)

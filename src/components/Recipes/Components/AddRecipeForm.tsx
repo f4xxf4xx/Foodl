@@ -1,14 +1,15 @@
 import React, { PureComponent } from 'react';
 import { RouteComponentProps } from 'react-router-dom';
 import { withRouter } from 'react-router-dom';
-import { recipeService } from '../recipeService';
+import { recipeService } from '../../../services/recipeService';
 import { Button, Typography, FormLabel, TextField, Box } from '@material-ui/core';
 import { compose, Dispatch, bindActionCreators } from 'redux';
 import { connect } from "react-redux";
-import * as recipesActions from '../recipesActions';
+import * as recipesActions from '../../../store/recipes/recipesActions';
 import { toast } from 'react-toastify';
 import { ButtonPrimary } from '../../Layout/Styles/Buttons';
 import { StyledPaper } from '../../Layout/Styles/Sections';
+import { ApplicationState } from '../../..';
 
 type State = {
     newRecipeName: string;
@@ -95,22 +96,17 @@ class AddRecipeFormBase extends PureComponent<Props, State> {
     }
 }
 
-const mapStateToProps = (state: any) => {
-    return {
-        recipes: state.recipes.recipes,
-        loadingRecipes: state.recipes.loadingRecipes,
-        updatingRecipes: state.recipes.updatingRecipes,
-        error: state.recipes.error
-    };
-};
+const mapStateToProps = (state: ApplicationState) => ({
+    recipes: state.recipes.recipes,
+    loadingRecipes: state.recipes.loadingRecipes,
+    updatingRecipes: state.recipes.updatingRecipes
+});
 
-const mapDispatchToProps = (dispatch: Dispatch) => {
-    return {
-        updateRecipesStart: bindActionCreators(recipesActions.updateRecipesStart, dispatch),
-        updateRecipesStop: bindActionCreators(recipesActions.updateRecipesStop, dispatch),
-        addRecipe: bindActionCreators(recipesActions.addRecipe, dispatch),
-    };
-};
+const mapDispatchToProps = (dispatch: Dispatch) => ({
+    updateRecipesStart: bindActionCreators(recipesActions.updateRecipesStart, dispatch),
+    updateRecipesStop: bindActionCreators(recipesActions.updateRecipesStop, dispatch),
+    addRecipe: bindActionCreators(recipesActions.addRecipe, dispatch),
+});
 
 const AddRecipeForm = compose(
     connect<StateProps, DispatchProps>(mapStateToProps, mapDispatchToProps)

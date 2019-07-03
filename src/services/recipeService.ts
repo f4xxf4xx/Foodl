@@ -1,5 +1,5 @@
-import { db } from '../../config';
-import { Recipe, IngredientItem, Step, Cuisine } from './models';
+import { db } from '../config';
+import { Recipe, IngredientItem, Step, Cuisine } from '../components/Recipes/models';
 import slugify from 'react-slugify';
 
 export class recipeService {

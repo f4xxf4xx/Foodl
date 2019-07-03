@@ -4,13 +4,14 @@ import { withRouter } from 'react-router-dom';
 import IngredientsElement from './IngredientsElement';
 import StepsElement from './StepsElement';
 import RecipeHeaderElement from './RecipeHeaderElement';
-import { recipeService } from '../recipeService';
+import { recipeService } from '../../../services/recipeService';
 import { toast } from 'react-toastify';
 import { Loader } from 'semantic-ui-react';
 import { RouteComponentProps } from 'react-router-dom';
-import * as recipeActions from '../recipeActions';
+import * as recipeActions from '../../../store/recipes/recipeActions';
 import { compose, Dispatch, bindActionCreators } from 'redux';
 import { connect } from "react-redux";
+import { ApplicationState } from '../../..';
 
 type State = {
     editing: boolean;
@@ -109,25 +110,21 @@ class RecipeViewBase extends PureComponent<Props, State> {
     }
 }
 
-const mapStateToProps = (state: any) => {
-    return {
-        recipe: state.recipe.recipe,
-        loadingRecipe: state.recipe.loadingRecipe,
-        cuisines: state.cuisines.cuisines
-    };
-};
+const mapStateToProps = (state: ApplicationState) => ({
+    recipe: state.recipe.recipe,
+    loadingRecipe: state.recipe.loadingRecipe,
+    cuisines: state.cuisines.cuisines
+});
 
-const mapDispatchToProps = (dispatch: Dispatch) => {
-    return {
-        fetchRecipeStart: bindActionCreators(recipeActions.fetchRecipeStart, dispatch),
-        fetchRecipeStop: bindActionCreators(recipeActions.fetchRecipeStop, dispatch),
-        updateRecipe: bindActionCreators(recipeActions.updateRecipe, dispatch),
-        fetchCuisinesStart: bindActionCreators(recipeActions.fetchCuisinesStart, dispatch),
-        fetchCuisinesStop: bindActionCreators(recipeActions.fetchCuisinesStop, dispatch),
-        updateCuisines: bindActionCreators(recipeActions.updateCuisines, dispatch),
-        addCuisine: bindActionCreators(recipeActions.addCuisine, dispatch),
-    };
-};
+const mapDispatchToProps = (dispatch: Dispatch) => ({
+    fetchRecipeStart: bindActionCreators(recipeActions.fetchRecipeStart, dispatch),
+    fetchRecipeStop: bindActionCreators(recipeActions.fetchRecipeStop, dispatch),
+    updateRecipe: bindActionCreators(recipeActions.updateRecipe, dispatch),
+    fetchCuisinesStart: bindActionCreators(recipeActions.fetchCuisinesStart, dispatch),
+    fetchCuisinesStop: bindActionCreators(recipeActions.fetchCuisinesStop, dispatch),
+    updateCuisines: bindActionCreators(recipeActions.updateCuisines, dispatch),
+    addCuisine: bindActionCreators(recipeActions.addCuisine, dispatch),
+});
 
 const RecipeView = compose(
     connect<StateProps, DispatchProps>(mapStateToProps, mapDispatchToProps)

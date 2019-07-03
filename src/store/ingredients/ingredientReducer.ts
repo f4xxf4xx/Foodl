@@ -1,5 +1,5 @@
 import { createReducer } from "redux-starter-kit";
-import { Ingredient } from "./models";
+import { Ingredient } from "../../components/Ingredients/models";
 
 export type IngredientState = {
     ingredients: Ingredient[];

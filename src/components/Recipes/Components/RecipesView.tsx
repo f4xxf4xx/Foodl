@@ -1,11 +1,11 @@
-import React, { Component, PureComponent } from 'react';
-import { Link, RouteComponentProps } from 'react-router-dom';
-import { Recipe, IngredientItem } from '../models';
+import React, { PureComponent } from 'react';
+import { RouteComponentProps } from 'react-router-dom';
+import { Recipe } from '../models';
 import { withRouter } from 'react-router-dom';
-import { recipeService } from '../recipeService';
+import { recipeService } from '../../../services/recipeService';
 import { toast } from 'react-toastify';
-import { Typography, Paper, CardHeader, IconButton, CardContent, CardActions, CardActionArea, Grid } from '@material-ui/core';
-import * as recipesActions from '../recipesActions';
+import { Typography, CardHeader, IconButton, CardContent, CardActions, CardActionArea, Grid } from '@material-ui/core';
+import * as recipesActions from '../../../store/recipes/recipesActions';
 import { compose, Dispatch, bindActionCreators } from 'redux';
 import { connect } from "react-redux";
 import AddRecipeForm from './AddRecipeForm';
@@ -13,10 +13,10 @@ import { Loader } from 'semantic-ui-react';
 import { Title } from '../../Layout/Styles/Sections';
 import DeleteIcon from '@material-ui/icons/Delete';
 import ShareIcon from '@material-ui/icons/Share';
-import MoreVertIcon from '@material-ui/icons/MoreVert';
 import { StyledCardMedia } from './Styles/StyledCardMedia';
 import { StyledCard } from './Styles/StyledCard';
-import { StyledAvatar } from './Styles/StyledAvatar';
+import { ApplicationState } from '../../..';
+import { firestoreConnect } from 'react-redux-firebase';
 
 type State = {
     newRecipeName: string;
@@ -145,28 +145,24 @@ class RecipesViewBase extends PureComponent<Props, State> {
     }
 }
 
-const mapStateToProps = (state: any) => {
-    return {
-        recipes: state.recipes.recipes,
-        loading: state.recipes.loading,
-        updating: state.recipes.updating
-    };
-};
+const mapStateToProps = (state: ApplicationState) => ({
+    recipes: state.recipes.recipes,
+    loading: state.recipes.loadingRecipes,
+    updating: state.recipes.updatingRecipes
+});
 
-const mapDispatchToProps = (dispatch: Dispatch) => {
-    return {
-        fetchRecipesStart: bindActionCreators(recipesActions.fetchRecipesStart, dispatch),
-        fetchRecipesStop: bindActionCreators(recipesActions.fetchRecipesStop, dispatch),
-        updateRecipesStart: bindActionCreators(recipesActions.updateRecipesStart, dispatch),
-        updateRecipesStop: bindActionCreators(recipesActions.updateRecipesStop, dispatch),
-        updateRecipes: bindActionCreators(recipesActions.updateRecipes, dispatch),
-        addRecipe: bindActionCreators(recipesActions.addRecipe, dispatch),
-        deleteRecipe: bindActionCreators(recipesActions.deleteRecipe, dispatch),
-    };
-};
+const mapDispatchToProps = (dispatch: Dispatch) => ({
+    fetchRecipesStart: bindActionCreators(recipesActions.fetchRecipesStart, dispatch),
+    fetchRecipesStop: bindActionCreators(recipesActions.fetchRecipesStop, dispatch),
+    updateRecipesStart: bindActionCreators(recipesActions.updateRecipesStart, dispatch),
+    updateRecipesStop: bindActionCreators(recipesActions.updateRecipesStop, dispatch),
+    updateRecipes: bindActionCreators(recipesActions.updateRecipes, dispatch),
+    addRecipe: bindActionCreators(recipesActions.addRecipe, dispatch),
+    deleteRecipe: bindActionCreators(recipesActions.deleteRecipe, dispatch),
+});
 
-const RecipesView = compose(
+const RecipesView = 
     connect<StateProps, DispatchProps>(mapStateToProps, mapDispatchToProps)
-)(withRouter(RecipesViewBase));
+    (firestoreConnect([{collection: 'recipes'}])(withRouter(RecipesViewBase)));
 
 export default RecipesView;

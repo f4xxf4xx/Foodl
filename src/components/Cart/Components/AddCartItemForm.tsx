@@ -3,15 +3,16 @@ import { RouteProps } from "react-router-dom";
 import { toast } from "react-toastify";
 import { connect } from "react-redux";
 import { compose, bindActionCreators, Dispatch } from "redux";
-import * as cartActions from "../cartActions";
-import * as ingredientActions from "../../Ingredients/ingredientActions";
-import { cartService } from "../cartService";
+import * as cartActions from "../../../store/cart/cartActions";
+import * as ingredientActions from "../../../store/ingredients/ingredientActions";
+import { cartService } from "../../../services/cartService";
 import { Typography, FormLabel, TextField, Paper, Box, Grid } from "@material-ui/core";
 import { ButtonPrimary } from "../../Layout/Styles/Buttons";
 import { StyledPaper } from "../../Layout/Styles/Sections";
 import { Ingredient } from "../../Ingredients/models";
-import { ingredientService } from "../../Ingredients/ingredientService";
+import { ingredientService } from "../../../services/ingredientService";
 import Creatable from 'react-select/lib/Creatable';
+import { ApplicationState } from "../../..";
 
 type OwnProps = {
     updating: boolean;
@@ -144,20 +145,16 @@ class AddCartItemFormBase extends PureComponent<Props, State> {
     }
 }
 
-const mapStateToProps = (state: any) => {
-    return {
-        ingredients: state.ingredients.ingredients,
-    };
-};
+const mapStateToProps = (state: ApplicationState) => ({
+    ingredients: state.ingredients.ingredients,
+});
 
-const mapDispatchToProps = (dispatch: Dispatch) => {
-    return {
-        addCartItem: bindActionCreators(cartActions.addCartItem, dispatch),
-        updateCartItemsStart: bindActionCreators(cartActions.updateCartItemsStart, dispatch),
-        updateCartItemsStop: bindActionCreators(cartActions.updateCartItemsStop, dispatch),
-        addIngredient: bindActionCreators(ingredientActions.addIngredient, dispatch)
-    };
-};
+const mapDispatchToProps = (dispatch: Dispatch) => ({
+    addCartItem: bindActionCreators(cartActions.addCartItem, dispatch),
+    updateCartItemsStart: bindActionCreators(cartActions.updateCartItemsStart, dispatch),
+    updateCartItemsStop: bindActionCreators(cartActions.updateCartItemsStop, dispatch),
+    addIngredient: bindActionCreators(ingredientActions.addIngredient, dispatch)
+});
 
 const AddCartItemForm = compose(
     connect<StateProps, DispatchProps>(mapStateToProps, mapDispatchToProps)

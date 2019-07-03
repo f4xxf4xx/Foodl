@@ -3,8 +3,8 @@ import { RouteProps } from "react-router-dom";
 import { toast } from "react-toastify";
 import { connect } from "react-redux";
 import { compose, bindActionCreators, Dispatch } from "redux";
-import * as cartActions from "../cartActions";
-import { cartService } from "../cartService";
+import * as cartActions from "../../../store/cart/cartActions";
+import { cartService } from "../../../services/cartService";
 import Button from '@material-ui/core/Button';
 import { TableHead, TableRow, Table, TableCell, TableBody, Paper, Typography, FormLabel, TextField } from "@material-ui/core";
 import { Loader} from 'semantic-ui-react'
@@ -12,6 +12,7 @@ import { Ingredient } from "../../Ingredients/models";
 import { ButtonError } from "../../Layout/Styles/Buttons";
 import { Title } from "../../Layout/Styles/Sections";
 import AddCartItemForm from "./AddCartItemForm";
+import { ApplicationState } from "../../..";
 
 type StateProps = {
     cartItems: Ingredient[];
@@ -136,25 +137,21 @@ class CartViewBase extends PureComponent<Props> {
     }
 }
 
-const mapStateToProps = (state: any) => {
-    return {
-        cartItems: state.cart.cartItems,
-        loadingCartItems: state.cart.loadingCartItems,
-        updatingCartItems: state.cart.updatingCartItems
-    };
-};
+const mapStateToProps = (state: ApplicationState) => ({
+    cartItems: state.cart.cartItems,
+    loadingCartItems: state.cart.loadingCartItems,
+    updatingCartItems: state.cart.updatingCartItems
+});
 
-const mapDispatchToProps = (dispatch: Dispatch) => {
-    return {
-        fetchCartItemsStart: bindActionCreators(cartActions.fetchCartItemsStart, dispatch),
-        fetchCartItemsStop: bindActionCreators(cartActions.fetchCartItemsStop, dispatch),
-        updateCartItemsStart: bindActionCreators(cartActions.updateCartItemsStart, dispatch),
-        updateCartItemsStop: bindActionCreators(cartActions.updateCartItemsStop, dispatch),
-        updateCartItems: bindActionCreators(cartActions.updateCartItems, dispatch),
-        deleteCartItem: bindActionCreators(cartActions.deleteCartItem, dispatch),
-        deleteAllCartItems: bindActionCreators(cartActions.deleteAllCartItems, dispatch)
-    };
-};
+const mapDispatchToProps = (dispatch: Dispatch) => ({
+    fetchCartItemsStart: bindActionCreators(cartActions.fetchCartItemsStart, dispatch),
+    fetchCartItemsStop: bindActionCreators(cartActions.fetchCartItemsStop, dispatch),
+    updateCartItemsStart: bindActionCreators(cartActions.updateCartItemsStart, dispatch),
+    updateCartItemsStop: bindActionCreators(cartActions.updateCartItemsStop, dispatch),
+    updateCartItems: bindActionCreators(cartActions.updateCartItems, dispatch),
+    deleteCartItem: bindActionCreators(cartActions.deleteCartItem, dispatch),
+    deleteAllCartItems: bindActionCreators(cartActions.deleteAllCartItems, dispatch)
+});
 
 const CartView = compose(
     connect<StateProps, DispatchProps>(mapStateToProps, mapDispatchToProps)

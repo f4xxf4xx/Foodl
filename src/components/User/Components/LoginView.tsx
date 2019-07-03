@@ -1,50 +1,49 @@
 import React, { PureComponent } from "react";
 import { RouteProps } from "react-router-dom";
-import { connect } from "react-redux";
-import { compose, bindActionCreators, Dispatch } from "redux";
-import * as userActions from "../userActions";
-import { StyledFirebaseAuth } from "react-firebaseui";
-import { authConfig } from "../../../config";
+import { FirebaseAuth } from "react-firebaseui";
 import firebase from "firebase";
+import * as firebaseui from 'firebaseui';
 
-type StateProps = {
-    signedIn: boolean;
-};
+type Props = RouteProps;
 
-type DispatchProps = {
-    userSignIn: typeof userActions.userSignIn;
-};
+class LoginView extends PureComponent<Props> {
+    authConfig = {
+        credentialHelper: firebaseui.auth.CredentialHelper.GOOGLE_YOLO,
+        // Popup signin flow rather than redirect flow.
+        signInFlow: 'popup',
+        // Redirect to /recipes after sign in is successful. Alternatively you can provide a callbacks.signInSuccess function.
+        signInSuccessUrl: '/recipes',
+        signInOptions: [
+            firebase.auth.EmailAuthProvider.PROVIDER_ID,
+            firebase.auth.GoogleAuthProvider.PROVIDER_ID
+        ],
+        callbacks: {
+            signInSuccessWithAuthResult: (authResult, redirectUrl) => {
+                if (authResult.additionalUserInfo.isNewUser) {
+                    console.log("new user");
+                }
 
-type Props = StateProps & DispatchProps & RouteProps;
+                //TODO verify if user exists in db
+                console.log("success");
+                return true;
+            },
+            signInFailure: (error) => {
+                console.log("fail");
 
-class LoginViewBase extends PureComponent<Props> {
+                return error;
+            }
+        }
+    };
+
     componentDidMount() {
-        
+
     }
 
     render() {
         return (
-            <>
-                <StyledFirebaseAuth uiConfig={authConfig} firebaseAuth={firebase.auth()} />                
-            </>
+            <FirebaseAuth uiConfig={this.authConfig} firebaseAuth={firebase.auth()} />
         );
     }
 }
-
-const mapStateToProps = (state: any) => {
-    return {
-        signedIn: state.user.signedIn
-    };
-};
-
-const mapDispatchToProps = (dispatch: Dispatch) => {
-    return {
-        userSignIn: bindActionCreators(userActions.userSignIn, dispatch)
-    };
-};
-
-const LoginView = compose(
-    connect<StateProps, DispatchProps>(mapStateToProps, mapDispatchToProps)
-)(LoginViewBase);
 
 export default LoginView;

@@ -1,8 +1,8 @@
 import React, { PureComponent } from 'react';
 import { Step, Recipe } from '../models';
 import { Table, TableBody, Divider, TableRow, TableCell, Button, Typography, Paper, TextField } from '@material-ui/core';
-import * as recipeActions from '../recipeActions';
-import { recipeService } from '../recipeService';
+import * as recipeActions from '../../../store/recipes/recipeActions';
+import { recipeService } from '../../../services/recipeService';
 import { toast } from 'react-toastify';
 import { compose, Dispatch, bindActionCreators } from 'redux';
 import { connect } from "react-redux";
@@ -11,6 +11,7 @@ import { RouteComponentProps } from 'react-router-dom';
 import AddStepForm from './AddStepForm';
 import { SortableContainer, SortableElement } from 'react-sortable-hoc';
 import { ButtonError } from '../../Layout/Styles/Buttons';
+import { ApplicationState } from '../../..';
 
 interface OwnProps {
     id: string;
@@ -217,25 +218,21 @@ class StepsElementBase extends PureComponent<Props> {
     }
 }
 
-const mapStateToProps = (state: any) => {
-    return {
-        steps: state.recipe.steps,
-        loadingSteps: state.recipe.loadingSteps,
-        updatingSteps: state.recipe.updatingSteps
-    };
-};
+const mapStateToProps = (state: ApplicationState) => ({
+    steps: state.recipe.steps,
+    loadingSteps: state.recipe.loadingSteps,
+    updatingSteps: state.recipe.updatingSteps
+});
 
-const mapDispatchToProps = (dispatch: Dispatch) => {
-    return {
-        fetchStepsStart: bindActionCreators(recipeActions.fetchStepsStart, dispatch),
-        fetchStepsStop: bindActionCreators(recipeActions.fetchStepsStop, dispatch),
-        updateStepsStart: bindActionCreators(recipeActions.updateStepsStart, dispatch),
-        updateStepsStop: bindActionCreators(recipeActions.updateStepsStop, dispatch),
-        updateSteps: bindActionCreators(recipeActions.updateSteps, dispatch),
-        updateStep: bindActionCreators(recipeActions.updateStep, dispatch),
-        deleteStep: bindActionCreators(recipeActions.deleteStep, dispatch),
-    };
-};
+const mapDispatchToProps = (dispatch: Dispatch) => ({
+    fetchStepsStart: bindActionCreators(recipeActions.fetchStepsStart, dispatch),
+    fetchStepsStop: bindActionCreators(recipeActions.fetchStepsStop, dispatch),
+    updateStepsStart: bindActionCreators(recipeActions.updateStepsStart, dispatch),
+    updateStepsStop: bindActionCreators(recipeActions.updateStepsStop, dispatch),
+    updateSteps: bindActionCreators(recipeActions.updateSteps, dispatch),
+    updateStep: bindActionCreators(recipeActions.updateStep, dispatch),
+    deleteStep: bindActionCreators(recipeActions.deleteStep, dispatch),
+});
 
 const StepsElement = compose(
     connect<StateProps, DispatchProps, OwnProps>(mapStateToProps, mapDispatchToProps)
