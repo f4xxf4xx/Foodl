@@ -2,39 +2,60 @@ import { db } from '../config';
 import { Ingredient } from '../components/Ingredients/models';
 
 export class cartService {
-    public static getCartItems(): Promise<Ingredient[]> {
-        //TODO refactor for cart by owner
+    public static getCartItems(userid: string): Promise<Ingredient[]> {
         return db.collection("cart")
-            .orderBy("name")
+            .doc(userid)
             .get()
             .then(data => {
-                let ingredients: Ingredient[] = [];
-                data.forEach(ingredient => {
-                    ingredients.push({
-                        id: ingredient.id,
-                        name: ingredient.data().name
-                    })
-                })
-                return ingredients;
-            });
+                if (data.exists) {
+                    return cartService.getItems(data);
+                } else {
+                    return [];
+                }
+            })
     }
 
-    public static addItem(name: string): Promise<Ingredient> {
-        const newCartItem: Ingredient = {
-            name: name
-        }
+    static getItems(data: firebase.firestore.DocumentSnapshot) {
+        const items = data.data().items;
 
-        return db.collection("cart").add(newCartItem)
-            .then(ingredient => {
+        let ingredients: Ingredient[] = [];
+        items.forEach(ingredient => {
+            ingredients.push({
+                name: ingredient
+            })
+        })
+        return ingredients;
+    }
+
+    public static addItem(userid: string, name: string): Promise<Ingredient> {
+        const cart = db.collection("cart").doc(userid);
+
+        return cart.get()
+            .then(data => {
+                if(data.exists) {
+                    const items = data.data().items;
+                    items.push(name);
+                    cart.set({ items });
+                } else {
+                    cart.set({ items: [name] });                    
+                }
                 return {
-                    id: ingredient.id,
                     name
                 }
-            });
+            })            
     }
 
-    public static deleteItem(id: string): Promise<void> {
-        return db.collection("cart").doc(id).delete();
+    public static deleteItem(userid: string, name: string): Promise<void> {
+        const cart = db.collection("cart").doc(userid);
+
+        return cart.get()
+            .then(data => {
+                if(data.exists) {
+                    const items = data.data().items;
+                    const newItems = items.filter(item => item !== name);
+                    cart.set({ items: newItems })
+                }
+            })
     }
 
     public static deleteAllItems(): Promise<void> {

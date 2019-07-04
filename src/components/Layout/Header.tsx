@@ -59,7 +59,8 @@ class HeaderBase extends React.Component<Props> {
 
 const mapStateToProps = (state: ApplicationState) => {
   return {
-      signedIn: state.users.signedIn
+      signedIn: state.user.signedIn,
+      loadingUser: state.user.loadingUser
   };
 };
 

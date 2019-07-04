@@ -9,9 +9,11 @@ import { connect } from "react-redux";
 import * as userActions from '../../store/users/userActions';
 import Header from "./Header";
 import { ApplicationState } from "../..";
+import { Loader } from "semantic-ui-react";
 
 type StateProps = {
   signedIn: boolean;
+  loadingUser: boolean;
 }
 
 type DispatchProps = {
@@ -27,33 +29,42 @@ class MainLayoutBase extends React.Component<Props> {
       (user) => {
         //TODO on user registering, create a db user for it
         if (user) {
-          this.props.userSignIn();
+          if (!this.props.signedIn) {
+            this.props.userSignIn(user.uid);
+          }
         } else {
-          this.props.userSignOut();
+          // this.props.userSignOut();
         }
       }
     );
   }
 
   render() {
-    const { signedIn } = this.props;
+    const { signedIn, loadingUser } = this.props;
     const user = firebase.auth().currentUser;
 
     return (
       <div style={{ display: 'flex' }}>
-        <CssBaseline />
-        <Header />
-        {signedIn && user && <Sidebar />}
-        <main style={{ flexGrow: 1, padding: 5, marginTop: 70 }}>
-          {this.props.children}
-        </main>
+        {loadingUser ?
+          <Loader />
+          :
+          <>
+            <CssBaseline />
+            <Header />
+            {signedIn && user && <Sidebar />}
+            <main style={{ flexGrow: 1, padding: 5, marginTop: 70 }}>
+              {this.props.children}
+            </main>
+          </>
+        }
       </div>
     );
   }
 }
 
 const mapStateToProps = (state: ApplicationState) => ({
-  signedIn: state.users.signedIn
+  signedIn: state.user.signedIn,
+  loadingUser: state.user.loadingUser
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({

@@ -51,7 +51,7 @@ class HomePageBase extends PureComponent<Props> {
 }
 
 const mapStateToProps = (state: ApplicationState) => ({
-    signedIn: state.users.signedIn
+    signedIn: state.user.signedIn
 });
 
 

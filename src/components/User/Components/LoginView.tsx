@@ -3,10 +3,19 @@ import { RouteProps } from "react-router-dom";
 import { FirebaseAuth } from "react-firebaseui";
 import firebase from "firebase";
 import * as firebaseui from 'firebaseui';
+import { bindActionCreators, Dispatch, compose } from "redux";
+import { connect } from "react-redux";
+import * as userActions from './../../../store/users/userActions';
 
-type Props = RouteProps;
+type DispatchProps = {
+    userLoadStart: typeof userActions.userLoadStart;
+    userLoadStop: typeof userActions.userLoadStop;
 
-class LoginView extends PureComponent<Props> {
+}
+
+type Props = RouteProps & DispatchProps;
+
+class LoginViewBase extends PureComponent<Props> {
     authConfig = {
         credentialHelper: firebaseui.auth.CredentialHelper.GOOGLE_YOLO,
         // Popup signin flow rather than redirect flow.
@@ -19,6 +28,7 @@ class LoginView extends PureComponent<Props> {
         ],
         callbacks: {
             signInSuccessWithAuthResult: (authResult, redirectUrl) => {
+                this.props.userLoadStart();
                 if (authResult.additionalUserInfo.isNewUser) {
                     console.log("new user");
                 }
@@ -35,15 +45,20 @@ class LoginView extends PureComponent<Props> {
         }
     };
 
-    componentDidMount() {
-
-    }
-
     render() {
         return (
             <FirebaseAuth uiConfig={this.authConfig} firebaseAuth={firebase.auth()} />
         );
     }
 }
+
+const mapDispatchToProps = (dispatch: Dispatch) => ({
+    userLoadStart: bindActionCreators(userActions.userSignIn, dispatch),
+    userLoadStop: bindActionCreators(userActions.userSignOut, dispatch)
+});
+
+const LoginView = compose(
+    connect<{}, DispatchProps>(null, mapDispatchToProps)
+)(LoginViewBase);
 
 export default LoginView;

@@ -16,7 +16,6 @@ import ShareIcon from '@material-ui/icons/Share';
 import { StyledCardMedia } from './Styles/StyledCardMedia';
 import { StyledCard } from './Styles/StyledCard';
 import { ApplicationState } from '../../..';
-import { firestoreConnect } from 'react-redux-firebase';
 
 type State = {
     newRecipeName: string;

@@ -3,21 +3,29 @@ import { User } from "firebase";
 
 export type UserState = {
     signedIn: boolean;
-    user: User;
+    uid: string;
+    loadingUser: boolean;
 }
 
 const initialState: UserState = {
     signedIn: false,
-    user: null
+    uid: null,
+    loadingUser: false
 }
 
 export const userReducer = createReducer(initialState, {
     USER_SIGNIN: (state, action) => {
         state.signedIn = true;
-        state.user = action.payload;
+        state.uid = action.payload;
     },
     USER_SIGNOUT: (state) => {
         state.signedIn = false;
-        state.user = null;
+        state.uid = null;
     },
+    USER_LOAD_START: (state) => {
+        state.loadingUser = true;
+    },
+    USER_LOAD_STOP: (state) => {
+        state.loadingUser = false;
+    }
 });

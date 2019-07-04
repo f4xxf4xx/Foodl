@@ -7,7 +7,7 @@ import * as cartActions from "../../../store/cart/cartActions";
 import { cartService } from "../../../services/cartService";
 import Button from '@material-ui/core/Button';
 import { TableHead, TableRow, Table, TableCell, TableBody, Paper, Typography, FormLabel, TextField } from "@material-ui/core";
-import { Loader} from 'semantic-ui-react'
+import { Loader } from 'semantic-ui-react'
 import { Ingredient } from "../../Ingredients/models";
 import { ButtonError } from "../../Layout/Styles/Buttons";
 import { Title } from "../../Layout/Styles/Sections";
@@ -18,6 +18,8 @@ type StateProps = {
     cartItems: Ingredient[];
     loadingCartItems: boolean;
     updatingCartItems: boolean;
+    signedIn: boolean;
+    userid: string;
 };
 
 type DispatchProps = {
@@ -34,16 +36,19 @@ type Props = StateProps & DispatchProps & RouteProps;
 
 class CartViewBase extends PureComponent<Props> {
     componentDidMount() {
-        this.props.fetchCartItemsStart();
-        return cartService.getCartItems()
-            .then(cartItems => {
-                this.props.updateCartItems(cartItems);
-                this.props.fetchCartItemsStop();
-            })
-            .catch(() => {
-                toast.error("Error fetching the cart items");
-                this.props.fetchCartItemsStop();
-            });
+        const { signedIn, userid } = this.props;
+        if (signedIn) {
+            this.props.fetchCartItemsStart();
+            return cartService.getCartItems(userid)
+                .then(cartItems => {
+                    this.props.updateCartItems(cartItems);
+                    this.props.fetchCartItemsStop();
+                })
+                .catch(() => {
+                    toast.error("Error fetching the cart items");
+                    this.props.fetchCartItemsStop();
+                });
+        }
     }
 
     deleteAllCartItems(): void {
@@ -61,8 +66,10 @@ class CartViewBase extends PureComponent<Props> {
     }
 
     deleteCartItem(cartItemId: string): void {
+        const { userid } = this.props;
+        
         this.props.updateCartItemsStart();
-        cartService.deleteItem(cartItemId)
+        cartService.deleteItem(userid, cartItemId)
             .then(() => {
                 this.props.deleteCartItem(cartItemId);
                 this.props.updateCartItemsStop();
@@ -75,11 +82,11 @@ class CartViewBase extends PureComponent<Props> {
     }
 
     renderCartItems() {
-        const { cartItems, updatingCartItems, loadingCartItems } = this.props;
+        const { cartItems, updatingCartItems, loadingCartItems, signedIn, userid } = this.props;
 
         return (
             <Paper>
-                {loadingCartItems ?
+                {(loadingCartItems || !signedIn) ?
                     <Loader active inline='centered' />
                     :
                     <>
@@ -93,13 +100,13 @@ class CartViewBase extends PureComponent<Props> {
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
-                                    {cartItems.map((cartItem) =>
-                                        <TableRow key={cartItem.id}>
+                                    {cartItems.map((cartItem, index) =>
+                                        <TableRow key={index}>
                                             <TableCell>{cartItem.name}</TableCell>
                                             <TableCell>
                                                 <ButtonError
                                                     disabled={updatingCartItems}
-                                                    onClick={() => this.deleteCartItem(cartItem.id)}
+                                                    onClick={() => this.deleteCartItem(cartItem.name)}
                                                 >
                                                     DELETE
                                                 </ButtonError>
@@ -140,7 +147,9 @@ class CartViewBase extends PureComponent<Props> {
 const mapStateToProps = (state: ApplicationState) => ({
     cartItems: state.cart.cartItems,
     loadingCartItems: state.cart.loadingCartItems,
-    updatingCartItems: state.cart.updatingCartItems
+    updatingCartItems: state.cart.updatingCartItems,
+    signedIn: state.user.signedIn,
+    userid: state.user.uid
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({

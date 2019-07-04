@@ -22,6 +22,7 @@ interface OwnProps {
 }
 
 type StateProps = {
+    userid: string;
     ingredientItems: IngredientItem[];
     cartItems: Ingredient[];
     loadingIngredientItems: boolean;
@@ -64,7 +65,7 @@ class IngredientsElementBase extends PureComponent<Props> {
 
         if (cartItems.length == 0) {
             fetchCartItemsStart()
-            cartService.getCartItems()
+            cartService.getCartItems("TODO")
                 .then((cartItems) => {
                     if (cartItems.length > 0) {
                         updateCartItems(cartItems);
@@ -95,7 +96,9 @@ class IngredientsElementBase extends PureComponent<Props> {
     }
 
     addCartItem = (ingredientItem: IngredientItem) => {
-        cartService.addItem(ingredientItem.name)
+        const { userid } = this.props;
+        
+        cartService.addItem(userid, ingredientItem.name)
             .then((ingredient) => {
                 this.props.addCartItem(ingredient);
                 toast.success(`Added ${ingredient.name} to cart!`);
@@ -183,6 +186,7 @@ class IngredientsElementBase extends PureComponent<Props> {
 }
 
 const mapStateToProps = (state: ApplicationState) => ({
+    userid: state.user.uid,
     ingredientItems: state.recipe.ingredientItems,
     cartItems: state.cart.cartItems,
     loadingIngredientItems: state.recipe.loadingIngredientItems,

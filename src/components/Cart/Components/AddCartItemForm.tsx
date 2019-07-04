@@ -20,6 +20,7 @@ type OwnProps = {
 
 type StateProps = {
     ingredients: Ingredient[];
+    userid: string;
 }
 
 type State = {
@@ -65,7 +66,7 @@ class AddCartItemFormBase extends PureComponent<Props, State> {
 
     addIngredient = () => {
         const { newIngredientName } = this.state;
-        const { ingredients } = this.props;
+        const { ingredients, userid } = this.props;
 
         if (newIngredientName === "") {
             return;
@@ -82,7 +83,7 @@ class AddCartItemFormBase extends PureComponent<Props, State> {
         }
 
         this.props.updateCartItemsStart();
-        cartService.addItem(newIngredientName)
+        cartService.addItem(userid, newIngredientName)
             .then((ingredient) => {
                 this.props.updateCartItemsStop();
                 this.props.addCartItem(ingredient);
@@ -147,13 +148,17 @@ class AddCartItemFormBase extends PureComponent<Props, State> {
 
 const mapStateToProps = (state: ApplicationState) => ({
     ingredients: state.ingredients.ingredients,
+    userid: state.user.uid
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
     addCartItem: bindActionCreators(cartActions.addCartItem, dispatch),
     updateCartItemsStart: bindActionCreators(cartActions.updateCartItemsStart, dispatch),
     updateCartItemsStop: bindActionCreators(cartActions.updateCartItemsStop, dispatch),
-    addIngredient: bindActionCreators(ingredientActions.addIngredient, dispatch)
+    addIngredient: bindActionCreators(ingredientActions.addIngredient, dispatch),
+    fetchIngredientsStart: bindActionCreators(ingredientActions.fetchIngredientsStart, dispatch),
+    fetchIngredientsStop: bindActionCreators(ingredientActions.fetchIngredientsStop, dispatch),
+    updateIngredients: bindActionCreators(ingredientActions.updateIngredients, dispatch),
 });
 
 const AddCartItemForm = compose(
