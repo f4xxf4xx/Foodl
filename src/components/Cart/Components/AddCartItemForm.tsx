@@ -20,7 +20,7 @@ type OwnProps = {
 
 type StateProps = {
     ingredients: Ingredient[];
-    userid: string;
+    auth: any;
 }
 
 type State = {
@@ -66,7 +66,7 @@ class AddCartItemFormBase extends PureComponent<Props, State> {
 
     addIngredient = () => {
         const { newIngredientName } = this.state;
-        const { ingredients, userid } = this.props;
+        const { ingredients, auth } = this.props;
 
         if (newIngredientName === "") {
             return;
@@ -83,7 +83,7 @@ class AddCartItemFormBase extends PureComponent<Props, State> {
         }
 
         this.props.updateCartItemsStart();
-        cartService.addItem(userid, newIngredientName)
+        cartService.addItem(auth.uid, newIngredientName)
             .then((ingredient) => {
                 this.props.updateCartItemsStop();
                 this.props.addCartItem(ingredient);
@@ -148,7 +148,7 @@ class AddCartItemFormBase extends PureComponent<Props, State> {
 
 const mapStateToProps = (state: ApplicationState) => ({
     ingredients: state.ingredients.ingredients,
-    userid: state.user.uid
+    auth: state.firebase.auth
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({

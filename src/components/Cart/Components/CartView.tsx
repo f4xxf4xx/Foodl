@@ -13,13 +13,14 @@ import { ButtonError } from "../../Layout/Styles/Buttons";
 import { Title } from "../../Layout/Styles/Sections";
 import AddCartItemForm from "./AddCartItemForm";
 import { ApplicationState } from "../../..";
+import { User } from "firebase";
 
 type StateProps = {
     cartItems: Ingredient[];
     loadingCartItems: boolean;
     updatingCartItems: boolean;
     signedIn: boolean;
-    userid: string;
+    auth: any;
 };
 
 type DispatchProps = {
@@ -36,10 +37,11 @@ type Props = StateProps & DispatchProps & RouteProps;
 
 class CartViewBase extends PureComponent<Props> {
     componentDidMount() {
-        const { signedIn, userid } = this.props;
-        if (signedIn) {
+        const { auth } = this.props;
+
+        if (auth.isLoaded && !auth.isEmpty) {
             this.props.fetchCartItemsStart();
-            return cartService.getCartItems(userid)
+            return cartService.getCartItems(auth.uid)
                 .then(cartItems => {
                     this.props.updateCartItems(cartItems);
                     this.props.fetchCartItemsStop();
@@ -66,10 +68,10 @@ class CartViewBase extends PureComponent<Props> {
     }
 
     deleteCartItem(cartItemId: string): void {
-        const { userid } = this.props;
-        
+        const { auth } = this.props;
+
         this.props.updateCartItemsStart();
-        cartService.deleteItem(userid, cartItemId)
+        cartService.deleteItem(auth.uid, cartItemId)
             .then(() => {
                 this.props.deleteCartItem(cartItemId);
                 this.props.updateCartItemsStop();
@@ -82,7 +84,7 @@ class CartViewBase extends PureComponent<Props> {
     }
 
     renderCartItems() {
-        const { cartItems, updatingCartItems, loadingCartItems, signedIn, userid } = this.props;
+        const { cartItems, updatingCartItems, loadingCartItems, signedIn } = this.props;
 
         return (
             <Paper>
@@ -149,7 +151,7 @@ const mapStateToProps = (state: ApplicationState) => ({
     loadingCartItems: state.cart.loadingCartItems,
     updatingCartItems: state.cart.updatingCartItems,
     signedIn: state.user.signedIn,
-    userid: state.user.uid
+    auth: state.firebase.auth
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({

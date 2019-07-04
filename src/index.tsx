@@ -12,6 +12,10 @@ import { recipesReducer, RecipesState } from './store/recipes/recipesReducer';
 import { cartReducer, CartState } from './store/cart/cartReducer';
 import { userReducer, UserState } from './store/users/userReducer';
 import { CuisinesState } from './store/recipes/recipeReducer';
+import { reactReduxFirebase, getFirebase, firebaseReducer } from 'react-redux-firebase';
+import { reduxFirestore, getFirestore, firestoreReducer } from 'redux-firestore';
+import { firebase } from './config'
+import thunk from "redux-thunk";
 
 const baseUrl = document.getElementsByTagName('base')[0].getAttribute('href');
 const rootElement = document.getElementById('root');
@@ -31,6 +35,14 @@ export interface ApplicationState {
   cart: CartState;
   cuisines: CuisinesState;
   user: UserState;
+  firebase: any;
+  firestore: any;
+}
+
+const rrfConfig = {
+  userProfile: 'users',
+  attachAuthIsReady: true,
+  useFirestoreForProfile: true
 }
 
 const store = configureStore({
@@ -41,7 +53,14 @@ const store = configureStore({
     cart: cartReducer,
     cuisines: cuisinesReducer,
     user: userReducer,
-  }
+    firebase: firebaseReducer,
+    firestore: firestoreReducer
+  },
+  enhancers: [
+    reactReduxFirebase(firebase, rrfConfig), 
+    reduxFirestore(firebase)
+  ],
+  middleware: [thunk.withExtraArgument({getFirebase, getFirestore})]
 })
 
 ReactDOM.render(
