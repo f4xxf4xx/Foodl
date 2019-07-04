@@ -40,17 +40,31 @@ class CartViewBase extends PureComponent<Props> {
         const { auth } = this.props;
 
         if (auth.isLoaded && !auth.isEmpty) {
-            this.props.fetchCartItemsStart();
-            return cartService.getCartItems(auth.uid)
-                .then(cartItems => {
-                    this.props.updateCartItems(cartItems);
-                    this.props.fetchCartItemsStop();
-                })
-                .catch(() => {
-                    toast.error("Error fetching the cart items");
-                    this.props.fetchCartItemsStop();
-                });
+            this.fetchCartItems();
         }
+    }
+
+    componentDidUpdate(prevProps: Props) {
+        const { auth } = this.props;
+
+        if(auth.isLoaded !== prevProps.auth.isLoaded && !auth.isEmpty) {
+            this.fetchCartItems();
+        }
+    }
+
+    fetchCartItems() {
+        const { auth } = this.props;
+
+        this.props.fetchCartItemsStart();
+        return cartService.getCartItems(auth.uid)
+            .then(cartItems => {
+                this.props.updateCartItems(cartItems);
+                this.props.fetchCartItemsStop();
+            })
+            .catch(() => {
+                toast.error("Error fetching the cart items");
+                this.props.fetchCartItemsStop();
+            });
     }
 
     deleteAllCartItems(): void {
