@@ -20,9 +20,9 @@ class HomePageBase extends PureComponent<Props> {
             <>
                 <Title>Welcome on Foodl</Title>
                 {auth.isLoaded && !auth.isEmpty &&
-                    <div>
-                        Welcome, {auth.email}
-                    </div>
+                    <Typography variant="h6">
+                        Welcome, {auth.displayName}
+                    </Typography>
                 }
                 <Box>
                     <Typography paragraph align="justify">
