@@ -7,22 +7,21 @@ import { connect } from "react-redux";
 import { ApplicationState } from '../..';
 
 type StateProps = {
-    signedIn: boolean;
+    auth: any;
 }
 
 type Props = StateProps;
 
 class HomePageBase extends PureComponent<Props> {
     render() {
-        const { signedIn } = this.props;
-        const user = firebase.auth().currentUser;
+        const { auth } = this.props;
 
         return (
             <>
                 <Title>Welcome on Foodl</Title>
-                {signedIn && user &&
+                {auth.isLoaded && !auth.isEmpty &&
                     <div>
-                        Welcome, {user.email}
+                        Welcome, {auth.email}
                     </div>
                 }
                 <Box>
@@ -51,7 +50,7 @@ class HomePageBase extends PureComponent<Props> {
 }
 
 const mapStateToProps = (state: ApplicationState) => ({
-    signedIn: state.user.signedIn
+    auth: state.firebase.auth
 });
 
 

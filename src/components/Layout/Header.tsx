@@ -3,31 +3,26 @@ import { Typography, Toolbar, Grid, Button } from '@material-ui/core';
 import { StyledAppBar } from "./Styles/StyledAppBar";
 import { StyledLink } from "./Styles/StyledLink";
 import { RouteComponentProps, withRouter } from "react-router-dom";
-import { bindActionCreators, Dispatch, compose } from "redux";
-import * as userActions from '../../store/users/userActions';
+import { compose } from "redux";
 import { connect } from "react-redux";
-import * as firebase from "firebase";
 import { ApplicationState } from "../..";
+import { withFirebase } from "react-redux-firebase";
 
 type StateProps = {
-  signedIn: boolean;
+  auth: any;
+  firebase: firebase.app.App;
 }
 
-type DispatchProps = {
-  userSignOut: typeof userActions.userSignOut;
-};
-
-type Props = StateProps & RouteComponentProps & DispatchProps;
+type Props = StateProps & RouteComponentProps;
 
 class HeaderBase extends React.Component<Props> {
   onSignOutClick = () => {
-    this.props.userSignOut();
-    firebase.auth().signOut()
+    this.props.firebase.auth().signOut();
     this.props.history.push("/");
   }
 
   render() {
-    const { signedIn } = this.props;
+    const { auth } = this.props;
 
     return (
       <StyledAppBar position="fixed">
@@ -41,7 +36,7 @@ class HeaderBase extends React.Component<Props> {
               </StyledLink>
             </Grid>
             <Grid item>
-              {signedIn ?
+              {auth.isLoaded && !auth.isEmpty ?
                 <Button onClick={this.onSignOutClick}>Sign out</Button>
                 :
                 <>
@@ -57,21 +52,12 @@ class HeaderBase extends React.Component<Props> {
   }
 }
 
-const mapStateToProps = (state: ApplicationState) => {
-  return {
-      signedIn: state.user.signedIn,
-      loadingUser: state.user.loadingUser
-  };
-};
-
-const mapDispatchToProps = (dispatch: Dispatch) => {
-  return {
-    userSignOut: bindActionCreators(userActions.userSignOut, dispatch)
-  };
-};
+const mapStateToProps = (state: ApplicationState) => ({
+  auth: state.firebase.auth
+});
 
 const Header = compose(
-  connect<StateProps, DispatchProps>(mapStateToProps, mapDispatchToProps)
-)(withRouter(HeaderBase));
+  connect<StateProps>(mapStateToProps)
+)(withRouter(withFirebase(HeaderBase)));
 
 export default Header;

@@ -10,7 +10,6 @@ import { ingredientReducer, IngredientState } from './store/ingredients/ingredie
 import { recipeReducer, cuisinesReducer, RecipeState } from './store/recipes/recipeReducer';
 import { recipesReducer, RecipesState } from './store/recipes/recipesReducer';
 import { cartReducer, CartState } from './store/cart/cartReducer';
-import { userReducer, UserState } from './store/users/userReducer';
 import { CuisinesState } from './store/recipes/recipeReducer';
 import { reactReduxFirebase, getFirebase, firebaseReducer } from 'react-redux-firebase';
 import { reduxFirestore, getFirestore, firestoreReducer } from 'redux-firestore';
@@ -34,7 +33,6 @@ export interface ApplicationState {
   recipes: RecipesState;
   cart: CartState;
   cuisines: CuisinesState;
-  user: UserState;
   firebase: any;
   firestore: any;
 }
@@ -52,7 +50,6 @@ const store = configureStore({
     recipes: recipesReducer,
     cart: cartReducer,
     cuisines: cuisinesReducer,
-    user: userReducer,
     firebase: firebaseReducer,
     firestore: firestoreReducer
   },

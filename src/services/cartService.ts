@@ -13,9 +13,9 @@ export class cartService {
                     return [];
                 }
             })
-            .catch(() => {
-                return [];
-            })
+            // .catch(() => {
+            //     return [];
+            // })
     }
 
     static getItems(data: firebase.firestore.DocumentSnapshot) {

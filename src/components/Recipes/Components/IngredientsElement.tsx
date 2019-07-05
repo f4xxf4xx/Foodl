@@ -22,7 +22,7 @@ interface OwnProps {
 }
 
 type StateProps = {
-    userid: string;
+    auth: any;
     ingredientItems: IngredientItem[];
     cartItems: Ingredient[];
     loadingIngredientItems: boolean;
@@ -96,9 +96,9 @@ class IngredientsElementBase extends PureComponent<Props> {
     }
 
     addCartItem = (ingredientItem: IngredientItem) => {
-        const { userid } = this.props;
+        const { auth } = this.props;
         
-        cartService.addItem(userid, ingredientItem.name)
+        cartService.addItem(auth.uid, ingredientItem.name)
             .then((ingredient) => {
                 this.props.addCartItem(ingredient);
                 toast.success(`Added ${ingredient.name} to cart!`);
@@ -186,7 +186,7 @@ class IngredientsElementBase extends PureComponent<Props> {
 }
 
 const mapStateToProps = (state: ApplicationState) => ({
-    userid: state.user.uid,
+    auth: state.firebase.auth,
     ingredientItems: state.recipe.ingredientItems,
     cartItems: state.cart.cartItems,
     loadingIngredientItems: state.recipe.loadingIngredientItems,

@@ -1,12 +1,9 @@
 import React, { PureComponent } from 'react';
 import { Recipe, Step } from '../models';
-import Select from 'react-select';
-import Creatable from 'react-select/lib/Creatable';
-import { Table, TableBody, Divider, TableRow, TableCell, Button, Typography, Avatar, FormLabel, TextField, Paper, Box } from '@material-ui/core';
+import { Typography, TextField, Box } from '@material-ui/core';
 import * as recipeActions from '../../../store/recipes/recipeActions';
 import { compose, Dispatch, bindActionCreators } from 'redux';
 import { connect } from "react-redux";
-import { Loader } from 'semantic-ui-react';
 import { recipeService } from '../../../services/recipeService';
 import { toast } from 'react-toastify';
 import { ButtonPrimary } from '../../Layout/Styles/Buttons';

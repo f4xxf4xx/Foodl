@@ -17,6 +17,7 @@ type StateProps = {
     ingredients: Ingredient[];
     loadingIngredients: boolean;
     updatingIngredients: boolean;
+    auth: any;
 };
 
 type DispatchProps = {
@@ -96,15 +97,20 @@ class IngredientsViewBase extends PureComponent<Props> {
     }
 
     render() {
-        const { updatingIngredients } = this.props;
+        const { updatingIngredients, auth } = this.props;
+
         return (
             <>
                 <Title>Ingredients</Title>
                 <Typography variant="subtitle1">
                     Here lies the list of possible ingredients
                 </Typography>
-                <AddIngredientForm updating={updatingIngredients} />
-                {this.renderIngredients()}
+                {auth.isLoaded &&
+                    <>
+                        <AddIngredientForm updating={updatingIngredients} />
+                        {this.renderIngredients()}
+                    </>
+                }
             </>
         );
     }
@@ -113,7 +119,8 @@ class IngredientsViewBase extends PureComponent<Props> {
 const mapStateToProps = (state: ApplicationState) => ({
     ingredients: state.ingredients.ingredients,
     loadingIngredients: state.ingredients.loadingIngredients,
-    updatingIngredients: state.ingredients.updatingIngredients
+    updatingIngredients: state.ingredients.updatingIngredients,
+    auth: state.firebase.auth
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({

@@ -5,7 +5,6 @@ import { connect } from "react-redux";
 import { compose, bindActionCreators, Dispatch } from "redux";
 import * as cartActions from "../../../store/cart/cartActions";
 import { cartService } from "../../../services/cartService";
-import Button from '@material-ui/core/Button';
 import { TableHead, TableRow, Table, TableCell, TableBody, Paper, Typography, FormLabel, TextField } from "@material-ui/core";
 import { Loader } from 'semantic-ui-react'
 import { Ingredient } from "../../Ingredients/models";
@@ -13,13 +12,11 @@ import { ButtonError } from "../../Layout/Styles/Buttons";
 import { Title } from "../../Layout/Styles/Sections";
 import AddCartItemForm from "./AddCartItemForm";
 import { ApplicationState } from "../../..";
-import { User } from "firebase";
 
 type StateProps = {
     cartItems: Ingredient[];
     loadingCartItems: boolean;
     updatingCartItems: boolean;
-    signedIn: boolean;
     auth: any;
 };
 
@@ -47,7 +44,7 @@ class CartViewBase extends PureComponent<Props> {
     componentDidUpdate(prevProps: Props) {
         const { auth } = this.props;
 
-        if(auth.isLoaded !== prevProps.auth.isLoaded && !auth.isEmpty) {
+        if (auth.isLoaded !== prevProps.auth.isLoaded && !auth.isEmpty) {
             this.fetchCartItems();
         }
     }
@@ -98,11 +95,11 @@ class CartViewBase extends PureComponent<Props> {
     }
 
     renderCartItems() {
-        const { cartItems, updatingCartItems, loadingCartItems, signedIn } = this.props;
+        const { cartItems, updatingCartItems, loadingCartItems, auth } = this.props;
 
         return (
             <Paper>
-                {(loadingCartItems || !signedIn) ?
+                {(loadingCartItems || !auth.isLoaded) ?
                     <Loader active inline='centered' />
                     :
                     <>
@@ -143,16 +140,22 @@ class CartViewBase extends PureComponent<Props> {
     }
 
     render() {
+        const { auth } = this.props;
+
         return (
             <>
                 <Title>Cart</Title>
-                <AddCartItemForm updating={this.props.updatingCartItems} />
-                {this.props.cartItems.length > 0 &&
-                    <div>
-                        <ButtonError height="48" onClick={() => this.deleteAllCartItems()}>
-                            Delete all items
-                        </ButtonError>
-                    </div>
+                {auth.isLoaded &&
+                    <>
+                        <AddCartItemForm updating={this.props.updatingCartItems} />
+                        {this.props.cartItems.length > 0 &&
+                            <div>
+                                <ButtonError height="48" onClick={() => this.deleteAllCartItems()}>
+                                    Delete all items
+                                </ButtonError>
+                            </div>
+                        }
+                    </>
                 }
                 {this.renderCartItems()}
             </>
@@ -164,7 +167,6 @@ const mapStateToProps = (state: ApplicationState) => ({
     cartItems: state.cart.cartItems,
     loadingCartItems: state.cart.loadingCartItems,
     updatingCartItems: state.cart.updatingCartItems,
-    signedIn: state.user.signedIn,
     auth: state.firebase.auth
 });
 
