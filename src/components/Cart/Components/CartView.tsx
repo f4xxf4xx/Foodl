@@ -12,6 +12,7 @@ import { ButtonError } from "../../Layout/Styles/Buttons";
 import { Title } from "../../Layout/Styles/Sections";
 import AddCartItemForm from "./AddCartItemForm";
 import { ApplicationState } from "../../..";
+import { isAuthenticated } from "../../../helpers/userHelper";
 
 type StateProps = {
     cartItems: Ingredient[];
@@ -36,7 +37,7 @@ class CartViewBase extends PureComponent<Props> {
     componentDidMount() {
         const { auth } = this.props;
 
-        if (auth.isLoaded && !auth.isEmpty) {
+        if (isAuthenticated(auth)) {
             this.fetchCartItems();
         }
     }
@@ -44,7 +45,7 @@ class CartViewBase extends PureComponent<Props> {
     componentDidUpdate(prevProps: Props) {
         const { auth } = this.props;
 
-        if (auth.isLoaded !== prevProps.auth.isLoaded && !auth.isEmpty) {
+        if (isAuthenticated(auth) && !isAuthenticated(prevProps.auth)) {
             this.fetchCartItems();
         }
     }

@@ -3,8 +3,10 @@ import { Recipe, IngredientItem, Step, Cuisine } from '../components/Recipes/mod
 import slugify from 'react-slugify';
 
 export class recipeService {
-    public static getRecipes(): Promise<Recipe[]> {
-        return db.collection("recipes").get()
+    public static getRecipes(uid: string): Promise<Recipe[]> {
+        return db.collection("recipes")
+            .where("uid", "==", uid)
+            .get()
             .then(data => {
                 let recipes: Recipe[] = [];
                 data.forEach(recipe => {

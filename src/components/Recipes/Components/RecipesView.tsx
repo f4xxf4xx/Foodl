@@ -16,6 +16,7 @@ import ShareIcon from '@material-ui/icons/Share';
 import { StyledCardMedia } from './Styles/StyledCardMedia';
 import { StyledCard } from './Styles/StyledCard';
 import { ApplicationState } from '../../..';
+import { isAuthenticated } from '../../../helpers/userHelper';
 
 type State = {
     newRecipeName: string;
@@ -26,6 +27,7 @@ type StateProps = {
     loading: boolean;
     updating: boolean;
     error: string;
+    auth: any;
 };
 
 type DispatchProps = {
@@ -49,9 +51,27 @@ class RecipesViewBase extends PureComponent<Props, State> {
     }
 
     componentDidMount() {
+        const { auth } = this.props;
+
+        if (isAuthenticated(auth)) {
+            this.fetchRecipes();
+        }
+    }
+
+    componentDidUpdate(prevProps: Props) {
+        const { auth } = this.props;
+
+        if (isAuthenticated(auth) && !isAuthenticated(prevProps.auth)) {
+            this.fetchRecipes();
+        }
+    }
+
+    fetchRecipes() {
+        const { auth } = this.props;
+        
         if (this.props.recipes.length === 0) {
             this.props.fetchRecipesStart();
-            recipeService.getRecipes()
+            recipeService.getRecipes(auth.uid)
                 .then((recipes) => {
                     this.props.updateRecipes(recipes);
                     this.props.fetchRecipesStop()
@@ -147,7 +167,8 @@ class RecipesViewBase extends PureComponent<Props, State> {
 const mapStateToProps = (state: ApplicationState) => ({
     recipes: state.recipes.recipes,
     loading: state.recipes.loadingRecipes,
-    updating: state.recipes.updatingRecipes
+    updating: state.recipes.updatingRecipes,
+    auth: state.firebase.auth
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({

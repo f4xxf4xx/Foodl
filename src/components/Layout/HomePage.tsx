@@ -5,6 +5,7 @@ import * as firebase from 'firebase';
 import { compose } from "redux";
 import { connect } from "react-redux";
 import { ApplicationState } from '../..';
+import { isAuthenticated } from '../../helpers/userHelper';
 
 type StateProps = {
     auth: any;
@@ -19,7 +20,7 @@ class HomePageBase extends PureComponent<Props> {
         return (
             <>
                 <Title>Welcome on Foodl</Title>
-                {auth.isLoaded && !auth.isEmpty &&
+                {isAuthenticated(auth) &&
                     <Typography variant="h6">
                         Welcome, {auth.displayName}
                     </Typography>

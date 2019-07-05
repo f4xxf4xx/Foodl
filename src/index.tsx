@@ -33,8 +33,8 @@ export interface ApplicationState {
   recipes: RecipesState;
   cart: CartState;
   cuisines: CuisinesState;
-  firebase: any;
-  firestore: any;
+  firebase: firebase.app.App;
+  firestore: firebase.firestore.Firestore;
 }
 
 const rrfConfig = {

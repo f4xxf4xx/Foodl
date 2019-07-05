@@ -7,6 +7,7 @@ import { compose } from "redux";
 import { connect } from "react-redux";
 import { ApplicationState } from "../..";
 import { withFirebase } from "react-redux-firebase";
+import { isAuthenticated } from "../../helpers/userHelper";
 
 type StateProps = {
   auth: any;
@@ -36,7 +37,7 @@ class HeaderBase extends React.Component<Props> {
               </StyledLink>
             </Grid>
             <Grid item>
-              {auth.isLoaded && !auth.isEmpty ?
+              {isAuthenticated(auth) ?
                 <Button onClick={this.onSignOutClick}>Sign out</Button>
                 :
                 <>
