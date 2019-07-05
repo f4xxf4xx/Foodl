@@ -1,7 +1,8 @@
 import React, { PureComponent } from "react";
-import { FirebaseAuth } from "react-firebaseui";
+import { FirebaseAuth, StyledFirebaseAuth } from "react-firebaseui";
 import firebase from "firebase";
 import * as firebaseui from 'firebaseui';
+import { StyledLogin } from "./Styles/StyledLogin";
 
 class LoginView extends PureComponent {
     authConfig = {
@@ -33,7 +34,7 @@ class LoginView extends PureComponent {
 
     render() {
         return (
-            <FirebaseAuth uiConfig={this.authConfig} firebaseAuth={firebase.auth()} />
+            <StyledLogin uiConfig={this.authConfig} firebaseAuth={firebase.auth()} />
         );
     }
 }

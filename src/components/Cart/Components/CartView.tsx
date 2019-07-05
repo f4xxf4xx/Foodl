@@ -95,69 +95,68 @@ class CartViewBase extends PureComponent<Props> {
     }
 
     renderCartItems() {
-        const { cartItems, updatingCartItems, loadingCartItems, auth } = this.props;
+        const { cartItems, updatingCartItems } = this.props;
 
         return (
             <Paper>
-                {(loadingCartItems || !auth.isLoaded) ?
-                    <Loader active inline='centered' />
+                {cartItems.length > 0
+                    ?
+                    <Table>
+                        <TableHead>
+                            <TableRow>
+                                <TableCell component="th">Ingredients</TableCell>
+                                <TableCell component="th">Delete</TableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {cartItems.map((cartItem, index) =>
+                                <TableRow key={index}>
+                                    <TableCell>{cartItem.name}</TableCell>
+                                    <TableCell>
+                                        <ButtonError
+                                            disabled={updatingCartItems}
+                                            onClick={() => this.deleteCartItem(cartItem.name)}
+                                        >
+                                            DELETE
+                                        </ButtonError>
+                                    </TableCell>
+                                </TableRow>
+                            )}
+                        </TableBody>
+                    </Table>
                     :
-                    <>
-                        {cartItems.length > 0
-                            ?
-                            <Table>
-                                <TableHead>
-                                    <TableRow>
-                                        <TableCell component="th">Ingredients</TableCell>
-                                        <TableCell component="th">Delete</TableCell>
-                                    </TableRow>
-                                </TableHead>
-                                <TableBody>
-                                    {cartItems.map((cartItem, index) =>
-                                        <TableRow key={index}>
-                                            <TableCell>{cartItem.name}</TableCell>
-                                            <TableCell>
-                                                <ButtonError
-                                                    disabled={updatingCartItems}
-                                                    onClick={() => this.deleteCartItem(cartItem.name)}
-                                                >
-                                                    DELETE
-                                                </ButtonError>
-                                            </TableCell>
-                                        </TableRow>
-                                    )}
-                                </TableBody>
-                            </Table>
-                            :
-                            <Typography variant="h5">
-                                Cart is empty
-                            </Typography>
-                        }
-                    </>
+                    <Typography variant="h5">
+                        Cart is empty
+                    </Typography>
                 }
             </Paper>
         );
     }
 
     render() {
-        const { auth } = this.props;
+        const { auth, loadingCartItems } = this.props;
 
         return (
             <>
                 <Title>Cart</Title>
-                {auth.isLoaded &&
-                    <>
-                        <AddCartItemForm updating={this.props.updatingCartItems} />
-                        {this.props.cartItems.length > 0 &&
-                            <div>
-                                <ButtonError height="48" onClick={() => this.deleteAllCartItems()}>
-                                    Delete all items
+                {(loadingCartItems || !auth.isLoaded) ?
+                    <Loader active inline='centered' />
+                    :
+                    !auth.isEmpty ?
+                        <>
+                            <AddCartItemForm updating={this.props.updatingCartItems} />
+                            {this.props.cartItems.length > 0 &&
+                                <div>
+                                    <ButtonError height="48" onClick={() => this.deleteAllCartItems()}>
+                                        Delete all items
                                 </ButtonError>
-                            </div>
-                        }
-                    </>
+                                </div>
+                            }
+                            {this.renderCartItems()}
+                        </>
+                        :
+                        <>Not logged in</>
                 }
-                {this.renderCartItems()}
             </>
         );
     }
