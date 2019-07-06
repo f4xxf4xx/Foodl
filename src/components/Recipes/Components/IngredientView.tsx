@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { Fetcher } from '../../../services/Fetcher';
-import { BarLoader } from 'react-spinners';
 import { Ingredient } from '../../Ingredients/models';
 import { Table, TableHead, TableBody, TableRow, TableCell, Button } from '@material-ui/core';
+import { Loader } from 'semantic-ui-react';
 
 type State = {
   ingredients: Ingredient[];
@@ -97,7 +97,7 @@ export class IngredientView extends Component<{}, State> {
   render() {
     return (
       <>
-        {this.state.loading ? <BarLoader /> :
+        {this.state.loading ? <Loader active inline='centered' /> :
           this.renderIngredients()
         }
         <input type="text" onChange={this.updateIngredient} value={this.state.newIngredientName}></input>

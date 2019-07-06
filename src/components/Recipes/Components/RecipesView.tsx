@@ -4,7 +4,7 @@ import { Recipe } from '../models';
 import { withRouter } from 'react-router-dom';
 import { recipeService } from '../../../services/recipeService';
 import { toast } from 'react-toastify';
-import { Typography, CardHeader, IconButton, CardContent, CardActions, CardActionArea, Grid } from '@material-ui/core';
+import { Typography, CardHeader, IconButton, CardContent, CardActions, CardActionArea, Grid, Divider, Card, CardMedia } from '@material-ui/core';
 import * as recipesActions from '../../../store/recipes/recipesActions';
 import { compose, Dispatch, bindActionCreators } from 'redux';
 import { connect } from "react-redux";
@@ -17,6 +17,7 @@ import { StyledCardMedia } from './Styles/StyledCardMedia';
 import { StyledCard } from './Styles/StyledCard';
 import { ApplicationState } from '../../..';
 import { isAuthenticated } from '../../../helpers/userHelper';
+import { StyledCardContent } from './Styles/StyledCardContent';
 
 type State = {
     newRecipeName: string;
@@ -68,7 +69,7 @@ class RecipesViewBase extends PureComponent<Props, State> {
 
     fetchRecipes() {
         const { auth } = this.props;
-        
+
         if (this.props.recipes.length === 0) {
             this.props.fetchRecipesStart();
             recipeService.getRecipes(auth.uid)
@@ -109,19 +110,27 @@ class RecipesViewBase extends PureComponent<Props, State> {
                         <Grid key={recipe.id} item xs={4}>
                             <StyledCard>
                                 <CardActionArea onClick={() => history.push(`/recipe/${recipe.id}`)}>
-                                    <CardHeader
-                                        title={recipe.name}
-                                    />
                                     <StyledCardMedia
-                                        component={'img'}
-                                        src="https://material-ui.com/static/images/cards/paella.jpg"
-                                        title="Paella dish"
+                                        image={
+                                            "https://material-ui.com/static/images/cards/paella.jpg"
+                                        }
+                                        title="TODO"
                                     />
-                                    <CardContent>
-                                        <Typography variant="body2" color="textSecondary" component="p">
-                                            {recipe.description}
+                                    <StyledCardContent>
+                                        <Typography
+                                            variant={"h6"}
+                                            gutterBottom
+                                        >
+                                            {recipe.name}
                                         </Typography>
-                                    </CardContent>
+                                        <Typography
+                                            variant={"caption"}
+                                        >
+                                            We are going to learn different kinds of species in nature that
+                                            live together to form amazing environment.
+                                        </Typography>
+                                        <Divider className={"MuiDivider-root"} light />
+                                    </StyledCardContent>
                                 </CardActionArea>
                                 <CardActions disableSpacing>
                                     <IconButton aria-label="Share recipe">

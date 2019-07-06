@@ -1,13 +1,15 @@
 import React from "react";
 import { getLinks, getAdminLinks } from "./links";
 import { List, ListItem, ListItemIcon, ListItemText, Icon, Divider } from '@material-ui/core';
-import { Link } from "react-router-dom";
+import { Link, RouteComponentProps, withRouter } from "react-router-dom";
 import { StyledDrawer } from "./Styles/StyledDrawer";
 
-type Props = {};
+type Props = RouteComponentProps;
 
-class Sidebar extends React.Component<Props> {
+class SidebarBase extends React.Component<Props> {
   render() {
+    const path = this.props.location.pathname;
+
     return (
       <StyledDrawer
         variant="permanent"
@@ -16,7 +18,7 @@ class Sidebar extends React.Component<Props> {
         <List>
           {getLinks().map((prop, key) =>
             <Link key={key} to={prop.path}>
-              <ListItem button>
+              <ListItem button selected={path == prop.path}>
                 <ListItemIcon><Icon>{prop.icon}</Icon></ListItemIcon>
                 <ListItemText primary={prop.name} />
               </ListItem>
@@ -28,7 +30,7 @@ class Sidebar extends React.Component<Props> {
           {/* TODO if admin */}
           {getAdminLinks().map((prop, key) =>
             <Link key={key} to={prop.path}>
-              <ListItem button>
+              <ListItem button selected={path == prop.path}>
                 <ListItemIcon><Icon>{prop.icon}</Icon></ListItemIcon>
                 <ListItemText primary={prop.name} />
               </ListItem>
@@ -39,5 +41,7 @@ class Sidebar extends React.Component<Props> {
     );
   }
 }
+
+const Sidebar = withRouter(SidebarBase);
 
 export default Sidebar;

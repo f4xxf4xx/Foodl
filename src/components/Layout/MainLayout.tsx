@@ -6,6 +6,7 @@ import { connect } from "react-redux";
 import Header from "./Header";
 import { ApplicationState } from "../..";
 import { Loader } from "semantic-ui-react";
+import { Wrapper } from "./Styles/Wrapper";
 
 type StateProps = {
   auth: any;
@@ -18,20 +19,20 @@ class MainLayoutBase extends React.Component<Props> {
     const { auth } = this.props;
 
     return (
-      <div style={{ display: 'flex' }}>
+      <Wrapper>
         {!auth.isLoaded ?
-          <Loader />
+          <Loader active inline='centered' />
           :
           <>
             <CssBaseline />
             <Header />
             {!auth.isEmpty && <Sidebar />}
-            <main style={{ flexGrow: 1, padding: 5, marginTop: 70 }}>
+            <div className="main">
               {this.props.children}
-            </main>
+            </div>
           </>
         }
-      </div>
+      </Wrapper>
     );
   }
 }

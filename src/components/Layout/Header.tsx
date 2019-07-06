@@ -1,5 +1,5 @@
 import React from "react";
-import { Typography, Toolbar, Grid, Button } from '@material-ui/core';
+import { Typography, Toolbar, Grid, Button, IconButton, Box } from '@material-ui/core';
 import { StyledAppBar } from "./Styles/StyledAppBar";
 import { StyledLink } from "./Styles/StyledLink";
 import { RouteComponentProps, withRouter } from "react-router-dom";
@@ -8,6 +8,8 @@ import { connect } from "react-redux";
 import { ApplicationState } from "../..";
 import { withFirebase } from "react-redux-firebase";
 import { isAuthenticated } from "../../helpers/userHelper";
+import { ButtonSecondary } from "./Styles/Buttons";
+import { Menu as MenuIcon } from "@material-ui/icons";
 
 type StateProps = {
   auth: any;
@@ -30,25 +32,39 @@ class HeaderBase extends React.Component<Props> {
         <Toolbar>
           <Grid justify="space-between" container>
             <Grid item>
-              <StyledLink to="/">
-                <Typography variant="h6" noWrap>
-                  Foodl
-                </Typography>
-              </StyledLink>
+              <Box display="flex">
+                  <IconButton
+                    color="inherit"
+                  // onClick={toggleSidebar}
+                  // className={classNames(
+                  // classes.headerMenuButton,
+                  // classes.headerMenuButtonCollapse
+                  // )}
+                  >
+                    <MenuIcon
+                      classes={{
+                        // root: classNames(classes.headerIcon, classes.headerIconCollapse)
+                      }}
+                    />
+                  </IconButton>
+                  <Typography
+                    variant="h6"
+                  // className={classes.logotype}
+                  >
+                    Foodl
+                  </Typography>
+              </Box>
             </Grid>
             <Grid item>
               {isAuthenticated(auth) ?
-                <Button onClick={this.onSignOutClick}>Sign out</Button>
+                <ButtonSecondary onClick={this.onSignOutClick}>Sign out</ButtonSecondary>
                 :
-                <>
-                  <Button onClick={() => this.props.history.push("/login")}>Login</Button>
-                  <Button onClick={() => this.props.history.push("/register")}>Register</Button>
-                </>
+                <ButtonSecondary onClick={() => this.props.history.push("/login")}>Login</ButtonSecondary>
               }
             </Grid>
           </Grid>
         </Toolbar>
-      </StyledAppBar>
+      </StyledAppBar >
     );
   }
 }

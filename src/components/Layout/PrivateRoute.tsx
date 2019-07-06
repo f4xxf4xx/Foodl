@@ -4,7 +4,7 @@ import { Route, Redirect } from "react-router-dom";
 import { RouteProps } from "react-router-dom";
 import { compose } from "redux";
 import { ApplicationState } from "../..";
-import { isAuthenticated } from "../../helpers/userHelper";
+import { Loader } from "semantic-ui-react";
 
 type StateProps = {
     auth: any;
@@ -17,10 +17,16 @@ class PrivateRouteBase extends PureComponent<Props> {
         const { auth } = this.props;
 
         return (
-            isAuthenticated(auth) ?
-                <Route {...this.props} />
+            auth.isLoaded ?
+                <>
+                    {auth.isEmpty ?
+                        <Redirect to="/login" />
+                        :
+                        <Route {...this.props} />
+                    }                    
+                </>
                 :
-                <Redirect to="/login" />
+                <Loader active inline='centered' />
         );
     }
 }
