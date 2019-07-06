@@ -16,12 +16,6 @@ function authedApp(auth) {
     .firestore();
 }
 
-function app() {
-  return firebase
-    .initializeTestApp({ projectId })
-    .firestore();
-}
-
 beforeEach(async () => {
   await firebase.clearFirestoreData({ projectId });
 });
@@ -44,52 +38,81 @@ afterAll(async () => {
 describe("Recipes rules", () => {
   it("should deny guess to read or write recipes", async () => {
     //arrange
-    const db = authedApp(null);
+    const guessAuth = authedApp(null);
     //assert
-    await firebase.assertFails(db.collection("recipes").get());
-    await firebase.assertFails(db.collection("recipes").doc("recipe").set({}));
+    await firebase.assertFails(guessAuth.collection("recipes").get());
+    await firebase.assertFails(guessAuth.collection("recipes").doc("recipe").set({}));
   });
 
   it("should allow a user to consult or create his own recipes", async () => {
     //arrange    
-    const authDbAlice = authedApp({ uid: "alice" });
+    const aliceAuth = authedApp({ uid: "alice" });
     //act
     //assert
-    await firebase.assertSucceeds(authDbAlice.collection("recipes").doc("recipe").set({ uid: "alice" }));
-    await firebase.assertSucceeds(authDbAlice.collection("recipes").doc("recipe").get());
+    await firebase.assertFails(aliceAuth.collection("recipes").get());
+    await firebase.assertSucceeds(aliceAuth.collection("recipes").where("uid", "==", "alice").get());
+    await firebase.assertSucceeds(aliceAuth.collection("recipes").doc("recipe").set({ uid: "alice" }));
+    await firebase.assertSucceeds(aliceAuth.collection("recipes").doc("recipe").get());
   });
 
   it("should not allow a user to consult someone else's recipe", async () => {
     //arrange    
-    const authDbAlice = authedApp({ uid: "alice" });
-    const authDbBob = authedApp({ uid: "bob" });
+    const aliceAuth = authedApp({ uid: "alice" });
+    const bobAuth = authedApp({ uid: "bob" });
     //act
-    await authDbAlice.collection("recipes").doc("recipe").set({ uid: "alice" });
+    await aliceAuth.collection("recipes").doc("recipe").set({ uid: "alice" });
     //assert
-    await firebase.assertFails(authDbBob.collection("recipes").doc("recipe").get());
-    await firebase.assertSucceeds(authDbAlice.collection("recipes").doc("recipe").get());
+    await firebase.assertFails(bobAuth.collection("recipes").doc("recipe").get());
+    await firebase.assertSucceeds(aliceAuth.collection("recipes").doc("recipe").get());
   });
-  
-  it("should not allow a user to create a recipe for another user", async () => {
+
+  it("should only a user to create a recipe for itself", async () => {
     //arrange    
-    const authDbAlice = authedApp({ uid: "alice" });
-    const authDbBob = authedApp({ uid: "bob" });
+    const aliceAuth = authedApp({ uid: "alice" });
+    const bobAuth = authedApp({ uid: "bob" });
     //act
     //assert
-    await firebase.assertFails(authDbBob.collection("recipes").doc("recipe").set({ uid: "alice" }));
-    await firebase.assertFails(authDbAlice.collection("recipes").doc("recipe").set({ uid: "bob"}));
+    await firebase.assertSucceeds(aliceAuth.collection("recipes").doc("recipe").set({ uid: "alice" }));
+    await firebase.assertFails(bobAuth.collection("recipes").doc("recipe").set({ uid: "alice" }));
   });
 });
 
 describe("Cart rules", () => {
   it("should only allow a user to consult his own cart", async () => {
     //arrange
-    const authDbAlice = authedApp({ uid: "alice" });
+    const aliceAuth = authedApp({ uid: "alice" });
     //act
-    authDbAlice.collection("carts").doc("bob").set({});
-    authDbAlice.collection("carts").doc("alice").set({});
+    await aliceAuth.collection("carts").doc("alice").set({});
     //assert
-    await firebase.assertFails(authDbAlice.collection("carts").doc("bob").get());
-    await firebase.assertSucceeds(authDbAlice.collection("carts").doc("alice").get());
+    await firebase.assertFails(aliceAuth.collection("carts").get());
+    await firebase.assertFails(aliceAuth.collection("carts").doc("bob").get());
+    await firebase.assertFails(aliceAuth.collection("carts").doc("bob").set({}));
+    await firebase.assertSucceeds(aliceAuth.collection("carts").doc("alice").get());
+  });
+});
+
+describe("Ingredients rules", () => {
+  it("should only allow a authenticated user to read and write ingredients", async () => {
+    //arrange
+    const guessAuth = authedApp(null);
+    const aliceAuth = authedApp({ uid: "alice" });
+    //assert
+    await firebase.assertFails(guessAuth.collection("ingredients").get());
+    await firebase.assertFails(guessAuth.collection("ingredients").doc("ingredient").set({}));
+    await firebase.assertSucceeds(aliceAuth.collection("ingredients").get());
+    await firebase.assertSucceeds(aliceAuth.collection("ingredients").doc("ingredient").set({}));
+  });
+});
+
+describe("Cuisines rules", () => {
+  it("should only allow a authenticated user to read and write cuisines", async () => {
+    //arrange
+    const guessAuth = authedApp(null);
+    const aliceAuth = authedApp({ uid: "alice" });
+    //assert
+    await firebase.assertFails(guessAuth.collection("cuisines").get());
+    await firebase.assertFails(guessAuth.collection("cuisines").doc("ingredient").set({}));
+    await firebase.assertSucceeds(aliceAuth.collection("cuisines").get());
+    await firebase.assertSucceeds(aliceAuth.collection("cuisines").doc("ingredient").set({}));
   });
 });

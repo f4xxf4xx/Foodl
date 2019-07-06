@@ -8,9 +8,13 @@ service cloud.firestore {
       return resource.data.uid == request.auth.uid;
     }
 
+    function creatingResourceForOwner() {
+      return request.resource.data.uid == request.auth.uid;
+    }
+
   	match /recipes/{recipe} {
-      allow read: if isAuthenticated() && resource.data.uid == request.auth.uid;
-      allow write: if isAuthenticated() && request.resource.data.uid == request.auth.uid;
+      allow read: if isAuthenticated() && userIsOwnerOfResource();
+      allow write: if isAuthenticated() && creatingResourceForOwner();
     }
     match /ingredients/{ingredient} {
       allow read, write: if isAuthenticated();
