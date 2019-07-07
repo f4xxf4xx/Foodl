@@ -49,16 +49,18 @@ class SidebarBase extends React.Component<Props> {
     return (
       <StyledNav>
         <Hidden smUp implementation="css">
-          <StyledDrawer
-            variant="temporary"
-            anchor="left"
-            open={drawerOpen}
-            onClose={toggleDrawer}
-            ModalProps={{
-              keepMounted: true,
-            }}
-          >
-            {this.getDrawer(path)}
+          <StyledDrawer>
+            <Drawer
+              variant="temporary"
+              anchor="left"
+              open={drawerOpen}
+              onClose={toggleDrawer}
+              ModalProps={{
+                keepMounted: true
+              }}
+            >
+              {this.getDrawer(path)}
+            </Drawer>
           </StyledDrawer>
         </Hidden>
         <Hidden xsDown implementation="css">

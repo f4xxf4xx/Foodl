@@ -9,8 +9,10 @@ export default createMuiTheme({
         }
     },
     overrides: {
-        MuiButton: {
-            
+        MuiPaper: {
+            elevation16: {
+                width: "240px"
+            }
         }
     }
 });
