@@ -10,6 +10,10 @@ import { withFirebase } from "react-redux-firebase";
 import { isAuthenticated } from "../../helpers/userHelper";
 import { ButtonSecondary } from "./Styles/Buttons";
 import { Menu as MenuIcon } from "@material-ui/icons";
+import { StyledToolbar } from "./Styles/StyledToolbar";
+import { StyledLogo } from "./Styles/StyledLogo";
+import { StyledMenuIcon } from "./Styles/StyledMenuIcon";
+import { StyledSpacer } from "./Styles/StyledSpacer";
 
 type StateProps = {
   auth: any;
@@ -29,41 +33,74 @@ class HeaderBase extends React.Component<Props> {
 
     return (
       <StyledAppBar position="fixed">
-        <Toolbar>
-          <Grid justify="space-between" container>
-            <Grid item>
-              <Box display="flex">
-                  <IconButton
-                    color="inherit"
-                  // onClick={toggleSidebar}
-                  // className={classNames(
-                  // classes.headerMenuButton,
-                  // classes.headerMenuButtonCollapse
-                  // )}
-                  >
-                    <MenuIcon
-                      classes={{
-                        // root: classNames(classes.headerIcon, classes.headerIconCollapse)
-                      }}
-                    />
-                  </IconButton>
-                  <Typography
-                    variant="h6"
-                  // className={classes.logotype}
-                  >
-                    Foodl
-                  </Typography>
-              </Box>
-            </Grid>
-            <Grid item>
-              {isAuthenticated(auth) ?
-                <ButtonSecondary onClick={this.onSignOutClick}>Sign out</ButtonSecondary>
-                :
-                <ButtonSecondary onClick={() => this.props.history.push("/login")}>Login</ButtonSecondary>
-              }
-            </Grid>
-          </Grid>
-        </Toolbar>
+        <StyledToolbar>
+          <StyledMenuIcon>
+            <MenuIcon />
+          </StyledMenuIcon>
+          <StyledLogo>Foodl</StyledLogo>
+          <StyledSpacer />
+          {isAuthenticated(auth) ?
+            <ButtonSecondary width="20" onClick={this.onSignOutClick}>Sign out</ButtonSecondary>
+            :
+            <ButtonSecondary width="20" onClick={() => this.props.history.push("/login")}>Login</ButtonSecondary>
+          }
+          {/* <Menu
+        id="profile-menu"
+        open={Boolean(props.profileMenu)}
+        anchorEl={props.profileMenu}
+        onClose={props.closeProfileMenu}
+        className={classes.headerMenu}
+        classes={{ paper: classes.profileMenu }}
+        disableAutoFocusItem
+      >
+        <div className={classes.profileMenuUser}>
+          <Typography variant="h4" weight="medium">
+            John Smith
+          </Typography>
+          <Typography
+            className={classes.profileMenuLink}
+            component="a"
+            color="primary"
+            href="https://flatlogic.com"
+          >
+            Flalogic.com
+          </Typography>
+        </div>
+        <MenuItem
+          className={classNames(
+            classes.profileMenuItem,
+            classes.headerMenuItem
+          )}
+        >
+          <AccountIcon className={classes.profileMenuIcon} /> Profile
+        </MenuItem>
+        <MenuItem
+          className={classNames(
+            classes.profileMenuItem,
+            classes.headerMenuItem
+          )}
+        >
+          <AccountIcon className={classes.profileMenuIcon} /> Tasks
+        </MenuItem>
+        <MenuItem
+          className={classNames(
+            classes.profileMenuItem,
+            classes.headerMenuItem
+          )}
+        >
+          <AccountIcon className={classes.profileMenuIcon} /> Messages
+        </MenuItem>
+        <div className={classes.profileMenuUser}>
+          <Typography
+            className={classes.profileMenuLink}
+            color="primary"
+            onClick={props.signOut}
+          >
+            Sign Out
+          </Typography>
+        </div>
+      </Menu> */}
+        </StyledToolbar>
       </StyledAppBar >
     );
   }

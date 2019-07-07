@@ -15,8 +15,7 @@ export const ButtonPrimary = styled(Button)`
       box-shadow: 0 3px 5px 3px rgba(65, 170, 255, .3);
     }
 
-    width: 100%;
-
+    width: ${props => props.width ? `${props.width}px` : "100%"};
     height: ${props => props.height ? `${props.height}px` : "35px"};
 
     & > span {
@@ -32,9 +31,7 @@ export const ButtonSecondary = styled(Button)`
     color: white;    
     padding: 0 15px;
 
-
-    width: 100%;
-
+    width: ${props => props.width ? `${props.width}px` : "100%"};
     height: ${props => props.height ? `${props.height}px` : "35px"};
 
     & > span {
@@ -57,7 +54,8 @@ export const ButtonError = styled(Button)`
       box-shadow: 0 3px 5px 3px rgba(255, 105, 135, .3);
     }
 
-    width: max-content;
+    width: ${props => props.width ? `${props.width}px` : "100%"};
+    height: ${props => props.height ? `${props.height}px` : "35px"};
 
     height: ${props => props.height ? `${props.height}px` : "35px"}
   }
