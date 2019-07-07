@@ -1,0 +1,58 @@
+[debug] [2019-07-07T22:35:10.521Z] ----------------------------------------------------------------------
+[debug] [2019-07-07T22:35:10.524Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\Felix.DESKTOP-8Q9PVP7\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js emulators:start --only firestore
+[debug] [2019-07-07T22:35:10.525Z] CLI Version:   7.0.2
+[debug] [2019-07-07T22:35:10.525Z] Platform:      win32
+[debug] [2019-07-07T22:35:10.525Z] Node Version:  v10.15.3
+[debug] [2019-07-07T22:35:10.528Z] Time:          Sun Jul 07 2019 18:35:10 GMT-0400 (Eastern Daylight Time)
+[debug] [2019-07-07T22:35:10.528Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2019-07-07T22:35:10.540Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2019-07-07T22:35:10.541Z] > authorizing via signed-in user
+[debug] [2019-07-07T22:35:10.543Z] > refreshing access token with scopes: ["email","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","openid"]
+[debug] [2019-07-07T22:35:10.543Z] >>> HTTP REQUEST POST https://www.googleapis.com/oauth2/v3/token  
+ <request body omitted>
+[debug] [2019-07-07T22:35:10.762Z] <<< HTTP RESPONSE 200
+[debug] [2019-07-07T22:35:10.766Z] >>> HTTP REQUEST GET https://cloudresourcemanager.googleapis.com/v1/projects/foodl-396b6  
+ 
+[debug] [2019-07-07T22:35:11.101Z] <<< HTTP RESPONSE 200
+[info] i  Starting emulators: ["firestore"]
+[debug] [2019-07-07T22:35:11.114Z] Starting emulator firestore with args {"host":"localhost","port":8080,"rules":"C:\\Projects\\foodl\\firestore.rules"}
+[info] i  firestore: Logging to firestore-debug.log
+[info] +  firestore: Emulator started at http://localhost:8080
+[debug] [2019-07-07T22:35:12.908Z] API endpoint: http://
+[debug] [2019-07-07T22:35:12.908Z] localhost:8080
+If you are using a library that supports the FIRESTORE_EMULATOR_HOST environment variable, run:
+
+   export FIRESTORE_EMULATOR_HOST=localhost:8080
+
+Dev App Server is now running.
+
+
+[info] i  firestore: For testing set FIRESTORE_EMULATOR_HOST=localhost:8080
+[debug] [2019-07-07T22:46:25.066Z] ----------------------------------------------------------------------
+[debug] [2019-07-07T22:46:25.068Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\Felix.DESKTOP-8Q9PVP7\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js emulators:start --only firestore
+[debug] [2019-07-07T22:46:25.069Z] CLI Version:   7.0.2
+[debug] [2019-07-07T22:46:25.069Z] Platform:      win32
+[debug] [2019-07-07T22:46:25.069Z] Node Version:  v10.15.3
+[debug] [2019-07-07T22:46:25.070Z] Time:          Sun Jul 07 2019 18:46:25 GMT-0400 (Eastern Daylight Time)
+[debug] [2019-07-07T22:46:25.070Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2019-07-07T22:46:25.085Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2019-07-07T22:46:25.086Z] > authorizing via signed-in user
+[debug] [2019-07-07T22:46:25.095Z] >>> HTTP REQUEST GET https://cloudresourcemanager.googleapis.com/v1/projects/foodl-396b6  
+ 
+[debug] [2019-07-07T22:46:25.551Z] <<< HTTP RESPONSE 200
+[info] i  Starting emulators: ["firestore"]
+[debug] [2019-07-07T22:46:25.565Z] Starting emulator firestore with args {"host":"localhost","port":8080,"rules":"C:\\Projects\\foodl\\firestore.rules"}
+[info] i  firestore: Logging to firestore-debug.log
+[info] +  firestore: Emulator started at http://localhost:8080
+[debug] [2019-07-07T22:46:27.564Z] API endpoint: http://localhost
+[debug] [2019-07-07T22:46:27.564Z] :8080
+If you are using a library that supports the FIRESTORE_EMULATOR_HOST environment variable, run:
+
+   export FIRESTORE_EMULATOR_HOST=localhost:8080
+
+Dev App Server is now running.
+
+
+[info] i  firestore: For testing set FIRESTORE_EMULATOR_HOST=localhost:8080

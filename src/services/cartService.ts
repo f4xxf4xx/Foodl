@@ -3,7 +3,7 @@ import { Ingredient } from '../modules/Ingredients/models';
 
 export class cartService {
     public static getCartItems(userid: string): Promise<Ingredient[]> {
-        return db.collection("cart")
+        return db.collection("carts")
             .doc(userid)
             .get()
             .then(data => {
@@ -12,9 +12,6 @@ export class cartService {
                 } else {
                     return [];
                 }
-            })
-            .catch(() => {
-                return [];
             })
     }
 
@@ -31,7 +28,7 @@ export class cartService {
     }
 
     public static addItem(userid: string, name: string): Promise<Ingredient> {
-        const cart = db.collection("cart").doc(userid);
+        const cart = db.collection("carts").doc(userid);
 
         return cart.get()
             .then(data => {
@@ -45,11 +42,11 @@ export class cartService {
                 return {
                     name
                 }
-            })            
+            })        
     }
 
     public static deleteItem(userid: string, name: string): Promise<void> {
-        const cart = db.collection("cart").doc(userid);
+        const cart = db.collection("carts").doc(userid);
 
         return cart.get()
             .then(data => {
@@ -62,9 +59,9 @@ export class cartService {
     }
 
     public static deleteAllItems(): Promise<void> {
-        return db.collection("cart").get()
+        return db.collection("carts").get()
             .then(data => {
-                data.forEach(item => db.collection("cart").doc(item.id).delete())
+                data.forEach(item => db.collection("carts").doc(item.id).delete())
             })
     }
 }
