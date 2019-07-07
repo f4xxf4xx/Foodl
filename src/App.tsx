@@ -1,18 +1,18 @@
 import React, { Component } from "react";
 import { Route, Switch } from "react-router";
-import MainLayout from "./components/Layout/MainLayout";
-import { IngredientView } from "./components/Recipes/Components/IngredientView";
-import RecipesView from "./components/Recipes/Components/RecipesView";
-import RecipeView from "./components/Recipes/Components/RecipeView";
-import IngredientsView from "./components/Ingredients/Components/IngredientsView";
-import HomePage from "./components/Layout/HomePage";
-import CartView from "./components/Cart/Components/CartView";
-import LoginView from "./components/User/Components/LoginView";
-import PrivateRoute from "./components/Layout/PrivateRoute";
-import GuessRoute from "./components/Layout/GuessRoute";
 import { createMuiTheme, MuiThemeProvider } from "@material-ui/core/styles";
 import foodlTheme from "./foodlTheme";
 import { ThemeProvider } from "styled-components";
+import MainLayout from "./layout/MainLayout";
+import HomePage from "./modules/Pages/HomePage";
+import PrivateRoute from "./layout/PrivateRoute";
+import RecipesView from "./modules/Recipes/Components/RecipesView";
+import RecipeView from "./modules/Recipes/Components/RecipeView";
+import IngredientsView from "./modules/Ingredients/Components/IngredientsView";
+import { IngredientView } from "./modules/Recipes/Components/IngredientView";
+import CartView from "./modules/Cart/Components/CartView";
+import GuessRoute from "./layout/GuessRoute";
+import LoginView from "./modules/User/Components/LoginView";
 
 class App extends Component {
   render() {

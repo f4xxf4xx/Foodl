@@ -1,5 +1,5 @@
 import { createReducer } from "redux-starter-kit";
-import { Ingredient } from "../../components/Ingredients/models";
+import { Ingredient } from "../../modules/Ingredients/models";
 
 export type CartState = {
     cartItems: Ingredient[];

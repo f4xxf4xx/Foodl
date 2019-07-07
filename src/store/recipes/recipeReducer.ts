@@ -1,5 +1,5 @@
 import { createReducer } from "redux-starter-kit";
-import { Recipe, IngredientItem, Step, Cuisine } from "../../components/Recipes/models";
+import { Recipe, IngredientItem, Step, Cuisine } from "../../modules/Recipes/models";
 
 export type RecipeState = {
     recipe: Recipe;

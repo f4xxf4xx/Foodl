@@ -1,6 +1,6 @@
 import { db } from '../config';
-import { Recipe, IngredientItem, Step, Cuisine } from '../components/Recipes/models';
 import slugify from 'react-slugify';
+import { Recipe, IngredientItem, Step, Cuisine } from '../modules/Recipes/models';
 
 export class recipeService {
     public static getRecipes(uid: string): Promise<Recipe[]> {

@@ -10,10 +10,9 @@ export default createMuiTheme({
     },
     overrides: {
         MuiButton: {
-            root: {
-                backgroundColor: "red",
-                margin: "10px",
-            }
+            
         }
     }
 });
+
+
