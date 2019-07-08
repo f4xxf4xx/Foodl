@@ -56,3 +56,445 @@ Dev App Server is now running.
 
 
 [info] i  firestore: For testing set FIRESTORE_EMULATOR_HOST=localhost:8080
+[debug] [2019-07-07T22:54:37.477Z] Jul 07, 2019 6:54:37 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected HTTP/2 connection.
+
+[debug] [2019-07-07T22:54:38.870Z] Jul 07, 2019 6:54:38 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected HTTP/2 connection.
+
+[debug] [2019-07-07T22:54:40.043Z] Jul 07, 2019 6:54:40 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected HTTP/2 connection.
+
+[debug] [2019-07-07T22:54:40.427Z] Jul 07, 2019 6:54:40 PM com.google.cloud.datastore.emulator.impl.util.WrappedStreamObserver onError
+INFO: operation failed: 
+Null value error. for 'create' @ L22
+
+[debug] [2019-07-07T22:54:41.383Z] Jul 07, 2019 6:54:41 PM com.google.cloud.datastore.emulator.impl.util.WrappedStreamObserver onError
+INFO: operation failed: 
+false for 'update' @ L22
+
+[debug] [2019-07-07T22:54:41.473Z] Jul 07, 2019 6:54:41 PM com.google.cloud.datastore.emulator.impl.util.WrappedStreamObserver onError
+INFO: operation failed: 
+false for 'create' @ L36
+
+[debug] [2019-07-07T22:54:41.593Z] Jul 07, 2019 6:54:41 PM com.google.cloud.datastore.emulator.impl.util.WrappedStreamObserver onError
+INFO: operation failed: 
+Null value error. for 'create' @ L30
+
+[debug] [2019-07-07T22:54:41.804Z] Jul 07, 2019 6:54:41 PM com.google.cloud.datastore.emulator.impl.util.WrappedStreamObserver onError
+INFO: operation failed: 
+Null value error. for 'create' @ L33
+
+[debug] [2019-07-07T22:55:33.376Z] Jul 07, 2019 6:55:33 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected HTTP/2 connection.
+
+[debug] [2019-07-07T22:55:34.403Z] Jul 07, 2019 6:55:34 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected HTTP/2 connection.
+
+[debug] [2019-07-07T22:55:35.612Z] Jul 07, 2019 6:55:35 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected HTTP/2 connection.
+
+[debug] [2019-07-07T22:55:35.651Z] Jul 07, 2019 6:55:35 PM com.google.cloud.datastore.emulator.impl.util.WrappedStreamObserver onError
+INFO: operation failed: 
+Null value error. for 'create' @ L22
+
+[debug] [2019-07-07T22:55:36.653Z] Jul 07, 2019 6:55:36 PM com.google.cloud.datastore.emulator.impl.util.WrappedStreamObserver onError
+INFO: operation failed: 
+false for 'update' @ L22
+
+[debug] [2019-07-07T22:55:36.794Z] Jul 07, 2019 6:55:36 PM com.google.cloud.datastore.emulator.impl.util.WrappedStreamObserver onError
+INFO: operation failed: 
+false for 'create' @ L36
+
+[debug] [2019-07-07T22:55:36.933Z] Jul 07, 2019 6:55:36 PM com.google.cloud.datastore.emulator.impl.util.WrappedStreamObserver onError
+INFO: operation failed: 
+Null value error. for 'create' @ L30
+
+[debug] [2019-07-07T22:55:37.113Z] Jul 07, 2019 6:55:37 PM com.google.cloud.datastore.emulator.impl.util.WrappedStreamObserver onError
+INFO: operation failed: 
+Null value error. for 'create' @ L33
+
+[debug] [2019-07-07T23:00:03.087Z] Jul 07, 2019 7:00:03 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected HTTP/2 connection.
+
+[debug] [2019-07-07T23:00:04.109Z] Jul 07, 2019 7:00:04 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected HTTP/2 connection.
+
+[debug] [2019-07-07T23:00:05.334Z] Jul 07, 2019 7:00:05 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected HTTP/2 connection.
+
+[debug] [2019-07-07T23:00:05.373Z] Jul 07, 2019 7:00:05 PM com.google.cloud.datastore.emulator.impl.util.WrappedStreamObserver onError
+INFO: operation failed: 
+Null value error. for 'create' @ L22
+
+[debug] [2019-07-07T23:00:06.343Z] Jul 07, 2019 7:00:06 PM com.google.cloud.datastore.emulator.impl.util.WrappedStreamObserver onError
+INFO: operation failed: 
+false for 'update' @ L22
+
+[debug] [2019-07-07T23:00:06.473Z] Jul 07, 2019 7:00:06 PM com.google.cloud.datastore.emulator.impl.util.WrappedStreamObserver onError
+INFO: operation failed: 
+false for 'create' @ L33
+
+[debug] [2019-07-07T23:00:06.603Z] Jul 07, 2019 7:00:06 PM com.google.cloud.datastore.emulator.impl.util.WrappedStreamObserver onError
+INFO: operation failed: 
+Null value error. for 'create' @ L27
+
+[debug] [2019-07-07T23:00:06.803Z] Jul 07, 2019 7:00:06 PM com.google.cloud.datastore.emulator.impl.util.WrappedStreamObserver onError
+INFO: operation failed: 
+Null value error. for 'create' @ L30
+
+[debug] [2019-07-07T23:01:20.714Z] Jul 07, 2019 7:01:20 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected HTTP/2 connection.
+
+[debug] [2019-07-07T23:01:21.739Z] Jul 07, 2019 7:01:21 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected HTTP/2 connection.
+
+[debug] [2019-07-07T23:01:22.940Z] Jul 07, 2019 7:01:22 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected HTTP/2 connection.
+
+[debug] [2019-07-07T23:01:22.983Z] Jul 07, 2019 7:01:22 PM com.google.cloud.datastore.emulator.impl.util.WrappedStreamObserver onError
+INFO: operation failed: 
+Null value error. for 'create' @ L22
+
+[debug] [2019-07-07T23:01:23.843Z] Jul 07, 2019 7:01:23 PM com.google.cloud.datastore.emulator.impl.util.WrappedStreamObserver onError
+INFO: operation failed: 
+false for 'update' @ L22
+
+[debug] [2019-07-07T23:01:23.973Z] Jul 07, 2019 7:01:23 PM com.google.cloud.datastore.emulator.impl.util.WrappedStreamObserver onError
+INFO: operation failed: 
+false for 'create' @ L36
+
+[debug] [2019-07-07T23:01:24.103Z] Jul 07, 2019 7:01:24 PM com.google.cloud.datastore.emulator.impl.util.WrappedStreamObserver onError
+INFO: operation failed: 
+Null value error. for 'create' @ L30
+
+[debug] [2019-07-07T23:01:24.283Z] Jul 07, 2019 7:01:24 PM com.google.cloud.datastore.emulator.impl.util.WrappedStreamObserver onError
+INFO: operation failed: 
+Null value error. for 'create' @ L33
+
+[debug] [2019-07-07T23:01:54.554Z] Jul 07, 2019 7:01:54 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected HTTP/2 connection.
+
+[debug] [2019-07-07T23:01:55.576Z] Jul 07, 2019 7:01:55 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected HTTP/2 connection.
+
+[debug] [2019-07-07T23:01:56.794Z] Jul 07, 2019 7:01:56 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected HTTP/2 connection.
+
+[debug] [2019-07-07T23:01:56.832Z] Jul 07, 2019 7:01:56 PM com.google.cloud.datastore.emulator.impl.util.WrappedStreamObserver onError
+INFO: operation failed: 
+Null value error. for 'create' @ L22
+
+[debug] [2019-07-07T23:01:57.693Z] Jul 07, 2019 7:01:57 PM com.google.cloud.datastore.emulator.impl.util.WrappedStreamObserver onError
+INFO: operation failed: 
+false for 'update' @ L22
+
+[debug] [2019-07-07T23:01:57.813Z] Jul 07, 2019 7:01:57 PM com.google.cloud.datastore.emulator.impl.util.WrappedStreamObserver onError
+INFO: operation failed: 
+false for 'create' @ L36
+
+[debug] [2019-07-07T23:01:57.932Z] Jul 07, 2019 7:01:57 PM com.google.cloud.datastore.emulator.impl.util.WrappedStreamObserver onError
+INFO: operation failed: 
+Null value error. for 'create' @ L30
+
+[debug] [2019-07-07T23:01:58.103Z] Jul 07, 2019 7:01:58 PM com.google.cloud.datastore.emulator.impl.util.WrappedStreamObserver onError
+INFO: operation failed: 
+Null value error. for 'create' @ L33
+
+[debug] [2019-07-07T23:02:20.860Z] Jul 07, 2019 7:02:20 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected HTTP/2 connection.
+
+[debug] [2019-07-07T23:02:21.881Z] Jul 07, 2019 7:02:21 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected HTTP/2 connection.
+
+[debug] [2019-07-07T23:02:23.107Z] Jul 07, 2019 7:02:23 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected HTTP/2 connection.
+
+[debug] [2019-07-07T23:02:23.143Z] Jul 07, 2019 7:02:23 PM com.google.cloud.datastore.emulator.impl.util.WrappedStreamObserver onError
+INFO: operation failed: 
+Null value error. for 'create' @ L22
+
+[debug] [2019-07-07T23:02:24.043Z] Jul 07, 2019 7:02:24 PM com.google.cloud.datastore.emulator.impl.util.WrappedStreamObserver onError
+INFO: operation failed: 
+false for 'update' @ L22
+
+[debug] [2019-07-07T23:02:24.173Z] Jul 07, 2019 7:02:24 PM com.google.cloud.datastore.emulator.impl.util.WrappedStreamObserver onError
+INFO: operation failed: 
+false for 'create' @ L31
+
+[debug] [2019-07-07T23:02:24.303Z] Jul 07, 2019 7:02:24 PM com.google.cloud.datastore.emulator.impl.util.WrappedStreamObserver onError
+INFO: operation failed: 
+Null value error. for 'create' @ L25
+
+[debug] [2019-07-07T23:02:24.483Z] Jul 07, 2019 7:02:24 PM com.google.cloud.datastore.emulator.impl.util.WrappedStreamObserver onError
+INFO: operation failed: 
+Null value error. for 'create' @ L28
+
+[debug] [2019-07-07T23:02:37.906Z] Jul 07, 2019 7:02:37 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected HTTP/2 connection.
+
+[debug] [2019-07-07T23:02:38.927Z] Jul 07, 2019 7:02:38 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected HTTP/2 connection.
+
+[debug] [2019-07-07T23:02:40.120Z] Jul 07, 2019 7:02:40 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected HTTP/2 connection.
+
+[debug] [2019-07-07T23:02:40.153Z] Jul 07, 2019 7:02:40 PM com.google.cloud.datastore.emulator.impl.util.WrappedStreamObserver onError
+INFO: operation failed: 
+Null value error. for 'create' @ L21
+
+[debug] [2019-07-07T23:02:40.624Z] Jul 07, 2019 7:02:40 PM com.google.cloud.datastore.emulator.impl.util.WrappedStreamObserver onError
+INFO: operation failed: 
+false for 'update' @ L21
+
+[debug] [2019-07-07T23:02:40.753Z] Jul 07, 2019 7:02:40 PM com.google.cloud.datastore.emulator.impl.util.WrappedStreamObserver onError
+INFO: operation failed: 
+false for 'create' @ L30
+
+[debug] [2019-07-07T23:02:40.863Z] Jul 07, 2019 7:02:40 PM com.google.cloud.datastore.emulator.impl.util.WrappedStreamObserver onError
+INFO: operation failed: 
+Null value error. for 'create' @ L24
+
+[debug] [2019-07-07T23:02:41.033Z] Jul 07, 2019 7:02:41 PM com.google.cloud.datastore.emulator.impl.util.WrappedStreamObserver onError
+INFO: operation failed: 
+Null value error. for 'create' @ L27
+
+[debug] [2019-07-07T23:03:33.953Z] Jul 07, 2019 7:03:33 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected HTTP/2 connection.
+
+[debug] [2019-07-07T23:03:34.973Z] Jul 07, 2019 7:03:34 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected HTTP/2 connection.
+
+[debug] [2019-07-07T23:03:36.180Z] Jul 07, 2019 7:03:36 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected HTTP/2 connection.
+
+[debug] [2019-07-07T23:03:36.222Z] Jul 07, 2019 7:03:36 PM com.google.cloud.datastore.emulator.impl.util.WrappedStreamObserver onError
+INFO: operation failed: 
+Null value error. for 'create' @ L22
+
+[debug] [2019-07-07T23:03:36.763Z] Jul 07, 2019 7:03:36 PM com.google.cloud.datastore.emulator.impl.util.WrappedStreamObserver onError
+INFO: operation failed: 
+false for 'update' @ L22
+
+[debug] [2019-07-07T23:03:36.893Z] Jul 07, 2019 7:03:36 PM com.google.cloud.datastore.emulator.impl.util.WrappedStreamObserver onError
+INFO: operation failed: 
+false for 'create' @ L31
+
+[debug] [2019-07-07T23:03:37.011Z] Jul 07, 2019 7:03:37 PM com.google.cloud.datastore.emulator.impl.util.WrappedStreamObserver onError
+INFO: operation failed: 
+Null value error. for 'create' @ L25
+
+[debug] [2019-07-07T23:03:37.182Z] Jul 07, 2019 7:03:37 PM com.google.cloud.datastore.emulator.impl.util.WrappedStreamObserver onError
+INFO: operation failed: 
+Null value error. for 'create' @ L28
+
+[debug] [2019-07-07T23:05:28.739Z] Jul 07, 2019 7:05:28 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected HTTP/2 connection.
+
+[debug] [2019-07-07T23:05:29.770Z] Jul 07, 2019 7:05:29 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected HTTP/2 connection.
+
+[debug] [2019-07-07T23:05:30.916Z] Jul 07, 2019 7:05:30 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected HTTP/2 connection.
+
+[debug] [2019-07-07T23:05:30.953Z] Jul 07, 2019 7:05:30 PM com.google.cloud.datastore.emulator.impl.util.WrappedStreamObserver onError
+INFO: operation failed: 
+Null value error. for 'create' @ L22
+
+[debug] [2019-07-07T23:05:31.513Z] Jul 07, 2019 7:05:31 PM com.google.cloud.datastore.emulator.impl.util.WrappedStreamObserver onError
+INFO: operation failed: 
+false for 'update' @ L22
+
+[debug] [2019-07-07T23:05:31.733Z] Jul 07, 2019 7:05:31 PM com.google.cloud.datastore.emulator.impl.util.WrappedStreamObserver onError
+INFO: operation failed: 
+false for 'create' @ L31
+
+[debug] [2019-07-07T23:05:31.853Z] Jul 07, 2019 7:05:31 PM com.google.cloud.datastore.emulator.impl.util.WrappedStreamObserver onError
+INFO: operation failed: 
+Null value error. for 'create' @ L25
+
+[debug] [2019-07-07T23:05:32.033Z] Jul 07, 2019 7:05:32 PM com.google.cloud.datastore.emulator.impl.util.WrappedStreamObserver onError
+INFO: operation failed: 
+Null value error. for 'create' @ L28
+
+[debug] [2019-07-07T23:12:07.232Z] Jul 07, 2019 7:12:07 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected HTTP/2 connection.
+
+[debug] [2019-07-07T23:12:08.265Z] Jul 07, 2019 7:12:08 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected HTTP/2 connection.
+
+[debug] [2019-07-07T23:12:09.409Z] Jul 07, 2019 7:12:09 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected HTTP/2 connection.
+
+[debug] [2019-07-07T23:12:09.453Z] Jul 07, 2019 7:12:09 PM com.google.cloud.datastore.emulator.impl.util.WrappedStreamObserver onError
+INFO: operation failed: 
+Null value error. for 'create' @ L19
+
+[debug] [2019-07-07T23:12:10.023Z] Jul 07, 2019 7:12:10 PM com.google.cloud.datastore.emulator.impl.util.WrappedStreamObserver onError
+INFO: operation failed: 
+false for 'update' @ L19
+
+[debug] [2019-07-07T23:12:10.153Z] Jul 07, 2019 7:12:10 PM com.google.cloud.datastore.emulator.impl.util.WrappedStreamObserver onError
+INFO: operation failed: 
+false for 'create' @ L37
+
+[debug] [2019-07-07T23:12:10.363Z] Jul 07, 2019 7:12:10 PM com.google.cloud.datastore.emulator.impl.util.WrappedStreamObserver onError
+INFO: operation failed: 
+Null value error. for 'create' @ L31
+
+[debug] [2019-07-07T23:12:10.552Z] Jul 07, 2019 7:12:10 PM com.google.cloud.datastore.emulator.impl.util.WrappedStreamObserver onError
+INFO: operation failed: 
+Null value error. for 'create' @ L34
+
+[debug] [2019-07-07T23:19:29.066Z] Jul 07, 2019 7:19:29 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected HTTP/2 connection.
+
+[debug] [2019-07-07T23:19:30.287Z] Jul 07, 2019 7:19:30 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected HTTP/2 connection.
+
+[debug] [2019-07-07T23:19:31.687Z] Jul 07, 2019 7:19:31 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected HTTP/2 connection.
+
+[debug] [2019-07-07T23:19:31.729Z] Jul 07, 2019 7:19:31 PM com.google.cloud.datastore.emulator.impl.util.WrappedStreamObserver onError
+INFO: operation failed: 
+Null value error. for 'create' @ L19
+
+[debug] [2019-07-07T23:19:32.263Z] Jul 07, 2019 7:19:32 PM com.google.cloud.datastore.emulator.impl.util.WrappedStreamObserver onError
+INFO: operation failed: 
+false for 'update' @ L19
+
+[debug] [2019-07-07T23:19:32.374Z] Jul 07, 2019 7:19:32 PM com.google.cloud.datastore.emulator.impl.util.WrappedStreamObserver onError
+INFO: operation failed: 
+false for 'create' @ L37
+
+[debug] [2019-07-07T23:19:32.482Z] Jul 07, 2019 7:19:32 PM com.google.cloud.datastore.emulator.impl.util.WrappedStreamObserver onError
+INFO: operation failed: 
+Null value error. for 'create' @ L31
+
+[debug] [2019-07-07T23:19:32.642Z] Jul 07, 2019 7:19:32 PM com.google.cloud.datastore.emulator.impl.util.WrappedStreamObserver onError
+INFO: operation failed: 
+Null value error. for 'create' @ L34
+
+[debug] [2019-07-07T23:19:32.770Z] Jul 07, 2019 7:19:32 PM io.grpc.netty.NettyServerHandler onStreamError
+WARNING: Stream Error
+io.netty.handler.codec.http2.Http2Exception$StreamException: Stream closed before write could take place
+	at io.netty.handler.codec.http2.Http2Exception.streamError(Http2Exception.java:149)
+	at io.netty.handler.codec.http2.DefaultHttp2RemoteFlowController$FlowState.cancel(DefaultHttp2RemoteFlowController.java:481)
+	at io.netty.handler.codec.http2.DefaultHttp2RemoteFlowController$1.onStreamClosed(DefaultHttp2RemoteFlowController.java:105)
+	at io.netty.handler.codec.http2.DefaultHttp2Connection.notifyClosed(DefaultHttp2Connection.java:356)
+	at io.netty.handler.codec.http2.DefaultHttp2Connection$ActiveStreams.removeFromActiveStreams(DefaultHttp2Connection.java:1000)
+	at io.netty.handler.codec.http2.DefaultHttp2Connection$ActiveStreams.deactivate(DefaultHttp2Connection.java:956)
+	at io.netty.handler.codec.http2.DefaultHttp2Connection$DefaultStream.close(DefaultHttp2Connection.java:512)
+	at io.netty.handler.codec.http2.DefaultHttp2Connection.close(DefaultHttp2Connection.java:152)
+	at io.netty.handler.codec.http2.Http2ConnectionHandler$BaseDecoder.channelInactive(Http2ConnectionHandler.java:221)
+	at io.netty.handler.codec.http2.Http2ConnectionHandler.channelInactive(Http2ConnectionHandler.java:429)
+	at io.grpc.netty.NettyServerHandler.channelInactive(NettyServerHandler.java:560)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelInactive(AbstractChannelHandlerContext.java:257)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelInactive(AbstractChannelHandlerContext.java:243)
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelInactive(AbstractChannelHandlerContext.java:236)
+	at io.netty.channel.DefaultChannelPipeline$HeadContext.channelInactive(DefaultChannelPipeline.java:1403)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelInactive(AbstractChannelHandlerContext.java:257)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelInactive(AbstractChannelHandlerContext.java:243)
+	at io.netty.channel.DefaultChannelPipeline.fireChannelInactive(DefaultChannelPipeline.java:912)
+	at io.netty.channel.AbstractChannel$AbstractUnsafe$8.run(AbstractChannel.java:827)
+	at io.netty.util.concurrent.AbstractEventExecutor.safeExecute(AbstractEventExecutor.java:163)
+	at io.netty.util.concurrent.SingleThreadEventExecutor.runAllTasks(SingleThreadEventExecutor.java:405)
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:500)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$5.run(SingleThreadEventExecutor.java:906)
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	at java.lang.Thread.run(Unknown Source)
+
+
+[debug] [2019-07-07T23:19:32.770Z] Jul 07, 2019 7:19:32 PM io.grpc.netty.NettyServerHandler onStreamError
+WARNING: Stream Error
+io.netty.handler.codec.http2.Http2Exception$StreamException: Stream closed before write could take place
+	at io.netty.handler.codec.http2.Http2Exception.streamError(Http2Exception.java:149)
+	at io.netty.handler.codec.http2.DefaultHttp2RemoteFlowController$FlowState.cancel(DefaultHttp2RemoteFlowController.java:481)
+	at io.netty.handler.codec.http2.DefaultHttp2RemoteFlowController$1.onStreamClosed(DefaultHttp2RemoteFlowController.java:105)
+	at io.netty.handler.codec.http2.DefaultHttp2Connection.notifyClosed(DefaultHttp2Connection.java:356)
+	at io.netty.handler.codec.http2.DefaultHttp2Connection$ActiveStreams.removeFromActiveStreams(DefaultHttp2Connection.java:1000)
+	at io.netty.handler.codec.http2.DefaultHttp2Connection$ActiveStreams.deactivate(DefaultHttp2Connection.java:956)
+	at io.netty.handler.codec.http2.DefaultHttp2Connection$DefaultStream.close(DefaultHttp2Connection.java:512)
+	at io.netty.handler.codec.http2.DefaultHttp2Connection.close(DefaultHttp2Connection.java:152)
+	at io.netty.handler.codec.http2.Http2ConnectionHandler$BaseDecoder.channelInactive(Http2ConnectionHandler.java:221)
+	at io.netty.handler.codec.http2.Http2ConnectionHandler.channelInactive(Http2ConnectionHandler.java:429)
+	at io.grpc.netty.NettyServerHandler.channelInactive(NettyServerHandler.java:560)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelInactive(AbstractChannelHandlerContext.java:257)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelInactive(AbstractChannelHandlerContext.java:243)
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelInactive(AbstractChannelHandlerContext.java:236)
+	at io.netty.channel.DefaultChannelPipeline$HeadContext.channelInactive(DefaultChannelPipeline.java:1403)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelInactive(AbstractChannelHandlerContext.java:257)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelInactive(AbstractChannelHandlerContext.java:243)
+	at io.netty.channel.DefaultChannelPipeline.fireChannelInactive(DefaultChannelPipeline.java:912)
+	at io.netty.channel.AbstractChannel$AbstractUnsafe$8.run(AbstractChannel.java:827)
+	at io.netty.util.concurrent.AbstractEventExecutor.safeExecute(AbstractEventExecutor.java:163)
+	at io.netty.util.concurrent.SingleThreadEventExecutor.runAllTasks(SingleThreadEventExecutor.java:405)
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:500)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$5.run(SingleThreadEventExecutor.java:906)
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	at java.lang.Thread.run(Unknown Source)
+
+
+[debug] [2019-07-08T00:48:32.602Z] Jul 07, 2019 8:48:32 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected HTTP/2 connection.
+
+[debug] [2019-07-08T00:48:33.943Z] Jul 07, 2019 8:48:33 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected HTTP/2 connection.
+
+[debug] [2019-07-08T00:48:35.383Z] Jul 07, 2019 8:48:35 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected HTTP/2 connection.
+
+[debug] [2019-07-08T00:48:35.424Z] Jul 07, 2019 8:48:35 PM com.google.cloud.datastore.emulator.impl.util.WrappedStreamObserver onError
+INFO: operation failed: 
+Null value error. for 'create' @ L20
+
+[debug] [2019-07-08T00:48:36.003Z] Jul 07, 2019 8:48:36 PM com.google.cloud.datastore.emulator.impl.util.WrappedStreamObserver onError
+INFO: operation failed: 
+false for 'update' @ L20
+
+[debug] [2019-07-08T00:48:36.143Z] Jul 07, 2019 8:48:36 PM com.google.cloud.datastore.emulator.impl.util.WrappedStreamObserver onError
+INFO: operation failed: 
+false for 'create' @ L43
+
+[debug] [2019-07-08T00:48:36.264Z] Jul 07, 2019 8:48:36 PM com.google.cloud.datastore.emulator.impl.util.WrappedStreamObserver onError
+INFO: operation failed: 
+Null value error. for 'create' @ L37
+
+[debug] [2019-07-08T00:48:36.453Z] Jul 07, 2019 8:48:36 PM com.google.cloud.datastore.emulator.impl.util.WrappedStreamObserver onError
+INFO: operation failed: 
+Null value error. for 'create' @ L40
+
+[debug] [2019-07-08T00:50:33.904Z] Jul 07, 2019 8:50:33 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected HTTP/2 connection.
+
+[debug] [2019-07-08T00:50:35.007Z] Jul 07, 2019 8:50:35 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected HTTP/2 connection.
+
+[debug] [2019-07-08T00:50:36.292Z] Jul 07, 2019 8:50:36 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected HTTP/2 connection.
+
+[debug] [2019-07-08T00:50:36.334Z] Jul 07, 2019 8:50:36 PM com.google.cloud.datastore.emulator.impl.util.WrappedStreamObserver onError
+INFO: operation failed: 
+Null value error. for 'create' @ L20
+
+[debug] [2019-07-08T00:50:36.864Z] Jul 07, 2019 8:50:36 PM com.google.cloud.datastore.emulator.impl.util.WrappedStreamObserver onError
+INFO: operation failed: 
+false for 'update' @ L20
+
+[debug] [2019-07-08T00:50:36.994Z] Jul 07, 2019 8:50:36 PM com.google.cloud.datastore.emulator.impl.util.WrappedStreamObserver onError
+INFO: operation failed: 
+false for 'create' @ L43
+
+[debug] [2019-07-08T00:50:37.129Z] Jul 07, 2019 8:50:37 PM com.google.cloud.datastore.emulator.impl.util.WrappedStreamObserver onError
+INFO: operation failed: 
+Null value error. for 'create' @ L37
+
+[debug] [2019-07-08T00:50:38.293Z] Jul 07, 2019 8:50:38 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected HTTP/2 connection.
+
+[debug] [2019-07-08T00:50:38.423Z] Jul 07, 2019 8:50:38 PM com.google.cloud.datastore.emulator.impl.util.WrappedStreamObserver onError
+INFO: operation failed: 
+Null value error. for 'create' @ L40
+

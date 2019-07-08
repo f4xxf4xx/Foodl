@@ -38,18 +38,17 @@ class MainLayoutBase extends React.Component<Props, State> {
 
     return (
       <Wrapper>
-        {!auth.isLoaded ?
-          <Loader active inline='centered' />
-          :
-          <>
-            <CssBaseline />
-            <Header toggleDrawer={this.toggleDrawer} />
-            {!auth.isEmpty && <Sidebar drawerOpen={drawerOpen} toggleDrawer={this.toggleDrawer} />}
-            <div className="main">
-              {this.props.children}
-            </div>
-          </>
+        <CssBaseline />
+        <Header toggleDrawer={this.toggleDrawer} />
+        {!auth.isEmpty &&
+          <Sidebar
+            drawerOpen={drawerOpen}
+            toggleDrawer={this.toggleDrawer}
+          />
         }
+        <div className="main">
+          {this.props.children}
+        </div>
       </Wrapper>
     );
   }

@@ -43,15 +43,21 @@ class AddIngredientFormBase extends PureComponent<Props, State> {
         this.props.updateIngredientsStart();
         ingredientService.addIngredient(newIngredientName)
             .then((ingredient) => {
-                this.props.updateIngredientsStop();
-                this.props.addIngredient(ingredient);
-                toast.success("Added!");
-                this.setState({
-                    newIngredientName: ""
-                });
+                if(ingredient) {
+                    this.props.updateIngredientsStop();
+                    this.props.addIngredient(ingredient);
+                    toast.success("Added!");
+                    this.setState({
+                        newIngredientName: ""
+                    });
+                } else {
+                    this.props.updateIngredientsStop();
+                    toast.warn("Ingredient already exists!");
+                }
             })
-            .catch(() => {
+            .catch((error) => {
                 this.props.updateIngredientsStop();
+                console.log(error);
                 toast.error("Error adding the ingredient.")
             })
     }

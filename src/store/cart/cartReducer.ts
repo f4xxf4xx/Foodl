@@ -33,7 +33,7 @@ export const cartReducer = createReducer(initialState, {
         state.cartItems.push(action.payload);
     },
     DELETE_CARTITEM: (state, action) => {
-        state.cartItems = state.cartItems.filter(i => i.id !== action.payload);
+        state.cartItems = state.cartItems.filter(i => i.name !== action.payload);
     },
     DELETE_ALL_CARTITEMS: (state) => {
         state.cartItems = [];

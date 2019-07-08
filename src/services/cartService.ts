@@ -34,6 +34,9 @@ export class cartService {
             .then(data => {
                 if(data.exists) {
                     const items = data.data().items;
+                    if(items.includes(name)) {
+                        return null;
+                    }
                     items.push(name);
                     cart.set({ items });
                 } else {

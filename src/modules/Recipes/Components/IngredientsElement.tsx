@@ -46,7 +46,7 @@ type Props = OwnProps & StateProps & RouteComponentProps & DispatchProps;
 
 class IngredientsElementBase extends PureComponent<Props> {
     componentDidMount() {
-        const { id, ingredientItems, fetchIngredientItemsStart, fetchIngredientItemsStop,
+        const { id, fetchIngredientItemsStart, fetchIngredientItemsStop, auth,
             updateIngredientItems, cartItems, fetchCartItemsStart, fetchCartItemsStop, updateCartItems } = this.props;
 
         fetchIngredientItemsStart()
@@ -57,15 +57,16 @@ class IngredientsElementBase extends PureComponent<Props> {
                 }
                 fetchIngredientItemsStop();
             })
-            .catch(() => {
+            .catch((error) => {
                 fetchIngredientItemsStop();
+                console.log(error);
                 toast.error("Error fetching the ingredient items!");
             })
 
 
         if (cartItems.length == 0) {
             fetchCartItemsStart()
-            cartService.getCartItems("TODO")
+            cartService.getCartItems(auth.uid)
                 .then((cartItems) => {
                     if (cartItems.length > 0) {
                         updateCartItems(cartItems);

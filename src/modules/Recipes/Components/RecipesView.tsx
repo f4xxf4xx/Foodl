@@ -54,22 +54,6 @@ class RecipesViewBase extends PureComponent<Props, State> {
     componentDidMount() {
         const { auth } = this.props;
 
-        if (isAuthenticated(auth)) {
-            this.fetchRecipes();
-        }
-    }
-
-    componentDidUpdate(prevProps: Props) {
-        const { auth } = this.props;
-
-        if (isAuthenticated(auth) && !isAuthenticated(prevProps.auth)) {
-            this.fetchRecipes();
-        }
-    }
-
-    fetchRecipes() {
-        const { auth } = this.props;
-
         if (this.props.recipes.length === 0) {
             this.props.fetchRecipesStart();
             recipeService.getRecipes(auth.uid)
@@ -84,7 +68,7 @@ class RecipesViewBase extends PureComponent<Props, State> {
         }
     }
 
-    deleteRecipe(recipeId: any): any {
+    deleteRecipe(recipeId: string) {
         this.props.updateRecipesStart();
         recipeService.deleteRecipe(recipeId)
             .then(() => {
@@ -126,8 +110,7 @@ class RecipesViewBase extends PureComponent<Props, State> {
                                         <Typography
                                             variant={"caption"}
                                         >
-                                            We are going to learn different kinds of species in nature that
-                                            live together to form amazing environment.
+                                            Slow-cooked meat-sauce with wine, authentic recipe from Bologna.
                                         </Typography>
                                         <Divider className={"MuiDivider-root"} light />
                                     </StyledCardContent>
@@ -149,6 +132,8 @@ class RecipesViewBase extends PureComponent<Props, State> {
     }
 
     render() {
+        const { loading } = this.props;
+
         return (
             <>
                 <Title>My recipes</Title>
@@ -166,8 +151,14 @@ class RecipesViewBase extends PureComponent<Props, State> {
                     lorem nisi, nec dignissim ipsum malesuada ac.
                     In id porta tellus.Lorem ipsum dolor sit amet, consectetur adipiscing elit.
                 </Typography>
-                <AddRecipeForm />
-                {this.renderRecipes()}
+                {loading ?
+                    <Loader active inline='centered' />
+                    :
+                    <>
+                        <AddRecipeForm />
+                        {this.renderRecipes()}
+                    </>
+                }
             </>
         );
     }

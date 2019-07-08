@@ -109,9 +109,12 @@ class AddIngredientItemFormBase extends PureComponent<Props, State> {
         if (!ingredients.find(i => i.name === newIngredientItem.name)) {
             ingredientService.addIngredient(newIngredientItem.name)
                 .then((ingredient) => {
-                    this.props.addIngredient(ingredient);
+                    if (ingredient) {
+                        this.props.addIngredient(ingredient);
+                    }
                 })
-                .catch(() => {
+                .catch((error) => {
+                    console.log(error);
                     toast.error("Error adding the ingredient.")
                 })
         }

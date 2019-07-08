@@ -9,10 +9,9 @@ export const ButtonPrimary = styled(Button)`
     border: 0;
     color: white;    
     padding: 0 15px;
-    box-shadow: 0 1px 2px 1px rgba(33, 33, 33, .3);
-
+    
     &:hover {
-      box-shadow: 0 2px 4px 2px rgba(33, 33, 33, .3);
+      box-shadow: 0 1px 2px 1px rgba(33, 33, 33, .3);
     }
 
     width: ${props => props.width ? `${props.width}px` : "100%"};
@@ -47,16 +46,13 @@ export const ButtonError = styled(Button)`
     border: 0;
     color: white;    
     padding: 0 30px;
-    box-shadow: 0 1px 2px 1px rgba(255, 105, 135, .3);
     margin:5px;
 
     &:hover {
-      box-shadow: 0 3px 5px 3px rgba(255, 105, 135, .3);
+      box-shadow: 0 1px 2px 1px rgba(33, 33, 33, .3);
     }
 
     width: ${props => props.width ? `${props.width}px` : "100%"};
     height: ${props => props.height ? `${props.height}px` : "35px"};
-
-    height: ${props => props.height ? `${props.height}px` : "35px"}
   }
 `;

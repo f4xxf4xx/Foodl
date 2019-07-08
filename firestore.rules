@@ -14,15 +14,21 @@ service cloud.firestore {
       allow update: if request.auth.uid == user;
       allow create: if false;
     }
+
   	match /recipes/{recipe} {
       allow read: if isAuthenticated() && resource.data.uid == request.auth.uid;
       allow write: if isAuthenticated() && request.resource.data.uid == request.auth.uid;
 
       function getRecipeData() {
-        return get('databases/$(database)/documents/recipes/$(recipe)').data;
+        return get(/databases/$(database)/documents/recipes/$(recipe)).data;
       }
 
       match /ingredientItems/{ingredientItem} {
+        allow read: if isAuthenticated() && getRecipeData().uid == request.auth.uid;
+        allow write: if isAuthenticated() && getRecipeData().uid == request.auth.uid;
+      }
+
+      match /steps/{step} {
         allow read: if isAuthenticated() && getRecipeData().uid == request.auth.uid;
         allow write: if isAuthenticated() && getRecipeData().uid == request.auth.uid;
       }

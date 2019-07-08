@@ -24,7 +24,6 @@ type StateProps = {
 }
 
 type State = {
-    newIngredientName: string;
     currentSelectIngredient: any;
 };
 
@@ -44,7 +43,6 @@ class AddCartItemFormBase extends PureComponent<Props, State> {
     constructor(props: Props) {
         super(props);
         this.state = {
-            newIngredientName: "",
             currentSelectIngredient: null
         };
     }
@@ -65,17 +63,19 @@ class AddCartItemFormBase extends PureComponent<Props, State> {
     }
 
     addIngredient = () => {
-        const { newIngredientName } = this.state;
+        const { currentSelectIngredient } = this.state;
         const { ingredients, auth } = this.props;
 
-        if (newIngredientName === "") {
+        if (!currentSelectIngredient) {
             return;
         }
 
-        if (!ingredients.find(i => i.name === newIngredientName)) {
-            ingredientService.addIngredient(newIngredientName)
+        if (!ingredients.find(i => i.name === currentSelectIngredient.label)) {
+            ingredientService.addIngredient(currentSelectIngredient.label)
                 .then((ingredient) => {
-                    this.props.addIngredient(ingredient);
+                    if (ingredient) {
+                        this.props.addIngredient(ingredient);
+                    }
                 })
                 .catch(() => {
                     toast.error("Error adding the ingredient.")
@@ -83,14 +83,19 @@ class AddCartItemFormBase extends PureComponent<Props, State> {
         }
 
         this.props.updateCartItemsStart();
-        cartService.addItem(auth.uid, newIngredientName)
+        cartService.addItem(auth.uid, currentSelectIngredient.label)
             .then((ingredient) => {
-                this.props.updateCartItemsStop();
-                this.props.addCartItem(ingredient);
-                toast.success("Added!");
-                this.setState({
-                    newIngredientName: ""
-                });
+                if (ingredient) {
+                    this.props.updateCartItemsStop();
+                    this.props.addCartItem(ingredient);
+                    toast.success("Added!");
+                    this.setState({
+                        currentSelectIngredient: null
+                    });
+                } else {
+                    this.props.updateCartItemsStop();
+                    toast.warn("Item already in cart!");
+                }
             })
             .catch(() => {
                 this.props.updateCartItemsStop();
@@ -106,14 +111,13 @@ class AddCartItemFormBase extends PureComponent<Props, State> {
 
     updateFormName = (e: any) => {
         this.setState({
-            newIngredientName: e.label,
             currentSelectIngredient: e
         });
     }
 
     render() {
         const { updating, ingredients } = this.props;
-        const { currentSelectIngredient, newIngredientName } = this.state;
+        const { currentSelectIngredient } = this.state;
         const ingredientOptions = ingredients ? ingredients.map(ingredient => {
             return {
                 value: ingredient.id,

@@ -6,12 +6,13 @@ import { compose, bindActionCreators, Dispatch } from "redux";
 import * as ingredientActions from "../../../store/ingredients/ingredientActions";
 import { Ingredient } from "../models";
 import { ingredientService } from "../../../services/ingredientService";
-import { TableHead, TableRow, Table, TableCell, TableBody, Paper, Typography, FormLabel, TextField } from "@material-ui/core";
-import { Dimmer, Loader, Image, Segment } from 'semantic-ui-react'
+import { TableHead, TableRow, Table, TableCell, TableBody, Paper, Typography } from "@material-ui/core";
+import { Loader } from 'semantic-ui-react'
 import AddIngredientForm from "./AddIngredientForm";
 import { ApplicationState } from "../../..";
 import { ButtonError } from "../../../layout/Styles/Buttons";
 import { Title } from "../../../layout/Styles/Sections";
+import { DeleteForever as DeleteIcon } from "@material-ui/icons";
 
 type StateProps = {
     ingredients: Ingredient[];
@@ -43,7 +44,6 @@ class IngredientsViewBase extends PureComponent<Props> {
                 toast.error("Error fetching the ingredients");
                 this.props.fetchIngredientsStop();
             });
-
     }
 
     deleteIngredient(ingredientId: string): void {
@@ -81,10 +81,11 @@ class IngredientsViewBase extends PureComponent<Props> {
                                     <TableCell>{ingredient.name}</TableCell>
                                     <TableCell>
                                         <ButtonError
+                                            width="15"
                                             disabled={updatingIngredients}
                                             onClick={() => this.deleteIngredient(ingredient.id)}
                                         >
-                                            DELETE
+                                            <DeleteIcon />
                                         </ButtonError>
                                     </TableCell>
                                 </TableRow>
@@ -97,7 +98,7 @@ class IngredientsViewBase extends PureComponent<Props> {
     }
 
     render() {
-        const { updatingIngredients, auth } = this.props;
+        const { updatingIngredients } = this.props;
 
         return (
             <>
@@ -105,12 +106,8 @@ class IngredientsViewBase extends PureComponent<Props> {
                 <Typography variant="subtitle1">
                     Here lies the list of possible ingredients
                 </Typography>
-                {auth.isLoaded &&
-                    <>
-                        <AddIngredientForm updating={updatingIngredients} />
-                        {this.renderIngredients()}
-                    </>
-                }
+                <AddIngredientForm updating={updatingIngredients} />
+                {this.renderIngredients()}
             </>
         );
     }

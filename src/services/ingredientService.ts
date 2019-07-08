@@ -4,8 +4,8 @@ import { Ingredient } from '../modules/Ingredients/models';
 export class ingredientService {
     public static getIngredients(): Promise<Ingredient[]> {
         return db.collection("ingredients")
-        .orderBy("name")
-        .get()
+            .orderBy("name")
+            .get()
             .then(data => {
                 let ingredients: Ingredient[] = [];
                 data.forEach(ingredient => {
@@ -19,17 +19,26 @@ export class ingredientService {
     }
 
     public static addIngredient(name: string): Promise<Ingredient> {
-        const newIngredient: Ingredient =  {
+        const newIngredient: Ingredient = {
             name: name
         }
 
-        return db.collection("ingredients").add(newIngredient)
-            .then(ingredient => {
-                return {
-                    id: ingredient.id,
-                    name
+        return db.collection("ingredients").where("name", "==", name)
+            .get()
+            .then(ingredients => {
+                if (!ingredients.empty) {
+                    return null;
                 }
-            });
+                return db.collection("ingredients").add(newIngredient)
+                    .then(ingredient => {
+                        return {
+                            id: ingredient.id,
+                            name
+                        }
+                    });
+            })
+
+
     }
 
     public static deleteIngredient(id: string): Promise<void> {
