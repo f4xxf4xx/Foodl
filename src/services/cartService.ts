@@ -2,17 +2,14 @@ import { db } from '../config';
 import { Ingredient } from '../modules/Ingredients/models';
 
 export class cartService {
-    public static getCartItems(userid: string): Promise<Ingredient[]> {
-        return db.collection("carts")
-            .doc(userid)
-            .get()
-            .then(data => {
-                if (data.exists) {
-                    return cartService.getItems(data);
-                } else {
-                    return [];
-                }
-            })
+    public static async getCartItems(userid: string): Promise<Ingredient[]> {
+        let cart = await db.collection("carts").doc(userid).get();
+        if (cart.exists) {
+            return cartService.getItems(cart);
+        }
+        else {
+            return [];
+        }
     }
 
     static getItems(data: firebase.firestore.DocumentSnapshot) {
@@ -27,38 +24,36 @@ export class cartService {
         return ingredients;
     }
 
-    public static addItem(userid: string, name: string): Promise<Ingredient> {
-        const cart = db.collection("carts").doc(userid);
+    public static async addItem(userid: string, name: string): Promise<Ingredient> {
+        const cartRef = db.collection("carts").doc(userid);
+        const cart = await cartRef.get();
 
-        return cart.get()
-            .then(data => {
-                if(data.exists) {
-                    const items = data.data().items;
-                    if(items.includes(name)) {
-                        return null;
-                    }
-                    items.push(name);
-                    cart.set({ items });
-                } else {
-                    cart.set({ items: [name] });                    
-                }
-                return {
-                    name
-                }
-            })        
+        if (cart.exists) {
+            const items = cart.data().items;
+            if (items.includes(name)) {
+                return null;
+            }
+            items.push(name);
+            await cartRef.set({ items });
+        } else {
+            await cartRef.set({ items: [name] });
+        }
+        return {
+            name
+        }
     }
 
-    public static deleteItem(userid: string, name: string): Promise<void> {
-        const cart = db.collection("carts").doc(userid);
-
-        return cart.get()
-            .then(data => {
-                if(data.exists) {
-                    const items = data.data().items;
-                    const newItems = items.filter(item => item !== name);
-                    cart.set({ items: newItems })
-                }
-            })
+    public static async deleteItem(userid: string, name: string): Promise<void> {
+        const cartRef = db.collection("carts").doc(userid);
+        const cart = await cartRef.get();
+        
+        if (cart.exists) {
+            const items = cart.data().items;
+            const newItems = items.filter(item => item !== name);
+            return await cartRef.set({ items: newItems })
+        }
+        
+        return Promise.resolve(null);
     }
 
     public static deleteAllItems(): Promise<void> {
