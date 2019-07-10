@@ -1,11 +1,11 @@
-import React from 'react';
-import styled from 'styled-components';
-import { CardContent } from '@material-ui/core';
+import { CardContent } from "@material-ui/core";
+import React from "react";
+import styled from "styled-components";
 
 export const StyledCardContent = styled(CardContent)`
   && {
     text-align: left;
-    padding: 24px 24px 0px 24px; 
+    padding: 24px 24px 0px 24px;
     & > h6 {
       font-weight: bold;
     }

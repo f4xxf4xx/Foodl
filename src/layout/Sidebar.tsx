@@ -1,12 +1,12 @@
+import { Divider, Drawer, Hidden, Icon, IconButton, List, ListItem, ListItemIcon, ListItemText, Toolbar } from "@material-ui/core";
 import React from "react";
-import { getLinks, getAdminLinks } from "./links";
-import { List, ListItem, ListItemIcon, ListItemText, Icon, Divider, IconButton, Hidden, Drawer, Toolbar } from '@material-ui/core';
 import { Link, RouteComponentProps, withRouter } from "react-router-dom";
-import { StyledDrawer } from "./Styles/StyledDrawer";
+import { getAdminLinks, getLinks } from "./links";
 import SidebarLink from "./SidebarLink";
+import { StyledDrawer } from "./Styles/StyledDrawer";
 import { StyledNav } from "./Styles/StyledNav";
 
-type OwnProps = {
+interface OwnProps {
   drawerOpen: boolean;
   toggleDrawer: () => void;
 }
@@ -14,7 +14,7 @@ type OwnProps = {
 type Props = OwnProps & RouteComponentProps;
 
 class SidebarBase extends React.Component<Props> {
-  getDrawer(path: string) {
+  public getDrawer(path: string) {
     return (
       <div>
         <Toolbar />
@@ -24,7 +24,7 @@ class SidebarBase extends React.Component<Props> {
               key={index}
               currentPath={path}
               link={link}
-            />
+            />,
           )}
         </List>
         <Divider />
@@ -35,36 +35,36 @@ class SidebarBase extends React.Component<Props> {
               key={index}
               currentPath={path}
               link={link}
-            />
+            />,
           )}
         </List>
       </div>
-    )
-  };
+    );
+  }
 
-  render() {
+  public render() {
     const path = this.props.location.pathname;
     const { drawerOpen, toggleDrawer } = this.props;
 
     return (
       <StyledNav>
-        <Hidden smUp implementation="css">
+        <Hidden smUp={true} implementation="css">
           <Drawer
             variant="temporary"
             anchor="left"
             open={drawerOpen}
             onClose={toggleDrawer}
             ModalProps={{
-              keepMounted: true
+              keepMounted: true,
             }}
           >
             {this.getDrawer(path)}
           </Drawer>
         </Hidden>
-        <Hidden xsDown implementation="css">
+        <Hidden xsDown={true} implementation="css">
           <StyledDrawer
             variant="permanent"
-            open
+            open={true}
           >
             {this.getDrawer(path)}
           </StyledDrawer>

@@ -1,39 +1,39 @@
-import React, { PureComponent } from 'react';
-import { Recipe, IngredientItem } from '../models';
-import { getIngredientTypeOptions } from '../helper';
-import { Ingredient } from '../../Ingredients/models';
-import Select from 'react-select';
-import Creatable from 'react-select/lib/Creatable';
-import { Typography, FormLabel, TextField } from '@material-ui/core';
-import * as recipeActions from '../../../store/recipes/recipeActions';
-import * as ingredientActions from '../../../store/ingredients/ingredientActions';
-import { compose, Dispatch, bindActionCreators } from 'redux';
+import { FormLabel, TextField, Typography } from "@material-ui/core";
+import React, { PureComponent } from "react";
 import { connect } from "react-redux";
-import { recipeService } from '../../../services/recipeService';
-import { toast } from 'react-toastify';
-import { ingredientService } from '../../../services/ingredientService';
-import { ApplicationState } from '../../..';
-import { StyledPaper } from '../../../layout/Styles/Sections';
-import { InputWrapper } from '../../../layout/Styles/Forms';
-import { ButtonPrimary } from '../../../layout/Styles/Buttons';
+import Select from "react-select";
+import Creatable from "react-select/lib/Creatable";
+import { toast } from "react-toastify";
+import { bindActionCreators, compose, Dispatch } from "redux";
+import { ApplicationState } from "../../..";
+import { ButtonPrimary } from "../../../layout/Styles/Buttons";
+import { InputWrapper } from "../../../layout/Styles/Forms";
+import { StyledPaper } from "../../../layout/Styles/Sections";
+import { ingredientService } from "../../../services/ingredientService";
+import { recipeService } from "../../../services/recipeService";
+import * as ingredientActions from "../../../store/ingredients/ingredientActions";
+import * as recipeActions from "../../../store/recipes/recipeActions";
+import { Ingredient } from "../../Ingredients/models";
+import { getIngredientTypeOptions } from "../helper";
+import { IngredientItem, Recipe } from "../models";
 
-type OwnProps = {
+interface OwnProps {
     editing: boolean;
 }
 
-type StateProps = {
+interface StateProps {
     recipe: Recipe;
     ingredients: Ingredient[];
     loadingIngredients: boolean;
 }
 
-type State = {
+interface State {
     newIngredientItem: IngredientItem;
     currentSelectIngredient: any;
     currentSelectType: any;
 }
 
-type DispatchProps = {
+interface DispatchProps {
     updateIngredientItemsStart: typeof recipeActions.updateIngredientItemsStart;
     updateIngredientItemsStop: typeof recipeActions.updateIngredientItemsStop;
     updateIngredientItems: typeof recipeActions.updateIngredientItems;
@@ -53,50 +53,50 @@ class AddIngredientItemFormBase extends PureComponent<Props, State> {
             newIngredientItem: {
                 name: "",
                 quantity: "",
-                type: ""
+                type: "",
             },
             currentSelectIngredient: null,
-            currentSelectType: null
+            currentSelectType: null,
         };
     }
 
-    componentDidMount() {
+    public componentDidMount() {
         if (this.props.ingredients.length == 0) {
-            this.props.fetchIngredientsStart()
+            this.props.fetchIngredientsStart();
             ingredientService.getIngredients()
-                .then(ingredients => {
+                .then((ingredients) => {
                     this.props.updateIngredients(ingredients);
                     this.props.fetchIngredientsStop();
                 })
                 .catch(() => {
                     this.props.fetchIngredientsStop();
-                    toast.error("Error fetching the ingredients!")
-                })
+                    toast.error("Error fetching the ingredients!");
+                });
         }
     }
 
-    updateFormName = (e: any) => {
+    public updateFormName = (e: any) => {
         const { newIngredientItem } = this.state;
         this.setState({
             newIngredientItem: { ...newIngredientItem, name: e.label },
-            currentSelectIngredient: e
+            currentSelectIngredient: e,
         });
     }
 
-    updateFormQuantity = (e: React.ChangeEvent<HTMLInputElement>) => {
+    public updateFormQuantity = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { newIngredientItem } = this.state;
         this.setState({ newIngredientItem: { ...newIngredientItem, quantity: e.target.value } });
     }
 
-    updateFormType = (e: any) => {
+    public updateFormType = (e: any) => {
         const { newIngredientItem } = this.state;
         this.setState({
             newIngredientItem: { ...newIngredientItem, type: e.value },
-            currentSelectType: e
+            currentSelectType: e,
         });
     }
 
-    addIngredient = () => {
+    public addIngredient = () => {
         const { newIngredientItem } = this.state;
         const { ingredients, recipe } = this.props;
 
@@ -106,7 +106,7 @@ class AddIngredientItemFormBase extends PureComponent<Props, State> {
             return false;
         }
 
-        if (!ingredients.find(i => i.name === newIngredientItem.name)) {
+        if (!ingredients.find((i) => i.name === newIngredientItem.name)) {
             ingredientService.addIngredient(newIngredientItem.name)
                 .then((ingredient) => {
                     if (ingredient) {
@@ -115,8 +115,8 @@ class AddIngredientItemFormBase extends PureComponent<Props, State> {
                 })
                 .catch((error) => {
                     console.log(error);
-                    toast.error("Error adding the ingredient.")
-                })
+                    toast.error("Error adding the ingredient.");
+                });
         }
 
         this.props.updateIngredientItemsStart();
@@ -127,10 +127,10 @@ class AddIngredientItemFormBase extends PureComponent<Props, State> {
                 this.setState({
                     newIngredientItem: {
                         ...newIngredientItem, name: "",
-                        quantity: "", type: ""
+                        quantity: "", type: "",
                     },
                     currentSelectIngredient: null,
-                    currentSelectType: null
+                    currentSelectType: null,
                 });
                 toast.success("Added!");
             })
@@ -140,22 +140,22 @@ class AddIngredientItemFormBase extends PureComponent<Props, State> {
             });
     }
 
-    render() {
+    public render() {
         const { editing, ingredients } = this.props;
         const { newIngredientItem, currentSelectIngredient, currentSelectType } = this.state;
 
-        const ingredientOptions = ingredients ? ingredients.map(ingredient => {
+        const ingredientOptions = ingredients ? ingredients.map((ingredient) => {
             return {
                 value: ingredient.id,
-                label: ingredient.name
-            }
+                label: ingredient.name,
+            };
         }) : [];
 
         return (
             <>
                 {editing &&
                     <StyledPaper>
-                        <form onSubmit={e => { e.preventDefault(); }}>
+                        <form onSubmit={(e) => { e.preventDefault(); }}>
                             <Typography variant="h6">
                                 Add ingredient
                             </Typography>
@@ -166,7 +166,7 @@ class AddIngredientItemFormBase extends PureComponent<Props, State> {
                                     type="text"
                                     value={newIngredientItem.quantity}
                                     onChange={this.updateFormQuantity}
-                                    fullWidth
+                                    fullWidth={true}
                                 />
                             </InputWrapper>
                             <InputWrapper>
@@ -208,7 +208,7 @@ class AddIngredientItemFormBase extends PureComponent<Props, State> {
 const mapStateToProps = (state: ApplicationState) => ({
     recipe: state.recipe.recipe,
     ingredients: state.ingredients.ingredients,
-    loadingIngredients: state.ingredients.loadingIngredients
+    loadingIngredients: state.ingredients.loadingIngredients,
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
@@ -223,7 +223,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
 });
 
 const AddIngredientItemForm = compose(
-    connect<StateProps, DispatchProps>(mapStateToProps, mapDispatchToProps)
+    connect<StateProps, DispatchProps>(mapStateToProps, mapDispatchToProps),
 )(AddIngredientItemFormBase);
 
 export default AddIngredientItemForm;

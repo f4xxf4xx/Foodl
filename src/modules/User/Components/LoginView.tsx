@@ -1,19 +1,19 @@
+import firebase from "firebase";
+import * as firebaseui from "firebaseui";
 import React, { PureComponent } from "react";
 import { FirebaseAuth, StyledFirebaseAuth } from "react-firebaseui";
-import firebase from "firebase";
-import * as firebaseui from 'firebaseui';
 import { StyledLogin } from "./Styles/StyledLogin";
 
 class LoginView extends PureComponent {
-    authConfig = {
+    public authConfig = {
         credentialHelper: firebaseui.auth.CredentialHelper.GOOGLE_YOLO,
         // Popup signin flow rather than redirect flow.
-        signInFlow: 'popup',
+        signInFlow: "popup",
         // Redirect to /recipes after sign in is successful. Alternatively you can provide a callbacks.signInSuccess function.
-        signInSuccessUrl: '/recipes',
+        signInSuccessUrl: "/recipes",
         signInOptions: [
             firebase.auth.EmailAuthProvider.PROVIDER_ID,
-            firebase.auth.GoogleAuthProvider.PROVIDER_ID
+            firebase.auth.GoogleAuthProvider.PROVIDER_ID,
         ],
         callbacks: {
             signInSuccessWithAuthResult: (authResult) => {
@@ -21,18 +21,18 @@ class LoginView extends PureComponent {
                     console.log("new user");
                 }
 
-                //TODO verify if user exists in db
+                // TODO verify if user exists in db
                 console.log("success");
                 return true;
             },
             signInFailure: (error) => {
                 console.log("fail");
                 return error;
-            }
-        }
+            },
+        },
     };
 
-    render() {
+    public render() {
         return (
             <StyledLogin uiConfig={this.authConfig} firebaseAuth={firebase.auth()} />
         );

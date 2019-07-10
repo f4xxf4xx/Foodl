@@ -1,7 +1,7 @@
 import { createReducer } from "redux-starter-kit";
-import { Recipe, IngredientItem, Step, Cuisine } from "../../modules/Recipes/models";
+import { Cuisine, IngredientItem, Recipe, Step } from "../../modules/Recipes/models";
 
-export type RecipeState = {
+export interface RecipeState {
     recipe: Recipe;
     ingredientItems: IngredientItem[];
     steps: Step[];
@@ -10,7 +10,7 @@ export type RecipeState = {
     loadingIngredientItems: boolean;
     updatingIngredientItems: boolean;
     loadingSteps: boolean;
-    updatingSteps: boolean
+    updatingSteps: boolean;
 }
 
 const initialRecipeState: RecipeState = {
@@ -22,8 +22,8 @@ const initialRecipeState: RecipeState = {
     loadingIngredientItems: false,
     updatingIngredientItems: false,
     loadingSteps: false,
-    updatingSteps: false
-}
+    updatingSteps: false,
+};
 
 export const recipeReducer = createReducer(initialRecipeState, {
     FETCH_RECIPE_START: (state) => {
@@ -73,11 +73,11 @@ export const recipeReducer = createReducer(initialRecipeState, {
     },
     UPDATE_STEP: (state, action) => {
         state.steps = state.steps.map((item) => {
-            if(item.id === action.payload.id) {
+            if (item.id === action.payload.id) {
                 return action.payload;
             }
             return item;
-        })
+        });
     },
     ADD_INGREDIENTITEM: (state, action) => {
         state.ingredientItems.push(action.payload);
@@ -86,20 +86,20 @@ export const recipeReducer = createReducer(initialRecipeState, {
         state.steps.push(action.payload);
     },
     DELETE_INGREDIENTITEM: (state, action) => {
-        state.ingredientItems = state.ingredientItems.filter(i => i.id !== action.payload);
+        state.ingredientItems = state.ingredientItems.filter((i) => i.id !== action.payload);
     },
     DELETE_STEP: (state, action) => {
-        state.steps = state.steps.filter(i => i.id !== action.payload);
+        state.steps = state.steps.filter((i) => i.id !== action.payload);
     },
 });
 
 const initialCuisinesState: CuisinesState = {
     cuisines: [],
     loadingCuisines: false,
-    updatingCuisines: false
-}
+    updatingCuisines: false,
+};
 
-export type CuisinesState = {
+export interface CuisinesState {
     cuisines: Cuisine[];
     loadingCuisines: boolean;
     updatingCuisines: boolean;
@@ -117,5 +117,5 @@ export const cuisinesReducer = createReducer(initialCuisinesState, {
     },
     UPDATE_CUISINES: (state, action) => {
         state.cuisines = action.payload;
-    }
+    },
 });

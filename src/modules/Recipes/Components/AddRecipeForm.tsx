@@ -1,29 +1,29 @@
-import React, { PureComponent } from 'react';
-import { RouteComponentProps } from 'react-router-dom';
-import { withRouter } from 'react-router-dom';
-import { recipeService } from '../../../services/recipeService';
-import { Button, Typography, FormLabel, TextField, Box } from '@material-ui/core';
-import { compose, Dispatch, bindActionCreators } from 'redux';
+import { Box, Button, FormLabel, TextField, Typography } from "@material-ui/core";
+import React, { PureComponent } from "react";
 import { connect } from "react-redux";
-import * as recipesActions from '../../../store/recipes/recipesActions';
-import { toast } from 'react-toastify';
-import { ButtonPrimary } from '../../../layout/Styles/Buttons';
-import { StyledPaper } from '../../../layout/Styles/Sections';
-import { ApplicationState } from '../../..';
+import { withRouter } from "react-router-dom";
+import { RouteComponentProps } from "react-router-dom";
+import { toast } from "react-toastify";
+import { bindActionCreators, compose, Dispatch } from "redux";
+import { ApplicationState } from "../../..";
+import { ButtonPrimary } from "../../../layout/Styles/Buttons";
+import { StyledPaper } from "../../../layout/Styles/Sections";
+import { recipeService } from "../../../services/recipeService";
+import * as recipesActions from "../../../store/recipes/recipesActions";
 
-type State = {
+interface State {
     newRecipeName: string;
-};
+}
 
-type StateProps = {
+interface StateProps {
     updatingRecipes: boolean;
-};
+}
 
-type DispatchProps = {
+interface DispatchProps {
     updateRecipesStart: typeof recipesActions.updateRecipesStart;
     updateRecipesStop: typeof recipesActions.updateRecipesStop;
     addRecipe: typeof recipesActions.addRecipe;
-};
+}
 
 type Props = StateProps & RouteComponentProps & DispatchProps;
 
@@ -31,21 +31,21 @@ class AddRecipeFormBase extends PureComponent<Props, State> {
     constructor(props: Props) {
         super(props);
         this.state = {
-            newRecipeName: ""
+            newRecipeName: "",
         };
     }
 
-    updateRecipeName = (e: React.ChangeEvent<HTMLInputElement>) => {
+    public updateRecipeName = (e: React.ChangeEvent<HTMLInputElement>) => {
         this.setState({ newRecipeName: e.target.value });
     }
 
-    handleKeyPress = (event) => {
+    public handleKeyPress = (event) => {
         if (event.charCode === 13) {
             this.addRecipe();
         }
     }
 
-    addRecipe = () => {
+    public addRecipe = () => {
         const { newRecipeName } = this.state;
         if (newRecipeName === "") {
             return;
@@ -53,12 +53,12 @@ class AddRecipeFormBase extends PureComponent<Props, State> {
 
         this.props.updateRecipesStart();
         recipeService.addRecipe(newRecipeName)
-            .then(recipe => {
+            .then((recipe) => {
                 this.props.addRecipe(recipe);
                 this.props.updateRecipesStop();
                 this.setState({
                     newRecipeName: "",
-                })
+                });
                 this.props.history.push(`/recipe/${recipe.id}`);
             })
             .catch(() => {
@@ -67,12 +67,12 @@ class AddRecipeFormBase extends PureComponent<Props, State> {
             });
     }
 
-    render() {
+    public render() {
         const { updatingRecipes } = this.props;
         return (
             <StyledPaper>
                 <Typography variant="h6">New recipe</Typography>
-                <form onSubmit={e => { e.preventDefault(); }}>
+                <form onSubmit={(e) => { e.preventDefault(); }}>
                     <Box>
                         <TextField
                             id="input-recipe-name"
@@ -92,14 +92,14 @@ class AddRecipeFormBase extends PureComponent<Props, State> {
                     </ButtonPrimary>
                 </form>
             </StyledPaper>
-        )
+        );
     }
 }
 
 const mapStateToProps = (state: ApplicationState) => ({
     recipes: state.recipes.recipes,
     loadingRecipes: state.recipes.loadingRecipes,
-    updatingRecipes: state.recipes.updatingRecipes
+    updatingRecipes: state.recipes.updatingRecipes,
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
@@ -109,7 +109,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
 });
 
 const AddRecipeForm = compose(
-    connect<StateProps, DispatchProps>(mapStateToProps, mapDispatchToProps)
+    connect<StateProps, DispatchProps>(mapStateToProps, mapDispatchToProps),
 )(withRouter(AddRecipeFormBase));
 
 export default AddRecipeForm;

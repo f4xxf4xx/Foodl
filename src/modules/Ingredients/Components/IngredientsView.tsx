@@ -1,42 +1,42 @@
+import { Paper, Table, TableBody, TableCell, TableHead, TableRow, Typography } from "@material-ui/core";
+import { DeleteForever as DeleteIcon } from "@material-ui/icons";
 import React, { PureComponent } from "react";
+import { connect } from "react-redux";
 import { RouteProps } from "react-router-dom";
 import { toast } from "react-toastify";
-import { connect } from "react-redux";
-import { compose, bindActionCreators, Dispatch } from "redux";
-import * as ingredientActions from "../../../store/ingredients/ingredientActions";
-import { Ingredient } from "../models";
-import { ingredientService } from "../../../services/ingredientService";
-import { TableHead, TableRow, Table, TableCell, TableBody, Paper, Typography } from "@material-ui/core";
-import { Loader } from 'semantic-ui-react'
-import AddIngredientForm from "./AddIngredientForm";
+import { bindActionCreators, compose, Dispatch } from "redux";
+import { Loader } from "semantic-ui-react";
 import { ApplicationState } from "../../..";
 import { ButtonError } from "../../../layout/Styles/Buttons";
 import { Title } from "../../../layout/Styles/Sections";
-import { DeleteForever as DeleteIcon } from "@material-ui/icons";
+import { ingredientService } from "../../../services/ingredientService";
+import * as ingredientActions from "../../../store/ingredients/ingredientActions";
+import { Ingredient } from "../models";
+import AddIngredientForm from "./AddIngredientForm";
 
-type StateProps = {
+interface StateProps {
     ingredients: Ingredient[];
     loadingIngredients: boolean;
     updatingIngredients: boolean;
     auth: any;
-};
+}
 
-type DispatchProps = {
+interface DispatchProps {
     fetchIngredientsStart: typeof ingredientActions.fetchIngredientsStart;
     fetchIngredientsStop: typeof ingredientActions.fetchIngredientsStop;
     updateIngredientsStart: typeof ingredientActions.updateIngredientsStart;
     updateIngredientsStop: typeof ingredientActions.updateIngredientsStop;
     updateIngredients: typeof ingredientActions.updateIngredients;
     deleteIngredient: typeof ingredientActions.deleteIngredient;
-};
+}
 
 type Props = StateProps & DispatchProps & RouteProps;
 
 class IngredientsViewBase extends PureComponent<Props> {
-    componentDidMount() {
+    public componentDidMount() {
         this.props.fetchIngredientsStart();
         return ingredientService.getIngredients()
-            .then(ingredients => {
+            .then((ingredients) => {
                 this.props.updateIngredients(ingredients);
                 this.props.fetchIngredientsStop();
             })
@@ -46,7 +46,7 @@ class IngredientsViewBase extends PureComponent<Props> {
             });
     }
 
-    deleteIngredient(ingredientId: string): void {
+    public deleteIngredient(ingredientId: string): void {
         this.props.updateIngredientsStart();
         ingredientService.deleteIngredient(ingredientId)
             .then(() => {
@@ -56,17 +56,17 @@ class IngredientsViewBase extends PureComponent<Props> {
             })
             .catch(() => {
                 this.props.updateIngredientsStop();
-                toast.error("Error deleting the ingredient!")
+                toast.error("Error deleting the ingredient!");
             });
     }
 
-    renderIngredients() {
+    public renderIngredients() {
         const { ingredients, updatingIngredients, loadingIngredients } = this.props;
 
         return (
             <Paper>
                 {loadingIngredients ?
-                    <Loader active inline='centered' />
+                    <Loader active={true} inline="centered" />
                     :
                     <Table>
                         <TableHead>
@@ -88,7 +88,7 @@ class IngredientsViewBase extends PureComponent<Props> {
                                             <DeleteIcon />
                                         </ButtonError>
                                     </TableCell>
-                                </TableRow>
+                                </TableRow>,
                             )}
                         </TableBody>
                     </Table>
@@ -97,7 +97,7 @@ class IngredientsViewBase extends PureComponent<Props> {
         );
     }
 
-    render() {
+    public render() {
         const { updatingIngredients } = this.props;
 
         return (
@@ -117,7 +117,7 @@ const mapStateToProps = (state: ApplicationState) => ({
     ingredients: state.ingredients.ingredients,
     loadingIngredients: state.ingredients.loadingIngredients,
     updatingIngredients: state.ingredients.updatingIngredients,
-    auth: state.firebase.auth
+    auth: state.firebase.auth,
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
@@ -126,11 +126,11 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
     updateIngredientsStart: bindActionCreators(ingredientActions.updateIngredientsStart, dispatch),
     updateIngredientsStop: bindActionCreators(ingredientActions.updateIngredientsStop, dispatch),
     updateIngredients: bindActionCreators(ingredientActions.updateIngredients, dispatch),
-    deleteIngredient: bindActionCreators(ingredientActions.deleteIngredient, dispatch)
+    deleteIngredient: bindActionCreators(ingredientActions.deleteIngredient, dispatch),
 });
 
 const IngredientsView = compose(
-    connect<StateProps, DispatchProps>(mapStateToProps, mapDispatchToProps)
+    connect<StateProps, DispatchProps>(mapStateToProps, mapDispatchToProps),
 )(IngredientsViewBase);
 
 export default IngredientsView;

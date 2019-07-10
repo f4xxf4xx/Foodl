@@ -1,26 +1,25 @@
-import { db } from '../config';
-import { Ingredient } from '../modules/Ingredients/models';
+import { db } from "../config";
+import { Ingredient } from "../modules/Ingredients/models";
 
 export class cartService {
     public static async getCartItems(userid: string): Promise<Ingredient[]> {
-        let cart = await db.collection("carts").doc(userid).get();
+        const cart = await db.collection("carts").doc(userid).get();
+
         if (cart.exists) {
             return cartService.getItems(cart);
-        }
-        else {
+        } else {
             return [];
         }
     }
 
-    static getItems(data: firebase.firestore.DocumentSnapshot) {
+    public static getItems(data: firebase.firestore.DocumentSnapshot) {
         const items = data.data().items;
+        const ingredients: Ingredient[] = items.map((ingredient) => {
+            return {
+                name: ingredient,
+            };
+        });
 
-        let ingredients: Ingredient[] = [];
-        items.forEach(ingredient => {
-            ingredients.push({
-                name: ingredient
-            })
-        })
         return ingredients;
     }
 
@@ -39,27 +38,27 @@ export class cartService {
             await cartRef.set({ items: [name] });
         }
         return {
-            name
-        }
+            name,
+        };
     }
 
     public static async deleteItem(userid: string, name: string): Promise<void> {
         const cartRef = db.collection("carts").doc(userid);
         const cart = await cartRef.get();
-        
+
         if (cart.exists) {
             const items = cart.data().items;
-            const newItems = items.filter(item => item !== name);
-            return await cartRef.set({ items: newItems })
+            const newItems = items.filter((item) => item !== name);
+            return await cartRef.set({ items: newItems });
         }
-        
+
         return Promise.resolve(null);
     }
 
     public static deleteAllItems(): Promise<void> {
         return db.collection("carts").get()
-            .then(data => {
-                data.forEach(item => db.collection("carts").doc(item.id).delete())
-            })
+            .then((data) => {
+                data.forEach((item) => db.collection("carts").doc(item.id).delete());
+            });
     }
 }

@@ -5,16 +5,14 @@ const muiBaseTheme = createMuiTheme();
 export default createMuiTheme({
     typography: {
         h6: {
-            
-        }
+
+        },
     },
     overrides: {
         MuiPaper: {
             elevation16: {
-                width: "240px"
-            }
-        }
-    }
+                width: "240px",
+            },
+        },
+    },
 });
-
-

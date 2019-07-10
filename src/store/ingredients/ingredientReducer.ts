@@ -1,7 +1,7 @@
 import { createReducer } from "redux-starter-kit";
 import { Ingredient } from "../../modules/Ingredients/models";
 
-export type IngredientState = {
+export interface IngredientState {
     ingredients: Ingredient[];
     loadingIngredients: boolean;
     updatingIngredients: boolean;
@@ -10,8 +10,8 @@ export type IngredientState = {
 const initialState: IngredientState = {
     ingredients: [],
     loadingIngredients: false,
-    updatingIngredients: false
-}
+    updatingIngredients: false,
+};
 
 export const ingredientReducer = createReducer(initialState, {
     FETCH_INGREDIENTS_START: (state) => {
@@ -33,6 +33,6 @@ export const ingredientReducer = createReducer(initialState, {
         state.ingredients.push(action.payload);
     },
     DELETE_INGREDIENT: (state, action) => {
-        state.ingredients = state.ingredients.filter(i => i.id !== action.payload);
-    }
+        state.ingredients = state.ingredients.filter((i) => i.id !== action.payload);
+    },
 });

@@ -1,30 +1,30 @@
-import React, { PureComponent } from 'react';
-import { Recipe, Step } from '../models';
-import { Typography, TextField, Box } from '@material-ui/core';
-import * as recipeActions from '../../../store/recipes/recipeActions';
-import { compose, Dispatch, bindActionCreators } from 'redux';
+import { Box, TextField, Typography } from "@material-ui/core";
+import React, { PureComponent } from "react";
 import { connect } from "react-redux";
-import { recipeService } from '../../../services/recipeService';
-import { toast } from 'react-toastify';
-import { ButtonPrimary } from '../../../layout/Styles/Buttons';
-import { StyledPaper } from '../../../layout/Styles/Sections';
-import { ApplicationState } from '../../..';
+import { toast } from "react-toastify";
+import { bindActionCreators, compose, Dispatch } from "redux";
+import { ApplicationState } from "../../..";
+import { ButtonPrimary } from "../../../layout/Styles/Buttons";
+import { StyledPaper } from "../../../layout/Styles/Sections";
+import { recipeService } from "../../../services/recipeService";
+import * as recipeActions from "../../../store/recipes/recipeActions";
+import { Recipe, Step } from "../models";
 
-type OwnProps = {
+interface OwnProps {
     editing: boolean;
     currentStepCount: number;
 }
 
-type StateProps = {
+interface StateProps {
     recipe: Recipe;
     loadingSteps: boolean;
 }
 
-type State = {
+interface State {
     newStep: Step;
 }
 
-type DispatchProps = {
+interface DispatchProps {
     updateStepsStart: typeof recipeActions.updateStepsStart;
     updateStepsStop: typeof recipeActions.updateStepsStop;
     updateSteps: typeof recipeActions.updateSteps;
@@ -39,19 +39,19 @@ class AddStepFormBase extends PureComponent<Props, State> {
         this.state = {
             newStep: {
                 order: props.currentStepCount,
-                text: ""
+                text: "",
             },
         };
     }
 
-    updateFormText = (e: React.ChangeEvent<HTMLInputElement>) => {
+    public updateFormText = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { newStep } = this.state;
         this.setState({
-            newStep: { ...newStep, text: e.target.value }
+            newStep: { ...newStep, text: e.target.value },
         });
     }
 
-    addStep = () => {
+    public addStep = () => {
         const { newStep } = this.state;
         const { recipe } = this.props;
 
@@ -65,11 +65,11 @@ class AddStepFormBase extends PureComponent<Props, State> {
                         newStep: {
                             ...newStep,
                             text: "",
-                            order: prevState.newStep.order + 1
+                            order: prevState.newStep.order + 1,
                         },
                         currentSelectStep: null,
-                        currentSelectType: null
-                    }
+                        currentSelectType: null,
+                    };
                 });
                 toast.success("Added!");
             })
@@ -79,7 +79,7 @@ class AddStepFormBase extends PureComponent<Props, State> {
             });
     }
 
-    render() {
+    public render() {
         const { editing } = this.props;
         const { newStep } = this.state;
 
@@ -87,7 +87,7 @@ class AddStepFormBase extends PureComponent<Props, State> {
             <>
                 {editing &&
                     <StyledPaper>
-                        <form onSubmit={e => { e.preventDefault(); }}>
+                        <form onSubmit={(e) => { e.preventDefault(); }}>
                             <Typography variant="h6">
                                 Add step
                             </Typography>
@@ -118,7 +118,7 @@ class AddStepFormBase extends PureComponent<Props, State> {
 const mapStateToProps = (state: ApplicationState) => ({
     recipe: state.recipe.recipe,
     steps: state.recipe.steps,
-    loadingSteps: state.recipe.loadingSteps
+    loadingSteps: state.recipe.loadingSteps,
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
@@ -126,11 +126,11 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
     updateStepsStop: bindActionCreators(recipeActions.updateStepsStop, dispatch),
     addStep: bindActionCreators(recipeActions.addStep, dispatch),
     fetchStepsStart: bindActionCreators(recipeActions.fetchStepsStart, dispatch),
-    fetchStepsStop: bindActionCreators(recipeActions.fetchStepsStop, dispatch)
+    fetchStepsStop: bindActionCreators(recipeActions.fetchStepsStop, dispatch),
 });
 
 const AddStepForm = compose(
-    connect<StateProps, DispatchProps>(mapStateToProps, mapDispatchToProps)
+    connect<StateProps, DispatchProps>(mapStateToProps, mapDispatchToProps),
 )(AddStepFormBase);
 
 export default AddStepForm;

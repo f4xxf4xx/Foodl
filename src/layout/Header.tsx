@@ -1,22 +1,22 @@
+import { Box, Button, Grid, IconButton, Link, Toolbar, Typography } from "@material-ui/core";
+import { Menu as MenuIcon } from "@material-ui/icons";
 import React from "react";
-import { Typography, Toolbar, Grid, Button, IconButton, Box, Link } from '@material-ui/core';
-import { StyledAppBar } from "./Styles/StyledAppBar";
-import { RouteComponentProps, withRouter, Link as RouterLink } from "react-router-dom";
-import { compose } from "redux";
 import { connect } from "react-redux";
 import { withFirebase } from "react-redux-firebase";
+import { Link as RouterLink, RouteComponentProps, withRouter } from "react-router-dom";
+import { compose } from "redux";
+import { ApplicationState } from "..";
+import { isAuthenticated } from "../helpers/userHelper";
 import { ButtonSecondary } from "./Styles/Buttons";
-import { Menu as MenuIcon } from "@material-ui/icons";
+import { StyledAppBar } from "./Styles/StyledAppBar";
 import { StyledMenuIcon } from "./Styles/StyledMenuIcon";
 import { StyledSpacer } from "./Styles/StyledSpacer";
-import { isAuthenticated } from "../helpers/userHelper";
-import { ApplicationState } from "..";
 
-type OwnProps = {
-  toggleDrawer: () => void
+interface OwnProps {
+  toggleDrawer: () => void;
 }
 
-type StateProps = {
+interface StateProps {
   auth: any;
   firebase: firebase.app.App;
 }
@@ -24,12 +24,12 @@ type StateProps = {
 type Props = OwnProps & StateProps & RouteComponentProps;
 
 class HeaderBase extends React.Component<Props> {
-  onSignOutClick = () => {
+  public onSignOutClick = () => {
     this.props.firebase.auth().signOut();
     this.props.history.push("/");
   }
 
-  render() {
+  public render() {
     const { auth, toggleDrawer } = this.props;
 
     return (
@@ -40,7 +40,7 @@ class HeaderBase extends React.Component<Props> {
               <MenuIcon />
             }
           </StyledMenuIcon>
-          <Link to="/" component={RouterLink} variant="h6" noWrap>
+          <Link to="/" component={RouterLink} variant="h6" noWrap={true}>
             Foodl
           </Link>
           <StyledSpacer />
@@ -56,11 +56,11 @@ class HeaderBase extends React.Component<Props> {
 }
 
 const mapStateToProps = (state: ApplicationState) => ({
-  auth: state.firebase.auth
+  auth: state.firebase.auth,
 });
 
 const Header = compose(
-  connect<StateProps>(mapStateToProps)
+  connect<StateProps>(mapStateToProps),
 )(withRouter(withFirebase(HeaderBase)));
 
 export default Header;

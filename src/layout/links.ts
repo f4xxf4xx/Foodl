@@ -9,27 +9,27 @@ export const getLinks = (): ListItemLink[] => {
         {
             path: "/",
             name: "Home",
-            icon: "home"
+            icon: "home",
         },
         {
             path: "/recipes",
             name: "Recipes",
-            icon: "library_books"
+            icon: "library_books",
         },
         {
             path: "/cart",
             name: "Cart",
-            icon: "shopping_cart"
-        }
+            icon: "shopping_cart",
+        },
     ];
-}
+};
 
 export const getAdminLinks = (): ListItemLink[] => {
     return [
         {
             path: "/ingredients",
             name: "Ingredients",
-            icon: "local_pizza"
-        }
-    ]
-}
+            icon: "local_pizza",
+        },
+    ];
+};

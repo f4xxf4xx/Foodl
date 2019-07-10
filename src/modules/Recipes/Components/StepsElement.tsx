@@ -1,30 +1,30 @@
-import React, { PureComponent } from 'react';
-import { Step, Recipe } from '../models';
-import { Table, TableBody, Divider, TableRow, TableCell, Button, Typography, Paper, TextField } from '@material-ui/core';
-import * as recipeActions from '../../../store/recipes/recipeActions';
-import { recipeService } from '../../../services/recipeService';
-import { toast } from 'react-toastify';
-import { compose, Dispatch, bindActionCreators } from 'redux';
+import { Button, Divider, Paper, Table, TableBody, TableCell, TableRow, TextField, Typography } from "@material-ui/core";
+import React, { PureComponent } from "react";
 import { connect } from "react-redux";
-import { Loader } from 'semantic-ui-react';
-import { RouteComponentProps } from 'react-router-dom';
-import AddStepForm from './AddStepForm';
-import { SortableContainer, SortableElement } from 'react-sortable-hoc';
-import { ButtonError } from '../../../layout/Styles/Buttons';
-import { ApplicationState } from '../../..';
+import { RouteComponentProps } from "react-router-dom";
+import { SortableContainer, SortableElement } from "react-sortable-hoc";
+import { toast } from "react-toastify";
+import { bindActionCreators, compose, Dispatch } from "redux";
+import { Loader } from "semantic-ui-react";
+import { ApplicationState } from "../../..";
+import { ButtonError } from "../../../layout/Styles/Buttons";
+import { recipeService } from "../../../services/recipeService";
+import * as recipeActions from "../../../store/recipes/recipeActions";
+import { Recipe, Step } from "../models";
+import AddStepForm from "./AddStepForm";
 
 interface OwnProps {
     id: string;
     editing: boolean;
 }
 
-type StateProps = {
+interface StateProps {
     steps: Step[];
     loadingSteps: boolean;
     updatingSteps: boolean;
 }
 
-type DispatchProps = {
+interface DispatchProps {
     fetchStepsStart: typeof recipeActions.fetchStepsStart;
     fetchStepsStop: typeof recipeActions.fetchStepsStop;
     updateStepsStart: typeof recipeActions.updateStepsStart;
@@ -74,7 +74,7 @@ const SortableStep = SortableElement(({ step, index, editing, updatingSteps, upd
                 }
             </TableCell>
         </TableRow>
-    )
+    );
 });
 
 const SortableSteps = SortableContainer(({ steps, editing, updatingSteps, updateStep, deleteStep }) => {
@@ -96,10 +96,10 @@ const SortableSteps = SortableContainer(({ steps, editing, updatingSteps, update
 });
 
 class StepsElementBase extends PureComponent<Props> {
-    componentDidMount() {
+    public componentDidMount() {
         const { id } = this.props;
 
-        this.props.fetchStepsStart()
+        this.props.fetchStepsStart();
         recipeService.getSteps(id)
             .then((steps) => {
                 if (steps.length > 0) {
@@ -110,11 +110,11 @@ class StepsElementBase extends PureComponent<Props> {
             .catch(() => {
                 this.props.fetchStepsStart();
                 toast.error("Error fetching the ingredient items!");
-            })
+            });
 
     }
 
-    deleteStep = (stepId: string) => {
+    public deleteStep = (stepId: string) => {
         const { id } = this.props;
 
         this.props.updateStepsStart();
@@ -130,7 +130,7 @@ class StepsElementBase extends PureComponent<Props> {
             });
     }
 
-    updateStep = (step: Step, key: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
+    public updateStep = (step: Step, key: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
 
         this.props.updateStepsStart();
@@ -142,14 +142,14 @@ class StepsElementBase extends PureComponent<Props> {
             .catch(() => {
                 this.props.updateStepsStop();
                 toast.error("Error updating the step");
-            })
+            });
     }
 
-    onSortEnd = ({ oldIndex, newIndex }) => {
+    public onSortEnd = ({ oldIndex, newIndex }) => {
 
-    };
+    }
 
-    renderSteps() {
+    public renderSteps() {
         const { steps, editing, updatingSteps } = this.props;
 
         return (
@@ -191,10 +191,10 @@ class StepsElementBase extends PureComponent<Props> {
                     </TableCell>
                 </TableRow>
             ))
-        )
+        );
     }
 
-    render() {
+    public render() {
         const { loadingSteps, editing, steps } = this.props;
 
         return (
@@ -202,7 +202,7 @@ class StepsElementBase extends PureComponent<Props> {
                 <Typography variant="h5">Steps</Typography>
                 <Paper>
                     {loadingSteps ?
-                        <Loader active inline='centered' />
+                        <Loader active={true} inline="centered" />
                         :
                         <Table>
                             <TableBody>
@@ -221,7 +221,7 @@ class StepsElementBase extends PureComponent<Props> {
 const mapStateToProps = (state: ApplicationState) => ({
     steps: state.recipe.steps,
     loadingSteps: state.recipe.loadingSteps,
-    updatingSteps: state.recipe.updatingSteps
+    updatingSteps: state.recipe.updatingSteps,
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
@@ -235,7 +235,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
 });
 
 const StepsElement = compose(
-    connect<StateProps, DispatchProps, OwnProps>(mapStateToProps, mapDispatchToProps)
+    connect<StateProps, DispatchProps, OwnProps>(mapStateToProps, mapDispatchToProps),
 )(StepsElementBase);
 
 export default StepsElement;

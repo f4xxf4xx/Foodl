@@ -1,19 +1,19 @@
-import React, { PureComponent } from 'react';
-import { Typography } from '@material-ui/core';
-import { compose } from "redux";
+import { Typography } from "@material-ui/core";
+import React, { PureComponent } from "react";
 import { connect } from "react-redux";
-import { ApplicationState } from '../..';
-import { isAuthenticated } from '../../helpers/userHelper';
-import { Title } from '../../layout/Styles/Sections';
+import { compose } from "redux";
+import { ApplicationState } from "../..";
+import { isAuthenticated } from "../../helpers/userHelper";
+import { Title } from "../../layout/Styles/Sections";
 
-type StateProps = {
+interface StateProps {
     auth: any;
 }
 
 type Props = StateProps;
 
 class HomePageBase extends PureComponent<Props> {
-    render() {
+    public render() {
         const { auth } = this.props;
 
         return (
@@ -24,13 +24,13 @@ class HomePageBase extends PureComponent<Props> {
                         Welcome, {auth.displayName}
                     </Typography>
                 }
-                <Typography paragraph align="justify">
+                <Typography paragraph={true} align="justify">
                     Lorem ipsum dolor sit amet, consectetur adipiscing elit.
                     ultrices arcu at sagittis aliquet. Donec convallis, felis id viverra sagittis, diam libero volutpat nunc,
                     pretium orci augue sed urna. Ut in laoreet lectus, in luctus purus. Cras a quam turpis.
                     Cras scelerisque hendrerit erat. Maecenas iaculis venenatis augue, a rutrum ex.
                 </Typography>
-                <Typography paragraph align="justify">
+                <Typography paragraph={true} align="justify">
                     Fusce vehicula urna molestie congue ultrices.
                     Suspendisse quis nulla nec risus varius pellentesque. Nullam efficitur sapien dolor,
                     uis tincidunt justo scelerisque ac. Fusce justo erat,
@@ -46,12 +46,11 @@ class HomePageBase extends PureComponent<Props> {
 }
 
 const mapStateToProps = (state: ApplicationState) => ({
-    auth: state.firebase.auth
+    auth: state.firebase.auth,
 });
 
-
 const HomePage = compose(
-    connect<StateProps>(mapStateToProps)
+    connect<StateProps>(mapStateToProps),
 )(HomePageBase);
 
 export default HomePage;

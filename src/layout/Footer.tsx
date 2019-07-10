@@ -1,9 +1,9 @@
 /*eslint-disable*/
-import React from "react";
 import { Typography } from "@material-ui/core";
+import React from "react";
 
 class Footer extends React.Component {
-  render() {
+  public render() {
     return (
       <footer>
         <Typography variant="body2" color="textSecondary" align="center">

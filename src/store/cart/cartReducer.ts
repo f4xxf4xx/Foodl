@@ -1,7 +1,7 @@
 import { createReducer } from "redux-starter-kit";
 import { Ingredient } from "../../modules/Ingredients/models";
 
-export type CartState = {
+export interface CartState {
     cartItems: Ingredient[];
     loadingCartItems: boolean;
     updatingCartItems: boolean;
@@ -10,8 +10,8 @@ export type CartState = {
 const initialState: CartState = {
     cartItems: [],
     loadingCartItems: false,
-    updatingCartItems: false
-}
+    updatingCartItems: false,
+};
 
 export const cartReducer = createReducer(initialState, {
     FETCH_CARTITEMS_START: (state) => {
@@ -33,9 +33,9 @@ export const cartReducer = createReducer(initialState, {
         state.cartItems.push(action.payload);
     },
     DELETE_CARTITEM: (state, action) => {
-        state.cartItems = state.cartItems.filter(i => i.name !== action.payload);
+        state.cartItems = state.cartItems.filter((i) => i.name !== action.payload);
     },
     DELETE_ALL_CARTITEMS: (state) => {
         state.cartItems = [];
-    }
+    },
 });

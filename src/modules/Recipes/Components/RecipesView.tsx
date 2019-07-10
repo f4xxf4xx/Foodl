@@ -1,37 +1,37 @@
-import React, { PureComponent } from 'react';
-import { RouteComponentProps } from 'react-router-dom';
-import { Recipe } from '../models';
-import { withRouter } from 'react-router-dom';
-import { recipeService } from '../../../services/recipeService';
-import { toast } from 'react-toastify';
-import { Typography, CardHeader, IconButton, CardContent, CardActions, CardActionArea, Grid, Divider, Card, CardMedia } from '@material-ui/core';
-import * as recipesActions from '../../../store/recipes/recipesActions';
-import { compose, Dispatch, bindActionCreators } from 'redux';
+import { Card, CardActionArea, CardActions, CardContent, CardHeader, CardMedia, Divider, Grid, IconButton, Typography } from "@material-ui/core";
+import DeleteIcon from "@material-ui/icons/Delete";
+import ShareIcon from "@material-ui/icons/Share";
+import React, { PureComponent } from "react";
 import { connect } from "react-redux";
-import AddRecipeForm from './AddRecipeForm';
-import { Loader } from 'semantic-ui-react';
-import { Title } from '../../../layout/Styles/Sections';
-import DeleteIcon from '@material-ui/icons/Delete';
-import ShareIcon from '@material-ui/icons/Share';
-import { StyledCardMedia } from './Styles/StyledCardMedia';
-import { StyledCard } from './Styles/StyledCard';
-import { ApplicationState } from '../../..';
-import { isAuthenticated } from '../../../helpers/userHelper';
-import { StyledCardContent } from './Styles/StyledCardContent';
+import { withRouter } from "react-router-dom";
+import { RouteComponentProps } from "react-router-dom";
+import { toast } from "react-toastify";
+import { bindActionCreators, compose, Dispatch } from "redux";
+import { Loader } from "semantic-ui-react";
+import { ApplicationState } from "../../..";
+import { isAuthenticated } from "../../../helpers/userHelper";
+import { Title } from "../../../layout/Styles/Sections";
+import { recipeService } from "../../../services/recipeService";
+import * as recipesActions from "../../../store/recipes/recipesActions";
+import { Recipe } from "../models";
+import AddRecipeForm from "./AddRecipeForm";
+import { StyledCard } from "./Styles/StyledCard";
+import { StyledCardContent } from "./Styles/StyledCardContent";
+import { StyledCardMedia } from "./Styles/StyledCardMedia";
 
-type State = {
+interface State {
     newRecipeName: string;
-};
+}
 
-type StateProps = {
+interface StateProps {
     recipes: Recipe[];
     loading: boolean;
     updating: boolean;
     error: string;
     auth: any;
-};
+}
 
-type DispatchProps = {
+interface DispatchProps {
     fetchRecipesStart: typeof recipesActions.fetchRecipesStart;
     fetchRecipesStop: typeof recipesActions.fetchRecipesStop;
     updateRecipesStart: typeof recipesActions.updateRecipesStart;
@@ -39,7 +39,7 @@ type DispatchProps = {
     updateRecipes: typeof recipesActions.updateRecipes;
     addRecipe: typeof recipesActions.addRecipe;
     deleteRecipe: typeof recipesActions.deleteRecipe;
-};
+}
 
 type Props = StateProps & RouteComponentProps & DispatchProps;
 
@@ -47,11 +47,11 @@ class RecipesViewBase extends PureComponent<Props, State> {
     constructor(props: Props) {
         super(props);
         this.state = {
-            newRecipeName: ""
+            newRecipeName: "",
         };
     }
 
-    componentDidMount() {
+    public componentDidMount() {
         const { auth } = this.props;
 
         if (this.props.recipes.length === 0) {
@@ -59,16 +59,16 @@ class RecipesViewBase extends PureComponent<Props, State> {
             recipeService.getRecipes(auth.uid)
                 .then((recipes) => {
                     this.props.updateRecipes(recipes);
-                    this.props.fetchRecipesStop()
+                    this.props.fetchRecipesStop();
                 })
                 .catch(() => {
                     this.props.fetchRecipesStop();
                     toast.error("Error fetching the recipes");
-                })
+                });
         }
     }
 
-    deleteRecipe(recipeId: string) {
+    public deleteRecipe(recipeId: string) {
         this.props.updateRecipesStart();
         recipeService.deleteRecipe(recipeId)
             .then(() => {
@@ -79,19 +79,19 @@ class RecipesViewBase extends PureComponent<Props, State> {
             .catch(() => {
                 this.props.updateRecipesStop();
                 toast.error("Error deleting the recipe");
-            })
+            });
     }
 
-    renderRecipes() {
+    public renderRecipes() {
         const { recipes, loading, history } = this.props;
 
         return (
-            <Grid container spacing={2}>
+            <Grid container={true} spacing={2}>
                 {loading ?
-                    <Loader active inline='centered' />
+                    <Loader active={true} inline="centered" />
                     :
                     recipes.map((recipe) =>
-                        <Grid key={recipe.id} item xs={12} sm={6} md={4} lg={3}>
+                        <Grid key={recipe.id} item={true} xs={12} sm={6} md={4} lg={3}>
                             <StyledCard>
                                 <CardActionArea onClick={() => history.push(`/recipe/${recipe.id}`)}>
                                     <StyledCardMedia
@@ -103,7 +103,7 @@ class RecipesViewBase extends PureComponent<Props, State> {
                                     <StyledCardContent>
                                         <Typography
                                             variant={"h6"}
-                                            gutterBottom
+                                            gutterBottom={true}
                                         >
                                             {recipe.name}
                                         </Typography>
@@ -112,10 +112,10 @@ class RecipesViewBase extends PureComponent<Props, State> {
                                         >
                                             Slow-cooked meat-sauce with wine, authentic recipe from Bologna.
                                         </Typography>
-                                        <Divider className={"MuiDivider-root"} light />
+                                        <Divider className={"MuiDivider-root"} light={true} />
                                     </StyledCardContent>
                                 </CardActionArea>
-                                <CardActions disableSpacing>
+                                <CardActions disableSpacing={true}>
                                     <IconButton aria-label="Share recipe">
                                         <ShareIcon />
                                     </IconButton>
@@ -124,20 +124,20 @@ class RecipesViewBase extends PureComponent<Props, State> {
                                     </IconButton>
                                 </CardActions>
                             </StyledCard>
-                        </Grid>
+                        </Grid>,
                     )
                 }
             </Grid>
         );
     }
 
-    render() {
+    public render() {
         const { loading } = this.props;
 
         return (
             <>
                 <Title>My recipes</Title>
-                <Typography paragraph>
+                <Typography paragraph={true}>
                     Lorem ipsum dolor sit amet, consectetur adipiscing elit.
                     ultrices arcu at sagittis aliquet. Donec convallis, felis id viverra sagittis, diam libero volutpat nunc,
                     pretium orci augue sed urna. Ut in laoreet lectus, in luctus purus. Cras a quam turpis.
@@ -152,7 +152,7 @@ class RecipesViewBase extends PureComponent<Props, State> {
                     In id porta tellus.Lorem ipsum dolor sit amet, consectetur adipiscing elit.
                 </Typography>
                 {loading ?
-                    <Loader active inline='centered' />
+                    <Loader active={true} inline="centered" />
                     :
                     <>
                         <AddRecipeForm />
@@ -168,7 +168,7 @@ const mapStateToProps = (state: ApplicationState) => ({
     recipes: state.recipes.recipes,
     loading: state.recipes.loadingRecipes,
     updating: state.recipes.updatingRecipes,
-    auth: state.firebase.auth
+    auth: state.firebase.auth,
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
@@ -182,7 +182,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
 });
 
 const RecipesView = compose(
-    connect<StateProps, DispatchProps>(mapStateToProps, mapDispatchToProps)
+    connect<StateProps, DispatchProps>(mapStateToProps, mapDispatchToProps),
 )(withRouter(RecipesViewBase));
 
 export default RecipesView;

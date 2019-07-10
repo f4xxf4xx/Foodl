@@ -1,18 +1,18 @@
+import { CssBaseline, Toolbar } from "@material-ui/core";
 import React from "react";
-import Sidebar from "./Sidebar";
-import { CssBaseline, Toolbar } from '@material-ui/core';
-import { compose } from "redux";
 import { connect } from "react-redux";
-import Header from "./Header";
+import { compose } from "redux";
 import { Loader } from "semantic-ui-react";
-import { Wrapper } from "./Styles/Wrapper";
 import { ApplicationState } from "..";
+import Header from "./Header";
+import Sidebar from "./Sidebar";
+import { Wrapper } from "./Styles/Wrapper";
 
-type StateProps = {
+interface StateProps {
   auth: any;
 }
 
-type State = {
+interface State {
   drawerOpen: boolean;
 }
 
@@ -22,17 +22,17 @@ class MainLayoutBase extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
-      drawerOpen: false
+      drawerOpen: false,
     };
   }
 
-  toggleDrawer = () => {
-    this.setState(prevProps => ({
-      drawerOpen: !prevProps.drawerOpen
-    }))
+  public toggleDrawer = () => {
+    this.setState((prevProps) => ({
+      drawerOpen: !prevProps.drawerOpen,
+    }));
   }
 
-  render() {
+  public render() {
     const { auth } = this.props;
     const { drawerOpen } = this.state;
 
@@ -55,12 +55,11 @@ class MainLayoutBase extends React.Component<Props, State> {
 }
 
 const mapStateToProps = (state: ApplicationState) => ({
-  auth: state.firebase.auth
+  auth: state.firebase.auth,
 });
 
-
 const MainLayout = compose(
-  connect<StateProps>(mapStateToProps)
+  connect<StateProps>(mapStateToProps),
 )(MainLayoutBase);
 
 export default MainLayout;

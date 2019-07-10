@@ -1,27 +1,27 @@
+import { Paper, Table, TableBody, TableCell, TableHead, TableRow, Typography } from "@material-ui/core";
+import { DeleteForever as DeleteIcon } from "@material-ui/icons";
 import React, { PureComponent } from "react";
+import { connect } from "react-redux";
 import { RouteProps } from "react-router-dom";
 import { toast } from "react-toastify";
-import { connect } from "react-redux";
-import { compose, bindActionCreators, Dispatch } from "redux";
-import * as cartActions from "../../../store/cart/cartActions";
-import { cartService } from "../../../services/cartService";
-import { TableHead, TableRow, Table, TableCell, TableBody, Paper, Typography } from "@material-ui/core";
-import { Loader } from 'semantic-ui-react'
-import { Ingredient } from "../../Ingredients/models";
-import AddCartItemForm from "./AddCartItemForm";
+import { bindActionCreators, compose, Dispatch } from "redux";
+import { Loader } from "semantic-ui-react";
 import { ApplicationState } from "../../..";
 import { ButtonError } from "../../../layout/Styles/Buttons";
 import { Title } from "../../../layout/Styles/Sections";
-import { DeleteForever as DeleteIcon } from "@material-ui/icons";
+import { cartService } from "../../../services/cartService";
+import * as cartActions from "../../../store/cart/cartActions";
+import { Ingredient } from "../../Ingredients/models";
+import AddCartItemForm from "./AddCartItemForm";
 
-type StateProps = {
+interface StateProps {
     cartItems: Ingredient[];
     loadingCartItems: boolean;
     updatingCartItems: boolean;
     auth: any;
-};
+}
 
-type DispatchProps = {
+interface DispatchProps {
     fetchCartItemsStart: typeof cartActions.fetchCartItemsStart;
     fetchCartItemsStop: typeof cartActions.fetchCartItemsStop;
     updateCartItemsStart: typeof cartActions.updateCartItemsStart;
@@ -29,17 +29,17 @@ type DispatchProps = {
     updateCartItems: typeof cartActions.updateCartItems;
     deleteCartItem: typeof cartActions.deleteCartItem;
     deleteAllCartItems: typeof cartActions.deleteAllCartItems;
-};
+}
 
 type Props = StateProps & DispatchProps & RouteProps;
 
 class CartViewBase extends PureComponent<Props> {
-    componentDidMount() {
+    public componentDidMount() {
         const { auth } = this.props;
 
         this.props.fetchCartItemsStart();
         return cartService.getCartItems(auth.uid)
-            .then(cartItems => {
+            .then((cartItems) => {
                 this.props.updateCartItems(cartItems);
                 this.props.fetchCartItemsStop();
             })
@@ -49,7 +49,7 @@ class CartViewBase extends PureComponent<Props> {
             });
     }
 
-    deleteAllCartItems() {
+    public deleteAllCartItems() {
         this.props.updateCartItemsStart();
         cartService.deleteAllItems()
             .then(() => {
@@ -59,11 +59,11 @@ class CartViewBase extends PureComponent<Props> {
             })
             .catch(() => {
                 this.props.updateCartItemsStop();
-                toast.error("Error deleting all cart items!")
+                toast.error("Error deleting all cart items!");
             });
     }
 
-    deleteCartItem(cartItemName: string) {
+    public deleteCartItem(cartItemName: string) {
         const { auth } = this.props;
 
         this.props.updateCartItemsStart();
@@ -75,11 +75,11 @@ class CartViewBase extends PureComponent<Props> {
             })
             .catch(() => {
                 this.props.updateCartItemsStop();
-                toast.error("Error deleting the cart item!")
+                toast.error("Error deleting the cart item!");
             });
     }
 
-    renderCartItems() {
+    public renderCartItems() {
         const { cartItems, updatingCartItems } = this.props;
 
         return (
@@ -106,7 +106,7 @@ class CartViewBase extends PureComponent<Props> {
                                             <DeleteIcon />
                                         </ButtonError>
                                     </TableCell>
-                                </TableRow>
+                                </TableRow>,
                             )}
                         </TableBody>
                     </Table>
@@ -119,14 +119,14 @@ class CartViewBase extends PureComponent<Props> {
         );
     }
 
-    render() {
+    public render() {
         const { loadingCartItems } = this.props;
 
         return (
             <>
                 <Title>Cart</Title>
-                {loadingCartItems?
-                    <Loader active inline='centered' />
+                {loadingCartItems ?
+                    <Loader active={true} inline="centered" />
                     :
                     <>
                         <AddCartItemForm updating={this.props.updatingCartItems} />
@@ -149,7 +149,7 @@ const mapStateToProps = (state: ApplicationState) => ({
     cartItems: state.cart.cartItems,
     loadingCartItems: state.cart.loadingCartItems,
     updatingCartItems: state.cart.updatingCartItems,
-    auth: state.firebase.auth
+    auth: state.firebase.auth,
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
@@ -159,11 +159,11 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
     updateCartItemsStop: bindActionCreators(cartActions.updateCartItemsStop, dispatch),
     updateCartItems: bindActionCreators(cartActions.updateCartItems, dispatch),
     deleteCartItem: bindActionCreators(cartActions.deleteCartItem, dispatch),
-    deleteAllCartItems: bindActionCreators(cartActions.deleteAllCartItems, dispatch)
+    deleteAllCartItems: bindActionCreators(cartActions.deleteAllCartItems, dispatch),
 });
 
 const CartView = compose(
-    connect<StateProps, DispatchProps>(mapStateToProps, mapDispatchToProps)
+    connect<StateProps, DispatchProps>(mapStateToProps, mapDispatchToProps),
 )(CartViewBase);
 
 export default CartView;

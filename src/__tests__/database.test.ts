@@ -25,7 +25,7 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
-  await Promise.all(firebase.apps().map(app => app.delete()));
+  await Promise.all(firebase.apps().map((app) => app.delete()));
   console.log(`View rule coverage information at ${coverageUrl}\n`);
 });
 
@@ -37,18 +37,18 @@ afterAll(async () => {
 
 describe("Recipes rules", () => {
   it("should deny guess to read or write recipes", async () => {
-    //arrange
+    // arrange
     const guessAuth = authedApp(null);
-    //assert
+    // assert
     await firebase.assertFails(guessAuth.collection("recipes").get());
     await firebase.assertFails(guessAuth.collection("recipes").doc("recipe").set({}));
   });
 
   it("should allow a user to consult or create his own recipes", async () => {
-    //arrange    
+    // arrange
     const aliceAuth = authedApp({ uid: "alice" });
-    //act
-    //assert
+    // act
+    // assert
     await firebase.assertFails(aliceAuth.collection("recipes").get());
     await firebase.assertSucceeds(aliceAuth.collection("recipes").where("uid", "==", "alice").get());
     await firebase.assertSucceeds(aliceAuth.collection("recipes").doc("recipe").set({ uid: "alice" }));
@@ -56,22 +56,22 @@ describe("Recipes rules", () => {
   });
 
   it("should not allow a user to consult someone else's recipe", async () => {
-    //arrange    
+    // arrange
     const aliceAuth = authedApp({ uid: "alice" });
     const bobAuth = authedApp({ uid: "bob" });
-    //act
+    // act
     await aliceAuth.collection("recipes").doc("recipe").set({ uid: "alice" });
-    //assert
+    // assert
     await firebase.assertFails(bobAuth.collection("recipes").doc("recipe").get());
     await firebase.assertSucceeds(aliceAuth.collection("recipes").doc("recipe").get());
   });
 
   it("should only a user to create a recipe for itself", async () => {
-    //arrange    
+    // arrange
     const aliceAuth = authedApp({ uid: "alice" });
     const bobAuth = authedApp({ uid: "bob" });
-    //act
-    //assert
+    // act
+    // assert
     await firebase.assertSucceeds(aliceAuth.collection("recipes").doc("recipe").set({ uid: "alice" }));
     await firebase.assertFails(bobAuth.collection("recipes").doc("recipe").set({ uid: "alice" }));
   });
@@ -79,11 +79,11 @@ describe("Recipes rules", () => {
 
 describe("Cart rules", () => {
   it("should only allow a user to consult his own cart", async () => {
-    //arrange
+    // arrange
     const aliceAuth = authedApp({ uid: "alice" });
-    //act
+    // act
     await aliceAuth.collection("carts").doc("alice").set({});
-    //assert
+    // assert
     await firebase.assertFails(aliceAuth.collection("carts").get());
     await firebase.assertFails(aliceAuth.collection("carts").doc("bob").get());
     await firebase.assertFails(aliceAuth.collection("carts").doc("bob").set({}));
@@ -93,10 +93,10 @@ describe("Cart rules", () => {
 
 describe("Ingredients rules", () => {
   it("should only allow a authenticated user to read and write ingredients", async () => {
-    //arrange
+    // arrange
     const guessAuth = authedApp(null);
     const aliceAuth = authedApp({ uid: "alice" });
-    //assert
+    // assert
     await firebase.assertFails(guessAuth.collection("ingredients").get());
     await firebase.assertFails(guessAuth.collection("ingredients").doc("ingredient").set({}));
     await firebase.assertSucceeds(aliceAuth.collection("ingredients").get());
@@ -106,10 +106,10 @@ describe("Ingredients rules", () => {
 
 describe("Cuisines rules", () => {
   it("should only allow a authenticated user to read and write cuisines", async () => {
-    //arrange
+    // arrange
     const guessAuth = authedApp(null);
     const aliceAuth = authedApp({ uid: "alice" });
-    //assert
+    // assert
     await firebase.assertFails(guessAuth.collection("cuisines").get());
     await firebase.assertFails(guessAuth.collection("cuisines").doc("ingredient").set({}));
     await firebase.assertSucceeds(aliceAuth.collection("cuisines").get());

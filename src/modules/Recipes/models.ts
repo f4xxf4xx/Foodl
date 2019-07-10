@@ -10,7 +10,7 @@ export enum IngredientType {
     Tablespoon = "tablespoon",
     Teaspoon = "teaspoon",
     Unit = "unit",
-    Gram = "gram"
+    Gram = "gram",
 }
 
 export interface Recipe {

@@ -1,4 +1,4 @@
-import { IngredientType, IngredientItem } from "./models";
+import { IngredientItem, IngredientType } from "./models";
 
 export const getNumericQuantity = (quantity: string): string => {
     const number = parseFloat(quantity);
@@ -20,8 +20,8 @@ export const getNumericQuantity = (quantity: string): string => {
             "";
     }
 
-    return `${flooredNumber > 0 ? flooredNumber : ""}${decimalText}`
-}
+    return `${flooredNumber > 0 ? flooredNumber : ""}${decimalText}`;
+};
 
 export const getIngredientTypeText = (ingredientType: string) => {
     switch (ingredientType) {
@@ -36,29 +36,29 @@ export const getIngredientTypeText = (ingredientType: string) => {
         case IngredientType.Teaspoon:
             return "teaspoon(s)";
     }
-}
+};
 
 export const getIngredientTypeOptions = () => {
     return [
         {
             value: IngredientType.Cup,
-            label: "cup(s)"
+            label: "cup(s)",
         },
         {
             value: IngredientType.Gram,
-            label: "gram(s)"
+            label: "gram(s)",
         },
         {
             value: IngredientType.Tablespoon,
-            label: "tablespoon(s)"
+            label: "tablespoon(s)",
         },
         {
             value: IngredientType.Teaspoon,
-            label: "teaspoon(s)"
+            label: "teaspoon(s)",
         },
         {
             value: IngredientType.Unit,
-            label: "unit(s)"
+            label: "unit(s)",
         },
-    ]
-}
+    ];
+};

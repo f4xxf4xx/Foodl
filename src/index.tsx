@@ -1,31 +1,31 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import App from './App';
-import { BrowserRouter } from 'react-router-dom';
-import { Provider } from 'react-redux'
-import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import { configureStore } from 'redux-starter-kit'
-import { ingredientReducer, IngredientState } from './store/ingredients/ingredientReducer';
-import { recipeReducer, cuisinesReducer, RecipeState } from './store/recipes/recipeReducer';
-import { recipesReducer, RecipesState } from './store/recipes/recipesReducer';
-import { cartReducer, CartState } from './store/cart/cartReducer';
-import { CuisinesState } from './store/recipes/recipeReducer';
-import { reactReduxFirebase, getFirebase, firebaseReducer } from 'react-redux-firebase';
-import { reduxFirestore, getFirestore, firestoreReducer } from 'redux-firestore';
-import { firebase } from './config'
+import React from "react";
+import ReactDOM from "react-dom";
+import { Provider } from "react-redux";
+import { firebaseReducer, getFirebase, reactReduxFirebase } from "react-redux-firebase";
+import { BrowserRouter } from "react-router-dom";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { firestoreReducer, getFirestore, reduxFirestore } from "redux-firestore";
+import { configureStore } from "redux-starter-kit";
 import thunk from "redux-thunk";
+import App from "./App";
+import { firebase } from "./config";
+import { cartReducer, CartState } from "./store/cart/cartReducer";
+import { ingredientReducer, IngredientState } from "./store/ingredients/ingredientReducer";
+import { CuisinesState } from "./store/recipes/recipeReducer";
+import { cuisinesReducer, recipeReducer, RecipeState } from "./store/recipes/recipeReducer";
+import { recipesReducer, RecipesState } from "./store/recipes/recipesReducer";
 
-const baseUrl = document.getElementsByTagName('base')[0].getAttribute('href');
-const rootElement = document.getElementById('root');
+const baseUrl = document.getElementsByTagName("base")[0].getAttribute("href");
+const rootElement = document.getElementById("root");
 toast.configure({
   position: "top-right",
   autoClose: 5000,
   hideProgressBar: true,
   closeOnClick: true,
   pauseOnHover: true,
-  draggable: true
-})
+  draggable: true,
+});
 
 export interface ApplicationState {
   ingredients: IngredientState;
@@ -38,10 +38,10 @@ export interface ApplicationState {
 }
 
 const rrfConfig = {
-  userProfile: 'users',
+  userProfile: "users",
   attachAuthIsReady: true,
-  useFirestoreForProfile: true
-}
+  useFirestoreForProfile: true,
+};
 
 const store = configureStore({
   reducer: {
@@ -51,14 +51,14 @@ const store = configureStore({
     cart: cartReducer,
     cuisines: cuisinesReducer,
     firebase: firebaseReducer,
-    firestore: firestoreReducer
+    firestore: firestoreReducer,
   },
   enhancers: [
-    reactReduxFirebase(firebase, rrfConfig), 
-    reduxFirestore(firebase)
+    reactReduxFirebase(firebase, rrfConfig),
+    reduxFirestore(firebase),
   ],
-  middleware: [thunk.withExtraArgument({getFirebase, getFirestore})]
-})
+  middleware: [thunk.withExtraArgument({getFirebase, getFirestore})],
+});
 
 ReactDOM.render(
   <Provider store={store}>
