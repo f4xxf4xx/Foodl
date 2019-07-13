@@ -1,0 +1,23 @@
+{
+    "extends": ["tslint-eslint-rules"],
+    "rules": {
+        "no-multi-spaces": true,
+        "no-constant-condition": true,
+        "no-inner-declarations": true,
+        "no-invalid-regexp": true,
+        "no-irregular-whitespace": true,
+        "no-regex-spaces": true,
+        "no-sparse-arrays": true,
+        "no-unexpected-multiline": true,
+        "brace-style": [true, "stroustrup"],
+        "ter-no-mixed-spaces-and-tabs": { "type": "spaces" },
+        "ter-max-len": [true, 150, {
+            "ignoreImports": true,
+            "ignoreComments": true,
+            "ignoreUrls": true
+        }],
+        "ter-newline-after-var": [true],
+        "ter-arrow-spacing": [true],
+        "object-curly-spacing": [true, "always"]
+    }
+}

@@ -1,13 +1,14 @@
 import { db } from "../config";
 import { Ingredient } from "../modules/Ingredients/models";
 
-export class cartService {
+export class CartService {
     public static async getCartItems(userid: string): Promise<Ingredient[]> {
         const cart = await db.collection("carts").doc(userid).get();
 
         if (cart.exists) {
-            return cartService.getItems(cart);
-        } else {
+            return CartService.getItems(cart);
+        }
+        else {
             return [];
         }
     }
@@ -29,12 +30,14 @@ export class cartService {
 
         if (cart.exists) {
             const items = cart.data().items;
+
             if (items.includes(name)) {
                 return null;
             }
             items.push(name);
             await cartRef.set({ items });
-        } else {
+        }
+        else {
             await cartRef.set({ items: [name] });
         }
         return {
@@ -49,6 +52,7 @@ export class cartService {
         if (cart.exists) {
             const items = cart.data().items;
             const newItems = items.filter((item) => item !== name);
+
             return await cartRef.set({ items: newItems });
         }
 

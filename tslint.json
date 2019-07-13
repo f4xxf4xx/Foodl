@@ -1,9 +1,61 @@
 {
-    "extends": [
-      "tslint:recommended",
-      "tslint-react"
+  "extends": [
+    "tslint:recommended",
+    "tslint-react",
+    "tslint-config-prettier",
+    "./eslint.json"
+  ],
+  "linterOptions": {
+    "exclude": [
+      "config/**/*.js",
+      "node_modules/**/*.ts",
+      "**/*.json"
+    ]
+  },
+  "rules": {
+    "object-literal-sort-keys": false,
+    "object-literal-shorthand": false,
+    "ordered-imports": [
+      true,
+      {
+        "import-sources-order": "any",
+        "named-imports-order": "any"
+      }
     ],
-    "rules": {
-      "interface-name": false
-    }
+    "no-import-side-effect": [
+      true,
+      {
+        "ignore-module": "(\\.html|\\.css|moment/locale/.+|ts-polyfill/lib/.+$|\\.scss)"
+      }
+    ],
+    "jsx-boolean-value": false,
+    "member-access": false,
+    "no-shadowed-variable": false,
+    "interface-name": false,
+    "member-ordering": false,
+    "interface-over-type-literal": false,
+    "type-literal-delimiter": true,
+    "no-namespace": false,
+    "no-empty": [
+      false,
+      {
+        "allow-empty-catch": true,
+        "allow-empty-functions": true
+      }
+    ],
+    "no-consecutive-blank-lines": true,
+    "whitespace": [
+      true,
+      "check-branch",
+      "check-operator",
+      "check-typecast",
+      "check-decl",
+      "check-separator",
+      "check-type",
+      "check-preblock"
+    ],
+    "no-trailing-whitespace": true,
+    "no-console": false,
+    "no-debugger": false
   }
+}
