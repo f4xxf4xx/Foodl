@@ -7,9 +7,9 @@ export const StyledCard = styled(Card)`
     transition: 0.3s;
     max-width: 300;
     margin: auto;
-    box-shadow: 0 8px 40px -12px rgba(0,0,0,0.3);
+    box-shadow: 0 4px 20px -6px rgba(0,0,0,0.3);
     &:hover {
-      box-shadow: 0 16px 70px -12px rgba(0,0,0,0.3);
+      box-shadow: 0 8px 30px -6px rgba(0,0,0,0.3);
     }
   }
 `;

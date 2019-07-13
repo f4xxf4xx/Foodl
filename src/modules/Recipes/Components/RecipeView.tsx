@@ -21,6 +21,7 @@ interface StateProps {
     recipe: Recipe;
     loadingRecipe: boolean;
     cuisines: Cuisine[];
+    auth: any;
 }
 
 interface DispatchProps {
@@ -51,14 +52,15 @@ class RecipeViewBase extends PureComponent<Props, State> {
 
     public componentDidMount() {
         const { id } = this.props.match.params;
+        const { auth } = this.props;
 
         this.props.fetchRecipeStart();
-        RecipeService.getRecipe(id)
+        RecipeService.getRecipeBySlug(auth.uid, id)
             .then((recipe) => {
                 this.props.updateRecipe(recipe);
                 this.props.fetchRecipeStop();
             })
-            .catch(() => {
+            .catch((error) => {
                 this.props.fetchRecipeStop();
                 toast.error("Error fetching the recipe!");
             });
@@ -70,7 +72,7 @@ class RecipeViewBase extends PureComponent<Props, State> {
                     this.props.updateCuisines(cuisines);
                     this.props.fetchCuisinesStop();
                 })
-                .catch(() => {
+                .catch((error) => {
                     this.props.fetchCuisinesStop();
                     toast.error("Error fetching the cuisines.");
                 });
@@ -87,8 +89,7 @@ class RecipeViewBase extends PureComponent<Props, State> {
     }
 
     public render() {
-        const { loadingRecipe } = this.props;
-        const { id } = this.props.match.params;
+        const { loadingRecipe, recipe } = this.props;
         const { editing } = this.state;
 
         return (
@@ -97,12 +98,18 @@ class RecipeViewBase extends PureComponent<Props, State> {
                     <Loader active={true} inline="centered" />
                     :
                     <>
-                        <RecipeHeaderElement
-                            editing={editing}
-                            toggleEdit={this.toggleEdit}
-                        />
-                        <IngredientsElement editing={editing} id={id} />
-                        <StepsElement editing={editing} id={id} />
+                        {recipe ?
+                            <>
+                                <RecipeHeaderElement
+                                    editing={editing}
+                                    toggleEdit={this.toggleEdit}
+                                />
+                                <IngredientsElement editing={editing} id={recipe.id} />
+                                <StepsElement editing={editing} id={recipe.id} />
+                            </>
+                            :
+                            null
+                        }
                     </>
                 }
             </>
@@ -114,6 +121,7 @@ const mapStateToProps = (state: ApplicationState) => ({
     recipe: state.recipe.recipe,
     loadingRecipe: state.recipe.loadingRecipe,
     cuisines: state.cuisines.cuisines,
+    auth: state.firebase.auth,
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({

@@ -1,10 +1,11 @@
-import { Typography } from "@material-ui/core";
+import { Divider, Typography, Grid } from "@material-ui/core";
 import React, { PureComponent } from "react";
 import { connect } from "react-redux";
 import { compose } from "redux";
 import { ApplicationState } from "../..";
 import { isAuthenticated } from "../../helpers/userHelper";
 import { Title } from "../../layout/Styles/Sections";
+import { Icon, ListItem, ListItemIcon, ListItemText } from "@material-ui/core";
 
 interface StateProps {
     auth: any;
@@ -18,28 +19,44 @@ class HomePageBase extends PureComponent<Props> {
 
         return (
             <>
-                <Title>Welcome on Foodl</Title>
-                {isAuthenticated(auth) &&
+                {isAuthenticated(auth) ?
                     <Typography variant="h6">
                         Welcome, {auth.displayName}
                     </Typography>
+                    :
+                    <>
+                    <Title align="center">Foodl</Title>
+                    <Typography variant="h6" align="center">
+                        An app for foodies
+                    </Typography>
+                    <Grid container={true} spacing={5}>
+                        <Grid item={true} xs={12} sm={4} lg={4}>
+                            <Typography align="center">
+                                <Icon>library_books</Icon>
+                            </Typography>
+                            <Typography paragraph={true} align="justify">
+                                Manage your own cookbook by creating recipes, and share the recipes to the people you love.
+                            </Typography>
+                        </Grid>
+                        <Grid item={true} xs={12} sm={4} lg={4}>
+                            <Typography align="center">
+                                <Icon>shopping_cart</Icon>
+                            </Typography>
+                            <Typography paragraph={true} align="justify">
+                                Keep track of food you need to buy to make recipes, or for ingredients you are running low of.
+                            </Typography>
+                        </Grid>
+                        <Grid item={true} xs={12} sm={4} lg={4}>
+                            <Typography align="center">
+                                <Icon>restaurant</Icon>
+                            </Typography>
+                            <Typography paragraph={true} align="justify">
+                                Share restaurants you suggest to your friends and keep a bucket list of restaurants you want to go to.
+                            </Typography>
+                        </Grid>
+                    </Grid>
+                    </>
                 }
-                <Typography paragraph={true} align="justify">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                    ultrices arcu at sagittis aliquet. Donec convallis, felis id viverra sagittis, diam libero volutpat nunc,
-                    pretium orci augue sed urna. Ut in laoreet lectus, in luctus purus. Cras a quam turpis.
-                    Cras scelerisque hendrerit erat. Maecenas iaculis venenatis augue, a rutrum ex.
-                </Typography>
-                <Typography paragraph={true} align="justify">
-                    Fusce vehicula urna molestie congue ultrices.
-                    Suspendisse quis nulla nec risus varius pellentesque. Nullam efficitur sapien dolor,
-                    uis tincidunt justo scelerisque ac. Fusce justo erat,
-                    ullamcorper et justo quis, efficitur egestas tellus. Integer interdum fermentum lorem,
-                    in placerat purus volutpat vitae.
-                    Ut sodales cursus dolor eget molestie. Curabitur eget laoreet ligula. Aenean venenatis
-                    lorem nisi, nec dignissim ipsum malesuada ac.
-                    In id porta tellus.Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                </Typography>
             </>
         );
     }

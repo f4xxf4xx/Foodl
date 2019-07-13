@@ -81,10 +81,10 @@ class RecipesViewBase extends PureComponent<Props, State> {
             });
     }
 
-    public goToRecipePage = (id: string) => (event: React.MouseEvent<HTMLButtonElement>) => {
+    public goToRecipePage = (slug: string) => (event: React.MouseEvent<HTMLButtonElement>) => {
         const { history } = this.props;
 
-        history.push(`/recipe/${id}`);
+        history.push(`/recipe/${slug}`);
     }
 
     public renderRecipes() {
@@ -98,7 +98,7 @@ class RecipesViewBase extends PureComponent<Props, State> {
                     recipes.map((recipe) =>
                         <Grid key={recipe.id} item={true} xs={12} sm={6} md={4} lg={3}>
                             <StyledCard>
-                                <CardActionArea onClick={this.goToRecipePage(recipe.id)}>
+                                <CardActionArea onClick={this.goToRecipePage(recipe.slug)}>
                                     <StyledCardMedia
                                         image={
                                             "https://material-ui.com/static/images/cards/paella.jpg"
@@ -143,18 +143,7 @@ class RecipesViewBase extends PureComponent<Props, State> {
             <>
                 <Title>My recipes</Title>
                 <Typography paragraph={true}>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                    ultrices arcu at sagittis aliquet. Donec convallis, felis id viverra sagittis, diam libero volutpat nunc,
-                    pretium orci augue sed urna. Ut in laoreet lectus, in luctus purus. Cras a quam turpis.
-                    Cras scelerisque hendrerit erat. Maecenas iaculis venenatis augue, a rutrum ex.
-                    Fusce vehicula urna molestie congue ultrices.
-                    Suspendisse quis nulla nec risus varius pellentesque. Nullam efficitur sapien dolor,
-                    uis tincidunt justo scelerisque ac. Fusce justo erat,
-                    ullamcorper et justo quis, efficitur egestas tellus. Integer interdum fermentum lorem,
-                    in placerat purus volutpat vitae.
-                    Ut sodales cursus dolor eget molestie. Curabitur eget laoreet ligula. Aenean venenatis
-                    lorem nisi, nec dignissim ipsum malesuada ac.
-                    In id porta tellus.Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                    Here you can manage your own recipes
                 </Typography>
                 {loading ?
                     <Loader active={true} inline="centered" />

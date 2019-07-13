@@ -9,6 +9,7 @@ export class RecipeService {
             .get()
             .then((data) => {
                 const recipes: Recipe[] = [];
+
                 data.forEach((recipe) => {
                     const item: Recipe = {
                         id: recipe.id,
@@ -16,13 +17,14 @@ export class RecipeService {
                         name: recipe.data().name,
                         description: recipe.data().description,
                     };
+
                     recipes.push(item);
                 });
                 return recipes;
             });
     }
 
-    public static getRecipe(id: string): Promise<Recipe> {
+    public static getRecipeById(id: string): Promise<Recipe> {
         return db.collection("recipes").doc(id).get()
             .then((data) => {
                 const recipe: Recipe = {
@@ -33,8 +35,34 @@ export class RecipeService {
                     cuisine: data.data().cuisine,
                     duration: data.data().duration,
                 };
+
                 return recipe;
             });
+    }
+
+    public static async getRecipeBySlug(uid: string, slug: string): Promise<Recipe> {
+        const recipes = await db.collection("recipes")
+            .where("uid", "==", uid)
+            .where("slug", "==", slug)
+            .get();
+
+        console.log(recipes);
+        if (recipes.docs.length === 0) {
+            return null;
+        }
+
+        const firstRecipe = recipes.docs[0];
+
+        const recipe: Recipe = {
+            id: firstRecipe.id,
+            slug: firstRecipe.data().slug,
+            name: firstRecipe.data().name,
+            description: firstRecipe.data().description,
+            cuisine: firstRecipe.data().cuisine,
+            duration: firstRecipe.data().duration,
+        };
+
+        return recipe;
     }
 
     public static addRecipe(name: string): Promise<Recipe> {
@@ -76,6 +104,7 @@ export class RecipeService {
             .get()
             .then((data) => {
                 const ingredientItems: IngredientItem[] = [];
+
                 data.forEach((ingredientItem) => {
                     const item: IngredientItem = {
                         id: ingredientItem.id,
@@ -83,6 +112,7 @@ export class RecipeService {
                         quantity: ingredientItem.data().quantity,
                         type: ingredientItem.data().type,
                     };
+
                     ingredientItems.push(item);
                 });
 
@@ -96,12 +126,14 @@ export class RecipeService {
             .get()
             .then((data) => {
                 const steps: Step[] = [];
+
                 data.forEach((step) => {
                     const item: Step = {
                         id: step.id,
                         text: step.data().text,
                         order: step.data().order,
                     };
+
                     steps.push(item);
                 });
 
@@ -137,13 +169,16 @@ export class RecipeService {
             .get()
             .then((data) => {
                 const cuisines: Cuisine[] = [];
+
                 data.forEach((cuisine) => {
                     const item: Cuisine = {
                         id: cuisine.id,
                         name: cuisine.data().name,
                     };
+
                     cuisines.push(item);
                 });
+
                 return cuisines;
             });
     }
