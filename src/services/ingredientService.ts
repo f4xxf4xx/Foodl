@@ -1,7 +1,7 @@
 import { db } from "../config";
 import { Ingredient } from "../modules/Ingredients/models";
 
-export class ingredientService {
+export class IngredientService {
     public static async getIngredients(): Promise<Ingredient[]> {
         const ingredients = await db.collection("ingredients")
             .orderBy("name")

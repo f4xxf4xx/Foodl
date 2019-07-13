@@ -1,8 +1,7 @@
-import { Divider, Icon, List, ListItem, ListItemIcon, ListItemText } from "@material-ui/core";
+import { Icon, ListItem, ListItemIcon, ListItemText } from "@material-ui/core";
 import React from "react";
 import { Link, RouteComponentProps, withRouter } from "react-router-dom";
-import { getAdminLinks, getLinks, ListItemLink } from "./links";
-import { StyledDrawer } from "./Styles/StyledDrawer";
+import { ListItemLink } from "./links";
 
 interface OwnProps {
   key: number;
@@ -15,7 +14,7 @@ type Props = OwnProps & RouteComponentProps;
 class SidebarLinkBase extends React.Component<Props> {
   public render() {
     const { key, currentPath, link } = this.props;
-    const active = currentPath == link.path;
+    const active = currentPath === link.path;
 
     return (
       <ListItem

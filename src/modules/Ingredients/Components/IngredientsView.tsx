@@ -9,10 +9,10 @@ import { Loader } from "semantic-ui-react";
 import { ApplicationState } from "../../..";
 import { ButtonError } from "../../../layout/Styles/Buttons";
 import { Title } from "../../../layout/Styles/Sections";
-import { ingredientService } from "../../../services/ingredientService";
 import * as ingredientActions from "../../../store/ingredients/ingredientActions";
 import { Ingredient } from "../models";
 import AddIngredientForm from "./AddIngredientForm";
+import { IngredientService } from "../../../services/IngredientService";
 
 interface StateProps {
     ingredients: Ingredient[];
@@ -35,7 +35,7 @@ type Props = StateProps & DispatchProps & RouteProps;
 class IngredientsViewBase extends PureComponent<Props> {
     public componentDidMount() {
         this.props.fetchIngredientsStart();
-        return ingredientService.getIngredients()
+        return IngredientService.getIngredients()
             .then((ingredients) => {
                 this.props.updateIngredients(ingredients);
                 this.props.fetchIngredientsStop();
@@ -46,9 +46,9 @@ class IngredientsViewBase extends PureComponent<Props> {
             });
     }
 
-    public deleteIngredient(ingredientId: string): void {
+    public deleteIngredient = (ingredientId: string) => {
         this.props.updateIngredientsStart();
-        ingredientService.deleteIngredient(ingredientId)
+        IngredientService.deleteIngredient(ingredientId)
             .then(() => {
                 this.props.deleteIngredient(ingredientId);
                 this.props.updateIngredientsStop();
@@ -83,7 +83,7 @@ class IngredientsViewBase extends PureComponent<Props> {
                                         <ButtonError
                                             width="15"
                                             disabled={updatingIngredients}
-                                            onClick={() => this.deleteIngredient(ingredient.id)}
+                                            onClick={this.deleteIngredient(ingredient.id)}
                                         >
                                             <DeleteIcon />
                                         </ButtonError>

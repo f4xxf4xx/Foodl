@@ -8,8 +8,8 @@ import { bindActionCreators, compose, Dispatch } from "redux";
 import { ApplicationState } from "../../..";
 import { ButtonPrimary } from "../../../layout/Styles/Buttons";
 import { StyledPaper } from "../../../layout/Styles/Sections";
-import { recipeService } from "../../../services/recipeService";
 import * as recipesActions from "../../../store/recipes/recipesActions";
+import { RecipeService } from "../../../services/RecipeService";
 
 interface State {
     newRecipeName: string;
@@ -47,12 +47,13 @@ class AddRecipeFormBase extends PureComponent<Props, State> {
 
     public addRecipe = () => {
         const { newRecipeName } = this.state;
+
         if (newRecipeName === "") {
             return;
         }
 
         this.props.updateRecipesStart();
-        recipeService.addRecipe(newRecipeName)
+        RecipeService.addRecipe(newRecipeName)
             .then((recipe) => {
                 this.props.addRecipe(recipe);
                 this.props.updateRecipesStop();
@@ -67,12 +68,17 @@ class AddRecipeFormBase extends PureComponent<Props, State> {
             });
     }
 
+    preventDefault = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+    }
+
     public render() {
         const { updatingRecipes } = this.props;
+
         return (
             <StyledPaper>
                 <Typography variant="h6">New recipe</Typography>
-                <form onSubmit={(e) => { e.preventDefault(); }}>
+                <form onSubmit={this.preventDefault}>
                     <Box>
                         <TextField
                             id="input-recipe-name"

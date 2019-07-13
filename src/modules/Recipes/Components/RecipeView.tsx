@@ -6,12 +6,12 @@ import { toast } from "react-toastify";
 import { bindActionCreators, compose, Dispatch } from "redux";
 import { Loader } from "semantic-ui-react";
 import { ApplicationState } from "../../..";
-import { recipeService } from "../../../services/recipeService";
 import * as recipeActions from "../../../store/recipes/recipeActions";
 import { Cuisine, Recipe } from "../models";
 import IngredientsElement from "./IngredientsElement";
 import RecipeHeaderElement from "./RecipeHeaderElement";
 import StepsElement from "./StepsElement";
+import { RecipeService } from "../../../services/RecipeService";
 
 interface State {
     editing: boolean;
@@ -53,7 +53,7 @@ class RecipeViewBase extends PureComponent<Props, State> {
         const { id } = this.props.match.params;
 
         this.props.fetchRecipeStart();
-        recipeService.getRecipe(id)
+        RecipeService.getRecipe(id)
             .then((recipe) => {
                 this.props.updateRecipe(recipe);
                 this.props.fetchRecipeStop();
@@ -65,7 +65,7 @@ class RecipeViewBase extends PureComponent<Props, State> {
 
         if (this.props.cuisines.length === 0) {
             this.props.fetchCuisinesStart();
-            recipeService.getCuisines()
+            RecipeService.getCuisines()
                 .then((cuisines) => {
                     this.props.updateCuisines(cuisines);
                     this.props.fetchCuisinesStop();

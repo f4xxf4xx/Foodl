@@ -8,9 +8,9 @@ import { Loader } from "semantic-ui-react";
 import { ApplicationState } from "../../..";
 import { ButtonPrimary } from "../../../layout/Styles/Buttons";
 import { Title } from "../../../layout/Styles/Sections";
-import { recipeService } from "../../../services/recipeService";
 import * as recipeActions from "../../../store/recipes/recipeActions";
 import { Cuisine, IngredientItem, Recipe } from "../models";
+import { RecipeService } from "../../../services/RecipeService";
 
 interface StateProps {
     recipe: Recipe;
@@ -38,7 +38,7 @@ class RecipeHeaderElementBase extends React.Component<Props> {
         const value = e.currentTarget.value;
 
         this.props.updateRecipeStart();
-        recipeService.updateRecipe(recipe.id, key, value)
+        RecipeService.updateRecipe(recipe.id, key, value)
             .then(() => {
                 this.props.updateRecipe({ ...recipe, [key]: value });
                 this.props.updateRecipeStop();
@@ -55,7 +55,7 @@ class RecipeHeaderElementBase extends React.Component<Props> {
         const value = e.label;
 
         if (!cuisines.find((i) => i.name === value)) {
-            recipeService.addCuisine(value)
+            RecipeService.addCuisine(value)
                 .then((cuisine) => {
                     this.props.addCuisine(cuisine);
                 })
@@ -65,7 +65,7 @@ class RecipeHeaderElementBase extends React.Component<Props> {
         }
 
         this.props.updateRecipeStart();
-        recipeService.updateRecipe(recipe.id, "cuisine", value)
+        RecipeService.updateRecipe(recipe.id, "cuisine", value)
             .then(() => {
                 this.props.updateRecipe({ ...recipe, ["cuisine"]: value });
                 this.props.updateRecipeStop();
@@ -88,6 +88,7 @@ class RecipeHeaderElementBase extends React.Component<Props> {
         }) : [];
 
         const matchingCuisine = cuisines ? cuisines.find((cuisine) => cuisine.name === recipe.cuisine) : null;
+
         return (
             recipe &&
             <>

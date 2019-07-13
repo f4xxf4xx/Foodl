@@ -1,9 +1,9 @@
 import { IngredientItem, IngredientType } from "./models";
 
 export const getNumericQuantity = (quantity: string): string => {
-    const number = parseFloat(quantity);
-    const flooredNumber = Math.floor(number);
-    const decimal = number - flooredNumber;
+    const quantityNumber = parseFloat(quantity);
+    const flooredNumber = Math.floor(quantityNumber);
+    const decimal = quantityNumber - flooredNumber;
     let decimalText = "";
 
     switch (decimal.toString()) {
@@ -17,7 +17,8 @@ export const getNumericQuantity = (quantity: string): string => {
             decimalText = "¾";
             break;
         default:
-            "";
+            decimalText = "";
+            break;
     }
 
     return `${flooredNumber > 0 ? flooredNumber : ""}${decimalText}`;

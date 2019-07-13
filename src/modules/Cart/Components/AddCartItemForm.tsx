@@ -8,11 +8,11 @@ import { bindActionCreators, compose, Dispatch } from "redux";
 import { ApplicationState } from "../../..";
 import { ButtonPrimary } from "../../../layout/Styles/Buttons";
 import { StyledPaper } from "../../../layout/Styles/Sections";
-import { cartService } from "../../../services/cartService";
-import { ingredientService } from "../../../services/ingredientService";
 import * as cartActions from "../../../store/cart/cartActions";
 import * as ingredientActions from "../../../store/ingredients/ingredientActions";
 import { Ingredient } from "../../Ingredients/models";
+import { CartService } from "../../../services/CartService";
+import { IngredientService } from "../../../services/IngredientService";
 
 interface OwnProps {
     updating: boolean;
@@ -48,9 +48,9 @@ class AddCartItemFormBase extends PureComponent<Props, State> {
     }
 
     public componentDidMount() {
-        if (this.props.ingredients.length == 0) {
+        if (this.props.ingredients.length === 0) {
             this.props.fetchIngredientsStart();
-            ingredientService.getIngredients()
+            IngredientService.getIngredients()
                 .then((ingredients) => {
                     this.props.updateIngredients(ingredients);
                     this.props.fetchIngredientsStop();
@@ -71,7 +71,7 @@ class AddCartItemFormBase extends PureComponent<Props, State> {
         }
 
         if (!ingredients.find((i) => i.name === currentSelectIngredient.label)) {
-            ingredientService.addIngredient(currentSelectIngredient.label)
+            IngredientService.addIngredient(currentSelectIngredient.label)
                 .then((ingredient) => {
                     if (ingredient) {
                         this.props.addIngredient(ingredient);
@@ -83,7 +83,7 @@ class AddCartItemFormBase extends PureComponent<Props, State> {
         }
 
         this.props.updateCartItemsStart();
-        cartService.addItem(auth.uid, currentSelectIngredient.label)
+        CartService.addItem(auth.uid, currentSelectIngredient.label)
             .then((ingredient) => {
                 if (ingredient) {
                     this.props.updateCartItemsStop();
@@ -92,7 +92,8 @@ class AddCartItemFormBase extends PureComponent<Props, State> {
                     this.setState({
                         currentSelectIngredient: null,
                     });
-                } else {
+                }
+                else {
                     this.props.updateCartItemsStop();
                     toast.warn("Item already in cart!");
                 }
@@ -115,6 +116,10 @@ class AddCartItemFormBase extends PureComponent<Props, State> {
         });
     }
 
+    preventDefault = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+    }
+
     public render() {
         const { updating, ingredients } = this.props;
         const { currentSelectIngredient } = this.state;
@@ -128,7 +133,7 @@ class AddCartItemFormBase extends PureComponent<Props, State> {
         return (
             <StyledPaper>
                 <Typography variant="h6">New cart item</Typography>
-                <form onSubmit={(e) => { e.preventDefault(); }}>
+                <form onSubmit={this.preventDefault}>
                     <Box>
                         <Creatable
                             id="input-ingredient"

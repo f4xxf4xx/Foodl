@@ -8,10 +8,10 @@ import { bindActionCreators, compose, Dispatch } from "redux";
 import { Loader } from "semantic-ui-react";
 import { ApplicationState } from "../../..";
 import { ButtonError } from "../../../layout/Styles/Buttons";
-import { recipeService } from "../../../services/recipeService";
 import * as recipeActions from "../../../store/recipes/recipeActions";
 import { Recipe, Step } from "../models";
 import AddStepForm from "./AddStepForm";
+import { RecipeService } from "../../../services/RecipeService";
 
 interface OwnProps {
     id: string;
@@ -66,6 +66,7 @@ const SortableStep = SortableElement(({ step, index, editing, updatingSteps, upd
                     <ButtonError
                         variant="contained"
                         color="primary"
+                        // tslint:disable-next-line: jsx-no-lambda
                         onClick={() => deleteStep(step.id)}
                         disabled={updatingSteps}
                     >
@@ -100,7 +101,7 @@ class StepsElementBase extends PureComponent<Props> {
         const { id } = this.props;
 
         this.props.fetchStepsStart();
-        recipeService.getSteps(id)
+        RecipeService.getSteps(id)
             .then((steps) => {
                 if (steps.length > 0) {
                     this.props.updateSteps(steps);
@@ -114,11 +115,11 @@ class StepsElementBase extends PureComponent<Props> {
 
     }
 
-    public deleteStep = (stepId: string) => {
+    public deleteStep = (stepId: string) => (event: React.MouseEvent<HTMLButtonElement>) => {
         const { id } = this.props;
 
         this.props.updateStepsStart();
-        recipeService.deleteStep(id, stepId)
+        RecipeService.deleteStep(id, stepId)
             .then(() => {
                 this.props.deleteStep(stepId);
                 this.props.updateStepsStop();
@@ -134,7 +135,7 @@ class StepsElementBase extends PureComponent<Props> {
         const value = e.target.value;
 
         this.props.updateStepsStart();
-        recipeService.updateStepText(this.props.id, step.id, value)
+        RecipeService.updateStepText(this.props.id, step.id, value)
             .then(() => {
                 this.props.updateStep({ ...step, [key]: value });
                 this.props.updateStepsStop();
@@ -143,10 +144,6 @@ class StepsElementBase extends PureComponent<Props> {
                 this.props.updateStepsStop();
                 toast.error("Error updating the step");
             });
-    }
-
-    public onSortEnd = ({ oldIndex, newIndex }) => {
-
     }
 
     public renderSteps() {
@@ -182,7 +179,7 @@ class StepsElementBase extends PureComponent<Props> {
                             <ButtonError
                                 variant="contained"
                                 color="primary"
-                                onClick={() => this.deleteStep(step.id)}
+                                onClick={this.deleteStep(step.id)}
                                 disabled={updatingSteps}
                             >
                                 Delete step

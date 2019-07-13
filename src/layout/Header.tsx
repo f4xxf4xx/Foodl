@@ -29,6 +29,10 @@ class HeaderBase extends React.Component<Props> {
     this.props.history.push("/");
   }
 
+  public redirectToLogin = () => {
+    this.props.history.push("/login")
+  }
+
   public render() {
     const { auth, toggleDrawer } = this.props;
 
@@ -47,7 +51,7 @@ class HeaderBase extends React.Component<Props> {
           {isAuthenticated(auth) ?
             <ButtonSecondary width="80" onClick={this.onSignOutClick}>Sign out</ButtonSecondary>
             :
-            <ButtonSecondary width="80" onClick={() => this.props.history.push("/login")}>Login</ButtonSecondary>
+            <ButtonSecondary width="80" onClick={this.redirectToLogin}>Login</ButtonSecondary>
           }
         </Toolbar>
       </StyledAppBar >

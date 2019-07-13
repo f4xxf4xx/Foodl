@@ -7,8 +7,8 @@ import { bindActionCreators, compose, Dispatch } from "redux";
 import { ApplicationState } from "../../..";
 import { ButtonPrimary } from "../../../layout/Styles/Buttons";
 import { StyledPaper } from "../../../layout/Styles/Sections";
-import { ingredientService } from "../../../services/ingredientService";
 import * as ingredientActions from "../../../store/ingredients/ingredientActions";
+import { IngredientService } from "../../../services/IngredientService";
 
 interface OwnProps {
     updating: boolean;
@@ -36,12 +36,13 @@ class AddIngredientFormBase extends PureComponent<Props, State> {
 
     public addIngredient = () => {
         const { newIngredientName } = this.state;
+
         if (newIngredientName === "") {
             return;
         }
 
         this.props.updateIngredientsStart();
-        ingredientService.addIngredient(newIngredientName)
+        IngredientService.addIngredient(newIngredientName)
             .then((ingredient) => {
                 if (ingredient) {
                     this.props.updateIngredientsStop();
@@ -50,7 +51,8 @@ class AddIngredientFormBase extends PureComponent<Props, State> {
                     this.setState({
                         newIngredientName: "",
                     });
-                } else {
+                }
+                else {
                     this.props.updateIngredientsStop();
                     toast.warn("Ingredient already exists!");
                 }
@@ -72,13 +74,17 @@ class AddIngredientFormBase extends PureComponent<Props, State> {
         this.setState({ newIngredientName: e.target.value });
     }
 
+    preventDefault = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+    }
+
     public render() {
         const { updating } = this.props;
 
         return (
             <StyledPaper>
                 <Typography variant="h6">New ingredient</Typography>
-                <form onSubmit={(e) => { e.preventDefault(); }}>
+                <form onSubmit={this.preventDefault}>
                     <Box>
                         <TextField
                             id="input-ingredient-name"

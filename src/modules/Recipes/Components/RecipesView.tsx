@@ -9,15 +9,14 @@ import { toast } from "react-toastify";
 import { bindActionCreators, compose, Dispatch } from "redux";
 import { Loader } from "semantic-ui-react";
 import { ApplicationState } from "../../..";
-import { isAuthenticated } from "../../../helpers/userHelper";
 import { Title } from "../../../layout/Styles/Sections";
-import { recipeService } from "../../../services/recipeService";
 import * as recipesActions from "../../../store/recipes/recipesActions";
 import { Recipe } from "../models";
 import AddRecipeForm from "./AddRecipeForm";
 import { StyledCard } from "./Styles/StyledCard";
 import { StyledCardContent } from "./Styles/StyledCardContent";
 import { StyledCardMedia } from "./Styles/StyledCardMedia";
+import { RecipeService } from "../../../services/RecipeService";
 
 interface State {
     newRecipeName: string;
@@ -56,7 +55,7 @@ class RecipesViewBase extends PureComponent<Props, State> {
 
         if (this.props.recipes.length === 0) {
             this.props.fetchRecipesStart();
-            recipeService.getRecipes(auth.uid)
+            RecipeService.getRecipes(auth.uid)
                 .then((recipes) => {
                     this.props.updateRecipes(recipes);
                     this.props.fetchRecipesStop();
@@ -68,9 +67,9 @@ class RecipesViewBase extends PureComponent<Props, State> {
         }
     }
 
-    public deleteRecipe(recipeId: string) {
+    public deleteRecipe = (recipeId: string) => (event: React.MouseEvent<HTMLButtonElement>) => {
         this.props.updateRecipesStart();
-        recipeService.deleteRecipe(recipeId)
+        RecipeService.deleteRecipe(recipeId)
             .then(() => {
                 this.props.deleteRecipe(recipeId);
                 this.props.updateRecipesStop();
@@ -80,6 +79,12 @@ class RecipesViewBase extends PureComponent<Props, State> {
                 this.props.updateRecipesStop();
                 toast.error("Error deleting the recipe");
             });
+    }
+
+    public goToRecipePage = (id: string) => (event: React.MouseEvent<HTMLButtonElement>) => {
+        const { history } = this.props;
+
+        history.push(`/recipe/${id}`);
     }
 
     public renderRecipes() {
@@ -93,7 +98,7 @@ class RecipesViewBase extends PureComponent<Props, State> {
                     recipes.map((recipe) =>
                         <Grid key={recipe.id} item={true} xs={12} sm={6} md={4} lg={3}>
                             <StyledCard>
-                                <CardActionArea onClick={() => history.push(`/recipe/${recipe.id}`)}>
+                                <CardActionArea onClick={this.goToRecipePage(recipe.id)}>
                                     <StyledCardMedia
                                         image={
                                             "https://material-ui.com/static/images/cards/paella.jpg"
@@ -119,7 +124,7 @@ class RecipesViewBase extends PureComponent<Props, State> {
                                     <IconButton aria-label="Share recipe">
                                         <ShareIcon />
                                     </IconButton>
-                                    <IconButton aria-label="Delete recipe" onClick={() => this.deleteRecipe(recipe.id)}>
+                                    <IconButton aria-label="Delete recipe" onClick={this.deleteRecipe(recipe.id)}>
                                         <DeleteIcon />
                                     </IconButton>
                                 </CardActions>

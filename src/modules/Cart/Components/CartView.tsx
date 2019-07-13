@@ -9,7 +9,7 @@ import { Loader } from "semantic-ui-react";
 import { ApplicationState } from "../../..";
 import { ButtonError } from "../../../layout/Styles/Buttons";
 import { Title } from "../../../layout/Styles/Sections";
-import { cartService } from "../../../services/cartService";
+import { CartService } from "../../../services/CartService";
 import * as cartActions from "../../../store/cart/cartActions";
 import { Ingredient } from "../../Ingredients/models";
 import AddCartItemForm from "./AddCartItemForm";
@@ -38,7 +38,7 @@ class CartViewBase extends PureComponent<Props> {
         const { auth } = this.props;
 
         this.props.fetchCartItemsStart();
-        return cartService.getCartItems(auth.uid)
+        return CartService.getCartItems(auth.uid)
             .then((cartItems) => {
                 this.props.updateCartItems(cartItems);
                 this.props.fetchCartItemsStop();
@@ -49,9 +49,9 @@ class CartViewBase extends PureComponent<Props> {
             });
     }
 
-    public deleteAllCartItems() {
+    public deleteAllCartItems = () => (event: React.MouseEvent<HTMLButtonElement>) => {
         this.props.updateCartItemsStart();
-        cartService.deleteAllItems()
+        CartService.deleteAllItems()
             .then(() => {
                 this.props.deleteAllCartItems();
                 this.props.updateCartItemsStop();
@@ -63,11 +63,11 @@ class CartViewBase extends PureComponent<Props> {
             });
     }
 
-    public deleteCartItem(cartItemName: string) {
+    public deleteCartItem = (cartItemName: string) => (event: React.MouseEvent<HTMLButtonElement>) => {
         const { auth } = this.props;
 
         this.props.updateCartItemsStart();
-        cartService.deleteItem(auth.uid, cartItemName)
+        CartService.deleteItem(auth.uid, cartItemName)
             .then(() => {
                 this.props.deleteCartItem(cartItemName);
                 this.props.updateCartItemsStop();
@@ -101,7 +101,7 @@ class CartViewBase extends PureComponent<Props> {
                                         <ButtonError
                                             width="15"
                                             disabled={updatingCartItems}
-                                            onClick={() => this.deleteCartItem(cartItem.name)}
+                                            onClick={this.deleteCartItem(cartItem.name)}
                                         >
                                             <DeleteIcon />
                                         </ButtonError>
@@ -132,7 +132,7 @@ class CartViewBase extends PureComponent<Props> {
                         <AddCartItemForm updating={this.props.updatingCartItems} />
                         {this.props.cartItems.length > 0 &&
                             <div>
-                                <ButtonError onClick={() => this.deleteAllCartItems()}>
+                                <ButtonError onClick={this.deleteAllCartItems()}>
                                     Delete all items
                                 </ButtonError>
                             </div>

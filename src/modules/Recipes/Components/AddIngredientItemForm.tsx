@@ -9,13 +9,13 @@ import { ApplicationState } from "../../..";
 import { ButtonPrimary } from "../../../layout/Styles/Buttons";
 import { InputWrapper } from "../../../layout/Styles/Forms";
 import { StyledPaper } from "../../../layout/Styles/Sections";
-import { ingredientService } from "../../../services/ingredientService";
-import { recipeService } from "../../../services/recipeService";
 import * as ingredientActions from "../../../store/ingredients/ingredientActions";
 import * as recipeActions from "../../../store/recipes/recipeActions";
 import { Ingredient } from "../../Ingredients/models";
 import { getIngredientTypeOptions } from "../helper";
 import { IngredientItem, Recipe } from "../models";
+import { IngredientService } from "../../../services/IngredientService";
+import { RecipeService } from "../../../services/RecipeService";
 
 interface OwnProps {
     editing: boolean;
@@ -61,9 +61,9 @@ class AddIngredientItemFormBase extends PureComponent<Props, State> {
     }
 
     public componentDidMount() {
-        if (this.props.ingredients.length == 0) {
+        if (this.props.ingredients.length === 0) {
             this.props.fetchIngredientsStart();
-            ingredientService.getIngredients()
+            IngredientService.getIngredients()
                 .then((ingredients) => {
                     this.props.updateIngredients(ingredients);
                     this.props.fetchIngredientsStop();
@@ -77,6 +77,7 @@ class AddIngredientItemFormBase extends PureComponent<Props, State> {
 
     public updateFormName = (e: any) => {
         const { newIngredientItem } = this.state;
+
         this.setState({
             newIngredientItem: { ...newIngredientItem, name: e.label },
             currentSelectIngredient: e,
@@ -85,11 +86,13 @@ class AddIngredientItemFormBase extends PureComponent<Props, State> {
 
     public updateFormQuantity = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { newIngredientItem } = this.state;
+
         this.setState({ newIngredientItem: { ...newIngredientItem, quantity: e.target.value } });
     }
 
     public updateFormType = (e: any) => {
         const { newIngredientItem } = this.state;
+
         this.setState({
             newIngredientItem: { ...newIngredientItem, type: e.value },
             currentSelectType: e,
@@ -107,7 +110,7 @@ class AddIngredientItemFormBase extends PureComponent<Props, State> {
         }
 
         if (!ingredients.find((i) => i.name === newIngredientItem.name)) {
-            ingredientService.addIngredient(newIngredientItem.name)
+            IngredientService.addIngredient(newIngredientItem.name)
                 .then((ingredient) => {
                     if (ingredient) {
                         this.props.addIngredient(ingredient);
@@ -120,7 +123,7 @@ class AddIngredientItemFormBase extends PureComponent<Props, State> {
         }
 
         this.props.updateIngredientItemsStart();
-        recipeService.addIngredientItem(recipe.id, newIngredientItem)
+        RecipeService.addIngredientItem(recipe.id, newIngredientItem)
             .then((ingredientItem) => {
                 this.props.addIngredientItem(ingredientItem);
                 this.props.updateIngredientItemsStop();
@@ -140,6 +143,10 @@ class AddIngredientItemFormBase extends PureComponent<Props, State> {
             });
     }
 
+    preventDefault = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+    }
+
     public render() {
         const { editing, ingredients } = this.props;
         const { newIngredientItem, currentSelectIngredient, currentSelectType } = this.state;
@@ -155,7 +162,7 @@ class AddIngredientItemFormBase extends PureComponent<Props, State> {
             <>
                 {editing &&
                     <StyledPaper>
-                        <form onSubmit={(e) => { e.preventDefault(); }}>
+                        <form onSubmit={this.preventDefault}>
                             <Typography variant="h6">
                                 Add ingredient
                             </Typography>

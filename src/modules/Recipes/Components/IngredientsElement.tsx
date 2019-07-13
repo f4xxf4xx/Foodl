@@ -7,14 +7,14 @@ import { bindActionCreators, compose, Dispatch } from "redux";
 import { Loader } from "semantic-ui-react";
 import { ApplicationState } from "../../..";
 import { ButtonError, ButtonPrimary } from "../../../layout/Styles/Buttons";
-import { cartService } from "../../../services/cartService";
-import { recipeService } from "../../../services/recipeService";
 import * as cartActions from "../../../store/cart/cartActions";
 import * as recipeActions from "../../../store/recipes/recipeActions";
 import { Ingredient } from "../../Ingredients/models";
 import { getIngredientTypeText, getNumericQuantity } from "../helper";
 import { IngredientItem } from "../models";
 import AddIngredientItemForm from "./AddIngredientItemForm";
+import { RecipeService } from "../../../services/RecipeService";
+import { CartService } from "../../../services/CartService";
 
 interface OwnProps {
     id: string;
@@ -50,7 +50,7 @@ class IngredientsElementBase extends PureComponent<Props> {
             updateIngredientItems, cartItems, fetchCartItemsStart, fetchCartItemsStop, updateCartItems } = this.props;
 
         fetchIngredientItemsStart();
-        recipeService.getIngredientItems(id)
+        RecipeService.getIngredientItems(id)
             .then((ingredientItems) => {
                 if (ingredientItems.length > 0) {
                     updateIngredientItems(ingredientItems);
@@ -59,13 +59,12 @@ class IngredientsElementBase extends PureComponent<Props> {
             })
             .catch((error) => {
                 fetchIngredientItemsStop();
-                console.log(error);
                 toast.error("Error fetching the ingredient items!");
             });
 
-        if (cartItems.length == 0) {
+        if (cartItems.length === 0) {
             fetchCartItemsStart();
-            cartService.getCartItems(auth.uid)
+            CartService.getCartItems(auth.uid)
                 .then((cartItems) => {
                     if (cartItems.length > 0) {
                         updateCartItems(cartItems);
@@ -83,7 +82,7 @@ class IngredientsElementBase extends PureComponent<Props> {
         const { id } = this.props;
 
         this.props.updateIngredientItemsStart();
-        recipeService.deleteIngredientItem(id, ingredientItemId)
+        RecipeService.deleteIngredientItem(id, ingredientItemId)
             .then(() => {
                 this.props.deleteIngredientItem(ingredientItemId);
                 this.props.updateIngredientItemsStop();
@@ -98,7 +97,7 @@ class IngredientsElementBase extends PureComponent<Props> {
     public addCartItem = (ingredientItem: IngredientItem) => {
         const { auth } = this.props;
 
-        cartService.addItem(auth.uid, ingredientItem.name)
+        CartService.addItem(auth.uid, ingredientItem.name)
             .then((ingredient) => {
                 this.props.addCartItem(ingredient);
                 toast.success(`Added ${ingredient.name} to cart!`);
@@ -120,7 +119,7 @@ class IngredientsElementBase extends PureComponent<Props> {
         }
 
         return (
-            <ButtonPrimary onClick={() => this.addCartItem(ingredientItem)}>
+            <ButtonPrimary onClick={this.addCartItem(ingredientItem)}>
                 Add to cart
             </ButtonPrimary>
         );
@@ -161,7 +160,7 @@ class IngredientsElementBase extends PureComponent<Props> {
                                                     <ButtonError
                                                         variant="contained"
                                                         color="primary"
-                                                        onClick={() => this.deleteIngredientItem(ingredientItem.id)}
+                                                        onClick={this.deleteIngredientItem(ingredientItem.id)}
                                                         disabled={updatingIngredientItems}
                                                     >
                                                         Delete ingredient

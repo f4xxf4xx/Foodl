@@ -6,9 +6,9 @@ import { bindActionCreators, compose, Dispatch } from "redux";
 import { ApplicationState } from "../../..";
 import { ButtonPrimary } from "../../../layout/Styles/Buttons";
 import { StyledPaper } from "../../../layout/Styles/Sections";
-import { recipeService } from "../../../services/recipeService";
 import * as recipeActions from "../../../store/recipes/recipeActions";
 import { Recipe, Step } from "../models";
+import { RecipeService } from "../../../services/RecipeService";
 
 interface OwnProps {
     editing: boolean;
@@ -46,6 +46,7 @@ class AddStepFormBase extends PureComponent<Props, State> {
 
     public updateFormText = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { newStep } = this.state;
+
         this.setState({
             newStep: { ...newStep, text: e.target.value },
         });
@@ -56,7 +57,7 @@ class AddStepFormBase extends PureComponent<Props, State> {
         const { recipe } = this.props;
 
         this.props.updateStepsStart();
-        recipeService.addStep(recipe.id, newStep)
+        RecipeService.addStep(recipe.id, newStep)
             .then((step) => {
                 this.props.addStep(step);
                 this.props.updateStepsStop();
@@ -79,6 +80,10 @@ class AddStepFormBase extends PureComponent<Props, State> {
             });
     }
 
+    preventDefault = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+    }
+
     public render() {
         const { editing } = this.props;
         const { newStep } = this.state;
@@ -87,7 +92,7 @@ class AddStepFormBase extends PureComponent<Props, State> {
             <>
                 {editing &&
                     <StyledPaper>
-                        <form onSubmit={(e) => { e.preventDefault(); }}>
+                        <form onSubmit={this.preventDefault}>
                             <Typography variant="h6">
                                 Add step
                             </Typography>

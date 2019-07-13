@@ -2,7 +2,7 @@ import slugify from "react-slugify";
 import { db } from "../config";
 import { Cuisine, IngredientItem, Recipe, Step } from "../modules/Recipes/models";
 
-export class recipeService {
+export class RecipeService {
     public static getRecipes(uid: string): Promise<Recipe[]> {
         return db.collection("recipes")
             .where("uid", "==", uid)
