@@ -46,7 +46,7 @@ class IngredientsViewBase extends PureComponent<Props> {
             });
     }
 
-    public deleteIngredient = (ingredientId: string) => {
+    public deleteIngredient = (ingredientId: string) => (event: React.MouseEvent<HTMLButtonElement>) => {
         this.props.updateIngredientsStart();
         IngredientService.deleteIngredient(ingredientId)
             .then(() => {

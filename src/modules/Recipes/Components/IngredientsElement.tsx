@@ -78,7 +78,7 @@ class IngredientsElementBase extends PureComponent<Props> {
         }
     }
 
-    public deleteIngredientItem = (ingredientItemId: string) => {
+    public deleteIngredientItem = (ingredientItemId: string) => (event: React.MouseEvent<HTMLButtonElement>) => {
         const { id } = this.props;
 
         this.props.updateIngredientItemsStart();
@@ -94,7 +94,7 @@ class IngredientsElementBase extends PureComponent<Props> {
             });
     }
 
-    public addCartItem = (ingredientItem: IngredientItem) => {
+    public addCartItem = (ingredientItem: IngredientItem) => (event: React.MouseEvent<HTMLButtonElement>) => {
         const { auth } = this.props;
 
         CartService.addItem(auth.uid, ingredientItem.name)
