@@ -103,16 +103,3 @@ describe("Ingredients rules", () => {
     await firebase.assertSucceeds(aliceAuth.collection("ingredients").doc("ingredient").set({}));
   });
 });
-
-describe("Cuisines rules", () => {
-  it("should only allow a authenticated user to read and write cuisines", async () => {
-    // arrange
-    const guessAuth = authedApp(null);
-    const aliceAuth = authedApp({ uid: "alice" });
-    // assert
-    await firebase.assertFails(guessAuth.collection("cuisines").get());
-    await firebase.assertFails(guessAuth.collection("cuisines").doc("ingredient").set({}));
-    await firebase.assertSucceeds(aliceAuth.collection("cuisines").get());
-    await firebase.assertSucceeds(aliceAuth.collection("cuisines").doc("ingredient").set({}));
-  });
-});

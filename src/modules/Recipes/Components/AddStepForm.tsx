@@ -101,6 +101,8 @@ class AddStepFormBase extends PureComponent<Props, State> {
                                     id="input-text"
                                     label="Text"
                                     multiline={true}
+                                    rows={2}
+                                    rowsMax={4}
                                     value={newStep.text}
                                     onChange={this.updateFormText}
                                 />

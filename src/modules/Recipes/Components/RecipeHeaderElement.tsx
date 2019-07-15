@@ -1,21 +1,20 @@
-import { Box, Button, Chip, Grid, Icon, TextField, Typography } from "@material-ui/core";
+import { Box, Chip, Grid, Icon, TextField, Typography } from "@material-ui/core";
 import React from "react";
 import { connect } from "react-redux";
 import Creatable from "react-select/lib/Creatable";
 import { toast } from "react-toastify";
 import { bindActionCreators, compose, Dispatch } from "redux";
-import { Loader } from "semantic-ui-react";
 import { ApplicationState } from "../../..";
 import { ButtonPrimary } from "../../../layout/Styles/Buttons";
 import { Title } from "../../../layout/Styles/Sections";
 import * as recipeActions from "../../../store/recipes/recipeActions";
-import { Cuisine, IngredientItem, Recipe } from "../models";
+import { Recipe, Cuisine, RecipeType, Tag } from "../models";
 import { RecipeService } from "../../../services/RecipeService";
+import { StyledChip } from "./Styles/StyledChip";
 
 interface StateProps {
     recipe: Recipe;
     updatingRecipe: boolean;
-    cuisines: Cuisine[];
 }
 
 interface OwnProps {
@@ -27,7 +26,8 @@ interface DispatchProps {
     updateRecipeStart: typeof recipeActions.updateRecipeStart;
     updateRecipeStop: typeof recipeActions.updateRecipeStop;
     updateRecipe: typeof recipeActions.updateRecipe;
-    addCuisine: typeof recipeActions.addCuisine;
+    addTag: typeof recipeActions.addTag;
+    deleteTag: typeof recipeActions.deleteTag;
 }
 
 type Props = OwnProps & StateProps & DispatchProps;
@@ -51,18 +51,8 @@ class RecipeHeaderElementBase extends React.Component<Props> {
     }
 
     public updateCuisine = (e: any) => {
-        const { recipe, cuisines } = this.props;
+        const { recipe } = this.props;
         const value = e.label;
-
-        if (!cuisines.find((i) => i.name === value)) {
-            RecipeService.addCuisine(value)
-                .then((cuisine) => {
-                    this.props.addCuisine(cuisine);
-                })
-                .catch(() => {
-                    toast.error("Error adding the new cuisine.");
-                });
-        }
 
         this.props.updateRecipeStart();
         RecipeService.updateRecipe(recipe.id, "cuisine", value)
@@ -77,27 +67,118 @@ class RecipeHeaderElementBase extends React.Component<Props> {
             });
     }
 
+    public updateTag = (e: any) => {
+        const { recipe } = this.props;
+        const value = e.label;
+
+        this.props.updateRecipeStart();
+        RecipeService.addTag(recipe.id, value)
+            .then(() => {
+                this.props.addTag(value);
+                this.props.updateRecipeStop();
+                toast.success("Added tag!");
+            })
+            .catch((error) => {
+                this.props.updateRecipeStop();
+                toast.error("Error adding the tag!");
+            });
+    }
+
+    public updateType = (e: any) => {
+        const { recipe } = this.props;
+        const value = e.label;
+
+        this.props.updateRecipeStart();
+        RecipeService.updateRecipe(recipe.id, "type", value)
+            .then(() => {
+                this.props.updateRecipe({ ...recipe, ["type"]: value });
+                this.props.updateRecipeStop();
+                toast.success("Updated!");
+            })
+            .catch(() => {
+                this.props.updateRecipeStop();
+                toast.error("Error updating the recipe!");
+            });
+    }
+
+    public addTag = (tag: string) => (e: any) => {
+        const { recipe } = this.props;
+
+        this.props.updateRecipeStart();
+        RecipeService.addTag(recipe.id, tag)
+            .then(() => {
+                this.props.addTag(tag);
+                this.props.updateRecipeStop();
+                toast.success("Added tag!");
+            })
+            .catch(() => {
+                this.props.updateRecipeStop();
+                toast.error("Error adding the tag!");
+            })
+    }
+
+    public deleteTag = (tag: string) => (e: any) => {
+        const { recipe } = this.props;
+
+        this.props.updateRecipeStart();
+        RecipeService.deleteTag(recipe.id, tag)
+            .then(() => {
+                this.props.deleteTag(tag);
+                this.props.updateRecipeStop();
+                toast.success("Deleted tag!");
+            })
+            .catch((error) => {
+                console.log(error);
+                this.props.updateRecipeStop();
+                toast.error("Error deleting the tag!");
+            })
+
+    }
+
     public renderInfo() {
-        const { recipe, cuisines, editing, updatingRecipe } = this.props;
+        const { recipe, editing, updatingRecipe } = this.props;
 
-        const cuisineOptions = cuisines ? cuisines.map((cuisine) => {
+        const cuisineOptions = Object.keys(Cuisine).map((cuisine) => {
             return {
-                value: cuisine.id,
-                label: cuisine.name,
+                value: Cuisine[cuisine],
+                label: Cuisine[cuisine],
             };
-        }) : [];
+        });
 
-        const matchingCuisine = cuisines ? cuisines.find((cuisine) => cuisine.name === recipe.cuisine) : null;
+        const typeOptions = Object.keys(RecipeType).map((type) => {
+            return {
+                value: RecipeType[type],
+                label: RecipeType[type],
+            };
+        });
+
+        const tagOptions = Object.keys(Tag).map((tag) => {
+            return {
+                value: Tag[tag],
+                label: Tag[tag]
+            }
+        })
 
         return (
             recipe &&
             <>
-                {recipe.recipeType &&
-                    <Chip
+                {editing ?
+                    <Creatable
+                        id="input-type"
+                        options={typeOptions}
+                        value={recipe.type && {
+                            value: recipe.type,
+                            label: recipe.type,
+                        }}
+                        onChange={this.updateType}
+                    />
+                    :
+                    recipe.type &&
+                    <StyledChip
                         size="small"
-                        icon={<Icon>local_pizza</Icon>}
-                        label={recipe.recipeType}
+                        label={recipe.type}
                         color="primary"
+                        variant="outlined"
                     />
                 }
                 {editing ?
@@ -109,31 +190,64 @@ class RecipeHeaderElementBase extends React.Component<Props> {
                     />
                     :
                     recipe.duration &&
-                    <Chip
+                    <StyledChip
                         size="small"
                         icon={<Icon>timer</Icon>}
                         label={`${recipe.duration} minutes`}
                         color="primary"
+                        variant="outlined"
                     />
                 }
                 {editing ?
                     <Creatable
                         id="input-ingredient"
                         options={cuisineOptions}
-                        value={matchingCuisine && {
-                            value: matchingCuisine.id,
-                            label: matchingCuisine.name,
+                        value={recipe.cuisine && {
+                            value: recipe.cuisine,
+                            label: recipe.cuisine,
                         }}
                         onChange={this.updateCuisine}
                     />
                     :
                     recipe.cuisine &&
-                    <Chip
+                    <StyledChip
                         size="small"
                         label={recipe.cuisine}
-                        color="secondary"
+                        color="primary"
+                        variant="outlined"
                     />
                 }
+                <Box>
+                    {editing ?
+                        <>
+                            {recipe.tags && recipe.tags.map((tag, index) =>
+                                <StyledChip
+                                    key={index}
+                                    size="small"
+                                    label={tag}
+                                    color="secondary"
+                                    onDelete={this.deleteTag(tag)}
+                                />
+                            )
+                            }
+                            <Creatable
+                                id="input-new-tag"
+                                options={tagOptions}
+                                value={null}
+                                onChange={this.updateTag}
+                            />
+                        </>
+                        :
+                        recipe.tags && recipe.tags.map((tag, index) =>
+                            <StyledChip
+                                key={index}
+                                size="small"
+                                label={tag}
+                                color="secondary"
+                            />
+                        )
+                    }
+                </Box>
             </>
         );
     }
@@ -174,14 +288,14 @@ class RecipeHeaderElementBase extends React.Component<Props> {
 const mapStateToProps = (state: ApplicationState) => ({
     recipe: state.recipe.recipe,
     updatingRecipe: state.recipe.updatingRecipe,
-    cuisines: state.cuisines.cuisines,
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
     updateRecipeStart: bindActionCreators(recipeActions.updateRecipeStart, dispatch),
     updateRecipeStop: bindActionCreators(recipeActions.updateRecipeStop, dispatch),
     updateRecipe: bindActionCreators(recipeActions.updateRecipe, dispatch),
-    addCuisine: bindActionCreators(recipeActions.addCuisine, dispatch),
+    addTag: bindActionCreators(recipeActions.addTag, dispatch),
+    deleteTag: bindActionCreators(recipeActions.deleteTag, dispatch),
 });
 
 const RecipeHeaderElement = compose(

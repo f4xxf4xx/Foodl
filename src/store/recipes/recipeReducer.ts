@@ -1,5 +1,5 @@
 import { createReducer } from "redux-starter-kit";
-import { Cuisine, IngredientItem, Recipe, Step } from "../../modules/Recipes/models";
+import { IngredientItem, Recipe, Step } from "../../modules/Recipes/models";
 
 export interface RecipeState {
     recipe: Recipe;
@@ -91,31 +91,10 @@ export const recipeReducer = createReducer(initialRecipeState, {
     DELETE_STEP: (state, action) => {
         state.steps = state.steps.filter((i) => i.id !== action.payload);
     },
-});
-
-const initialCuisinesState: CuisinesState = {
-    cuisines: [],
-    loadingCuisines: false,
-    updatingCuisines: false,
-};
-
-export interface CuisinesState {
-    cuisines: Cuisine[];
-    loadingCuisines: boolean;
-    updatingCuisines: boolean;
-}
-
-export const cuisinesReducer = createReducer(initialCuisinesState, {
-    FETCH_CUISINES_START: (state) => {
-        state.loadingCuisines = true;
+    ADD_TAG: (state, action) => {
+        state.recipe.tags.push(action.payload);
     },
-    FETCH_CUISINES_STOP: (state) => {
-        state.loadingCuisines = false;
-    },
-    ADD_CUISINE: (state, action) => {
-        state.cuisines.push(action.payload);
-    },
-    UPDATE_CUISINES: (state, action) => {
-        state.cuisines = action.payload;
-    },
+    DELETE_TAG: (state, action) => {
+        state.recipe.tags = state.recipe.tags.filter((i) => i !== action.payload);
+    }
 });

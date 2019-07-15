@@ -1,3 +1,7 @@
+
+import { IconDefinition, faHome, faBook, faShoppingCart, faPizzaSlice } from '@fortawesome/free-solid-svg-icons'
+
+
 export interface ListItemLink {
     path: string;
     name: string;
@@ -9,12 +13,12 @@ export const getLinks = (): ListItemLink[] => {
         {
             path: "/",
             name: "Home",
-            icon: "home",
+            icon: "home"
         },
         {
             path: "/recipes",
             name: "Recipes",
-            icon: "library_books",
+            icon: "book",
         },
         {
             path: "/cart",
@@ -29,7 +33,7 @@ export const getAdminLinks = (): ListItemLink[] => {
         {
             path: "/ingredients",
             name: "Ingredients",
-            icon: "local_pizza",
+            icon: "pizza_slice",
         },
     ];
 };

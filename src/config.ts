@@ -13,6 +13,7 @@ export const config = {
 firebase.initializeApp(config);
 
 const db = firebase.firestore();
+
 export { db };
 
 export { firebase };

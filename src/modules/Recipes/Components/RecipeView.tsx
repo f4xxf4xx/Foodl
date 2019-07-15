@@ -7,11 +7,12 @@ import { bindActionCreators, compose, Dispatch } from "redux";
 import { Loader } from "semantic-ui-react";
 import { ApplicationState } from "../../..";
 import * as recipeActions from "../../../store/recipes/recipeActions";
-import { Cuisine, Recipe } from "../models";
+import { Recipe } from "../models";
 import IngredientsElement from "./IngredientsElement";
 import RecipeHeaderElement from "./RecipeHeaderElement";
 import StepsElement from "./StepsElement";
 import { RecipeService } from "../../../services/RecipeService";
+import { Grid } from "@material-ui/core";
 
 interface State {
     editing: boolean;
@@ -20,7 +21,6 @@ interface State {
 interface StateProps {
     recipe: Recipe;
     loadingRecipe: boolean;
-    cuisines: Cuisine[];
     auth: any;
 }
 
@@ -28,10 +28,6 @@ interface DispatchProps {
     fetchRecipeStart: typeof recipeActions.fetchRecipeStart;
     fetchRecipeStop: typeof recipeActions.fetchRecipeStop;
     updateRecipe: typeof recipeActions.updateRecipe;
-    fetchCuisinesStart: typeof recipeActions.fetchCuisinesStart;
-    fetchCuisinesStop: typeof recipeActions.fetchCuisinesStart;
-    updateCuisines: typeof recipeActions.updateCuisines;
-    addCuisine: typeof recipeActions.addCuisine;
 }
 
 interface RouterProps {
@@ -65,19 +61,6 @@ class RecipeViewBase extends PureComponent<Props, State> {
                 toast.error("Error fetching the recipe!");
             });
 
-        if (this.props.cuisines.length === 0) {
-            this.props.fetchCuisinesStart();
-            RecipeService.getCuisines()
-                .then((cuisines) => {
-                    this.props.updateCuisines(cuisines);
-                    this.props.fetchCuisinesStop();
-                })
-                .catch((error) => {
-                    this.props.fetchCuisinesStop();
-                    toast.error("Error fetching the cuisines.");
-                });
-        }
-
     }
 
     public toggleEdit = () => {
@@ -104,8 +87,14 @@ class RecipeViewBase extends PureComponent<Props, State> {
                                     editing={editing}
                                     toggleEdit={this.toggleEdit}
                                 />
-                                <IngredientsElement editing={editing} id={recipe.id} />
-                                <StepsElement editing={editing} id={recipe.id} />
+                                <Grid container={true} spacing={5}>
+                                    <Grid item={true} xs={12} lg={6}>
+                                        <IngredientsElement editing={editing} id={recipe.id} />
+                                    </Grid>
+                                    <Grid item={true} xs={12} lg={6}>
+                                        <StepsElement editing={editing} id={recipe.id} />
+                                    </Grid>                                    
+                                </Grid>
                             </>
                             :
                             null
@@ -120,18 +109,13 @@ class RecipeViewBase extends PureComponent<Props, State> {
 const mapStateToProps = (state: ApplicationState) => ({
     recipe: state.recipe.recipe,
     loadingRecipe: state.recipe.loadingRecipe,
-    cuisines: state.cuisines.cuisines,
     auth: state.firebase.auth,
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
     fetchRecipeStart: bindActionCreators(recipeActions.fetchRecipeStart, dispatch),
     fetchRecipeStop: bindActionCreators(recipeActions.fetchRecipeStop, dispatch),
-    updateRecipe: bindActionCreators(recipeActions.updateRecipe, dispatch),
-    fetchCuisinesStart: bindActionCreators(recipeActions.fetchCuisinesStart, dispatch),
-    fetchCuisinesStop: bindActionCreators(recipeActions.fetchCuisinesStop, dispatch),
-    updateCuisines: bindActionCreators(recipeActions.updateCuisines, dispatch),
-    addCuisine: bindActionCreators(recipeActions.addCuisine, dispatch),
+    updateRecipe: bindActionCreators(recipeActions.updateRecipe, dispatch)
 });
 
 const RecipeView = compose(

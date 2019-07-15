@@ -12,12 +12,12 @@ import App from "./App";
 import { firebase } from "./config";
 import { cartReducer, CartState } from "./store/cart/cartReducer";
 import { ingredientReducer, IngredientState } from "./store/ingredients/ingredientReducer";
-import { CuisinesState } from "./store/recipes/recipeReducer";
-import { cuisinesReducer, recipeReducer, RecipeState } from "./store/recipes/recipeReducer";
+import { recipeReducer, RecipeState } from "./store/recipes/recipeReducer";
 import { recipesReducer, RecipesState } from "./store/recipes/recipesReducer";
 
 const baseUrl = document.getElementsByTagName("base")[0].getAttribute("href");
 const rootElement = document.getElementById("root");
+
 toast.configure({
   position: "top-right",
   autoClose: 5000,
@@ -32,7 +32,6 @@ export interface ApplicationState {
   recipe: RecipeState;
   recipes: RecipesState;
   cart: CartState;
-  cuisines: CuisinesState;
   firebase: firebase.app.App;
   firestore: firebase.firestore.Firestore;
 }
@@ -49,7 +48,6 @@ const store = configureStore({
     recipe: recipeReducer,
     recipes: recipesReducer,
     cart: cartReducer,
-    cuisines: cuisinesReducer,
     firebase: firebaseReducer,
     firestore: firestoreReducer,
   },
@@ -57,7 +55,7 @@ const store = configureStore({
     reactReduxFirebase(firebase, rrfConfig),
     reduxFirestore(firebase),
   ],
-  middleware: [thunk.withExtraArgument({getFirebase, getFirestore})],
+  middleware: [thunk.withExtraArgument({ getFirebase, getFirestore })],
 });
 
 ReactDOM.render(

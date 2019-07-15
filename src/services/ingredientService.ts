@@ -21,6 +21,7 @@ export class IngredientService {
         };
 
         const ingredient = await db.collection("ingredients").where("name", "==", name).get();
+
         if (!ingredient.empty) {
             return {
                 id: ingredient.docs[0].id,
@@ -29,6 +30,7 @@ export class IngredientService {
         }
 
         const addedIngredient = await db.collection("ingredients").add(newIngredient);
+
         return {
             id: addedIngredient.id,
             name,

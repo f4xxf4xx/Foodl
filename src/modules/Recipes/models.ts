@@ -18,19 +18,42 @@ export interface Recipe {
     name: string;
     description?: string;
     slug: string;
-    recipeType?: string;
+    type?: RecipeType;
     duration?: number;
-    tags?: string[];
-    cuisine?: string;
+    tags?: Tag[];
+    cuisine?: Cuisine;
+}
+
+export enum RecipeType {
+    Drink = "Drink",
+    Breakfast = "Breakfast",
+    Appetizer = "Appetizer",
+    Meal = "Meal",
+    Dessert = "Dessert"
+}
+
+export enum Tag {
+    Vegetarian = "Vegetarian",
+    BBQ = "BBQ",
+    Pasta = "Pasta",
+    Soup = "Soup",
+    Pizza = "Pizza",
+    Beef = "Beef",
+    Chicken = "Chicken",
+    Fish = "Fish",
+    Salad = "Salad",
+    Cookie = "Cookie"
+}
+
+export enum Cuisine {
+    Indian = "Indian",
+    Italian = "Italian",
+    American = "American",
+    Greek = "Greek"
 }
 
 export interface Step {
     id?: string;
     order: number;
     text: string;
-}
-
-export interface Cuisine {
-    id?: string;
-    name: string;
 }

@@ -1,4 +1,5 @@
-import { IngredientItem, IngredientType } from "./models";
+import { IngredientItem, IngredientType, Tag } from "./models";
+import { faPizzaSlice, faHamburger, faCookie, faDrumstickBite, faFish, faCarrot } from "@fortawesome/free-solid-svg-icons";
 
 export const getNumericQuantity = (quantity: string): string => {
     const quantityNumber = parseFloat(quantity);
@@ -63,3 +64,28 @@ export const getIngredientTypeOptions = () => {
         },
     ];
 };
+
+export const getTagIcon = (tag: string) => {
+    switch (tag) {
+        case Tag.BBQ:
+            return faHamburger;
+        case Tag.Beef:
+            return faPizzaSlice;
+        case Tag.Chicken:
+            return faDrumstickBite;
+        case Tag.Cookie:
+            return faCookie;
+        case Tag.Fish:
+            return faFish;
+        case Tag.Pasta:
+            return faPizzaSlice;
+        case Tag.Pizza:
+            return faPizzaSlice;
+        case Tag.Salad:
+            return faPizzaSlice;
+        case Tag.Soup:
+            return faPizzaSlice;
+        case Tag.Vegetarian:
+            return faCarrot;
+    }
+}

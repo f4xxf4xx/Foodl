@@ -1,4 +1,4 @@
-import { Card, CardActionArea, CardActions, CardContent, CardHeader, CardMedia, Divider, Grid, IconButton, Typography } from "@material-ui/core";
+import { Card, CardActionArea, CardActions, CardContent, CardHeader, CardMedia, Divider, Grid, IconButton, Typography, Icon, Box, Tooltip } from "@material-ui/core";
 import DeleteIcon from "@material-ui/icons/Delete";
 import ShareIcon from "@material-ui/icons/Share";
 import React, { PureComponent } from "react";
@@ -17,6 +17,10 @@ import { StyledCard } from "./Styles/StyledCard";
 import { StyledCardContent } from "./Styles/StyledCardContent";
 import { StyledCardMedia } from "./Styles/StyledCardMedia";
 import { RecipeService } from "../../../services/RecipeService";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faPizzaSlice } from "@fortawesome/free-solid-svg-icons";
+import { getTagIcon } from "../helper";
+import { StyledFontAwesomeIcon } from "./Styles/StyledFontAwesomeIcon";
 
 interface State {
     newRecipeName: string;
@@ -53,18 +57,16 @@ class RecipesViewBase extends PureComponent<Props, State> {
     public componentDidMount() {
         const { auth } = this.props;
 
-        if (this.props.recipes.length === 0) {
-            this.props.fetchRecipesStart();
-            RecipeService.getRecipes(auth.uid)
-                .then((recipes) => {
-                    this.props.updateRecipes(recipes);
-                    this.props.fetchRecipesStop();
-                })
-                .catch(() => {
-                    this.props.fetchRecipesStop();
-                    toast.error("Error fetching the recipes");
-                });
-        }
+        this.props.fetchRecipesStart();
+        RecipeService.getRecipes(auth.uid)
+            .then((recipes) => {
+                this.props.updateRecipes(recipes);
+                this.props.fetchRecipesStop();
+            })
+            .catch(() => {
+                this.props.fetchRecipesStop();
+                toast.error("Error fetching the recipes");
+            });
     }
 
     public deleteRecipe = (recipeId: string) => (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -87,8 +89,16 @@ class RecipesViewBase extends PureComponent<Props, State> {
         history.push(`/recipe/${slug}`);
     }
 
+    public renderTags(recipe: Recipe) {
+        return recipe.tags.map((tag, index) => {
+            return (
+                <StyledFontAwesomeIcon key={index} size="lg" icon={getTagIcon(tag)} />
+            )
+        })
+    }
+
     public renderRecipes() {
-        const { recipes, loading, history } = this.props;
+        const { recipes, loading } = this.props;
 
         return (
             <Grid container={true} spacing={2}>
@@ -117,8 +127,11 @@ class RecipesViewBase extends PureComponent<Props, State> {
                                         >
                                             Slow-cooked meat-sauce with wine, authentic recipe from Bologna.
                                         </Typography>
-                                        <Divider className={"MuiDivider-root"} light={true} />
+                                        <Box>
+                                            {this.renderTags(recipe)}
+                                        </Box>
                                     </StyledCardContent>
+                                    <Divider className={"MuiDivider-root"} light={true} />
                                 </CardActionArea>
                                 <CardActions disableSpacing={true}>
                                     <IconButton aria-label="Share recipe">
