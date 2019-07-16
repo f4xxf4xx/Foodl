@@ -77,7 +77,8 @@ class RecipesViewBase extends PureComponent<Props, State> {
                 this.props.updateRecipesStop();
                 toast.success("Deleted!");
             })
-            .catch(() => {
+            .catch((error) => {
+                console.log(error);
                 this.props.updateRecipesStop();
                 toast.error("Error deleting the recipe");
             });
@@ -90,11 +91,15 @@ class RecipesViewBase extends PureComponent<Props, State> {
     }
 
     public renderTags(recipe: Recipe) {
-        return recipe.tags.map((tag, index) => {
-            return (
-                <StyledFontAwesomeIcon key={index} size="lg" icon={getTagIcon(tag)} />
-            )
-        })
+        return recipe.tags ?
+            recipe.tags.map((tag, index) => {
+                return (
+                    <StyledFontAwesomeIcon key={index} size="lg" icon={getTagIcon(tag)} />
+                )
+            })
+            :
+            null
+
     }
 
     public renderRecipes() {
@@ -111,7 +116,7 @@ class RecipesViewBase extends PureComponent<Props, State> {
                                 <CardActionArea onClick={this.goToRecipePage(recipe.slug)}>
                                     <StyledCardMedia
                                         image={
-                                            "https://material-ui.com/static/images/cards/paella.jpg"
+                                            "https://assets.kraftfoods.com/recipe_images/opendeploy/201689_640x428.jpg"
                                         }
                                         title="TODO"
                                     />
@@ -125,7 +130,7 @@ class RecipesViewBase extends PureComponent<Props, State> {
                                         <Typography
                                             variant={"caption"}
                                         >
-                                            Slow-cooked meat-sauce with wine, authentic recipe from Bologna.
+                                            {recipe.description}
                                         </Typography>
                                         <Box>
                                             {this.renderTags(recipe)}

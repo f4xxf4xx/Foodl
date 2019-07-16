@@ -16,7 +16,8 @@ service cloud.firestore {
 
   	match /recipes/{recipe} {
       allow read: if isAuthenticated() && resource.data.uid == request.auth.uid;
-      allow write: if isAuthenticated() && request.resource.data.uid == request.auth.uid;
+      allow create, update: if isAuthenticated() && request.resource.data.uid == request.auth.uid;
+      allow delete: if isAuthenticated() && resource.data.uid == request.auth.uid;
 
       function getRecipeData() {
         return get(/databases/$(database)/documents/recipes/$(recipe)).data;

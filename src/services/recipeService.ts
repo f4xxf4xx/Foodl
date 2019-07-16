@@ -6,13 +6,14 @@ export class RecipeService {
     private static mapRecipe(data: firebase.firestore.DocumentSnapshot): Recipe {
         const recipe: Recipe = {
             id: data.id,
+            uid: data.data().uid,
             slug: data.data().slug,
             name: data.data().name,
             description: data.data().description,
             type: data.data().type,
             cuisine: data.data().cuisine,
             duration: data.data().duration,
-            tags: data.data().tags
+            tags: data.data().tags,
         };
 
         return recipe;
@@ -53,9 +54,10 @@ export class RecipeService {
         return this.mapRecipe(firstRecipe);
     }
 
-    public static async addRecipe(name: string): Promise<Recipe> {
+    public static async addRecipe(name: string, uid: string): Promise<Recipe> {
         const slug = slugify(name);
         const newRecipe: Recipe = {
+            uid,
             name,
             slug,
         };
@@ -64,8 +66,9 @@ export class RecipeService {
             .then((recipe) => {
                 return {
                     id: recipe.id,
+                    uid,
                     name,
-                    slug,
+                    slug
                 };
             });
     }
@@ -144,11 +147,15 @@ export class RecipeService {
         if (recipe.exists) {
             const tags = recipe.data().tags;
 
-            if (tags.includes(tag)) {
-                return null;
+            if (tags) {
+                if (tags.includes(tag)) {
+                    return null;
+                }
+                tags.push(tag);
+                await recipeRef.update({ tags });
+            } else {
+                await recipeRef.update({ tags: [tag] });
             }
-            tags.push(tag);
-            await recipeRef.update({ tags });
         }
         else {
             return Promise.resolve(null);

@@ -17,6 +17,7 @@ interface State {
 
 interface StateProps {
     updatingRecipes: boolean;
+    auth: any;
 }
 
 interface DispatchProps {
@@ -47,20 +48,22 @@ class AddRecipeFormBase extends PureComponent<Props, State> {
 
     public addRecipe = () => {
         const { newRecipeName } = this.state;
+        const { auth } = this.props;
 
         if (newRecipeName === "") {
             return;
         }
 
+        console.log(auth.uid);
         this.props.updateRecipesStart();
-        RecipeService.addRecipe(newRecipeName)
+        RecipeService.addRecipe(newRecipeName, auth.uid)
             .then((recipe) => {
                 this.props.addRecipe(recipe);
                 this.props.updateRecipesStop();
                 this.setState({
                     newRecipeName: "",
                 });
-                this.props.history.push(`/recipe/${recipe.id}`);
+                this.props.history.push(`/recipe/${recipe.slug}`);
             })
             .catch(() => {
                 this.props.updateRecipesStop();
@@ -103,9 +106,8 @@ class AddRecipeFormBase extends PureComponent<Props, State> {
 }
 
 const mapStateToProps = (state: ApplicationState) => ({
-    recipes: state.recipes.recipes,
-    loadingRecipes: state.recipes.loadingRecipes,
     updatingRecipes: state.recipes.updatingRecipes,
+    auth: state.firebase.auth
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({

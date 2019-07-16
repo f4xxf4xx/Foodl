@@ -1,7 +1,7 @@
 import { Box, Chip, Grid, Icon, TextField, Typography } from "@material-ui/core";
 import React from "react";
 import { connect } from "react-redux";
-import Creatable from "react-select/lib/Creatable";
+import Select from "react-select";
 import { toast } from "react-toastify";
 import { bindActionCreators, compose, Dispatch } from "redux";
 import { ApplicationState } from "../../..";
@@ -79,6 +79,7 @@ class RecipeHeaderElementBase extends React.Component<Props> {
                 toast.success("Added tag!");
             })
             .catch((error) => {
+                console.log(error);
                 this.props.updateRecipeStop();
                 toast.error("Error adding the tag!");
             });
@@ -163,8 +164,7 @@ class RecipeHeaderElementBase extends React.Component<Props> {
             recipe &&
             <>
                 {editing ?
-                    <Creatable
-                        id="input-type"
+                    <Select
                         options={typeOptions}
                         value={recipe.type && {
                             value: recipe.type,
@@ -199,8 +199,7 @@ class RecipeHeaderElementBase extends React.Component<Props> {
                     />
                 }
                 {editing ?
-                    <Creatable
-                        id="input-ingredient"
+                    <Select
                         options={cuisineOptions}
                         value={recipe.cuisine && {
                             value: recipe.cuisine,
@@ -230,8 +229,7 @@ class RecipeHeaderElementBase extends React.Component<Props> {
                                 />
                             )
                             }
-                            <Creatable
-                                id="input-new-tag"
+                            <Select
                                 options={tagOptions}
                                 value={null}
                                 onChange={this.updateTag}

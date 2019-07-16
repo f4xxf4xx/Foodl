@@ -15,6 +15,7 @@ export enum IngredientType {
 
 export interface Recipe {
     id?: string;
+    uid: string;
     name: string;
     description?: string;
     slug: string;
@@ -49,7 +50,8 @@ export enum Cuisine {
     Indian = "Indian",
     Italian = "Italian",
     American = "American",
-    Greek = "Greek"
+    Greek = "Greek",
+    Mexican = "Mexican"
 }
 
 export interface Step {
