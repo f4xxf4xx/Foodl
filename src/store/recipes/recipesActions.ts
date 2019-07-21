@@ -8,3 +8,4 @@ export const updateRecipesStop = createAction("UPDATE_RECIPES_STOP");
 export const updateRecipes = createAction("UPDATE_RECIPES");
 export const addRecipe = createAction("ADD_RECIPE");
 export const deleteRecipe = createAction("DELETE_RECIPE");
+export const updateFilters = createAction("UPDATE_FILTERS");

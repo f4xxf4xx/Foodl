@@ -1,6 +1,7 @@
 import slugify from "react-slugify";
 import { db } from "../config";
 import { IngredientItem, Recipe, Step } from "../modules/Recipes/models";
+import { Filters } from "../store/recipes/recipesReducer";
 
 export class RecipeService {
     private static mapRecipe(data: firebase.firestore.DocumentSnapshot): Recipe {
@@ -19,10 +20,20 @@ export class RecipeService {
         return recipe;
     }
 
-    public static async getRecipes(uid: string): Promise<Recipe[]> {
-        const recipes = await db.collection("recipes")
-            .where("uid", "==", uid)
-            .get();
+    public static async getRecipes(uid: string, filters: Filters): Promise<Recipe[]> {
+        let recipesRef = db.collection("recipes")
+            .where("uid", "==", uid);
+
+        if(filters) {
+            if(filters.cuisine) {
+                recipesRef = recipesRef.where("cuisine", "==", filters.cuisine);
+            }
+            if(filters.type) {
+                recipesRef = recipesRef.where("type", "==", filters.type);
+            }
+        }
+
+        const recipes = await recipesRef.get();
 
         return recipes.docs.map((recipe) => {
             return this.mapRecipe(recipe);

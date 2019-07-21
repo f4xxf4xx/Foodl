@@ -11,16 +11,16 @@ import { Loader } from "semantic-ui-react";
 import { ApplicationState } from "../../..";
 import { Title } from "../../../layout/Styles/Sections";
 import * as recipesActions from "../../../store/recipes/recipesActions";
-import { Recipe } from "../models";
+import { Recipe, Cuisine } from "../models";
 import AddRecipeForm from "./AddRecipeForm";
 import { StyledCard } from "./Styles/StyledCard";
 import { StyledCardContent } from "./Styles/StyledCardContent";
 import { StyledCardMedia } from "./Styles/StyledCardMedia";
 import { RecipeService } from "../../../services/RecipeService";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPizzaSlice } from "@fortawesome/free-solid-svg-icons";
 import { getTagIcon } from "../helper";
 import { StyledFontAwesomeIcon } from "./Styles/StyledFontAwesomeIcon";
+import { Filters } from "../../../store/recipes/recipesReducer";
+import Select from "react-select";
 
 interface State {
     newRecipeName: string;
@@ -32,6 +32,7 @@ interface StateProps {
     updating: boolean;
     error: string;
     auth: any;
+    filters: Filters;
 }
 
 interface DispatchProps {
@@ -42,6 +43,7 @@ interface DispatchProps {
     updateRecipes: typeof recipesActions.updateRecipes;
     addRecipe: typeof recipesActions.addRecipe;
     deleteRecipe: typeof recipesActions.deleteRecipe;
+    updateFilters: typeof recipesActions.updateFilters;
 }
 
 type Props = StateProps & RouteComponentProps & DispatchProps;
@@ -58,7 +60,7 @@ class RecipesViewBase extends PureComponent<Props, State> {
         const { auth } = this.props;
 
         this.props.fetchRecipesStart();
-        RecipeService.getRecipes(auth.uid)
+        RecipeService.getRecipes(auth.uid, null)
             .then((recipes) => {
                 this.props.updateRecipes(recipes);
                 this.props.fetchRecipesStop();
@@ -102,55 +104,110 @@ class RecipesViewBase extends PureComponent<Props, State> {
 
     }
 
+    public filterCuisine = (e: any) => {
+        const { filters, auth } = this.props;
+        const value = e.label;
+        let newFilters: Filters = null;
+
+        console.log(filters);
+        if (filters) {
+            newFilters = filters;
+            newFilters.cuisine = value;
+            this.props.updateFilters(newFilters);
+        } else {
+            newFilters = {};
+            newFilters.cuisine = value;
+            this.props.updateFilters(newFilters);
+        }
+
+        this.props.updateRecipesStart();
+        RecipeService.getRecipes(auth.uid, newFilters)
+            .then((recipes) => {
+                console.log(recipes);
+                this.props.updateRecipes(recipes);
+                this.props.updateRecipesStop();
+            })
+            .catch((error) => {
+                console.log(error);
+                this.props.updateRecipesStop();
+                toast.error("Error filtering the recipe!");
+            });
+    }
+
+    public renderFilters() {
+        const { filters } = this.props;
+        const cuisineOptions = Object.keys(Cuisine).map((cuisine) => {
+            return {
+                value: Cuisine[cuisine],
+                label: Cuisine[cuisine],
+            };
+        });
+
+        return (
+            <Select
+                options={cuisineOptions}
+                value={filters && filters.cuisine && {
+                    value: filters.cuisine,
+                    label: filters.cuisine,
+                }}
+                onChange={this.filterCuisine}
+            />
+        )
+    }
+
     public renderRecipes() {
         const { recipes, loading } = this.props;
 
         return (
-            <Grid container={true} spacing={2}>
-                {loading ?
-                    <Loader active={true} inline="centered" />
-                    :
-                    recipes.map((recipe) =>
-                        <Grid key={recipe.id} item={true} xs={12} sm={6} md={4} lg={3}>
-                            <StyledCard>
-                                <CardActionArea onClick={this.goToRecipePage(recipe.slug)}>
-                                    <StyledCardMedia
-                                        image={
-                                            "https://assets.kraftfoods.com/recipe_images/opendeploy/201689_640x428.jpg"
-                                        }
-                                        title="TODO"
-                                    />
-                                    <StyledCardContent>
-                                        <Typography
-                                            variant={"h6"}
-                                            gutterBottom={true}
-                                        >
-                                            {recipe.name}
-                                        </Typography>
-                                        <Typography
-                                            variant={"caption"}
-                                        >
-                                            {recipe.description}
-                                        </Typography>
-                                        <Box>
-                                            {this.renderTags(recipe)}
-                                        </Box>
-                                    </StyledCardContent>
-                                    <Divider className={"MuiDivider-root"} light={true} />
-                                </CardActionArea>
-                                <CardActions disableSpacing={true}>
-                                    <IconButton aria-label="Share recipe">
-                                        <ShareIcon />
-                                    </IconButton>
-                                    <IconButton aria-label="Delete recipe" onClick={this.deleteRecipe(recipe.id)}>
-                                        <DeleteIcon />
-                                    </IconButton>
-                                </CardActions>
-                            </StyledCard>
-                        </Grid>,
-                    )
-                }
-            </Grid>
+            loading ?
+                <Loader active={true} inline="centered" />
+                :
+                <>
+                    <Box>
+                        {this.renderFilters()}
+                    </Box>
+                    <Grid container={true} spacing={2}>
+                        {recipes.map((recipe) =>
+                            <Grid key={recipe.id} item={true} xs={12} sm={6} md={4} lg={3}>
+                                <StyledCard>
+                                    <CardActionArea onClick={this.goToRecipePage(recipe.slug)}>
+                                        <StyledCardMedia
+                                            image={
+                                                "https://assets.kraftfoods.com/recipe_images/opendeploy/201689_640x428.jpg"
+                                            }
+                                            title="TODO"
+                                        />
+                                        <StyledCardContent>
+                                            <Typography
+                                                variant={"h6"}
+                                                gutterBottom={true}
+                                            >
+                                                {recipe.name}
+                                            </Typography>
+                                            <Typography
+                                                variant={"caption"}
+                                            >
+                                                {recipe.description}
+                                            </Typography>
+                                            <Box>
+                                                {this.renderTags(recipe)}
+                                            </Box>
+                                        </StyledCardContent>
+                                        <Divider className={"MuiDivider-root"} light={true} />
+                                    </CardActionArea>
+                                    <CardActions disableSpacing={true}>
+                                        <IconButton aria-label="Share recipe">
+                                            <ShareIcon />
+                                        </IconButton>
+                                        <IconButton aria-label="Delete recipe" onClick={this.deleteRecipe(recipe.id)}>
+                                            <DeleteIcon />
+                                        </IconButton>
+                                    </CardActions>
+                                </StyledCard>
+                            </Grid>
+                        )}
+                    </Grid>
+                </>
         );
     }
 
@@ -181,6 +238,7 @@ const mapStateToProps = (state: ApplicationState) => ({
     loading: state.recipes.loadingRecipes,
     updating: state.recipes.updatingRecipes,
     auth: state.firebase.auth,
+    filters: state.recipes.filters,
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
@@ -191,6 +249,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
     updateRecipes: bindActionCreators(recipesActions.updateRecipes, dispatch),
     addRecipe: bindActionCreators(recipesActions.addRecipe, dispatch),
     deleteRecipe: bindActionCreators(recipesActions.deleteRecipe, dispatch),
+    updateFilters: bindActionCreators(recipesActions.updateFilters, dispatch)
 });
 
 const RecipesView = compose(
