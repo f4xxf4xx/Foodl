@@ -11,7 +11,7 @@ import { Loader } from "semantic-ui-react";
 import { ApplicationState } from "../../..";
 import { Title } from "../../../layout/Styles/Sections";
 import * as recipesActions from "../../../store/recipes/recipesActions";
-import { Recipe, Cuisine } from "../models";
+import { Recipe, Cuisine, RecipeType } from "../models";
 import AddRecipeForm from "./AddRecipeForm";
 import { StyledCard } from "./Styles/StyledCard";
 import { StyledCardContent } from "./Styles/StyledCardContent";
@@ -104,26 +104,22 @@ class RecipesViewBase extends PureComponent<Props, State> {
 
     }
 
-    public filterCuisine = (e: any) => {
+    public filterByAttribute = (attribute: string) => (e: any) => {
         const { filters, auth } = this.props;
-        const value = e.label;
+        const value = e.value;
         let newFilters: Filters = null;
 
-        console.log(filters);
         if (filters) {
-            newFilters = filters;
-            newFilters.cuisine = value;
+            newFilters = { ...filters, [attribute]: value }
             this.props.updateFilters(newFilters);
         } else {
-            newFilters = {};
-            newFilters.cuisine = value;
+            newFilters = { [attribute]: value };
             this.props.updateFilters(newFilters);
         }
 
         this.props.updateRecipesStart();
         RecipeService.getRecipes(auth.uid, newFilters)
             .then((recipes) => {
-                console.log(recipes);
                 this.props.updateRecipes(recipes);
                 this.props.updateRecipesStop();
             })
@@ -142,16 +138,35 @@ class RecipesViewBase extends PureComponent<Props, State> {
                 label: Cuisine[cuisine],
             };
         });
+        cuisineOptions.unshift({ label: "No filters", value: null })
+
+        const typeOptions = Object.keys(RecipeType).map((type) => {
+            return {
+                value: RecipeType[type],
+                label: RecipeType[type],
+            };
+        });
+        typeOptions.unshift({ label: "No filters", value: null })
 
         return (
-            <Select
-                options={cuisineOptions}
-                value={filters && filters.cuisine && {
-                    value: filters.cuisine,
-                    label: filters.cuisine,
-                }}
-                onChange={this.filterCuisine}
-            />
+            <>
+                <Select
+                    options={cuisineOptions}
+                    value={filters && filters.cuisine && {
+                        value: filters.cuisine,
+                        label: filters.cuisine,
+                    }}
+                    onChange={this.filterByAttribute("cuisine")}
+                />
+                <Select
+                    options={typeOptions}
+                    value={filters && filters.type && {
+                        value: filters.type,
+                        label: filters.type,
+                    }}
+                    onChange={this.filterByAttribute("type")}
+                />
+            </>
         )
     }
 

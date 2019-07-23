@@ -52,7 +52,7 @@ class RecipeHeaderElementBase extends React.Component<Props> {
 
     public updateCuisine = (e: any) => {
         const { recipe } = this.props;
-        const value = e.label;
+        const value = e.value;
 
         this.props.updateRecipeStart();
         RecipeService.updateRecipe(recipe.id, "cuisine", value)
@@ -69,7 +69,7 @@ class RecipeHeaderElementBase extends React.Component<Props> {
 
     public updateTag = (e: any) => {
         const { recipe } = this.props;
-        const value = e.label;
+        const value = e.value;
 
         this.props.updateRecipeStart();
         RecipeService.addTag(recipe.id, value)
@@ -87,7 +87,7 @@ class RecipeHeaderElementBase extends React.Component<Props> {
 
     public updateType = (e: any) => {
         const { recipe } = this.props;
-        const value = e.label;
+        const value = e.value;
 
         this.props.updateRecipeStart();
         RecipeService.updateRecipe(recipe.id, "type", value)
