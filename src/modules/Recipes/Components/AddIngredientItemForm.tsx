@@ -12,10 +12,10 @@ import { StyledPaper } from "../../../layout/Styles/Sections";
 import * as ingredientActions from "../../../store/ingredients/ingredientActions";
 import * as recipeActions from "../../../store/recipes/recipeActions";
 import { Ingredient } from "../../Ingredients/models";
-import { getIngredientTypeOptions } from "../helper";
 import { IngredientItem, Recipe } from "../models";
 import { IngredientService } from "../../../services/IngredientService";
 import { RecipeService } from "../../../services/RecipeService";
+import { IngredientType } from "../constants";
 
 interface OwnProps {
     editing: boolean;
@@ -158,6 +158,13 @@ class AddIngredientItemFormBase extends PureComponent<Props, State> {
             };
         }) : [];
 
+        const typeOptions = Object.keys(IngredientType).map((type) => {
+            return {
+                value: IngredientType[type],
+                label: IngredientType[type],
+            };
+        });
+
         return (
             <>
                 {editing &&
@@ -183,7 +190,7 @@ class AddIngredientItemFormBase extends PureComponent<Props, State> {
                                 <Select
                                     id="input-type"
                                     label="type"
-                                    options={getIngredientTypeOptions()}
+                                    options={typeOptions}
                                     value={currentSelectType}
                                     onChange={this.updateFormType}
                                 />

@@ -31,6 +31,11 @@ export const ingredientReducer = createReducer(initialState, {
     },
     ADD_INGREDIENT: (state, action) => {
         state.ingredients.push(action.payload);
+        state.ingredients = state.ingredients.sort((a,b) => {
+            if(a.name < b.name) return -1;
+            if(a.name > b.name) return 1;
+            return 0;
+        });
     },
     DELETE_INGREDIENT: (state, action) => {
         state.ingredients = state.ingredients.filter((i) => i.id !== action.payload);

@@ -45,8 +45,7 @@ export const ButtonError = styled(Button)`
     border-radius: 3px;
     border: 0;
     color: white;
-    padding: 0 30px;
-    margin:5px;
+    padding: 0 15px;
 
     &:hover {
       box-shadow: 0 1px 2px 1px rgba(33, 33, 33, .3);

@@ -12,7 +12,7 @@ import IngredientsElement from "./IngredientsElement";
 import RecipeHeaderElement from "./RecipeHeaderElement";
 import StepsElement from "./StepsElement";
 import { RecipeService } from "../../../services/RecipeService";
-import { Grid } from "@material-ui/core";
+import { Grid, Divider, Box } from "@material-ui/core";
 
 interface State {
     editing: boolean;
@@ -87,14 +87,16 @@ class RecipeViewBase extends PureComponent<Props, State> {
                                     editing={editing}
                                     toggleEdit={this.toggleEdit}
                                 />
-                                <Grid container={true} spacing={5}>
-                                    <Grid item={true} xs={12} lg={6}>
-                                        <IngredientsElement editing={editing} id={recipe.id} />
+                                <Box mt={2}>
+                                    <Grid container={true} spacing={5}>
+                                        <Grid item={true} xs={12} lg={6}>
+                                            <IngredientsElement editing={editing} id={recipe.id} />
+                                        </Grid>
+                                        <Grid item={true} xs={12} lg={6}>
+                                            <StepsElement editing={editing} id={recipe.id} />
+                                        </Grid>
                                     </Grid>
-                                    <Grid item={true} xs={12} lg={6}>
-                                        <StepsElement editing={editing} id={recipe.id} />
-                                    </Grid>                                    
-                                </Grid>
+                                </Box>
                             </>
                             :
                             null

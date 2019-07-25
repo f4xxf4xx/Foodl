@@ -1,16 +1,10 @@
+import { RecipeType, Tag, Cuisine } from "./constants";
+
 export interface IngredientItem {
     id?: string;
     quantity: string;
     type: string;
     name: string;
-}
-
-export enum IngredientType {
-    Cup = "cup",
-    Tablespoon = "tablespoon",
-    Teaspoon = "teaspoon",
-    Unit = "unit",
-    Gram = "gram",
 }
 
 export interface Recipe {
@@ -23,35 +17,6 @@ export interface Recipe {
     duration?: number;
     tags?: Tag[];
     cuisine?: Cuisine;
-}
-
-export enum RecipeType {
-    Drink = "Drink",
-    Breakfast = "Breakfast",
-    Appetizer = "Appetizer",
-    Meal = "Meal",
-    Dessert = "Dessert"
-}
-
-export enum Tag {
-    Vegetarian = "Vegetarian",
-    BBQ = "BBQ",
-    Pasta = "Pasta",
-    Soup = "Soup",
-    Pizza = "Pizza",
-    Beef = "Beef",
-    Chicken = "Chicken",
-    Fish = "Fish",
-    Salad = "Salad",
-    Cookie = "Cookie"
-}
-
-export enum Cuisine {
-    Indian = "Indian",
-    Italian = "Italian",
-    American = "American",
-    Greek = "Greek",
-    Mexican = "Mexican"
 }
 
 export interface Step {

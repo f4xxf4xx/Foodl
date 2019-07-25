@@ -102,7 +102,6 @@ export class RecipeService {
 
     public static async getIngredientItems(id: string): Promise<IngredientItem[]> {
         const ingredientItems = await db.collection("recipes").doc(id).collection("ingredientItems")
-            .orderBy("name")
             .get();
 
         return ingredientItems.docs.map((ingredientItem) => {

@@ -1,5 +1,5 @@
-import { IngredientItem, IngredientType, Tag } from "./models";
 import { faPizzaSlice, faHamburger, faCookie, faDrumstickBite, faFish, faCarrot } from "@fortawesome/free-solid-svg-icons";
+import { IngredientType, Tag } from "./constants";
 
 export const getNumericQuantity = (quantity: string): string => {
     const quantityNumber = parseFloat(quantity);
@@ -37,32 +37,11 @@ export const getIngredientTypeText = (ingredientType: string) => {
             return "tablespoon(s)";
         case IngredientType.Teaspoon:
             return "teaspoon(s)";
+        case IngredientType.Can:
+            return "can(s)";
+        case IngredientType.Pack:
+            return "pack(s)";
     }
-};
-
-export const getIngredientTypeOptions = () => {
-    return [
-        {
-            value: IngredientType.Cup,
-            label: "cup(s)",
-        },
-        {
-            value: IngredientType.Gram,
-            label: "gram(s)",
-        },
-        {
-            value: IngredientType.Tablespoon,
-            label: "tablespoon(s)",
-        },
-        {
-            value: IngredientType.Teaspoon,
-            label: "teaspoon(s)",
-        },
-        {
-            value: IngredientType.Unit,
-            label: "unit(s)",
-        },
-    ];
 };
 
 export const getTagIcon = (tag: string) => {

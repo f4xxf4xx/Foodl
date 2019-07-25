@@ -1,4 +1,4 @@
-import { Button, Divider, Paper, Table, TableBody, TableCell, TableRow, Typography } from "@material-ui/core";
+import { Button, Divider, Paper, Table, TableBody, TableCell, TableRow, Typography, Icon } from "@material-ui/core";
 import React, { PureComponent } from "react";
 import { connect } from "react-redux";
 import { RouteComponentProps } from "react-router-dom";
@@ -6,7 +6,7 @@ import { toast } from "react-toastify";
 import { bindActionCreators, compose, Dispatch } from "redux";
 import { Loader } from "semantic-ui-react";
 import { ApplicationState } from "../../..";
-import { ButtonError, ButtonPrimary } from "../../../layout/Styles/Buttons";
+import { ButtonError, ButtonPrimary, ButtonSecondary } from "../../../layout/Styles/Buttons";
 import * as cartActions from "../../../store/cart/cartActions";
 import * as recipeActions from "../../../store/recipes/recipeActions";
 import { Ingredient } from "../../Ingredients/models";
@@ -15,6 +15,9 @@ import { IngredientItem } from "../models";
 import AddIngredientItemForm from "./AddIngredientItemForm";
 import { RecipeService } from "../../../services/RecipeService";
 import { CartService } from "../../../services/CartService";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { StyledFontAwesomeIcon } from "./Styles/StyledFontAwesomeIcon";
+import { faShoppingCart, faCartPlus } from "@fortawesome/free-solid-svg-icons";
 
 interface OwnProps {
     id: string;
@@ -112,15 +115,15 @@ class IngredientsElementBase extends PureComponent<Props> {
 
         if (inCart) {
             return (
-                <ButtonPrimary disabled={true}>
-                    Already in cart
-                </ButtonPrimary>
+                <ButtonSecondary width="20" disabled={true}>
+                    <FontAwesomeIcon size="lg" icon={faShoppingCart} />
+                </ButtonSecondary>
             );
         }
 
         return (
-            <ButtonPrimary onClick={this.addCartItem(ingredientItem)}>
-                Add to cart
+            <ButtonPrimary width="20" onClick={this.addCartItem(ingredientItem)}>
+                <FontAwesomeIcon size="lg" icon={faCartPlus} />
             </ButtonPrimary>
         );
     }

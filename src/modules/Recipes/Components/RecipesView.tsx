@@ -11,7 +11,7 @@ import { Loader } from "semantic-ui-react";
 import { ApplicationState } from "../../..";
 import { Title } from "../../../layout/Styles/Sections";
 import * as recipesActions from "../../../store/recipes/recipesActions";
-import { Recipe, Cuisine, RecipeType } from "../models";
+import { Recipe } from "../models";
 import AddRecipeForm from "./AddRecipeForm";
 import { StyledCard } from "./Styles/StyledCard";
 import { StyledCardContent } from "./Styles/StyledCardContent";
@@ -21,6 +21,7 @@ import { getTagIcon } from "../helper";
 import { StyledFontAwesomeIcon } from "./Styles/StyledFontAwesomeIcon";
 import { Filters } from "../../../store/recipes/recipesReducer";
 import Select from "react-select";
+import { Cuisine, RecipeType } from "../constants";
 
 interface State {
     newRecipeName: string;

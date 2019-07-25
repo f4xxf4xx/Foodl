@@ -8,9 +8,10 @@ import { ApplicationState } from "../../..";
 import { ButtonPrimary } from "../../../layout/Styles/Buttons";
 import { Title } from "../../../layout/Styles/Sections";
 import * as recipeActions from "../../../store/recipes/recipeActions";
-import { Recipe, Cuisine, RecipeType, Tag } from "../models";
+import { Recipe } from "../models";
 import { RecipeService } from "../../../services/RecipeService";
 import { StyledChip } from "./Styles/StyledChip";
+import { Cuisine, RecipeType, Tag } from "../constants";
 
 interface StateProps {
     recipe: Recipe;
