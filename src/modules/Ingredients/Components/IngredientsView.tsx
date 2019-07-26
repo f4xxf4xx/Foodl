@@ -8,7 +8,6 @@ import { bindActionCreators, compose, Dispatch } from "redux";
 import { Loader } from "semantic-ui-react";
 import { ApplicationState } from "../../..";
 import { ButtonError } from "../../../layout/Styles/Buttons";
-import { Title } from "../../../layout/Styles/Sections";
 import * as ingredientActions from "../../../store/ingredients/ingredientActions";
 import { Ingredient } from "../models";
 import AddIngredientForm from "./AddIngredientForm";
@@ -102,7 +101,7 @@ class IngredientsViewBase extends PureComponent<Props> {
 
         return (
             <>
-                <Title>Ingredients</Title>
+                <Typography variant="h3">Ingredients</Typography>
                 <Typography variant="subtitle1">
                     Here lies the list of possible ingredients
                 </Typography>

@@ -6,12 +6,16 @@ import { toast } from "react-toastify";
 import { bindActionCreators, compose, Dispatch } from "redux";
 import { ApplicationState } from "../../..";
 import { ButtonPrimary } from "../../../layout/Styles/Buttons";
-import { Title } from "../../../layout/Styles/Sections";
 import * as recipeActions from "../../../store/recipes/recipeActions";
 import { Recipe } from "../models";
 import { RecipeService } from "../../../services/RecipeService";
 import { StyledChip } from "./Styles/StyledChip";
 import { Cuisine, RecipeType, Tag } from "../constants";
+import { Loader } from "semantic-ui-react";
+import ContentEditable, { ContentEditableEvent } from 'react-contenteditable'
+import { StyledRecipeInfo } from "./Styles/StyledRecipeInfo";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faClock } from "@fortawesome/free-solid-svg-icons";
 
 interface StateProps {
     recipe: Recipe;
@@ -37,6 +41,23 @@ class RecipeHeaderElementBase extends React.Component<Props> {
     public updateRecipe = (key: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
         const { recipe } = this.props;
         const value = e.currentTarget.value;
+
+        this.props.updateRecipeStart();
+        RecipeService.updateRecipe(recipe.id, key, value)
+            .then(() => {
+                this.props.updateRecipe({ ...recipe, [key]: value });
+                this.props.updateRecipeStop();
+                toast.success("Updated!");
+            })
+            .catch(() => {
+                this.props.updateRecipeStop();
+                toast.error("Error updating the recipe!");
+            });
+    }
+
+    public updateContentEditable = (key: string) => (e: React.FocusEvent<HTMLDivElement>) => {
+        const { recipe } = this.props;
+        const value = e.target.textContent;
 
         this.props.updateRecipeStart();
         RecipeService.updateRecipe(recipe.id, key, value)
@@ -137,8 +158,59 @@ class RecipeHeaderElementBase extends React.Component<Props> {
 
     }
 
-    public renderInfo() {
-        const { recipe, editing, updatingRecipe } = this.props;
+    public renderRecipeHeader() {
+        const { recipe, toggleEdit } = this.props;
+
+        return (
+            <>
+                <Grid justify="space-between" container={true}>
+                    <Grid item={true}>
+                        <Typography variant="h3">{recipe.name}</Typography>
+                    </Grid>
+                    <Grid item={true}>
+                        <ButtonPrimary onClick={toggleEdit}>Edit</ButtonPrimary>
+                    </Grid>
+                </Grid>
+                <Box>
+                    {recipe.type &&
+                        <StyledRecipeInfo>
+                            <Typography variant="subtitle2">
+                                {recipe.type}
+                            </Typography>
+                        </StyledRecipeInfo>
+                    }
+                    {recipe.duration &&
+                        <StyledRecipeInfo>
+                            <Typography variant="subtitle2">
+                                <FontAwesomeIcon size="sm" icon={faClock} />
+                                {` ${recipe.duration} minutes`}
+                            </Typography>
+                        </StyledRecipeInfo>
+                    }
+                    {recipe.cuisine &&
+                        <StyledRecipeInfo>
+                            <Typography variant="subtitle2">
+                                {recipe.cuisine}
+                            </Typography>
+                        </StyledRecipeInfo>
+                    }
+                    <Box>
+                        {recipe.tags && recipe.tags.map((tag, index) =>
+                            <StyledChip
+                                key={index}
+                                size="small"
+                                label={tag}
+                                color="secondary"
+                            />
+                        )}
+                    </Box>
+                </Box>
+            </>
+        )
+    }
+
+    public renderEditHeader() {
+        const { recipe, updatingRecipe, toggleEdit } = this.props;
 
         const cuisineOptions = Object.keys(Cuisine).map((cuisine) => {
             return {
@@ -162,124 +234,82 @@ class RecipeHeaderElementBase extends React.Component<Props> {
         })
 
         return (
-            recipe &&
             <>
-                {editing ?
-                    <Select
-                        options={typeOptions}
-                        value={recipe.type && {
-                            value: recipe.type,
-                            label: recipe.type,
-                        }}
-                        onChange={this.updateType}
-                    />
-                    :
-                    recipe.type &&
-                    <StyledChip
-                        size="small"
-                        label={recipe.type}
-                        color="primary"
-                        variant="outlined"
-                    />
-                }
-                {editing ?
-                    <TextField
-                        placeholder="Duration in minutes"
-                        defaultValue={recipe.duration}
-                        onBlur={this.updateRecipe("duration")}
-                        disabled={updatingRecipe}
-                    />
-                    :
-                    recipe.duration &&
-                    <StyledChip
-                        size="small"
-                        icon={<Icon>timer</Icon>}
-                        label={`${recipe.duration} minutes`}
-                        color="primary"
-                        variant="outlined"
-                    />
-                }
-                {editing ?
-                    <Select
-                        options={cuisineOptions}
-                        value={recipe.cuisine && {
-                            value: recipe.cuisine,
-                            label: recipe.cuisine,
-                        }}
-                        onChange={this.updateCuisine}
-                    />
-                    :
-                    recipe.cuisine &&
-                    <StyledChip
-                        size="small"
-                        label={recipe.cuisine}
-                        color="primary"
-                        variant="outlined"
-                    />
-                }
+                <Grid justify="space-between" container={true}>
+                    <Grid item={true}>
+                        <ContentEditable
+                            className="MuiTypography-root MuiTypography-h3"
+                            html={recipe.name}
+                            disabled={updatingRecipe}
+                            onBlur={this.updateContentEditable("name")}
+                            tagName='h3'
+                            onChange={() => { }}
+                        />
+                    </Grid>
+                    <Grid item={true}>
+                        <ButtonPrimary onClick={toggleEdit}>Stop editing</ButtonPrimary>
+                    </Grid>
+                </Grid>
                 <Box>
-                    {editing ?
-                        <>
-                            {recipe.tags && recipe.tags.map((tag, index) =>
-                                <StyledChip
-                                    key={index}
-                                    size="small"
-                                    label={tag}
-                                    color="secondary"
-                                    onDelete={this.deleteTag(tag)}
-                                />
-                            )
-                            }
+                    <StyledRecipeInfo>
+                        <Select
+                            options={typeOptions}
+                            value={recipe.type && {
+                                value: recipe.type,
+                                label: recipe.type,
+                            }}
+                            onChange={this.updateType}
+                        />
+                    </StyledRecipeInfo>
+                    <StyledRecipeInfo>
+                        <TextField
+                            placeholder="Duration in minutes"
+                            defaultValue={recipe.duration}
+                            onBlur={this.updateRecipe("duration")}
+                            disabled={updatingRecipe}
+                        />
+                    </StyledRecipeInfo>
+                    {recipe.cuisine &&
+                        <StyledRecipeInfo>
                             <Select
-                                options={tagOptions}
-                                value={null}
-                                onChange={this.updateTag}
+                                options={cuisineOptions}
+                                value={recipe.cuisine && {
+                                    value: recipe.cuisine,
+                                    label: recipe.cuisine,
+                                }}
+                                onChange={this.updateCuisine}
                             />
-                        </>
-                        :
-                        recipe.tags && recipe.tags.map((tag, index) =>
+                        </StyledRecipeInfo>
+                    }
+                    <Box>
+                        {recipe.tags && recipe.tags.map((tag, index) =>
                             <StyledChip
                                 key={index}
                                 size="small"
                                 label={tag}
                                 color="secondary"
+                                onDelete={this.deleteTag(tag)}
                             />
-                        )
-                    }
+                        )}
+                        <Select
+                            options={tagOptions}
+                            value={null}
+                            onChange={this.updateTag}
+                        />
+                    </Box>
                 </Box>
             </>
-        );
+        )
     }
 
     public render() {
-        const { recipe, editing, toggleEdit, updatingRecipe } = this.props;
+        const { recipe, editing } = this.props;
 
         return (
             recipe ?
-                <>
-                    <Grid justify="space-between" container={true}>
-                        <Grid item={true}>
-                            {editing ?
-                                <TextField
-                                    defaultValue={recipe.name}
-                                    onBlur={this.updateRecipe("name")}
-                                    disabled={updatingRecipe}
-                                />
-                                :
-                                <Title>{recipe.name}</Title>
-                            }
-                        </Grid>
-                        <Grid item={true}>
-                            <ButtonPrimary onClick={toggleEdit}>
-                                {editing ? "Stop editing" : "Edit"}
-                            </ButtonPrimary>
-                        </Grid>
-                    </Grid>
-                    <Box>
-                        {this.renderInfo()}
-                    </Box>
-                </>
-                : null
+                editing ? this.renderEditHeader() : this.renderRecipeHeader()
+                :
+                <Loader active={true} inline="centered" />
         );
     }
 }

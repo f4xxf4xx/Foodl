@@ -1,5 +1,5 @@
 import { createMuiTheme } from "@material-ui/core/styles";
-import { green, orange } from "@material-ui/core/colors";
+import {  } from "@material-ui/core/colors";
 
 const muiBaseTheme = createMuiTheme();
 
@@ -11,6 +11,9 @@ export default createMuiTheme({
         },
     },
     typography: {
+        h3: {
+        
+        },
         h6: {
 
         },
@@ -21,5 +24,13 @@ export default createMuiTheme({
                 width: "240px",
             },
         },
+        MuiTypography: {
+            h3: {
+                marginBottom: "12px !important"
+            },
+            subtitle2: {
+                color: "white"
+            }
+        }
     },
 });

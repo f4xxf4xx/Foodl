@@ -8,7 +8,6 @@ import { bindActionCreators, compose, Dispatch } from "redux";
 import { Loader } from "semantic-ui-react";
 import { ApplicationState } from "../../..";
 import { ButtonError } from "../../../layout/Styles/Buttons";
-import { Title } from "../../../layout/Styles/Sections";
 import { CartService } from "../../../services/CartService";
 import * as cartActions from "../../../store/cart/cartActions";
 import { Ingredient } from "../../Ingredients/models";
@@ -124,7 +123,7 @@ class CartViewBase extends PureComponent<Props> {
 
         return (
             <>
-                <Title>Cart</Title>
+                <Typography variant="h3">Cart</Typography>
                 {loadingCartItems ?
                     <Loader active={true} inline="centered" />
                     :

@@ -9,7 +9,6 @@ import { toast } from "react-toastify";
 import { bindActionCreators, compose, Dispatch } from "redux";
 import { Loader } from "semantic-ui-react";
 import { ApplicationState } from "../../..";
-import { Title } from "../../../layout/Styles/Sections";
 import * as recipesActions from "../../../store/recipes/recipesActions";
 import { Recipe } from "../models";
 import AddRecipeForm from "./AddRecipeForm";
@@ -232,7 +231,7 @@ class RecipesViewBase extends PureComponent<Props, State> {
 
         return (
             <>
-                <Title>My recipes</Title>
+                <Typography variant="h3">My recipes</Typography>
                 <Typography paragraph={true}>
                     Here you can manage your own recipes
                 </Typography>

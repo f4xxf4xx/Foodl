@@ -1,11 +1,10 @@
-import { Divider, Typography, Grid } from "@material-ui/core";
+import { Typography, Grid } from "@material-ui/core";
 import React, { PureComponent } from "react";
 import { connect } from "react-redux";
 import { compose } from "redux";
 import { ApplicationState } from "../..";
 import { isAuthenticated } from "../../helpers/userHelper";
-import { Title } from "../../layout/Styles/Sections";
-import { Icon, ListItem, ListItemIcon, ListItemText } from "@material-ui/core";
+import { Icon } from "@material-ui/core";
 
 interface StateProps {
     auth: any;
@@ -25,7 +24,7 @@ class HomePageBase extends PureComponent<Props> {
                     </Typography>
                     :
                     <>
-                    <Title align="center">Foodl</Title>
+                    <Typography variant="h3" align="center">Foodl</Typography>
                     <Typography variant="h6" align="center">
                         An app for foodies
                     </Typography>
