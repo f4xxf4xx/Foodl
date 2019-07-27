@@ -8,6 +8,14 @@ export enum IngredientType {
     Unit = "Unit",
 }
 
+export enum IngredientPrepType {
+    Chopped = "Chopped",
+    Diced = "Diced",
+    Blanched = "Blanched",
+    Minced = "Minced",
+    Pureed = "Pureed"
+}
+
 export enum RecipeType {
     Appetizer = "Appetizer",
     Breakfast = "Breakfast",

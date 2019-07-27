@@ -12,6 +12,8 @@ import { CartService } from "../../../services/CartService";
 import * as cartActions from "../../../store/cart/cartActions";
 import { Ingredient } from "../../Ingredients/models";
 import AddCartItemForm from "./AddCartItemForm";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrash } from "@fortawesome/free-solid-svg-icons";
 
 interface StateProps {
     cartItems: Ingredient[];
@@ -102,7 +104,7 @@ class CartViewBase extends PureComponent<Props> {
                                             disabled={updatingCartItems}
                                             onClick={this.deleteCartItem(cartItem.name)}
                                         >
-                                            <DeleteIcon />
+                                            <FontAwesomeIcon icon={faTrash} />
                                         </ButtonError>
                                     </TableCell>
                                 </TableRow>,

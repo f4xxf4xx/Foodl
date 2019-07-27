@@ -110,6 +110,7 @@ export class RecipeService {
                 name: ingredientItem.data().name,
                 quantity: ingredientItem.data().quantity,
                 type: ingredientItem.data().type,
+                prepType: ingredientItem.data().prepType
             };
         });
     }

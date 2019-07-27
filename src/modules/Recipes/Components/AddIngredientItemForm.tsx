@@ -15,7 +15,7 @@ import { Ingredient } from "../../Ingredients/models";
 import { IngredientItem, Recipe } from "../models";
 import { IngredientService } from "../../../services/IngredientService";
 import { RecipeService } from "../../../services/RecipeService";
-import { IngredientType } from "../constants";
+import { IngredientType, IngredientPrepType } from "../constants";
 
 interface OwnProps {
     editing: boolean;
@@ -31,6 +31,7 @@ interface State {
     newIngredientItem: IngredientItem;
     currentSelectIngredient: any;
     currentSelectType: any;
+    currentPrepType: any;
 }
 
 interface DispatchProps {
@@ -54,9 +55,11 @@ class AddIngredientItemFormBase extends PureComponent<Props, State> {
                 name: "",
                 quantity: "",
                 type: "",
+                prepType: ""
             },
             currentSelectIngredient: null,
             currentSelectType: null,
+            currentPrepType: null
         };
     }
 
@@ -75,27 +78,36 @@ class AddIngredientItemFormBase extends PureComponent<Props, State> {
         }
     }
 
-    public updateFormName = (e: any) => {
+    public updateName = (e: any) => {
         const { newIngredientItem } = this.state;
 
         this.setState({
-            newIngredientItem: { ...newIngredientItem, name: e.label },
+            newIngredientItem: { ...newIngredientItem, name: e ? e.label: null },
             currentSelectIngredient: e,
         });
     }
 
-    public updateFormQuantity = (e: React.ChangeEvent<HTMLInputElement>) => {
+    public updateQuantity = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { newIngredientItem } = this.state;
 
-        this.setState({ newIngredientItem: { ...newIngredientItem, quantity: e.target.value } });
+        this.setState({ newIngredientItem: { ...newIngredientItem, quantity: e ? e.target.value: null } });
     }
 
-    public updateFormType = (e: any) => {
+    public updateType = (e: any) => {
         const { newIngredientItem } = this.state;
 
         this.setState({
-            newIngredientItem: { ...newIngredientItem, type: e.value },
+            newIngredientItem: { ...newIngredientItem, type: e ? e.value: null },
             currentSelectType: e,
+        });
+    }
+    
+    public updatePrepType = (e: any) => {
+        const { newIngredientItem } = this.state;
+
+        this.setState({
+            newIngredientItem: { ...newIngredientItem, prepType: e ? e.value: null },
+            currentPrepType: e,
         });
     }
 
@@ -134,6 +146,7 @@ class AddIngredientItemFormBase extends PureComponent<Props, State> {
                     },
                     currentSelectIngredient: null,
                     currentSelectType: null,
+                    currentPrepType: null
                 });
                 toast.success("Added!");
             })
@@ -149,11 +162,11 @@ class AddIngredientItemFormBase extends PureComponent<Props, State> {
 
     public render() {
         const { editing, ingredients } = this.props;
-        const { newIngredientItem, currentSelectIngredient, currentSelectType } = this.state;
+        const { newIngredientItem, currentSelectIngredient, currentSelectType, currentPrepType } = this.state;
 
         const ingredientOptions = ingredients ? ingredients.map((ingredient) => {
             return {
-                value: ingredient.id,
+                value: ingredient.name,
                 label: ingredient.name,
             };
         }) : [];
@@ -162,6 +175,13 @@ class AddIngredientItemFormBase extends PureComponent<Props, State> {
             return {
                 value: IngredientType[type],
                 label: IngredientType[type],
+            };
+        });
+        
+        const prepTypeOptions = Object.keys(IngredientPrepType).map((type) => {
+            return {
+                value: IngredientPrepType[type],
+                label: IngredientPrepType[type],
             };
         });
 
@@ -179,7 +199,7 @@ class AddIngredientItemFormBase extends PureComponent<Props, State> {
                                     label="Quantity"
                                     type="text"
                                     value={newIngredientItem.quantity}
-                                    onChange={this.updateFormQuantity}
+                                    onChange={this.updateQuantity}
                                     fullWidth={true}
                                 />
                             </InputWrapper>
@@ -192,7 +212,8 @@ class AddIngredientItemFormBase extends PureComponent<Props, State> {
                                     label="type"
                                     options={typeOptions}
                                     value={currentSelectType}
-                                    onChange={this.updateFormType}
+                                    onChange={this.updateType}
+                                    isClearable
                                 />
                             </InputWrapper>
                             <InputWrapper>
@@ -203,14 +224,28 @@ class AddIngredientItemFormBase extends PureComponent<Props, State> {
                                     id="input-ingredient"
                                     options={ingredientOptions}
                                     value={currentSelectIngredient}
-                                    onChange={this.updateFormName}
+                                    onChange={this.updateName}
+                                    isClearable
                                 />
-                                <ButtonPrimary
-                                    onClick={this.addIngredient}
-                                >
-                                    Add
-                                </ButtonPrimary>
                             </InputWrapper>
+                            <InputWrapper>
+                                <FormLabel htmlFor="input-ingredient">
+                                    Preparation
+                                </FormLabel>
+                                <Select
+                                    id="input-ingredient-preparation"
+                                    label="prep-type"
+                                    options={prepTypeOptions}
+                                    value={currentPrepType}
+                                    onChange={this.updatePrepType}
+                                    isClearable
+                                />
+                            </InputWrapper>
+                            <ButtonPrimary
+                                onClick={this.addIngredient}
+                            >
+                                Add
+                            </ButtonPrimary>
                         </form>
                     </StyledPaper>
                 }

@@ -10,14 +10,13 @@ import { ButtonError, ButtonPrimary, ButtonSecondary } from "../../../layout/Sty
 import * as cartActions from "../../../store/cart/cartActions";
 import * as recipeActions from "../../../store/recipes/recipeActions";
 import { Ingredient } from "../../Ingredients/models";
-import { getIngredientTypeText, getNumericQuantity } from "../helper";
+import { getIngredientQuantity, getIngredientName } from "../helper";
 import { IngredientItem } from "../models";
 import AddIngredientItemForm from "./AddIngredientItemForm";
 import { RecipeService } from "../../../services/RecipeService";
 import { CartService } from "../../../services/CartService";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { StyledFontAwesomeIcon } from "./Styles/StyledFontAwesomeIcon";
-import { faShoppingCart, faCartPlus } from "@fortawesome/free-solid-svg-icons";
+import { faShoppingCart, faCartPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
 
 interface OwnProps {
     id: string;
@@ -145,17 +144,12 @@ class IngredientsElementBase extends PureComponent<Props> {
                                         <TableRow key={index}>
                                             <TableCell>
                                                 <Typography>
-                                                    {getNumericQuantity(ingredientItem.quantity)}
+                                                    {getIngredientQuantity(ingredientItem)}
                                                 </Typography>
                                             </TableCell>
                                             <TableCell>
                                                 <Typography>
-                                                    {getIngredientTypeText(ingredientItem.type)}
-                                                </Typography>
-                                            </TableCell>
-                                            <TableCell>
-                                                <Typography>
-                                                    {ingredientItem.name.toLowerCase()}
+                                                    {getIngredientName(ingredientItem)}
                                                 </Typography>
                                             </TableCell>
                                             <TableCell>
@@ -166,7 +160,7 @@ class IngredientsElementBase extends PureComponent<Props> {
                                                         onClick={this.deleteIngredientItem(ingredientItem.id)}
                                                         disabled={updatingIngredientItems}
                                                     >
-                                                        Delete ingredient
+                                                        <FontAwesomeIcon icon={faTrash} />
                                                     </ButtonError>
                                                     :
                                                     this.renderAddToCartButton(ingredientItem)

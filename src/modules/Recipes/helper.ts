@@ -1,8 +1,20 @@
 import { faPizzaSlice, faHamburger, faCookie, faDrumstickBite, faFish, faCarrot } from "@fortawesome/free-solid-svg-icons";
 import { IngredientType, Tag } from "./constants";
+import { IngredientItem } from "./models";
 
-export const getNumericQuantity = (quantity: string): string => {
-    const quantityNumber = parseFloat(quantity);
+export const getIngredientQuantity = (ingredientItem: IngredientItem): string => {
+    return `${getNumericQuantity(ingredientItem)} ${getIngredientTypeText(ingredientItem)}`
+}
+
+export const getIngredientName = (ingredientItem: IngredientItem) => {
+    if(ingredientItem.prepType) {
+        return `${ingredientItem.name.toLowerCase()}, ${ingredientItem.prepType.toLowerCase()}`
+    }
+    return ingredientItem.name.toLowerCase();
+}
+
+const getNumericQuantity = (ingredientItem: IngredientItem): string => {
+    const quantityNumber = parseFloat(ingredientItem.quantity);
     const flooredNumber = Math.floor(quantityNumber);
     const decimal = quantityNumber - flooredNumber;
     let decimalText = "";
@@ -25,23 +37,16 @@ export const getNumericQuantity = (quantity: string): string => {
     return `${flooredNumber > 0 ? flooredNumber : ""}${decimalText}`;
 };
 
-export const getIngredientTypeText = (ingredientType: string) => {
-    switch (ingredientType) {
-        case IngredientType.Unit:
-            return "";
-        case IngredientType.Cup:
-            return "cup(s)";
-        case IngredientType.Gram:
-            return "gram(s)";
-        case IngredientType.Tablespoon:
-            return "tablespoon(s)";
-        case IngredientType.Teaspoon:
-            return "teaspoon(s)";
-        case IngredientType.Can:
-            return "can(s)";
-        case IngredientType.Pack:
-            return "pack(s)";
+const getIngredientTypeText = (ingredientItem: IngredientItem) => {
+    if(ingredientItem.type == IngredientType.Unit.toString()) {
+        return "";
     }
+
+    if(parseFloat(ingredientItem.quantity) > 1) {
+        return `${ingredientItem.type.toLowerCase()}s`
+    }
+
+    return ingredientItem.type.toLowerCase();
 };
 
 export const getTagIcon = (tag: string) => {

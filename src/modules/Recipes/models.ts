@@ -5,6 +5,7 @@ export interface IngredientItem {
     quantity: string;
     type: string;
     name: string;
+    prepType: string;
 }
 
 export interface Recipe {
