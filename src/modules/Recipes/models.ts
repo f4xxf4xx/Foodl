@@ -6,6 +6,7 @@ export interface IngredientItem {
     type: string;
     name: string;
     prepType: string;
+    group?: string;
 }
 
 export interface Recipe {
@@ -18,6 +19,7 @@ export interface Recipe {
     duration?: number;
     tags?: Tag[];
     cuisine?: Cuisine;
+    ingredientGroups?: string[];
 }
 
 export interface Step {

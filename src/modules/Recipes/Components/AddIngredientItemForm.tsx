@@ -55,7 +55,8 @@ class AddIngredientItemFormBase extends PureComponent<Props, State> {
                 name: "",
                 quantity: "",
                 type: "",
-                prepType: ""
+                prepType: "",
+                group: null
             },
             currentSelectIngredient: null,
             currentSelectType: null,
@@ -142,7 +143,7 @@ class AddIngredientItemFormBase extends PureComponent<Props, State> {
                 this.setState({
                     newIngredientItem: {
                         ...newIngredientItem, name: "",
-                        quantity: "", type: "",
+                        quantity: "", type: "", group: ""
                     },
                     currentSelectIngredient: null,
                     currentSelectType: null,

@@ -51,14 +51,17 @@ class CartViewBase extends PureComponent<Props> {
     }
 
     public deleteAllCartItems = () => (event: React.MouseEvent<HTMLButtonElement>) => {
+        const { auth } = this.props;
+
         this.props.updateCartItemsStart();
-        CartService.deleteAllItems()
+        CartService.deleteAllItems(auth.uid)
             .then(() => {
                 this.props.deleteAllCartItems();
                 this.props.updateCartItemsStop();
                 toast.success("Deleted all!");
             })
-            .catch(() => {
+            .catch((error) => {
+                console.log(error);
                 this.props.updateCartItemsStop();
                 toast.error("Error deleting all cart items!");
             });

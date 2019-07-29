@@ -15,6 +15,7 @@ export class RecipeService {
             cuisine: data.data().cuisine,
             duration: data.data().duration,
             tags: data.data().tags,
+            ingredientGroups: data.data().ingredientGroups
         };
 
         return recipe;
@@ -24,11 +25,11 @@ export class RecipeService {
         let recipesRef = db.collection("recipes")
             .where("uid", "==", uid);
 
-        if(filters) {
-            if(filters.cuisine) {
+        if (filters) {
+            if (filters.cuisine) {
                 recipesRef = recipesRef.where("cuisine", "==", filters.cuisine);
             }
-            if(filters.type) {
+            if (filters.type) {
                 recipesRef = recipesRef.where("type", "==", filters.type);
             }
         }
@@ -40,8 +41,8 @@ export class RecipeService {
         });
     }
 
-    public static async getRecipeById(id: string): Promise<Recipe> {
-        const recipe = await db.collection("recipes").doc(id).get();
+    public static async getRecipeById(recipeId: string): Promise<Recipe> {
+        const recipe = await db.collection("recipes").doc(recipeId).get();
 
         if (!recipe.exists) {
             return null;
@@ -84,8 +85,8 @@ export class RecipeService {
             });
     }
 
-    public static async updateRecipe(id: string, key: string, value: string): Promise<void> {
-        return await db.collection("recipes").doc(id).update({
+    public static async updateRecipe(recipeId: string, key: string, value: string): Promise<void> {
+        return await db.collection("recipes").doc(recipeId).update({
             [key]: value,
         });
     }
@@ -96,27 +97,28 @@ export class RecipeService {
         });
     }
 
-    public static async deleteRecipe(id: string): Promise<void> {
-        return await db.collection("recipes").doc(id).delete();
+    public static async deleteRecipe(recipeId: string): Promise<void> {
+        return await db.collection("recipes").doc(recipeId).delete();
     }
 
-    public static async getIngredientItems(id: string): Promise<IngredientItem[]> {
-        const ingredientItems = await db.collection("recipes").doc(id).collection("ingredientItems")
+    public static async getIngredients(recipeId: string): Promise<IngredientItem[]> {
+        const ingredients = await db.collection("recipes").doc(recipeId).collection("ingredientItems")
             .get();
 
-        return ingredientItems.docs.map((ingredientItem) => {
+        return ingredients.docs.map((ingredientItem) => {
             return {
                 id: ingredientItem.id,
                 name: ingredientItem.data().name,
                 quantity: ingredientItem.data().quantity,
                 type: ingredientItem.data().type,
-                prepType: ingredientItem.data().prepType
+                prepType: ingredientItem.data().prepType,
+                group: ingredientItem.data().group
             };
         });
     }
 
-    public static async getSteps(id: string): Promise<Step[]> {
-        const steps = await db.collection("recipes").doc(id).collection("steps")
+    public static async getSteps(recipeId: string): Promise<Step[]> {
+        const steps = await db.collection("recipes").doc(recipeId).collection("steps")
             .orderBy("order")
             .get();
 
@@ -129,26 +131,65 @@ export class RecipeService {
         });
     }
 
-    public static async addIngredientItem(id: string, ingredientItem: IngredientItem): Promise<IngredientItem> {
-        return await db.collection("recipes").doc(id).collection("ingredientItems").add(ingredientItem)
+    public static async addIngredientItem(recipeId: string, ingredientItem: IngredientItem): Promise<IngredientItem> {
+        return await db.collection("recipes").doc(recipeId).collection("ingredientItems").add(ingredientItem)
             .then((data) => {
                 return { ...ingredientItem, id: data.id };
             });
     }
 
-    public static async deleteIngredientItem(id: string, ingredientItemId: string): Promise<void> {
-        return await db.collection("recipes").doc(id).collection("ingredientItems").doc(ingredientItemId).delete();
+    public static async addIngredientGroup(recipeId: string, group: string): Promise<string> {
+        const recipeRef = db.collection("recipes").doc(recipeId);
+        const recipe = await recipeRef.get();
+
+        if (recipe.exists) {
+            const groups = recipe.data().groups;
+
+            if (groups) {
+                if (groups.includes(group)) {
+                    return null;
+                }
+                groups.push(group);
+                await recipeRef.update({ groups });
+            } else {
+                await recipeRef.update({ groups: [group] });
+            }
+        }
+        else {
+            return Promise.resolve(null);
+        }
+        return Promise.resolve(group);
     }
 
-    public static async addStep(id: string, step: Step): Promise<Step> {
-        return await db.collection("recipes").doc(id).collection("steps").add(step)
+    public static async deleteIngredientGroup(recipeId: string, groupName: string): Promise<void> {
+        const recipeRef = db.collection("recipes").doc(recipeId);
+        const recipe = await recipeRef.get();
+
+        if (recipe.exists) {
+            const groups = recipe.data().groups;
+            if (groups.includes(groupName)) {
+                const filteredGroups = groups.filter((group) => group !== groupName);
+
+                return await recipeRef.update({ groups: filteredGroups });
+            }
+        }
+
+        return Promise.resolve(null);
+    }
+
+    public static async deleteIngredientItem(recipeId: string, ingredientItemId: string): Promise<void> {
+        return await db.collection("recipes").doc(recipeId).collection("ingredientItems").doc(ingredientItemId).delete();
+    }
+
+    public static async addStep(recipeId: string, step: Step): Promise<Step> {
+        return await db.collection("recipes").doc(recipeId).collection("steps").add(step)
             .then((data) => {
                 return { ...step, id: data.id };
             });
     }
 
-    public static async deleteStep(id: string, stepId: string): Promise<void> {
-        return await db.collection("recipes").doc(id).collection("steps").doc(stepId).delete();
+    public static async deleteStep(recipeId: string, stepId: string): Promise<void> {
+        return await db.collection("recipes").doc(recipeId).collection("steps").doc(stepId).delete();
     }
 
     public static async addTag(recipeId: string, tag: string): Promise<string> {
@@ -180,9 +221,11 @@ export class RecipeService {
 
         if (recipe.exists) {
             const tags = recipe.data().tags;
-            const filteredTags = tags.filter((tag) => tag !== tagName);
+            if (tags.includes(tagName)) {
+                const filteredTags = tags.filter((tag) => tag !== tagName);
 
-            return await recipeRef.update({ tags: filteredTags });
+                return await recipeRef.update({ tags: filteredTags });
+            }
         }
 
         return Promise.resolve(null);

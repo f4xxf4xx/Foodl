@@ -59,10 +59,7 @@ export class CartService {
         return Promise.resolve(null);
     }
 
-    public static deleteAllItems(): Promise<void> {
-        return db.collection("carts").get()
-            .then((data) => {
-                data.forEach((item) => db.collection("carts").doc(item.id).delete());
-            });
+    public static deleteAllItems(userid: string): Promise<void> {
+        return db.collection("carts").doc(userid).set({ items: [] });
     }
 }

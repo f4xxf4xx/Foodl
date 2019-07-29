@@ -21,6 +21,7 @@ import { faShoppingCart, faCartPlus, faTrash } from "@fortawesome/free-solid-svg
 interface OwnProps {
     id: string;
     editing: boolean;
+    ingredientGroups: string[];
 }
 
 interface StateProps {
@@ -52,7 +53,7 @@ class IngredientsElementBase extends PureComponent<Props> {
             updateIngredientItems, cartItems, fetchCartItemsStart, fetchCartItemsStop, updateCartItems } = this.props;
 
         fetchIngredientItemsStart();
-        RecipeService.getIngredientItems(id)
+        RecipeService.getIngredients(id)
             .then((ingredientItems) => {
                 if (ingredientItems.length > 0) {
                     updateIngredientItems(ingredientItems);
@@ -127,53 +128,67 @@ class IngredientsElementBase extends PureComponent<Props> {
         );
     }
 
+    public renderIngredientGroup = (group: string, index: number) => {
+        const { ingredientItems, editing, updatingIngredientItems } = this.props;
+        const groupIngredientItems = ingredientItems.filter(ingredientItem => group ? ingredientItem.group === group : ingredientItem.group === undefined);
+
+        return (
+            <React.Fragment key={index}>
+                {group && <Typography variant="h6">{group}</Typography>}
+                <Table>
+                    <TableBody>
+                        {groupIngredientItems.map((ingredientItem, index) => {
+                            return (
+                                <TableRow key={index}>
+                                    <TableCell>
+                                        <Typography>
+                                            {getIngredientQuantity(ingredientItem)}
+                                        </Typography>
+                                    </TableCell>
+                                    <TableCell>
+                                        <Typography>
+                                            {getIngredientName(ingredientItem)}
+                                        </Typography>
+                                    </TableCell>
+                                    <TableCell>
+                                        {editing ?
+                                            <ButtonError
+                                                variant="contained"
+                                                color="primary"
+                                                onClick={this.deleteIngredientItem(ingredientItem.id)}
+                                                disabled={updatingIngredientItems}
+                                            >
+                                                <FontAwesomeIcon icon={faTrash} />
+                                            </ButtonError>
+                                            :
+                                            this.renderAddToCartButton(ingredientItem)
+                                        }
+                                    </TableCell>
+                                </TableRow>
+                            );
+                        })}
+                    </TableBody>
+                </Table>
+            </React.Fragment>
+        )
+    }
+
     public render() {
-        const { ingredientItems, editing, loadingIngredientItems, updatingIngredientItems } = this.props;
+        const { ingredientItems, editing, loadingIngredientItems, ingredientGroups } = this.props;
 
         return (
             <>
                 <Typography variant="h5">Ingredients ({ingredientItems.length})</Typography>
-                <Paper>
-                    {loadingIngredientItems ?
-                        <Loader active={true} inline="centered" />
-                        :
-                        <Table>
-                            <TableBody>
-                                {ingredientItems.map((ingredientItem, index) => {
-                                    return (
-                                        <TableRow key={index}>
-                                            <TableCell>
-                                                <Typography>
-                                                    {getIngredientQuantity(ingredientItem)}
-                                                </Typography>
-                                            </TableCell>
-                                            <TableCell>
-                                                <Typography>
-                                                    {getIngredientName(ingredientItem)}
-                                                </Typography>
-                                            </TableCell>
-                                            <TableCell>
-                                                {editing ?
-                                                    <ButtonError
-                                                        variant="contained"
-                                                        color="primary"
-                                                        onClick={this.deleteIngredientItem(ingredientItem.id)}
-                                                        disabled={updatingIngredientItems}
-                                                    >
-                                                        <FontAwesomeIcon icon={faTrash} />
-                                                    </ButtonError>
-                                                    :
-                                                    this.renderAddToCartButton(ingredientItem)
-                                                }
-                                            </TableCell>
-                                        </TableRow>
-                                    );
-                                })
-                                }
-                            </TableBody>
-                        </Table>
-                    }
-                </Paper>
+                {loadingIngredientItems ?
+                    <Loader active={true} inline="centered" />
+                    :
+                    <>
+                        {this.renderIngredientGroup(null, null)}
+                        {ingredientGroups.map((ingredientGroup, index) => {
+                            return this.renderIngredientGroup(ingredientGroup, index);
+                        })}
+                    </>
+                }
                 <Divider />
                 <AddIngredientItemForm editing={editing} />
             </>

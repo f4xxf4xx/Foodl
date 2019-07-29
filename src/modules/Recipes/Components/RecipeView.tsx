@@ -90,7 +90,7 @@ class RecipeViewBase extends PureComponent<Props, State> {
                                 <Box mt={2}>
                                     <Grid container={true} spacing={5}>
                                         <Grid item={true} xs={12} lg={6}>
-                                            <IngredientsElement editing={editing} id={recipe.id} />
+                                            <IngredientsElement editing={editing} id={recipe.id} ingredientGroups={recipe.ingredientGroups} />
                                         </Grid>
                                         <Grid item={true} xs={12} lg={6}>
                                             <StepsElement editing={editing} id={recipe.id} />

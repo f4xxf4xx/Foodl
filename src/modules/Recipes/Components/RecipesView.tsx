@@ -1,4 +1,4 @@
-import { Card, CardActionArea, CardActions, CardContent, CardHeader, CardMedia, Divider, Grid, IconButton, Typography, Icon, Box, Tooltip } from "@material-ui/core";
+import { Card, CardActionArea, CardActions, Divider, Grid, IconButton, Typography, Box } from "@material-ui/core";
 import DeleteIcon from "@material-ui/icons/Delete";
 import ShareIcon from "@material-ui/icons/Share";
 import React, { PureComponent } from "react";
@@ -7,7 +7,7 @@ import { withRouter } from "react-router-dom";
 import { RouteComponentProps } from "react-router-dom";
 import { toast } from "react-toastify";
 import { bindActionCreators, compose, Dispatch } from "redux";
-import { Loader } from "semantic-ui-react";
+import { Loader, Placeholder, Card as SemanticCard } from "semantic-ui-react";
 import { ApplicationState } from "../../..";
 import * as recipesActions from "../../../store/recipes/recipesActions";
 import { Recipe } from "../models";
@@ -170,19 +170,64 @@ class RecipesViewBase extends PureComponent<Props, State> {
         )
     }
 
+    public renderLoadingRecipes() {
+        const cards = [];
+        for (let i = 0; i < 6; i++) {
+            const element = (
+                <Grid key={i} item={true} xs={12} sm={6} md={4} lg={3}>
+                    <StyledCard>
+                        <Placeholder>
+                            <Placeholder.Image square />
+                        </Placeholder>
+                        <StyledCardContent>
+                            <Placeholder>
+                                <Placeholder.Header>
+                                    <Typography
+                                        variant={"h6"}
+                                        gutterBottom={true}
+                                    >
+                                        <Placeholder.Line length='short' />
+                                    </Typography>
+                                </Placeholder.Header>
+                                <Placeholder.Paragraph>
+                                    <Typography
+                                        variant={"caption"}
+                                    >
+                                        <Placeholder.Line length='medium' />
+                                    </Typography>
+                                </Placeholder.Paragraph>
+                            </Placeholder>
+                        </StyledCardContent>
+                        <Divider className={"MuiDivider-root"} light={true} />
+                        <CardActions disableSpacing={true}>
+                            <IconButton aria-label="Share recipe" disabled={true}>
+                                <ShareIcon />
+                            </IconButton>
+                            <IconButton aria-label="Delete recipe" disabled={true}>
+                                <DeleteIcon />
+                            </IconButton>
+                        </CardActions>
+                    </StyledCard>
+                </Grid>
+            )
+            cards.push(element);
+        }
+        return cards;
+    }
+
     public renderRecipes() {
         const { recipes, loading } = this.props;
 
         return (
-            loading ?
-                <Loader active={true} inline="centered" />
-                :
-                <>
-                    <Box>
-                        {this.renderFilters()}
-                    </Box>
-                    <Grid container={true} spacing={2}>
-                        {recipes.map((recipe) =>
+            <>
+                <Box>
+                    {!loading && this.renderFilters()}
+                </Box>
+                <Grid container={true} spacing={2}>
+                    {loading ?
+                        this.renderLoadingRecipes()
+                        :
+                        recipes.map((recipe) =>
                             <Grid key={recipe.id} item={true} xs={12} sm={6} md={4} lg={3}>
                                 <StyledCard>
                                     <CardActionArea onClick={this.goToRecipePage(recipe.slug)}>
@@ -221,8 +266,8 @@ class RecipesViewBase extends PureComponent<Props, State> {
                                 </StyledCard>
                             </Grid>
                         )}
-                    </Grid>
-                </>
+                </Grid>
+            </>
         );
     }
 
@@ -235,14 +280,8 @@ class RecipesViewBase extends PureComponent<Props, State> {
                 <Typography paragraph={true}>
                     Here you can manage your own recipes
                 </Typography>
-                {loading ?
-                    <Loader active={true} inline="centered" />
-                    :
-                    <>
-                        <AddRecipeForm />
-                        {this.renderRecipes()}
-                    </>
-                }
+                {!loading && <AddRecipeForm />}
+                {this.renderRecipes()}
             </>
         );
     }
