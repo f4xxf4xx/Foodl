@@ -1,7 +1,6 @@
 import firebase from "firebase";
 import * as firebaseui from "firebaseui";
 import React, { PureComponent } from "react";
-import { FirebaseAuth, StyledFirebaseAuth } from "react-firebaseui";
 import { StyledLogin } from "./Styles/StyledLogin";
 
 class LoginView extends PureComponent {

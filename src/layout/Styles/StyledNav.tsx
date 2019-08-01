@@ -1,5 +1,3 @@
-import { Drawer } from "@material-ui/core";
-import React from "react";
 import styled from "styled-components";
 
 export const StyledNav = styled.nav`

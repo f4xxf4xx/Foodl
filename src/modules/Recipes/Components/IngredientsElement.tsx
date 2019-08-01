@@ -1,4 +1,4 @@
-import { Button, Divider, Paper, Table, TableBody, TableCell, TableRow, Typography, Icon } from "@material-ui/core";
+import { Divider, Table, TableBody, TableCell, TableRow, Typography } from "@material-ui/core";
 import React, { PureComponent } from "react";
 import { connect } from "react-redux";
 import { RouteComponentProps } from "react-router-dom";

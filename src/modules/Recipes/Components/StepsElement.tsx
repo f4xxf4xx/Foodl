@@ -1,15 +1,14 @@
-import { Button, Divider, Paper, Table, TableBody, TableCell, TableRow, TextField, Typography } from "@material-ui/core";
+import { Divider, Paper, Table, TableBody, TableCell, TableRow, TextField, Typography } from "@material-ui/core";
 import React, { PureComponent } from "react";
 import { connect } from "react-redux";
 import { RouteComponentProps } from "react-router-dom";
-import { SortableContainer, SortableElement } from "react-sortable-hoc";
 import { toast } from "react-toastify";
 import { bindActionCreators, compose, Dispatch } from "redux";
 import { Loader } from "semantic-ui-react";
 import { ApplicationState } from "../../..";
 import { ButtonError } from "../../../layout/Styles/Buttons";
 import * as recipeActions from "../../../store/recipes/recipeActions";
-import { Recipe, Step } from "../models";
+import { Step } from "../models";
 import AddStepForm from "./AddStepForm";
 import { RecipeService } from "../../../services/RecipeService";
 
@@ -36,6 +35,7 @@ interface DispatchProps {
 
 type Props = OwnProps & StateProps & RouteComponentProps & DispatchProps;
 
+/*
 const SortableStep = SortableElement(({ step, index, editing, updatingSteps, updateStep, deleteStep }) => {
     return (
         <TableRow key={index}>
@@ -77,7 +77,9 @@ const SortableStep = SortableElement(({ step, index, editing, updatingSteps, upd
         </TableRow>
     );
 });
+*/
 
+/* 
 const SortableSteps = SortableContainer(({ steps, editing, updatingSteps, updateStep, deleteStep }) => {
     return (
         <ul>
@@ -95,6 +97,7 @@ const SortableSteps = SortableContainer(({ steps, editing, updatingSteps, update
         </ul>
     );
 });
+*/
 
 class StepsElementBase extends PureComponent<Props> {
     public componentDidMount() {

@@ -1,4 +1,4 @@
-import { Box, Button, Grid, IconButton, Link, Toolbar, Typography } from "@material-ui/core";
+import { Link, Toolbar } from "@material-ui/core";
 import { Menu as MenuIcon } from "@material-ui/icons";
 import React from "react";
 import { connect } from "react-redux";

@@ -1,5 +1,4 @@
 import { Paper, Table, TableBody, TableCell, TableHead, TableRow, Typography } from "@material-ui/core";
-import { DeleteForever as DeleteIcon } from "@material-ui/icons";
 import React, { PureComponent } from "react";
 import { connect } from "react-redux";
 import { RouteProps } from "react-router-dom";

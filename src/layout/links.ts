@@ -1,7 +1,3 @@
-
-import { IconDefinition, faHome, faBook, faShoppingCart, faPizzaSlice } from '@fortawesome/free-solid-svg-icons'
-
-
 export interface ListItemLink {
     path: string;
     name: string;

@@ -1,4 +1,4 @@
-import { Paper, Typography } from "@material-ui/core";
+import { Paper } from "@material-ui/core";
 import styled from "styled-components";
 
 export const StyledPaper = styled(Paper)`

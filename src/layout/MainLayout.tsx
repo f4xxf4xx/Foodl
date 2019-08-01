@@ -1,8 +1,7 @@
-import { CssBaseline, Toolbar } from "@material-ui/core";
+import { CssBaseline } from "@material-ui/core";
 import React from "react";
 import { connect } from "react-redux";
 import { compose } from "redux";
-import { Loader } from "semantic-ui-react";
 import { ApplicationState } from "..";
 import Header from "./Header";
 import Sidebar from "./Sidebar";

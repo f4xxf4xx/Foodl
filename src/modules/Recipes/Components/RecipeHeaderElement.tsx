@@ -1,4 +1,4 @@
-import { Box, Chip, Grid, Icon, TextField, Typography } from "@material-ui/core";
+import { Box, Grid, TextField, Typography } from "@material-ui/core";
 import React from "react";
 import { connect } from "react-redux";
 import Select from "react-select";
@@ -12,7 +12,7 @@ import { RecipeService } from "../../../services/RecipeService";
 import { StyledChip } from "./Styles/StyledChip";
 import { Cuisine, RecipeType, Tag } from "../constants";
 import { Loader } from "semantic-ui-react";
-import ContentEditable, { ContentEditableEvent } from 'react-contenteditable'
+import ContentEditable from 'react-contenteditable'
 import { StyledRecipeInfo } from "./Styles/StyledRecipeInfo";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClock } from "@fortawesome/free-solid-svg-icons";
@@ -79,7 +79,7 @@ class RecipeHeaderElementBase extends React.Component<Props> {
         this.props.updateRecipeStart();
         RecipeService.updateRecipe(recipe.id, "cuisine", value)
             .then(() => {
-                this.props.updateRecipe({ ...recipe, ["cuisine"]: value });
+                this.props.updateRecipe({ ...recipe, "cuisine": value });
                 this.props.updateRecipeStop();
                 toast.success("Updated!");
             })
@@ -114,7 +114,7 @@ class RecipeHeaderElementBase extends React.Component<Props> {
         this.props.updateRecipeStart();
         RecipeService.updateRecipe(recipe.id, "type", value)
             .then(() => {
-                this.props.updateRecipe({ ...recipe, ["type"]: value });
+                this.props.updateRecipe({ ...recipe, "type": value });
                 this.props.updateRecipeStop();
                 toast.success("Updated!");
             })
@@ -124,7 +124,7 @@ class RecipeHeaderElementBase extends React.Component<Props> {
             });
     }
 
-    public addTag = (tag: string) => (e: any) => {
+    public addTag = (tag: string) => () => {
         const { recipe } = this.props;
 
         this.props.updateRecipeStart();
@@ -140,7 +140,7 @@ class RecipeHeaderElementBase extends React.Component<Props> {
             })
     }
 
-    public deleteTag = (tag: string) => (e: any) => {
+    public deleteTag = (tag: string) => () => {
         const { recipe } = this.props;
 
         this.props.updateRecipeStart();

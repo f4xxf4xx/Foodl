@@ -1,4 +1,4 @@
-import { Card, CardActionArea, CardActions, Divider, Grid, IconButton, Typography, Box } from "@material-ui/core";
+import { CardActionArea, CardActions, Divider, Grid, IconButton, Typography, Box } from "@material-ui/core";
 import DeleteIcon from "@material-ui/icons/Delete";
 import ShareIcon from "@material-ui/icons/Share";
 import React, { PureComponent } from "react";
@@ -7,7 +7,7 @@ import { withRouter } from "react-router-dom";
 import { RouteComponentProps } from "react-router-dom";
 import { toast } from "react-toastify";
 import { bindActionCreators, compose, Dispatch } from "redux";
-import { Loader, Placeholder, Card as SemanticCard } from "semantic-ui-react";
+import { Placeholder } from "semantic-ui-react";
 import { ApplicationState } from "../../..";
 import * as recipesActions from "../../../store/recipes/recipesActions";
 import { Recipe } from "../models";

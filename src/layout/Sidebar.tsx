@@ -1,6 +1,6 @@
-import { Divider, Drawer, Hidden, Icon, IconButton, List, ListItem, ListItemIcon, ListItemText, Toolbar } from "@material-ui/core";
+import { Divider, Drawer, Hidden, List, Toolbar } from "@material-ui/core";
 import React from "react";
-import { Link, RouteComponentProps, withRouter } from "react-router-dom";
+import { RouteComponentProps, withRouter } from "react-router-dom";
 import { getAdminLinks, getLinks } from "./links";
 import SidebarLink from "./SidebarLink";
 import { StyledDrawer } from "./Styles/StyledDrawer";

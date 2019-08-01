@@ -12,7 +12,7 @@ import IngredientsElement from "./IngredientsElement";
 import RecipeHeaderElement from "./RecipeHeaderElement";
 import StepsElement from "./StepsElement";
 import { RecipeService } from "../../../services/RecipeService";
-import { Grid, Divider, Box } from "@material-ui/core";
+import { Grid, Box } from "@material-ui/core";
 
 interface State {
     editing: boolean;

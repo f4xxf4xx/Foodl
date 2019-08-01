@@ -38,7 +38,7 @@ const getNumericQuantity = (ingredientItem: IngredientItem): string => {
 };
 
 const getIngredientTypeText = (ingredientItem: IngredientItem) => {
-    if(ingredientItem.type == IngredientType.Unit.toString()) {
+    if(ingredientItem.type === IngredientType.Unit.toString()) {
         return "";
     }
 
