@@ -32,6 +32,7 @@ interface State {
     currentSelectIngredient: any;
     currentSelectType: any;
     currentPrepType: any;
+    currentIngredientGroup: any;
 }
 
 interface DispatchProps {
@@ -60,7 +61,8 @@ class AddIngredientItemFormBase extends PureComponent<Props, State> {
             },
             currentSelectIngredient: null,
             currentSelectType: null,
-            currentPrepType: null
+            currentPrepType: null,
+            currentIngredientGroup: null
         };
     }
 
@@ -85,6 +87,15 @@ class AddIngredientItemFormBase extends PureComponent<Props, State> {
         this.setState({
             newIngredientItem: { ...newIngredientItem, name: e ? e.label: null },
             currentSelectIngredient: e,
+        });
+    }
+
+    public updateGroup = (e: any) => {
+        const { newIngredientItem } = this.state;
+
+        this.setState({
+            newIngredientItem: { ...newIngredientItem, group: e ? e.label: null },
+            currentIngredientGroup: e,
         });
     }
 
@@ -162,8 +173,8 @@ class AddIngredientItemFormBase extends PureComponent<Props, State> {
     }
 
     public render() {
-        const { editing, ingredients } = this.props;
-        const { newIngredientItem, currentSelectIngredient, currentSelectType, currentPrepType } = this.state;
+        const { editing, ingredients, recipe } = this.props;
+        const { newIngredientItem, currentSelectIngredient, currentSelectType, currentPrepType, currentIngredientGroup } = this.state;
 
         const ingredientOptions = ingredients ? ingredients.map((ingredient) => {
             return {
@@ -183,6 +194,13 @@ class AddIngredientItemFormBase extends PureComponent<Props, State> {
             return {
                 value: IngredientPrepType[type],
                 label: IngredientPrepType[type],
+            };
+        });
+
+        const ingredientGroupOptions = recipe.ingredientGroups.map((group) => {
+            return {
+                value: group,
+                label: group,
             };
         });
 
@@ -239,6 +257,18 @@ class AddIngredientItemFormBase extends PureComponent<Props, State> {
                                     options={prepTypeOptions}
                                     value={currentPrepType}
                                     onChange={this.updatePrepType}
+                                    isClearable
+                                />
+                            </InputWrapper>
+                            <InputWrapper>
+                                <FormLabel htmlFor="input-ingredient">
+                                    Group
+                                </FormLabel>
+                                <Creatable
+                                    id="input-group"
+                                    options={ingredientGroupOptions}
+                                    value={currentIngredientGroup}
+                                    onChange={this.updateGroup}
                                     isClearable
                                 />
                             </InputWrapper>

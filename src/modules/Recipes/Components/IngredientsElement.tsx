@@ -134,7 +134,7 @@ class IngredientsElementBase extends PureComponent<Props> {
 
         return (
             <React.Fragment key={index}>
-                {group && <Typography variant="h6">{group}</Typography>}
+                <Typography variant="h6">{group ? group : "Other"}</Typography>
                 <Table>
                     <TableBody>
                         {groupIngredientItems.map((ingredientItem, index) => {
@@ -183,10 +183,10 @@ class IngredientsElementBase extends PureComponent<Props> {
                     <Loader active={true} inline="centered" />
                     :
                     <>
-                        {this.renderIngredientGroup(null, null)}
                         {ingredientGroups.map((ingredientGroup, index) => {
                             return this.renderIngredientGroup(ingredientGroup, index);
                         })}
+                        {this.renderIngredientGroup(null, null)}
                     </>
                 }
                 <Divider />

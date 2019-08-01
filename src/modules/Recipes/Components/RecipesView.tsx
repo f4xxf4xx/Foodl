@@ -131,7 +131,7 @@ class RecipesViewBase extends PureComponent<Props, State> {
     }
 
     public renderFilters() {
-        const { filters } = this.props;
+        const { filters, loading } = this.props;
         const cuisineOptions = Object.keys(Cuisine).map((cuisine) => {
             return {
                 value: Cuisine[cuisine],
@@ -157,6 +157,7 @@ class RecipesViewBase extends PureComponent<Props, State> {
                         label: filters.cuisine,
                     }}
                     onChange={this.filterByAttribute("cuisine")}
+                    isDisabled={loading}
                 />
                 <Select
                     options={typeOptions}
@@ -165,6 +166,7 @@ class RecipesViewBase extends PureComponent<Props, State> {
                         label: filters.type,
                     }}
                     onChange={this.filterByAttribute("type")}
+                    isDisabled={loading}
                 />
             </>
         )
@@ -221,7 +223,7 @@ class RecipesViewBase extends PureComponent<Props, State> {
         return (
             <>
                 <Box>
-                    {!loading && this.renderFilters()}
+                    {this.renderFilters()}
                 </Box>
                 <Grid container={true} spacing={2}>
                     {loading ?
@@ -280,7 +282,7 @@ class RecipesViewBase extends PureComponent<Props, State> {
                 <Typography paragraph={true}>
                     Here you can manage your own recipes
                 </Typography>
-                {!loading && <AddRecipeForm />}
+                <AddRecipeForm />
                 {this.renderRecipes()}
             </>
         );
