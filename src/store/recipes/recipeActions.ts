@@ -6,8 +6,6 @@ export const fetchRecipeStop = createAction("FETCH_RECIPE_STOP");
 export const updateRecipeStart = createAction("UPDATE_RECIPE_START");
 export const updateRecipeStop = createAction("UPDATE_RECIPE_STOP");
 export const updateRecipe = createAction("UPDATE_RECIPE");
-export const addTag = createAction("ADD_TAG");
-export const deleteTag = createAction("DELETE_TAG");
 
 // INGREDIENT ITEMS
 export const fetchIngredientItemsStart = createAction("FETCH_INGREDIENTITEMS_START");

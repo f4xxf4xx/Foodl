@@ -2,6 +2,7 @@ import slugify from "react-slugify";
 import { db } from "../config";
 import { IngredientItem, Recipe, Step } from "../modules/Recipes/models";
 import { Filters } from "../store/recipes/recipesReducer";
+import { DbHelper } from "./DbHelper";
 
 export class RecipeService {
     private static mapRecipe(data: firebase.firestore.DocumentSnapshot): Recipe {
@@ -138,27 +139,16 @@ export class RecipeService {
             });
     }
 
-    public static async addIngredientGroup(recipeId: string, group: string): Promise<string> {
+    public static async addIngredientGroup(recipeId: string, ingredientGroup: string): Promise<string> {
         const recipeRef = db.collection("recipes").doc(recipeId);
         const recipe = await recipeRef.get();
 
         if (recipe.exists) {
-            const groups = recipe.data().groups;
+            const ingredientGroups = recipe.data().ingredientGroups;
 
-            if (groups) {
-                if (groups.includes(group)) {
-                    return null;
-                }
-                groups.push(group);
-                await recipeRef.update({ groups });
-            } else {
-                await recipeRef.update({ groups: [group] });
-            }
+            return DbHelper.arrayAddUnique(recipeRef, ingredientGroups, "ingredientGroups", ingredientGroup)
         }
-        else {
-            return Promise.resolve(null);
-        }
-        return Promise.resolve(group);
+        return Promise.resolve(null);
     }
 
     public static async deleteIngredientGroup(recipeId: string, groupName: string): Promise<void> {
@@ -167,11 +157,8 @@ export class RecipeService {
 
         if (recipe.exists) {
             const groups = recipe.data().groups;
-            if (groups.includes(groupName)) {
-                const filteredGroups = groups.filter((group) => group !== groupName);
 
-                return await recipeRef.update({ groups: filteredGroups });
-            }
+            return DbHelper.arrayDelete(recipeRef, groups, "groups", groupName)
         }
 
         return Promise.resolve(null);
@@ -199,33 +186,19 @@ export class RecipeService {
         if (recipe.exists) {
             const tags = recipe.data().tags;
 
-            if (tags) {
-                if (tags.includes(tag)) {
-                    return null;
-                }
-                tags.push(tag);
-                await recipeRef.update({ tags });
-            } else {
-                await recipeRef.update({ tags: [tag] });
-            }
+            return DbHelper.arrayAddUnique(recipeRef, tags, "tags", tag);
         }
-        else {
-            return Promise.resolve(null);
-        }
-        return Promise.resolve(tag);
+        return Promise.resolve(null);
     }
 
-    public static async deleteTag(recipeId: string, tagName: string): Promise<void> {
+    public static async deleteTag(recipeId: string, tag: string): Promise<void> {
         const recipeRef = db.collection("recipes").doc(recipeId);
         const recipe = await recipeRef.get();
 
         if (recipe.exists) {
             const tags = recipe.data().tags;
-            if (tags.includes(tagName)) {
-                const filteredTags = tags.filter((tag) => tag !== tagName);
 
-                return await recipeRef.update({ tags: filteredTags });
-            }
+            return DbHelper.arrayDelete(recipeRef, tags, "tags", tag);
         }
 
         return Promise.resolve(null);

@@ -274,8 +274,6 @@ class RecipesViewBase extends PureComponent<Props, State> {
     }
 
     public render() {
-        const { loading } = this.props;
-
         return (
             <>
                 <Typography variant="h3">My recipes</Typography>

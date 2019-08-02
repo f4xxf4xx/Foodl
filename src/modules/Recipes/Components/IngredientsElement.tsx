@@ -132,6 +132,10 @@ class IngredientsElementBase extends PureComponent<Props> {
         const { ingredientItems, editing, updatingIngredientItems } = this.props;
         const groupIngredientItems = ingredientItems.filter(ingredientItem => group ? ingredientItem.group === group : ingredientItem.group === undefined);
 
+        if(!groupIngredientItems || groupIngredientItems.length === 0) {
+            return null;
+        }
+
         return (
             <React.Fragment key={index}>
                 <Typography variant="h6">{group ? group : "Other"}</Typography>

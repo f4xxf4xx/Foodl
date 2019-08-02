@@ -44,6 +44,7 @@ interface DispatchProps {
     fetchIngredientsStart: typeof ingredientActions.fetchIngredientsStart;
     fetchIngredientsStop: typeof ingredientActions.fetchIngredientsStop;
     addIngredient: typeof ingredientActions.addIngredient;
+    updateRecipe: typeof recipeActions.updateRecipe;
 }
 
 type Props = OwnProps & StateProps & DispatchProps;
@@ -146,6 +147,19 @@ class AddIngredientItemFormBase extends PureComponent<Props, State> {
                 });
         }
 
+        if(!recipe.ingredientGroups.includes(newIngredientItem.group)) {
+            RecipeService.addIngredientGroup(recipe.id, newIngredientItem.group)
+                .then((groups) => {
+                    if (groups) {
+                        this.props.updateRecipe({...recipe, ingredientGroups: groups});
+                    }
+                })
+                .catch((error) => {
+                    console.log(error);
+                    toast.error("Error adding the group.");
+                });
+        }
+        
         this.props.updateIngredientItemsStart();
         RecipeService.addIngredientItem(recipe.id, newIngredientItem)
             .then((ingredientItem) => {
@@ -158,7 +172,8 @@ class AddIngredientItemFormBase extends PureComponent<Props, State> {
                     },
                     currentSelectIngredient: null,
                     currentSelectType: null,
-                    currentPrepType: null
+                    currentPrepType: null,
+                    currentIngredientGroup: null
                 });
                 toast.success("Added!");
             })
@@ -300,6 +315,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
     fetchIngredientsStart: bindActionCreators(ingredientActions.fetchIngredientsStart, dispatch),
     fetchIngredientsStop: bindActionCreators(ingredientActions.fetchIngredientsStop, dispatch),
     addIngredient: bindActionCreators(ingredientActions.addIngredient, dispatch),
+    updateRecipe: bindActionCreators(recipeActions.updateRecipe, dispatch)
 });
 
 const AddIngredientItemForm = compose(

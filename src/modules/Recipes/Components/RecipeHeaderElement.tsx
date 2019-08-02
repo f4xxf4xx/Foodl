@@ -31,8 +31,6 @@ interface DispatchProps {
     updateRecipeStart: typeof recipeActions.updateRecipeStart;
     updateRecipeStop: typeof recipeActions.updateRecipeStop;
     updateRecipe: typeof recipeActions.updateRecipe;
-    addTag: typeof recipeActions.addTag;
-    deleteTag: typeof recipeActions.deleteTag;
 }
 
 type Props = OwnProps & StateProps & DispatchProps;
@@ -87,26 +85,8 @@ class RecipeHeaderElementBase extends React.Component<Props> {
                 this.props.updateRecipeStop();
                 toast.error("Error updating the recipe!");
             });
-    }
-
-    public updateTag = (e: any) => {
-        const { recipe } = this.props;
-        const value = e.value;
-
-        this.props.updateRecipeStart();
-        RecipeService.addTag(recipe.id, value)
-            .then(() => {
-                this.props.addTag(value);
-                this.props.updateRecipeStop();
-                toast.success("Added tag!");
-            })
-            .catch((error) => {
-                console.log(error);
-                this.props.updateRecipeStop();
-                toast.error("Error adding the tag!");
-            });
-    }
-
+    }  
+    
     public updateType = (e: any) => {
         const { recipe } = this.props;
         const value = e.value;
@@ -124,20 +104,22 @@ class RecipeHeaderElementBase extends React.Component<Props> {
             });
     }
 
-    public addTag = (tag: string) => () => {
+    public addTag = (e: any) => {
         const { recipe } = this.props;
+        const value = e.value;
 
         this.props.updateRecipeStart();
-        RecipeService.addTag(recipe.id, tag)
-            .then(() => {
-                this.props.addTag(tag);
+        RecipeService.addTag(recipe.id, value)
+            .then((tags) => {
+                this.props.updateRecipe({ ...recipe, tags });
                 this.props.updateRecipeStop();
                 toast.success("Added tag!");
             })
-            .catch(() => {
+            .catch((error) => {
+                console.log(error);
                 this.props.updateRecipeStop();
                 toast.error("Error adding the tag!");
-            })
+            });
     }
 
     public deleteTag = (tag: string) => () => {
@@ -145,8 +127,8 @@ class RecipeHeaderElementBase extends React.Component<Props> {
 
         this.props.updateRecipeStart();
         RecipeService.deleteTag(recipe.id, tag)
-            .then(() => {
-                this.props.deleteTag(tag);
+            .then((tags) => {
+                this.props.updateRecipe({ ...recipe, tags });
                 this.props.updateRecipeStop();
                 toast.success("Deleted tag!");
             })
@@ -259,6 +241,7 @@ class RecipeHeaderElementBase extends React.Component<Props> {
                                 label: recipe.type,
                             }}
                             onChange={this.updateType}
+                            isDisabled={updatingRecipe}
                         />
                     </StyledRecipeInfo>
                     <StyledRecipeInfo>
@@ -278,6 +261,7 @@ class RecipeHeaderElementBase extends React.Component<Props> {
                                     label: recipe.cuisine,
                                 }}
                                 onChange={this.updateCuisine}
+                                isDisabled={updatingRecipe}
                             />
                         </StyledRecipeInfo>
                     }
@@ -294,7 +278,7 @@ class RecipeHeaderElementBase extends React.Component<Props> {
                         <Select
                             options={tagOptions}
                             value={null}
-                            onChange={this.updateTag}
+                            onChange={this.addTag}
                         />
                     </Box>
                 </Box>
@@ -322,9 +306,7 @@ const mapStateToProps = (state: ApplicationState) => ({
 const mapDispatchToProps = (dispatch: Dispatch) => ({
     updateRecipeStart: bindActionCreators(recipeActions.updateRecipeStart, dispatch),
     updateRecipeStop: bindActionCreators(recipeActions.updateRecipeStop, dispatch),
-    updateRecipe: bindActionCreators(recipeActions.updateRecipe, dispatch),
-    addTag: bindActionCreators(recipeActions.addTag, dispatch),
-    deleteTag: bindActionCreators(recipeActions.deleteTag, dispatch),
+    updateRecipe: bindActionCreators(recipeActions.updateRecipe, dispatch)
 });
 
 const RecipeHeaderElement = compose(

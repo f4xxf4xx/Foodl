@@ -140,6 +140,7 @@ class StepsElementBase extends PureComponent<Props> {
         this.props.updateStepsStart();
         RecipeService.updateStepText(this.props.id, step.id, value)
             .then(() => {
+                //TODO refactor to not use updatestep but update steps
                 this.props.updateStep({ ...step, [key]: value });
                 this.props.updateStepsStop();
             })

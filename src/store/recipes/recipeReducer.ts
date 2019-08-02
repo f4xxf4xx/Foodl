@@ -90,11 +90,5 @@ export const recipeReducer = createReducer(initialRecipeState, {
     },
     DELETE_STEP: (state, action) => {
         state.steps = state.steps.filter((i) => i.id !== action.payload);
-    },
-    ADD_TAG: (state, action) => {
-        state.recipe.tags.push(action.payload);
-    },
-    DELETE_TAG: (state, action) => {
-        state.recipe.tags = state.recipe.tags.filter((i) => i !== action.payload);
     }
 });
