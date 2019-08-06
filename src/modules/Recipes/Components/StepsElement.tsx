@@ -64,8 +64,6 @@ const SortableStep = SortableElement(({ step, index, editing, updatingSteps, upd
             <TableCell>
                 {editing &&
                     <ButtonError
-                        variant="contained"
-                        color="primary"
                         // tslint:disable-next-line: jsx-no-lambda
                         onClick={() => deleteStep(step.id)}
                         disabled={updatingSteps}
@@ -181,8 +179,6 @@ class StepsElementBase extends PureComponent<Props> {
                     <TableCell>
                         {editing &&
                             <ButtonError
-                                variant="contained"
-                                color="primary"
                                 onClick={this.deleteStep(step.id)}
                                 disabled={updatingSteps}
                             >

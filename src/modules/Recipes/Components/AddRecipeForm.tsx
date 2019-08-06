@@ -53,8 +53,7 @@ class AddRecipeFormBase extends PureComponent<Props, State> {
         if (newRecipeName === "") {
             return;
         }
-
-        console.log(auth.uid);
+        
         this.props.updateRecipesStart();
         RecipeService.addRecipe(newRecipeName, auth.uid)
             .then((recipe) => {

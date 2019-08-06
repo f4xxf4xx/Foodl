@@ -1,4 +1,4 @@
-import { Divider, Table, TableBody, TableCell, TableRow, Typography } from "@material-ui/core";
+import { Divider, Table, TableBody, TableCell, TableRow, Typography, Grid, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions } from "@material-ui/core";
 import React, { PureComponent } from "react";
 import { connect } from "react-redux";
 import { RouteComponentProps } from "react-router-dom";
@@ -11,7 +11,7 @@ import * as cartActions from "../../../store/cart/cartActions";
 import * as recipeActions from "../../../store/recipes/recipeActions";
 import { Ingredient } from "../../Ingredients/models";
 import { getIngredientQuantity, getIngredientName } from "../helper";
-import { IngredientItem } from "../models";
+import { IngredientItem, Recipe } from "../models";
 import AddIngredientItemForm from "./AddIngredientItemForm";
 import { RecipeService } from "../../../services/RecipeService";
 import { CartService } from "../../../services/CartService";
@@ -24,7 +24,13 @@ interface OwnProps {
     ingredientGroups: string[];
 }
 
+interface State {
+    openedModal: boolean;
+    currentRemoveGroup: string;
+}
+
 interface StateProps {
+    recipe: Recipe;
     auth: any;
     ingredientItems: IngredientItem[];
     cartItems: Ingredient[];
@@ -43,11 +49,20 @@ interface DispatchProps {
     updateCartItems: typeof cartActions.updateCartItems;
     deleteIngredientItem: typeof recipeActions.deleteIngredientItem;
     addCartItem: typeof cartActions.addCartItem;
+    updateRecipe: typeof recipeActions.updateRecipe;
 }
 
 type Props = OwnProps & StateProps & RouteComponentProps & DispatchProps;
 
-class IngredientsElementBase extends PureComponent<Props> {
+class IngredientsElementBase extends PureComponent<Props, State> {
+    constructor(props) {
+        super(props);
+        this.state = {
+            openedModal: false,
+            currentRemoveGroup: null
+        };
+    }
+
     public componentDidMount() {
         const { id, fetchIngredientItemsStart, fetchIngredientItemsStop, auth,
             updateIngredientItems, cartItems, fetchCartItemsStart, fetchCartItemsStop, updateCartItems } = this.props;
@@ -60,7 +75,7 @@ class IngredientsElementBase extends PureComponent<Props> {
                 }
                 fetchIngredientItemsStop();
             })
-            .catch((error) => {
+            .catch(() => {
                 fetchIngredientItemsStop();
                 toast.error("Error fetching the ingredient items!");
             });
@@ -81,7 +96,7 @@ class IngredientsElementBase extends PureComponent<Props> {
         }
     }
 
-    public deleteIngredientItem = (ingredientItemId: string) => (event: React.MouseEvent<HTMLButtonElement>) => {
+    public deleteIngredientItem = (ingredientItemId: string) => () => {
         const { id } = this.props;
 
         this.props.updateIngredientItemsStart();
@@ -97,7 +112,7 @@ class IngredientsElementBase extends PureComponent<Props> {
             });
     }
 
-    public addCartItem = (ingredientItem: IngredientItem) => (event: React.MouseEvent<HTMLButtonElement>) => {
+    public addCartItem = (ingredientItem: IngredientItem) => () => {
         const { auth } = this.props;
 
         CartService.addItem(auth.uid, ingredientItem.name)
@@ -128,17 +143,55 @@ class IngredientsElementBase extends PureComponent<Props> {
         );
     }
 
+    public deleteIngredientGroup = () => {
+        const { id, recipe } = this.props;
+        const { currentRemoveGroup } = this.state;
+
+        this.props.updateIngredientItemsStart();
+        RecipeService.deleteIngredientGroup(id, currentRemoveGroup)
+            .then((groups) => {
+                this.props.updateRecipe({...recipe, ingredientGroups: groups});
+                RecipeService.deleteIngredientOfGroup(id, currentRemoveGroup)
+                    .then(ingredientItems => {
+                        this.props.updateIngredientItems(ingredientItems);
+                        this.props.updateIngredientItemsStop();
+                        this.setState({ openedModal: false, currentRemoveGroup: null });
+                        toast.success("Deleted!");
+                    })
+            })
+            .catch(() => {
+                this.props.updateIngredientItemsStop();
+                toast.error("Error deleting the ingredient group!");
+            });
+    }
+
+    public handleOpenModal = (group: string) => () => {
+        this.setState({ openedModal: true, currentRemoveGroup: group });
+    }
+
+    public handleCloseModal = () => {
+        this.setState({ openedModal: false, currentRemoveGroup: null });
+    }
+
     public renderIngredientGroup = (group: string, index: number) => {
         const { ingredientItems, editing, updatingIngredientItems } = this.props;
+        const { openedModal } = this.state;
         const groupIngredientItems = ingredientItems.filter(ingredientItem => group ? ingredientItem.group === group : ingredientItem.group === undefined);
 
-        if(!groupIngredientItems || groupIngredientItems.length === 0) {
+        if (!groupIngredientItems || groupIngredientItems.length === 0) {
             return null;
         }
 
         return (
             <React.Fragment key={index}>
-                <Typography variant="h6">{group ? group : "Other"}</Typography>
+                <Grid justify="space-between" container={true}>
+                    <Grid item={true}>
+                        <Typography variant="h6">{group ? group : "Other"}</Typography>
+                    </Grid>
+                    <Grid item={true}>
+                        {editing && <ButtonSecondary onClick={this.handleOpenModal(group)} color="secondary">Delete group</ButtonSecondary>}
+                    </Grid>
+                </Grid>
                 <Table>
                     <TableBody>
                         {groupIngredientItems.map((ingredientItem, index) => {
@@ -157,10 +210,9 @@ class IngredientsElementBase extends PureComponent<Props> {
                                     <TableCell>
                                         {editing ?
                                             <ButtonError
-                                                variant="contained"
-                                                color="primary"
                                                 onClick={this.deleteIngredientItem(ingredientItem.id)}
                                                 disabled={updatingIngredientItems}
+                                                width="20"
                                             >
                                                 <FontAwesomeIcon icon={faTrash} />
                                             </ButtonError>
@@ -173,6 +225,27 @@ class IngredientsElementBase extends PureComponent<Props> {
                         })}
                     </TableBody>
                 </Table>
+                <Dialog
+                    open={openedModal}
+                    onClose={this.handleCloseModal}
+                    aria-labelledby="alert-dialog-title"
+                    aria-describedby="alert-dialog-description"
+                >
+                    <DialogTitle id="alert-dialog-title">{"Delete all ingredients in the group?"}</DialogTitle>
+                    <DialogContent>
+                        <DialogContentText id="alert-dialog-description">
+                            Deleting this ingredient group will also delete all ingredients in the group.
+                        </DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
+                        <ButtonSecondary color="secondary" onClick={this.handleCloseModal} autoFocus>
+                            Disagree
+                        </ButtonSecondary>
+                        <ButtonError onClick={this.deleteIngredientGroup}>
+                            Delete
+                        </ButtonError>
+                    </DialogActions>
+                </Dialog>
             </React.Fragment>
         )
     }
@@ -204,6 +277,7 @@ const mapStateToProps = (state: ApplicationState) => ({
     auth: state.firebase.auth,
     ingredientItems: state.recipe.ingredientItems,
     cartItems: state.cart.cartItems,
+    recipe: state.recipe.recipe,
     loadingIngredientItems: state.recipe.loadingIngredientItems,
     updatingIngredientItems: state.recipe.updatingIngredientItems,
 });
@@ -219,6 +293,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
     updateCartItems: bindActionCreators(cartActions.updateCartItems, dispatch),
     deleteIngredientItem: bindActionCreators(recipeActions.deleteIngredientItem, dispatch),
     addCartItem: bindActionCreators(cartActions.addCartItem, dispatch),
+    updateRecipe: bindActionCreators(recipeActions.updateRecipe, dispatch)
 });
 
 const IngredientsElement = compose(

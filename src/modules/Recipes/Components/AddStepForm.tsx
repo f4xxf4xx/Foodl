@@ -108,8 +108,6 @@ class AddStepFormBase extends PureComponent<Props, State> {
                                 />
                             </Box>
                             <ButtonPrimary
-                                variant="contained"
-                                color="primary"
                                 onClick={this.addStep}
                             >
                                 Add

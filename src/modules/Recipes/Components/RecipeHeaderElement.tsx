@@ -85,8 +85,8 @@ class RecipeHeaderElementBase extends React.Component<Props> {
                 this.props.updateRecipeStop();
                 toast.error("Error updating the recipe!");
             });
-    }  
-    
+    }
+
     public updateType = (e: any) => {
         const { recipe } = this.props;
         const value = e.value;
@@ -215,6 +215,11 @@ class RecipeHeaderElementBase extends React.Component<Props> {
             }
         })
 
+        const tagOptionsWithoutCurrentTags = recipe ?
+            tagOptions.filter(tag => !recipe.tags.includes(tag.value))
+            :
+            tagOptions;
+
         return (
             <>
                 <Grid justify="space-between" container={true}>
@@ -276,7 +281,7 @@ class RecipeHeaderElementBase extends React.Component<Props> {
                             />
                         )}
                         <Select
-                            options={tagOptions}
+                            options={tagOptionsWithoutCurrentTags}
                             value={null}
                             onChange={this.addTag}
                         />

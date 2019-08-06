@@ -156,12 +156,22 @@ export class RecipeService {
         const recipe = await recipeRef.get();
 
         if (recipe.exists) {
-            const groups = recipe.data().groups;
+            const groups = recipe.data().ingredientGroups;
 
-            return DbHelper.arrayDelete(recipeRef, groups, "groups", groupName)
+            return DbHelper.arrayDelete(recipeRef, groups, "ingredientGroups", groupName)
         }
 
         return Promise.resolve(null);
+    }
+
+    public static async deleteIngredientOfGroup(recipeId: string, groupName: string): Promise<IngredientItem[]> {
+        const ingredientItems = await db.collection("recipes").doc(recipeId).collection("ingredientItems").where("group", "==", groupName).get();
+        
+        ingredientItems.docs.forEach(ingredientItem => {
+            ingredientItem.ref.delete();
+        })
+
+        return this.getIngredients(recipeId);
     }
 
     public static async deleteIngredientItem(recipeId: string, ingredientItemId: string): Promise<void> {

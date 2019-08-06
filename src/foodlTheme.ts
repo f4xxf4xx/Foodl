@@ -7,6 +7,9 @@ export default createMuiTheme({
           main: "#217fff",
           light: "#43adff"
         },
+        secondary: {
+            main: "rgba(0, 0, 0, 0.87)"
+        }
     },
     typography: {
         h3: {
@@ -28,6 +31,11 @@ export default createMuiTheme({
             },
             subtitle2: {
                 color: "white"
+            }
+        },
+        MuiButton: {
+            root: {
+                textTransform: "none"
             }
         }
     },

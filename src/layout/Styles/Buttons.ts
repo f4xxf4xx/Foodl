@@ -26,8 +26,9 @@ export const ButtonSecondary = styled(Button)`
   && {
     background: none;
     border: 0;
-    color: white;
+    color: ${(props) => props.color ? props.color : "white"};
     padding: 0 15px;
+    text-transform: none;
 
     width: ${(props) => props.width ? `${props.width}px` : "100%"};
     height: ${(props) => props.height ? `${props.height}px` : "35px"};
