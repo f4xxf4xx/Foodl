@@ -1,4 +1,4 @@
-import { Box, Grid, TextField, Typography } from "@material-ui/core";
+import { Box, Grid, TextField, Typography, Card } from "@material-ui/core";
 import React from "react";
 import { connect } from "react-redux";
 import Select from "react-select";
@@ -16,6 +16,7 @@ import ContentEditable from 'react-contenteditable'
 import { StyledRecipeInfo } from "./Styles/StyledRecipeInfo";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClock } from "@fortawesome/free-solid-svg-icons";
+import { StyledCardMedia } from "./Styles/StyledCardMedia";
 
 interface StateProps {
     recipe: Recipe;
@@ -145,6 +146,12 @@ class RecipeHeaderElementBase extends React.Component<Props> {
 
         return (
             <>
+                <Card>
+                    <StyledCardMedia
+                        image={recipe.imageFullPath}
+                        title="TODO"
+                    />
+                </Card>
                 <Grid justify="space-between" container={true}>
                     <Grid item={true}>
                         <Typography variant="h3">{recipe.name}</Typography>
@@ -153,6 +160,9 @@ class RecipeHeaderElementBase extends React.Component<Props> {
                         <ButtonPrimary onClick={toggleEdit}>Edit</ButtonPrimary>
                     </Grid>
                 </Grid>
+                <Box>
+                    <Typography variant="body1">{recipe.description}</Typography>
+                </Box>
                 <Box>
                     {recipe.type &&
                         <StyledRecipeInfo>
@@ -216,7 +226,7 @@ class RecipeHeaderElementBase extends React.Component<Props> {
         })
 
         const tagOptionsWithoutCurrentTags = recipe ?
-            tagOptions.filter(tag => !recipe.tags.includes(tag.value))
+            tagOptions.filter(tag => !recipe.tags || !recipe.tags.includes(tag.value))
             :
             tagOptions;
 
@@ -238,6 +248,16 @@ class RecipeHeaderElementBase extends React.Component<Props> {
                     </Grid>
                 </Grid>
                 <Box>
+                    <ContentEditable
+                        className="MuiTypography-root MuiTypography-body1"
+                        html={recipe.description || "Description"}
+                        disabled={updatingRecipe}
+                        onBlur={this.updateContentEditable("description")}
+                        tagName='p'
+                        onChange={() => { }}
+                    />
+                </Box>
+                <Box>
                     <StyledRecipeInfo>
                         <Select
                             options={typeOptions}
@@ -257,19 +277,17 @@ class RecipeHeaderElementBase extends React.Component<Props> {
                             disabled={updatingRecipe}
                         />
                     </StyledRecipeInfo>
-                    {recipe.cuisine &&
-                        <StyledRecipeInfo>
-                            <Select
-                                options={cuisineOptions}
-                                value={recipe.cuisine && {
-                                    value: recipe.cuisine,
-                                    label: recipe.cuisine,
-                                }}
-                                onChange={this.updateCuisine}
-                                isDisabled={updatingRecipe}
-                            />
-                        </StyledRecipeInfo>
-                    }
+                    <StyledRecipeInfo>
+                        <Select
+                            options={cuisineOptions}
+                            value={recipe.cuisine && {
+                                value: recipe.cuisine,
+                                label: recipe.cuisine,
+                            }}
+                            onChange={this.updateCuisine}
+                            isDisabled={updatingRecipe}
+                        />
+                    </StyledRecipeInfo>
                     <Box>
                         {recipe.tags && recipe.tags.map((tag, index) =>
                             <StyledChip

@@ -14,6 +14,8 @@ export interface Recipe {
     uid: string;
     name: string;
     description?: string;
+    image?: string;
+    imageFullPath?: string;
     slug: string;
     type?: RecipeType;
     duration?: number;

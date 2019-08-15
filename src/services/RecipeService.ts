@@ -1,23 +1,30 @@
 import slugify from "react-slugify";
-import { db } from "../config";
+import { db, storage } from "../config";
 import { IngredientItem, Recipe, Step } from "../modules/Recipes/models";
 import { Filters } from "../store/recipes/recipesReducer";
 import { DbHelper } from "./DbHelper";
 
 export class RecipeService {
-    private static mapRecipe(data: firebase.firestore.DocumentSnapshot): Recipe {
+    private static async mapRecipe(data: firebase.firestore.DocumentSnapshot): Promise<Recipe> {
         const recipe: Recipe = {
             id: data.id,
             uid: data.data().uid,
             slug: data.data().slug,
             name: data.data().name,
             description: data.data().description,
+            image: data.data().image,
             type: data.data().type,
             cuisine: data.data().cuisine,
             duration: data.data().duration,
             tags: data.data().tags,
             ingredientGroups: data.data().ingredientGroups
         };
+
+        if(recipe.image) {
+            const storageRef = storage.ref();
+            const recipesRef = storageRef.child("recipes").child(recipe.image);
+            recipe.imageFullPath = await recipesRef.getDownloadURL();
+        }
 
         return recipe;
     }
@@ -37,9 +44,11 @@ export class RecipeService {
 
         const recipes = await recipesRef.get();
 
-        return recipes.docs.map((recipe) => {
-            return this.mapRecipe(recipe);
+        const mappedRecipes = recipes.docs.map(async (recipe) => {
+            return await this.mapRecipe(recipe);
         });
+
+        return Promise.all(mappedRecipes);
     }
 
     public static async getRecipeById(recipeId: string): Promise<Recipe> {

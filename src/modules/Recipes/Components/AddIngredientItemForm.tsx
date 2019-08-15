@@ -147,7 +147,7 @@ class AddIngredientItemFormBase extends PureComponent<Props, State> {
                 });
         }
 
-        if(!recipe.ingredientGroups.includes(newIngredientItem.group)) {
+        if(!recipe.ingredientGroups || !recipe.ingredientGroups.includes(newIngredientItem.group)) {
             RecipeService.addIngredientGroup(recipe.id, newIngredientItem.group)
                 .then((groups) => {
                     if (groups) {
@@ -212,7 +212,7 @@ class AddIngredientItemFormBase extends PureComponent<Props, State> {
             };
         });
 
-        const ingredientGroupOptions = recipe.ingredientGroups.map((group) => {
+        const ingredientGroupOptions = recipe.ingredientGroups && recipe.ingredientGroups.map((group) => {
             return {
                 value: group,
                 label: group,

@@ -57,6 +57,7 @@ class RecipeViewBase extends PureComponent<Props, State> {
                 this.props.fetchRecipeStop();
             })
             .catch((error) => {
+                console.log(error);
                 this.props.fetchRecipeStop();
                 toast.error("Error fetching the recipe!");
             });

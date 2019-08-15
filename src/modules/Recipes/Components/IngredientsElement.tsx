@@ -189,7 +189,7 @@ class IngredientsElementBase extends PureComponent<Props, State> {
                         <Typography variant="h6">{group ? group : "Other"}</Typography>
                     </Grid>
                     <Grid item={true}>
-                        {editing && <ButtonSecondary onClick={this.handleOpenModal(group)} color="secondary">Delete group</ButtonSecondary>}
+                        {editing && group && <ButtonSecondary onClick={this.handleOpenModal(group)} color="secondary">Delete group</ButtonSecondary>}
                     </Grid>
                 </Grid>
                 <Table>
@@ -260,7 +260,7 @@ class IngredientsElementBase extends PureComponent<Props, State> {
                     <Loader active={true} inline="centered" />
                     :
                     <>
-                        {ingredientGroups.map((ingredientGroup, index) => {
+                        {ingredientGroups && ingredientGroups.map((ingredientGroup, index) => {
                             return this.renderIngredientGroup(ingredientGroup, index);
                         })}
                         {this.renderIngredientGroup(null, null)}

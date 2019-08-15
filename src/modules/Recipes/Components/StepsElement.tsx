@@ -1,4 +1,4 @@
-import { Divider, Paper, Table, TableBody, TableCell, TableRow, TextField, Typography } from "@material-ui/core";
+import { Divider, Table, TableBody, TableCell, TableRow, TextField, Typography } from "@material-ui/core";
 import React, { PureComponent } from "react";
 import { connect } from "react-redux";
 import { RouteComponentProps } from "react-router-dom";
@@ -197,17 +197,15 @@ class StepsElementBase extends PureComponent<Props> {
         return (
             <>
                 <Typography variant="h5">Steps</Typography>
-                <Paper>
-                    {loadingSteps ?
-                        <Loader active={true} inline="centered" />
-                        :
-                        <Table>
-                            <TableBody>
-                                {this.renderSteps()}
-                            </TableBody>
-                        </Table>
-                    }
-                </Paper>
+                {loadingSteps ?
+                    <Loader active={true} inline="centered" />
+                    :
+                    <Table>
+                        <TableBody>
+                            {this.renderSteps()}
+                        </TableBody>
+                    </Table>
+                }
                 <Divider />
                 <AddStepForm editing={editing} currentStepCount={(steps.length + 1)} />
             </>
