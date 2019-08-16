@@ -30,7 +30,6 @@ interface StateProps {
     recipes: Recipe[];
     loading: boolean;
     updating: boolean;
-    error: string;
     auth: any;
     filters: Filters;
 }

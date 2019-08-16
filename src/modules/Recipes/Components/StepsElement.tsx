@@ -1,7 +1,7 @@
 import { Divider, Table, TableBody, TableCell, TableRow, TextField, Typography } from "@material-ui/core";
 import React, { PureComponent } from "react";
 import { connect } from "react-redux";
-import { RouteComponentProps } from "react-router-dom";
+import { RouteComponentProps, withRouter } from "react-router-dom";
 import { toast } from "react-toastify";
 import { bindActionCreators, compose, Dispatch } from "redux";
 import { Loader } from "semantic-ui-react";
@@ -231,6 +231,6 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
 
 const StepsElement = compose(
     connect<StateProps, DispatchProps, OwnProps>(mapStateToProps, mapDispatchToProps),
-)(StepsElementBase);
+)(withRouter(StepsElementBase));
 
 export default StepsElement;

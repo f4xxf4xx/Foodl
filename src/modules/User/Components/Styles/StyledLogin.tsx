@@ -1,7 +1,7 @@
 import { StyledFirebaseAuth } from "react-firebaseui";
 import styled from "styled-components";
 
-export const StyledLogin = styled(StyledFirebaseAuth)`
+export const StyledLogin = styled(StyledFirebaseAuth)<{ height?: string }>`
   && {
     .mdl-button--raised.mdl-button--colored {
       background: linear-gradient(45deg, #217fff 30%, #43adff 90%);

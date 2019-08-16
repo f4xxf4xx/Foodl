@@ -1,7 +1,13 @@
 import { Button } from "@material-ui/core";
 import styled from "styled-components";
+import { ButtonProps } from "@material-ui/core/Button";
 
-export const ButtonPrimary = styled(Button)`
+type DimensionProps = ButtonProps & { 
+  width?: string;
+  height?: string;
+}
+
+export const ButtonPrimary = styled(Button)<DimensionProps>`
   && {
     background: linear-gradient(45deg, #217fff 30%, #43adff 90%);
     border-radius: 3px;
@@ -22,7 +28,7 @@ export const ButtonPrimary = styled(Button)`
   }
 `;
 
-export const ButtonSecondary = styled(Button)`
+export const ButtonSecondary = styled(Button)<DimensionProps>`
   && {
     background: none;
     border: 0;
@@ -39,7 +45,7 @@ export const ButtonSecondary = styled(Button)`
   }
 `;
 
-export const ButtonError = styled(Button)`
+export const ButtonError = styled(Button)<DimensionProps>`
   && {
     background: linear-gradient(45deg, #e10005 30%, #ff4145 90%);
     border-radius: 3px;

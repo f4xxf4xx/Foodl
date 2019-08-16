@@ -1,16 +1,16 @@
-import { Link, Toolbar } from "@material-ui/core";
-import { Menu as MenuIcon } from "@material-ui/icons";
 import React from "react";
 import { connect } from "react-redux";
-import { withFirebase } from "react-redux-firebase";
 import { Link as RouterLink, RouteComponentProps, withRouter } from "react-router-dom";
 import { compose } from "redux";
 import { ApplicationState } from "..";
-import { isAuthenticated } from "../helpers/userHelper";
-import { ButtonSecondary } from "./Styles/Buttons";
 import { StyledAppBar } from "./Styles/StyledAppBar";
+import { Toolbar, Link } from "@material-ui/core";
 import { StyledMenuIcon } from "./Styles/StyledMenuIcon";
+import { isAuthenticated } from "../helpers/userHelper";
+import { Menu as MenuIcon } from "@material-ui/icons";
 import { StyledSpacer } from "./Styles/StyledSpacer";
+import { ButtonSecondary } from "./Styles/Buttons";
+import { withFirebase } from "react-redux-firebase";
 
 interface OwnProps {
   toggleDrawer: () => void;
@@ -61,10 +61,11 @@ class HeaderBase extends React.Component<Props> {
 
 const mapStateToProps = (state: ApplicationState) => ({
   auth: state.firebase.auth,
+  firebase: state.firebase
 });
 
 const Header = compose(
-  connect<StateProps>(mapStateToProps),
+  connect<StateProps, {}, OwnProps>(mapStateToProps),
 )(withRouter(withFirebase(HeaderBase)));
 
 export default Header;

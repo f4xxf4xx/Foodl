@@ -6,30 +6,30 @@ import { compose } from "redux";
 import { ApplicationState } from "..";
 
 interface StateProps {
-    auth: any;
+  auth: any;
 }
 
 type Props = StateProps & RouteProps;
 
 class GuessRouteBase extends PureComponent<Props> {
-    public render() {
-        const { auth } = this.props;
+  public render() {
+    const { auth } = this.props;
 
-        return (
-            (auth.isLoaded && auth.isEmpty) ?
-                <Route {...this.props} />
-                :
-                <Redirect to="/" />
-        );
-    }
+    return (
+      (auth.isLoaded && auth.isEmpty) ?
+        <Route {...this.props} />
+        :
+        <Redirect to="/" />
+    );
+  }
 }
 
 const mapStateToProps = (state: ApplicationState) => ({
-    auth: state.firebase.auth,
+  auth: state.firebase.auth,
 });
 
 const GuessRoute = compose(
-    connect<StateProps>(mapStateToProps),
+  connect<StateProps>(mapStateToProps),
 )(GuessRouteBase);
 
 export default GuessRoute;

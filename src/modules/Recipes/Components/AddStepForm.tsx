@@ -129,9 +129,8 @@ const mapStateToProps = (state: ApplicationState) => ({
 const mapDispatchToProps = (dispatch: Dispatch) => ({
     updateStepsStart: bindActionCreators(recipeActions.updateStepsStart, dispatch),
     updateStepsStop: bindActionCreators(recipeActions.updateStepsStop, dispatch),
+    updateSteps: bindActionCreators(recipeActions.updateSteps, dispatch),
     addStep: bindActionCreators(recipeActions.addStep, dispatch),
-    fetchStepsStart: bindActionCreators(recipeActions.fetchStepsStart, dispatch),
-    fetchStepsStop: bindActionCreators(recipeActions.fetchStepsStop, dispatch),
 });
 
 const AddStepForm = compose(

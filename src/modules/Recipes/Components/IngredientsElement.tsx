@@ -1,7 +1,7 @@
 import { Divider, Table, TableBody, TableCell, TableRow, Typography, Grid, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions } from "@material-ui/core";
 import React, { PureComponent } from "react";
 import { connect } from "react-redux";
-import { RouteComponentProps } from "react-router-dom";
+import { RouteComponentProps, withRouter } from "react-router-dom";
 import { toast } from "react-toastify";
 import { bindActionCreators, compose, Dispatch } from "redux";
 import { Loader } from "semantic-ui-react";
@@ -298,6 +298,6 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
 
 const IngredientsElement = compose(
     connect<StateProps, DispatchProps, OwnProps>(mapStateToProps, mapDispatchToProps),
-)(IngredientsElementBase);
+)(withRouter(IngredientsElementBase));
 
 export default IngredientsElement;

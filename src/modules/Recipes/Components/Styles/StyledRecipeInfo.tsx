@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { Box } from "@material-ui/core";
 
-export const StyledRecipeInfo = styled(Box)`
+export const StyledRecipeInfo = styled(Box)<{ editing?: boolean }>`
   && {
     display: inline-block;
     width: 120px;

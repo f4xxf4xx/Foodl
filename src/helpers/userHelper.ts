@@ -1,1 +1,1 @@
-export const isAuthenticated = (auth) => auth.isLoaded && !auth.isEmpty;
+export const isAuthenticated = (auth: any) => auth.isLoaded && !auth.isEmpty;
