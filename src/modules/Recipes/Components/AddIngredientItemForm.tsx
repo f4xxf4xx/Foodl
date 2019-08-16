@@ -2,7 +2,7 @@ import { FormLabel, TextField, Typography } from "@material-ui/core";
 import React, { PureComponent } from "react";
 import { connect } from "react-redux";
 import Select from "react-select";
-import Creatable from "react-select/lib/Creatable";
+import Creatable from 'react-select/creatable';
 import { toast } from "react-toastify";
 import { bindActionCreators, compose, Dispatch } from "redux";
 import { ApplicationState } from "../../..";

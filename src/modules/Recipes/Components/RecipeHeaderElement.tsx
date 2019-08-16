@@ -1,4 +1,4 @@
-import { Box, Grid, TextField, Typography, Card } from "@material-ui/core";
+import { Box, Grid, TextField, Typography, Card, Input } from "@material-ui/core";
 import React from "react";
 import { connect } from "react-redux";
 import Select from "react-select";
@@ -17,6 +17,9 @@ import { StyledRecipeInfo } from "./Styles/StyledRecipeInfo";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClock } from "@fortawesome/free-solid-svg-icons";
 import { StyledCardMedia } from "./Styles/StyledCardMedia";
+import { StyledPaper } from "../../../layout/Styles/Sections";
+import { InputWrapper } from "../../../layout/Styles/Forms";
+import { StorageHelper } from "../../../services/StorageHelper";
 
 interface StateProps {
     recipe: Recipe;
@@ -141,17 +144,39 @@ class RecipeHeaderElementBase extends React.Component<Props> {
 
     }
 
+    public saveImage = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { recipe } = this.props;
+        const image = e.target.files[0];
+
+        StorageHelper.addFile(`recipes/${image.name}`, image)
+            .then(filePath => {
+                this.props.updateRecipeStart();
+                RecipeService.updateRecipe(recipe.id, "image", image.name)
+                    .then(() => {
+                        this.props.updateRecipe({ ...recipe, "image": image.name });
+                        this.props.updateRecipeStop();
+                        toast.success("Updated!");
+                    })
+                    .catch(() => {
+                        this.props.updateRecipeStop();
+                        toast.error("Error updating the recipe!");
+                    });
+            })
+    }
+
     public renderRecipeHeader() {
         const { recipe, toggleEdit } = this.props;
 
         return (
             <>
-                <Card>
-                    <StyledCardMedia
-                        image={recipe.imageFullPath}
-                        title="TODO"
-                    />
-                </Card>
+                {recipe.image &&
+                    <Card>
+                        <StyledCardMedia
+                            image={recipe.imageFullPath}
+                            title="TODO"
+                        />
+                    </Card>
+                }
                 <Grid justify="space-between" container={true}>
                     <Grid item={true}>
                         <Typography variant="h3">{recipe.name}</Typography>
@@ -232,6 +257,23 @@ class RecipeHeaderElementBase extends React.Component<Props> {
 
         return (
             <>
+                {recipe.image &&
+                    <Card>
+                        <StyledCardMedia
+                            image={recipe.imageFullPath}
+                            title="TODO"
+                        />
+                    </Card>
+                }
+                <StyledPaper>
+                    <InputWrapper>
+                        <Input
+                            id="input-image"
+                            type="file"
+                            onChange={this.saveImage}
+                        />
+                    </InputWrapper>
+                </StyledPaper>
                 <Grid justify="space-between" container={true}>
                     <Grid item={true}>
                         <ContentEditable

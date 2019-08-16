@@ -2,7 +2,7 @@ import { Box, Typography } from "@material-ui/core";
 import React, { PureComponent } from "react";
 import { connect } from "react-redux";
 import { RouteProps } from "react-router-dom";
-import Creatable from "react-select/lib/Creatable";
+import Creatable from 'react-select/creatable';
 import { toast } from "react-toastify";
 import { bindActionCreators, compose, Dispatch } from "redux";
 import { ApplicationState } from "../../..";
