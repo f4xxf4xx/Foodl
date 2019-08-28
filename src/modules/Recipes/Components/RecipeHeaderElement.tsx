@@ -20,6 +20,7 @@ import { StyledCardMedia } from "./Styles/StyledCardMedia";
 import { StyledPaper } from "../../../layout/Styles/Sections";
 import { InputWrapper } from "../../../layout/Styles/Forms";
 import { StorageHelper } from "../../../services/StorageHelper";
+import AvatarEditor from "react-avatar-editor";
 
 interface StateProps {
     recipe: Recipe;
@@ -37,9 +38,20 @@ interface DispatchProps {
     updateRecipe: typeof recipeActions.updateRecipe;
 }
 
+interface State {
+    image: File;
+}
+
 type Props = OwnProps & StateProps & DispatchProps;
 
-class RecipeHeaderElementBase extends React.Component<Props> {
+class RecipeHeaderElementBase extends React.Component<Props, State> {
+    constructor(props: Props) {
+        super(props);
+        this.state = {
+            image: null
+        };
+    }
+
     public updateRecipe = (key: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
         const { recipe } = this.props;
         const value = e.currentTarget.value;
@@ -144,9 +156,16 @@ class RecipeHeaderElementBase extends React.Component<Props> {
 
     }
 
-    public saveImage = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const { recipe } = this.props;
+    public updateImage = (e: React.ChangeEvent<HTMLInputElement>) => {
         const image = e.target.files[0];
+        this.setState({
+            image
+        })
+    }
+
+    public saveImage = () => {
+        const { recipe } = this.props;
+        const { image } = this.state;
 
         StorageHelper.addFile(`recipes/${image.name}`, image)
             .then(filePath => {
@@ -228,6 +247,7 @@ class RecipeHeaderElementBase extends React.Component<Props> {
 
     public renderEditHeader() {
         const { recipe, updatingRecipe, toggleEdit } = this.props;
+        const { image } = this.state;
 
         const cuisineOptions = Object.keys(Cuisine).map((cuisine) => {
             return {
@@ -261,18 +281,20 @@ class RecipeHeaderElementBase extends React.Component<Props> {
                     <Card>
                         <StyledCardMedia
                             image={recipe.imageFullPath}
-                            title="TODO"
+                            title={recipe.name}
                         />
                     </Card>
                 }
-                <StyledPaper>
+                <StyledPaper width="600">
                     <InputWrapper>
+                        <AvatarEditor width={400} height={250} image={image} />
                         <Input
                             id="input-image"
                             type="file"
-                            onChange={this.saveImage}
+                            onChange={this.updateImage}
                         />
                     </InputWrapper>
+                    <ButtonPrimary onClick={this.saveImage}>Save image</ButtonPrimary>
                 </StyledPaper>
                 <Grid justify="space-between" container={true}>
                     <Grid item={true}>

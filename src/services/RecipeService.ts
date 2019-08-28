@@ -23,7 +23,12 @@ export class RecipeService {
         if(recipe.image) {
             const storageRef = storage.ref();
             const recipesRef = storageRef.child("recipes").child(recipe.image);
-            recipe.imageFullPath = await recipesRef.getDownloadURL();
+            try{
+                recipe.imageFullPath = await recipesRef.getDownloadURL();
+            }
+            catch(error) {
+                
+            }
         }
 
         return recipe;
