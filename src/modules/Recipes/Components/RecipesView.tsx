@@ -233,10 +233,8 @@ class RecipesViewBase extends PureComponent<Props, State> {
                                 <StyledCard>
                                     <CardActionArea onClick={this.goToRecipePage(recipe.slug)}>
                                         <StyledCardMedia
-                                            image={
-                                                "https://assets.kraftfoods.com/recipe_images/opendeploy/201689_640x428.jpg"
-                                            }
-                                            title="TODO"
+                                            image={recipe.imageFullPath}
+                                            title={recipe.name}
                                         />
                                         <StyledCardContent>
                                             <Typography

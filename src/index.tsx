@@ -1,19 +1,19 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
-import { firebaseReducer, getFirebase, reactReduxFirebase } from "react-redux-firebase";
+import { firebaseReducer, ReactReduxFirebaseProvider } from "react-redux-firebase";
 import { BrowserRouter } from "react-router-dom";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { firestoreReducer, getFirestore, reduxFirestore } from "redux-firestore";
+import { firestoreReducer } from "redux-firestore";
 import { configureStore } from "redux-starter-kit";
-import thunk from "redux-thunk";
 import App from "./App";
 import { firebase } from "./config";
 import { cartReducer, CartState } from "./store/cart/cartReducer";
 import { ingredientReducer, IngredientState } from "./store/ingredients/ingredientReducer";
 import { recipeReducer, RecipeState } from "./store/recipes/recipeReducer";
 import { recipesReducer, RecipesState } from "./store/recipes/recipesReducer";
+import thunk from "redux-thunk";
 
 const baseUrl = document.getElementsByTagName("base")[0].getAttribute("href");
 const rootElement = document.getElementById("root");
@@ -32,7 +32,7 @@ export interface ApplicationState {
   recipe: RecipeState;
   recipes: RecipesState;
   cart: CartState;
-  firebase: firebase.app.App;
+  firebase: any;
   firestore: firebase.firestore.Firestore;
 }
 
@@ -51,18 +51,22 @@ const store = configureStore({
     firebase: firebaseReducer,
     firestore: firestoreReducer,
   },
-  enhancers: [
-    reactReduxFirebase(firebase, rrfConfig),
-    reduxFirestore(firebase),
-  ],
-  middleware: [thunk.withExtraArgument({ getFirebase, getFirestore })],
+  middleware: [thunk],
 });
+
+const rrfProps = {
+  firebase,
+  config: rrfConfig,
+  dispatch: store.dispatch
+}
 
 ReactDOM.render(
   <Provider store={store}>
-    <BrowserRouter basename={baseUrl}>
-      <App />
-    </BrowserRouter>
+    <ReactReduxFirebaseProvider {...rrfProps}>
+      <BrowserRouter basename={baseUrl}>
+        <App />
+      </BrowserRouter>
+    </ReactReduxFirebaseProvider>
   </Provider>
   ,
   rootElement);
