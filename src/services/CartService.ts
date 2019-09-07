@@ -1,65 +1,102 @@
+import { toast } from "react-toastify";
 import { db } from "../config";
 import { Ingredient } from "../modules/Ingredients/models";
+import * as cartActions2 from "../store/cart/cartActions2";
+import { CartDbHelper } from "../repositories/CartDbHelper";
 
-export class CartService {
-    public static async getCartItems(userid: string): Promise<Ingredient[]> {
-        const cart = await db.collection("carts").doc(userid).get();
-
-        if (cart.exists) {
-            return CartService.getItems(cart);
+export const fetchAsync = (uid: string) => {
+    return async dispatch => {
+        dispatch(cartActions2.setCartLoading(true));
+        try {
+            const ingredients = await CartDbHelper.getCartItems(uid);
+            dispatch(cartActions2.updateCartItems(ingredients));
         }
-        else {
-            return [];
+        catch (error) {
+            toast.error(error);
+        }
+        finally {
+            dispatch(cartActions2.setCartLoading(false));
         }
     }
+}
 
-    private static getItems(data: firebase.firestore.DocumentSnapshot) {
-        const items = data.data().items;
-        const ingredients: Ingredient[] = items.map((ingredient) => {
-            return {
-                name: ingredient,
-            };
-        });
-
-        return ingredients;
-    }
-
-    public static async addItem(userid: string, name: string): Promise<Ingredient> {
-        const cartRef = db.collection("carts").doc(userid);
-        const cart = await cartRef.get();
-
-        if (cart.exists) {
-            const items = cart.data().items;
-
-            if (items.includes(name)) {
-                return null;
-            }
-            items.push(name);
-            await cartRef.set({ items });
+export const deleteAllItemsAsync = (uid: string) => {
+    return async dispatch => {
+        dispatch(cartActions2.setCartUpdating(true));
+        try {
+            await CartDbHelper.deleteAllItems(uid);
+            dispatch(cartActions2.deleteAllCartItems());
+            toast.success("Deleted all!");
         }
-        else {
-            await cartRef.set({ items: [name] });
+        catch (error) {
+            toast.error(error);
         }
-        return {
-            name,
+        finally {
+            dispatch(cartActions2.setCartUpdating(false));
         };
     }
+}
 
-    public static async deleteItem(userid: string, name: string): Promise<void> {
-        const cartRef = db.collection("carts").doc(userid);
-        const cart = await cartRef.get();
-
-        if (cart.exists) {
-            const items = cart.data().items;
-            const newItems = items.filter((item) => item !== name);
-
-            return await cartRef.set({ items: newItems });
+export const deleteItemAsync = (uid: string, cartItemName: string) => {
+    return async dispatch => {
+        dispatch(cartActions2.setCartUpdating(true));
+        try {
+            await CartDbHelper.deleteItem(uid, cartItemName);
+            dispatch(cartActions2.deleteCartItem(cartItemName));
+            toast.success("Deleted!");
         }
-
-        return Promise.resolve(null);
+        catch (error) {
+            toast.error(error);
+        }
+        finally {
+            dispatch(cartActions2.setCartUpdating(false));
+        }
     }
+}
 
-    public static deleteAllItems(userid: string): Promise<void> {
-        return db.collection("carts").doc(userid).set({ items: [] });
+export const addItemAsync = (uid: string, cartItemName: string) => {
+    return async dispatch => {
+        dispatch(cartActions2.setCartUpdating(true));
+        try {
+            const ingredient = await CartDbHelper.addItem(uid, cartItemName);
+            if (ingredient) {
+                dispatch(cartActions2.addCartItem(ingredient));
+                dispatch(cartActions2.updateCurrentSelectedIngredient(null));
+                toast.success("Added!");
+            }
+            else {
+                toast.warn("Item already exists!");
+            }            
+        }
+        catch (error) {
+            toast.error(error);
+        }
+        finally {
+            dispatch(cartActions2.setCartUpdating(false));
+        }
+    }
+}
+
+//Unused, but working way to do realtime fetches
+export const fetchRealTimeAsync = (uid: string) => {
+    return async dispatch => {
+        dispatch(cartActions2.setCartLoading(true));
+        try {
+            return await db.collection("carts").doc(uid).onSnapshot((snapshot) => {
+                const items = snapshot.data().items;
+                const ingredients: Ingredient[] = items.map((ingredient) => {
+                    return {
+                        name: ingredient,
+                    };
+                });
+                dispatch(cartActions2.updateCartItems(ingredients));
+            });
+        }
+        catch (error) {
+            toast.error(error);
+        }
+        finally {
+            dispatch(cartActions2.setCartLoading(false));
+        }
     }
 }

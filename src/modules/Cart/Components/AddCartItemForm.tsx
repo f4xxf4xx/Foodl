@@ -1,15 +1,13 @@
 import { Box, Typography } from "@material-ui/core";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import Creatable from 'react-select/creatable';
 import { ApplicationState } from "../../..";
 import { ButtonPrimary } from "../../../layout/Styles/Buttons";
 import { StyledPaper } from "../../../layout/Styles/Sections";
-import * as cartActions2 from "../../../store/cart/cartActions2";
 import * as ingredientActions2 from "../../../store/ingredients/ingredientActions2";
-import { CartService } from "../../../services/CartService";
-import { toast } from "react-toastify";
-import * as cartService2 from "../../../services/cartService2";
+import * as cartActions2 from "../../../store/cart/cartActions2";
+import * as cartService from "../../../services/cartService";
 
 const AddCartItemForm = () => {
     const dispatch = useDispatch();
@@ -17,9 +15,8 @@ const AddCartItemForm = () => {
     const ingredients = useSelector((state: ApplicationState) => state.ingredients.ingredients);
     const ingredientsLoading = useSelector((state: ApplicationState) => state.ingredients.loading);
     const ingredientsUpdating = useSelector((state: ApplicationState) => state.ingredients.updating);
+    const currentSelectedIngredient = useSelector((state: ApplicationState) => state.cart.currentSelectedIngredient);
     const firebase = useSelector((state: ApplicationState) => state.firebase);
-    //state
-    const [currentSelectedIngredient, setCurrentSelectedIngredient] = useState(null);
     //vars
     const ingredientOptions = ingredients ? ingredients.map((ingredient) => {
         return {
@@ -29,10 +26,14 @@ const AddCartItemForm = () => {
     }) : [];
 
     useEffect(() => {
-        dispatch(ingredientActions2.fetchAsync());
+        const fetch = async () => {
+            dispatch(ingredientActions2.fetchAsync());
+        }
+
+        fetch();
     }, [dispatch]);
 
-    const addIngredient = () => {
+    const addIngredient = async () => {
         if (!currentSelectedIngredient) {
             return;
         }
@@ -41,11 +42,7 @@ const AddCartItemForm = () => {
             dispatch(ingredientActions2.addIngredientAsync(currentSelectedIngredient.label));
         }
 
-        addCartItemAsync(firebase.auth.uid, currentSelectedIngredient.label);
-    }
-
-    const addCartItemAsync = async (uid: string, label: string) => {
-        dispatch(cartService2.addCartItemAsync(uid, label));
+        dispatch(cartService.addItemAsync(firebase.auth.uid, currentSelectedIngredient.label));
     }
 
     const handleKeyPress = (event) => {
@@ -55,7 +52,7 @@ const AddCartItemForm = () => {
     }
 
     const updateCurrentSelectedIngredient = (e: any) => {
-        setCurrentSelectedIngredient(e);
+        dispatch(cartActions2.updateCurrentSelectedIngredient(e));
     }
 
     const preventDefault = (e: React.FormEvent<HTMLFormElement>) => {

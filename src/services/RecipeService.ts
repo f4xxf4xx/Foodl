@@ -2,7 +2,7 @@ import slugify from "react-slugify";
 import { db, storage } from "../config";
 import { IngredientItem, Recipe, Step } from "../modules/Recipes/models";
 import { Filters } from "../store/recipes/recipesReducer";
-import { DbHelper } from "./DbHelper";
+import { DbHelper } from "../repositories/DbHelper";
 
 export class RecipeService {
     private static async mapRecipe(data: firebase.firestore.DocumentSnapshot): Promise<Recipe> {

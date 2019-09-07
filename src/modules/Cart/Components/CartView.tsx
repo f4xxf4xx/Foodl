@@ -4,13 +4,10 @@ import { useSelector, useDispatch } from "react-redux";
 import { Loader } from "semantic-ui-react";
 import { ApplicationState } from "../../..";
 import { ButtonError } from "../../../layout/Styles/Buttons";
-import * as cartActions2 from "../../../store/cart/cartActions2";
-import * as cartService2 from "../../../services/cartService2";
+import * as cartService from "../../../services/cartService";
 import AddCartItemForm from "./AddCartItemForm";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
-import { CartService } from "../../../services/CartService";
-import { toast } from "react-toastify";
 
 const CartView = () => {
     const dispatch = useDispatch();
@@ -21,41 +18,19 @@ const CartView = () => {
     const firebase = useSelector((state: ApplicationState) => state.firebase);
 
     useEffect(() => {
-        const unsubscribe = dispatch(cartService2.fetchAsync(firebase.auth.uid));
-
-        return () => {
-            unsubscribe(dispatch);
+        const fetch = async () => {
+            dispatch(cartService.fetchAsync(firebase.auth.uid));
         }
+
+        fetch();
     }, [firebase.auth.uid, dispatch]);
 
     const deleteAllCartItems = () => async () => {
-        dispatch(cartActions2.setCartUpdating(true));
-        try {
-            await CartService.deleteAllItems(firebase.auth.uid);
-            dispatch(cartActions2.deleteAllCartItems());
-            toast.success("Deleted all!");
-        }
-        catch (error) {
-            toast.error(error);
-        }
-        finally {
-            dispatch(cartActions2.setCartUpdating(false));
-        };
+        dispatch(cartService.deleteAllItemsAsync(firebase.auth.uid));
     }
 
     const deleteCartItem = (cartItemName: string) => async () => {
-        dispatch(cartActions2.setCartUpdating(true));
-        try {
-            await CartService.deleteItem(firebase.auth.uid, cartItemName);
-            dispatch(cartActions2.deleteCartItem(cartItemName));
-            toast.success("Deleted!");
-        }
-        catch (error) {
-            toast.error(error);
-        }
-        finally {
-            dispatch(cartActions2.setCartUpdating(false));
-        }
+        dispatch(cartService.deleteItemAsync(firebase.auth.uid, cartItemName));
     }
 
     const renderCartItems = () => {

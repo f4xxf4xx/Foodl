@@ -14,7 +14,7 @@ import { getIngredientQuantity, getIngredientName } from "../helper";
 import { IngredientItem, Recipe } from "../models";
 import AddIngredientItemForm from "./AddIngredientItemForm";
 import { RecipeService } from "../../../services/RecipeService";
-import { CartService } from "../../../services/CartService";
+import { CartDbHelper } from "../../../repositories/CartDbHelper";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faShoppingCart, faCartPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
 
@@ -82,7 +82,7 @@ class IngredientsElementBase extends PureComponent<Props, State> {
 
         if (cartItems.length === 0) {
             fetchCartItemsStart();
-            CartService.getCartItems(auth.uid)
+            CartDbHelper.getCartItems(auth.uid)
                 .then((cartItems) => {
                     if (cartItems.length > 0) {
                         updateCartItems(cartItems);
@@ -115,7 +115,7 @@ class IngredientsElementBase extends PureComponent<Props, State> {
     public addCartItem = (ingredientItem: IngredientItem) => () => {
         const { auth } = this.props;
 
-        CartService.addItem(auth.uid, ingredientItem.name)
+        CartDbHelper.addItem(auth.uid, ingredientItem.name)
             .then((ingredient) => {
                 this.props.addCartItem(ingredient);
                 toast.success(`Added ${ingredient.name} to cart!`);
