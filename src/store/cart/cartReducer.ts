@@ -3,28 +3,22 @@ import { Ingredient } from "../../modules/Ingredients/models";
 
 export interface CartState {
     cartItems: Ingredient[];
-    loadingCartItems: boolean;
-    updatingCartItems: boolean;
+    loading: boolean;
+    updating: boolean;
 }
 
 const initialState: CartState = {
     cartItems: [],
-    loadingCartItems: false,
-    updatingCartItems: false,
+    loading: true,
+    updating: false
 };
 
 export const cartReducer = createReducer(initialState, {
-    FETCH_CARTITEMS_START: (state) => {
-        state.loadingCartItems = true;
+    SET_CART_LOADING: (state, action) => {
+        state.loading = action.payload;
     },
-    FETCH_CARTITEMS_STOP: (state) => {
-        state.loadingCartItems = false;
-    },
-    UPDATE_CARTITEMS_START: (state) => {
-        state.updatingCartItems = true;
-    },
-    UPDATE_CARTITEMS_STOP: (state) => {
-        state.updatingCartItems = false;
+    SET_CART_UPDATING: (state, action) => {
+        state.updating = action.payload;
     },
     UPDATE_CARTITEMS: (state, action) => {
         state.cartItems = action.payload;
@@ -37,5 +31,5 @@ export const cartReducer = createReducer(initialState, {
     },
     DELETE_ALL_CARTITEMS: (state) => {
         state.cartItems = [];
-    },
+    }
 });

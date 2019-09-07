@@ -13,7 +13,7 @@ export class CartService {
         }
     }
 
-    public static getItems(data: firebase.firestore.DocumentSnapshot) {
+    private static getItems(data: firebase.firestore.DocumentSnapshot) {
         const items = data.data().items;
         const ingredients: Ingredient[] = items.map((ingredient) => {
             return {
