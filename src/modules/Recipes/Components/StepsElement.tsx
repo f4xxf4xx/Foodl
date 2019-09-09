@@ -10,7 +10,7 @@ import { ButtonError } from "../../../layout/Styles/Buttons";
 import * as recipeActions from "../../../store/recipes/recipeActions";
 import { Step } from "../models";
 import AddStepForm from "./AddStepForm";
-import { RecipeService } from "../../../services/RecipeService";
+import { RecipeDbHelper } from "../../../repositories/RecipeDbHelper";
 
 interface OwnProps {
     id: string;
@@ -102,7 +102,7 @@ class StepsElementBase extends PureComponent<Props> {
         const { id } = this.props;
 
         this.props.fetchStepsStart();
-        RecipeService.getSteps(id)
+        RecipeDbHelper.getSteps(id)
             .then((steps) => {
                 if (steps.length > 0) {
                     this.props.updateSteps(steps);
@@ -120,7 +120,7 @@ class StepsElementBase extends PureComponent<Props> {
         const { id } = this.props;
 
         this.props.updateStepsStart();
-        RecipeService.deleteStep(id, stepId)
+        RecipeDbHelper.deleteStep(id, stepId)
             .then(() => {
                 this.props.deleteStep(stepId);
                 this.props.updateStepsStop();
@@ -136,7 +136,7 @@ class StepsElementBase extends PureComponent<Props> {
         const value = e.target.value;
 
         this.props.updateStepsStart();
-        RecipeService.updateStepText(this.props.id, step.id, value)
+        RecipeDbHelper.updateStepText(this.props.id, step.id, value)
             .then(() => {
                 //TODO refactor to not use updatestep but update steps
                 this.props.updateStep({ ...step, [key]: value });

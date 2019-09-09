@@ -8,7 +8,7 @@ import { ApplicationState } from "../../..";
 import { ButtonPrimary } from "../../../layout/Styles/Buttons";
 import * as recipeActions from "../../../store/recipes/recipeActions";
 import { Recipe } from "../models";
-import { RecipeService } from "../../../services/RecipeService";
+import { RecipeDbHelper } from "../../../repositories/RecipeDbHelper";
 import { StyledChip } from "./Styles/StyledChip";
 import { Cuisine, RecipeType, Tag } from "../constants";
 import { Loader } from "semantic-ui-react";
@@ -57,7 +57,7 @@ class RecipeHeaderElementBase extends React.Component<Props, State> {
         const value = e.currentTarget.value;
 
         this.props.updateRecipeStart();
-        RecipeService.updateRecipe(recipe.id, key, value)
+        RecipeDbHelper.updateRecipe(recipe.id, key, value)
             .then(() => {
                 this.props.updateRecipe({ ...recipe, [key]: value });
                 this.props.updateRecipeStop();
@@ -74,7 +74,7 @@ class RecipeHeaderElementBase extends React.Component<Props, State> {
         const value = e.target.textContent;
 
         this.props.updateRecipeStart();
-        RecipeService.updateRecipe(recipe.id, key, value)
+        RecipeDbHelper.updateRecipe(recipe.id, key, value)
             .then(() => {
                 this.props.updateRecipe({ ...recipe, [key]: value });
                 this.props.updateRecipeStop();
@@ -91,7 +91,7 @@ class RecipeHeaderElementBase extends React.Component<Props, State> {
         const value = e.value;
 
         this.props.updateRecipeStart();
-        RecipeService.updateRecipe(recipe.id, "cuisine", value)
+        RecipeDbHelper.updateRecipe(recipe.id, "cuisine", value)
             .then(() => {
                 this.props.updateRecipe({ ...recipe, "cuisine": value });
                 this.props.updateRecipeStop();
@@ -108,7 +108,7 @@ class RecipeHeaderElementBase extends React.Component<Props, State> {
         const value = e.value;
 
         this.props.updateRecipeStart();
-        RecipeService.updateRecipe(recipe.id, "type", value)
+        RecipeDbHelper.updateRecipe(recipe.id, "type", value)
             .then(() => {
                 this.props.updateRecipe({ ...recipe, "type": value });
                 this.props.updateRecipeStop();
@@ -125,7 +125,7 @@ class RecipeHeaderElementBase extends React.Component<Props, State> {
         const value = e.value;
 
         this.props.updateRecipeStart();
-        RecipeService.addTag(recipe.id, value)
+        RecipeDbHelper.addTag(recipe.id, value)
             .then((tags) => {
                 this.props.updateRecipe({ ...recipe, tags });
                 this.props.updateRecipeStop();
@@ -142,7 +142,7 @@ class RecipeHeaderElementBase extends React.Component<Props, State> {
         const { recipe } = this.props;
 
         this.props.updateRecipeStart();
-        RecipeService.deleteTag(recipe.id, tag)
+        RecipeDbHelper.deleteTag(recipe.id, tag)
             .then((tags) => {
                 this.props.updateRecipe({ ...recipe, tags });
                 this.props.updateRecipeStop();
@@ -170,7 +170,7 @@ class RecipeHeaderElementBase extends React.Component<Props, State> {
         StorageHelper.addFile(`recipes/${image.name}`, image)
             .then(filePath => {
                 this.props.updateRecipeStart();
-                RecipeService.updateRecipe(recipe.id, "image", image.name)
+                RecipeDbHelper.updateRecipe(recipe.id, "image", image.name)
                     .then(() => {
                         this.props.updateRecipe({ ...recipe, "image": image.name });
                         this.props.updateRecipeStop();

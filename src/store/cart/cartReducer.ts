@@ -5,14 +5,14 @@ export interface CartState {
     cartItems: Ingredient[];
     loading: boolean;
     updating: boolean;
-    currentSelectedIngredient: any;
+    newCartItem: any;
 }
 
 const initialState: CartState = {
     cartItems: [],
     loading: true,
     updating: false,
-    currentSelectedIngredient: null
+    newCartItem: null
 };
 
 export const cartReducer = createReducer(initialState, {
@@ -34,7 +34,7 @@ export const cartReducer = createReducer(initialState, {
     DELETE_ALL_CARTITEMS: (state) => {
         state.cartItems = [];
     },
-    UPDATE_CURRENT_SELECTED_INGREDIENT: (state, action) => {
-        state.currentSelectedIngredient = action.payload;
+    UPDATE_NEW_CART_ITEM: (state, action) => {
+        state.newCartItem = action.payload;
     }
 });

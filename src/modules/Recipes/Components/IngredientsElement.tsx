@@ -13,7 +13,7 @@ import { Ingredient } from "../../Ingredients/models";
 import { getIngredientQuantity, getIngredientName } from "../helper";
 import { IngredientItem, Recipe } from "../models";
 import AddIngredientItemForm from "./AddIngredientItemForm";
-import { RecipeService } from "../../../services/RecipeService";
+import { RecipeDbHelper } from "../../../repositories/RecipeDbHelper";
 import { CartDbHelper } from "../../../repositories/CartDbHelper";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faShoppingCart, faCartPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
@@ -41,8 +41,8 @@ interface StateProps {
 interface DispatchProps {
     fetchIngredientItemsStart: typeof recipeActions.fetchIngredientItemsStart;
     fetchIngredientItemsStop: typeof recipeActions.fetchIngredientItemsStop;
-    fetchCartItemsStart: typeof cartActions.fetchCartItemsStart;
-    fetchCartItemsStop: typeof cartActions.fetchCartItemsStop;
+    //fetchCartItemsStart: typeof cartActions.fetchCartItemsStart;
+    //fetchCartItemsStop: typeof cartActions.fetchCartItemsStop;
     updateIngredientItemsStart: typeof recipeActions.updateIngredientItemsStart;
     updateIngredientItemsStop: typeof recipeActions.updateIngredientItemsStop;
     updateIngredientItems: typeof recipeActions.updateIngredientItems;
@@ -65,10 +65,10 @@ class IngredientsElementBase extends PureComponent<Props, State> {
 
     public componentDidMount() {
         const { id, fetchIngredientItemsStart, fetchIngredientItemsStop, auth,
-            updateIngredientItems, cartItems, fetchCartItemsStart, fetchCartItemsStop, updateCartItems } = this.props;
+            updateIngredientItems, cartItems, updateCartItems } = this.props;
 
         fetchIngredientItemsStart();
-        RecipeService.getIngredients(id)
+        RecipeDbHelper.getIngredients(id)
             .then((ingredientItems) => {
                 if (ingredientItems.length > 0) {
                     updateIngredientItems(ingredientItems);
@@ -81,16 +81,16 @@ class IngredientsElementBase extends PureComponent<Props, State> {
             });
 
         if (cartItems.length === 0) {
-            fetchCartItemsStart();
+            //fetchCartItemsStart();
             CartDbHelper.getCartItems(auth.uid)
                 .then((cartItems) => {
                     if (cartItems.length > 0) {
                         updateCartItems(cartItems);
                     }
-                    fetchCartItemsStop();
+                    //fetchCartItemsStop();
                 })
                 .catch(() => {
-                    fetchCartItemsStop();
+                    //fetchCartItemsStop();
                     toast.error("Error fetching the cart items!");
                 });
         }
@@ -100,7 +100,7 @@ class IngredientsElementBase extends PureComponent<Props, State> {
         const { id } = this.props;
 
         this.props.updateIngredientItemsStart();
-        RecipeService.deleteIngredientItem(id, ingredientItemId)
+        RecipeDbHelper.deleteIngredientItem(id, ingredientItemId)
             .then(() => {
                 this.props.deleteIngredientItem(ingredientItemId);
                 this.props.updateIngredientItemsStop();
@@ -148,10 +148,10 @@ class IngredientsElementBase extends PureComponent<Props, State> {
         const { currentRemoveGroup } = this.state;
 
         this.props.updateIngredientItemsStart();
-        RecipeService.deleteIngredientGroup(id, currentRemoveGroup)
+        RecipeDbHelper.deleteIngredientGroup(id, currentRemoveGroup)
             .then((groups) => {
                 this.props.updateRecipe({...recipe, ingredientGroups: groups});
-                RecipeService.deleteIngredientOfGroup(id, currentRemoveGroup)
+                RecipeDbHelper.deleteIngredientOfGroup(id, currentRemoveGroup)
                     .then(ingredientItems => {
                         this.props.updateIngredientItems(ingredientItems);
                         this.props.updateIngredientItemsStop();
@@ -285,8 +285,8 @@ const mapStateToProps = (state: ApplicationState) => ({
 const mapDispatchToProps = (dispatch: Dispatch) => ({
     fetchIngredientItemsStart: bindActionCreators(recipeActions.fetchIngredientItemsStart, dispatch),
     fetchIngredientItemsStop: bindActionCreators(recipeActions.fetchIngredientItemsStop, dispatch),
-    fetchCartItemsStart: bindActionCreators(cartActions.fetchCartItemsStart, dispatch),
-    fetchCartItemsStop: bindActionCreators(cartActions.fetchCartItemsStop, dispatch),
+    //fetchCartItemsStart: bindActionCreators(cartActions.fetchCartItemsStart, dispatch),
+    //fetchCartItemsStop: bindActionCreators(cartActions.fetchCartItemsStop, dispatch),
     updateIngredientItemsStart: bindActionCreators(recipeActions.updateIngredientItemsStart, dispatch),
     updateIngredientItemsStop: bindActionCreators(recipeActions.updateIngredientItemsStop, dispatch),
     updateIngredientItems: bindActionCreators(recipeActions.updateIngredientItems, dispatch),

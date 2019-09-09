@@ -1,5 +1,6 @@
 import { db } from "../config";
 import { Ingredient } from "../modules/Ingredients/models";
+import { DbHelper } from "./DbHelper";
 
 export class CartDbHelper {
     public static async getCartItems(userid: string): Promise<Ingredient[]> {
@@ -31,18 +32,14 @@ export class CartDbHelper {
         if (cart.exists) {
             const items = cart.data().items;
 
-            if (items.includes(name)) {
-                return null;
+            const ingredientName = await DbHelper.arrayPushUnique(cartRef, items, "items", name)
+            if(ingredientName) {
+                return {
+                    name: ingredientName
+                }
             }
-            items.push(name);
-            await cartRef.set({ items });
         }
-        else {
-            await cartRef.set({ items: [name] });
-        }
-        return {
-            name,
-        };
+        return Promise.resolve(null);
     }
 
     public static async deleteItem(userid: string, name: string): Promise<void> {

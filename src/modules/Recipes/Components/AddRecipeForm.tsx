@@ -9,7 +9,7 @@ import { ApplicationState } from "../../..";
 import { ButtonPrimary } from "../../../layout/Styles/Buttons";
 import { StyledPaper } from "../../../layout/Styles/Sections";
 import * as recipesActions from "../../../store/recipes/recipesActions";
-import { RecipeService } from "../../../services/RecipeService";
+import { RecipeDbHelper } from "../../../repositories/RecipeDbHelper";
 
 interface State {
     newRecipeName: string;
@@ -55,7 +55,7 @@ class AddRecipeFormBase extends PureComponent<Props, State> {
         }
         
         this.props.updateRecipesStart();
-        RecipeService.addRecipe(newRecipeName, auth.uid)
+        RecipeDbHelper.addRecipe(newRecipeName, auth.uid)
             .then((recipe) => {
                 this.props.addRecipe(recipe);
                 this.props.updateRecipesStop();

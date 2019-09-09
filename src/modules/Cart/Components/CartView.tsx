@@ -15,22 +15,22 @@ const CartView = () => {
     const cartItems = useSelector((state: ApplicationState) => state.cart.cartItems);
     const cartLoading = useSelector((state: ApplicationState) => state.cart.loading);
     const cartUpdating = useSelector((state: ApplicationState) => state.cart.updating);
-    const firebase = useSelector((state: ApplicationState) => state.firebase);
+    const auth = useSelector((state: ApplicationState) => state.firebase.auth);
 
     useEffect(() => {
         const fetch = async () => {
-            dispatch(cartService.fetchAsync(firebase.auth.uid));
+            dispatch(cartService.fetchAsync(auth.uid));
         }
 
         fetch();
-    }, [firebase.auth.uid, dispatch]);
+    }, [auth.uid, dispatch]);
 
     const deleteAllCartItems = () => async () => {
-        dispatch(cartService.deleteAllItemsAsync(firebase.auth.uid));
+        dispatch(cartService.deleteAllItemsAsync(auth.uid));
     }
 
     const deleteCartItem = (cartItemName: string) => async () => {
-        dispatch(cartService.deleteItemAsync(firebase.auth.uid, cartItemName));
+        dispatch(cartService.deleteItemAsync(auth.uid, cartItemName));
     }
 
     const renderCartItems = () => {

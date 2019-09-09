@@ -8,7 +8,7 @@ import { ButtonPrimary } from "../../../layout/Styles/Buttons";
 import { StyledPaper } from "../../../layout/Styles/Sections";
 import * as recipeActions from "../../../store/recipes/recipeActions";
 import { Recipe, Step } from "../models";
-import { RecipeService } from "../../../services/RecipeService";
+import { RecipeDbHelper } from "../../../repositories/RecipeDbHelper";
 
 interface OwnProps {
     editing: boolean;
@@ -57,7 +57,7 @@ class AddStepFormBase extends PureComponent<Props, State> {
         const { recipe } = this.props;
 
         this.props.updateStepsStart();
-        RecipeService.addStep(recipe.id, newStep)
+        RecipeDbHelper.addStep(recipe.id, newStep)
             .then((step) => {
                 this.props.addStep(step);
                 this.props.updateStepsStop();

@@ -1,35 +1,24 @@
-import React, { PureComponent } from "react";
-import { connect } from "react-redux";
+import React from "react";
+import { useSelector } from "react-redux";
 import { Redirect, Route } from "react-router-dom";
-import { RouteProps } from "react-router-dom";
-import { compose } from "redux";
 import { ApplicationState } from "..";
+import { Loader } from "semantic-ui-react";
 
-interface StateProps {
-  auth: any;
-}
-
-type Props = StateProps & RouteProps;
-
-class GuessRouteBase extends PureComponent<Props> {
-  public render() {
-    const { auth } = this.props;
+const GuessRoute = (props) => {
+    const auth = useSelector((state: ApplicationState) => state.firebase.auth);
 
     return (
-      (auth.isLoaded && auth.isEmpty) ?
-        <Route {...this.props} />
-        :
-        <Redirect to="/" />
+        auth.isLoaded ?
+            <>
+                {auth.isEmpty ?
+                    <Route {...props} />
+                    :
+                    <Redirect to="/" />
+                }
+            </>
+            :
+            <Loader active={true} inline="centered" />
     );
-  }
 }
-
-const mapStateToProps = (state: ApplicationState) => ({
-  auth: state.firebase.auth,
-});
-
-const GuessRoute = compose(
-  connect<StateProps>(mapStateToProps),
-)(GuessRouteBase);
 
 export default GuessRoute;

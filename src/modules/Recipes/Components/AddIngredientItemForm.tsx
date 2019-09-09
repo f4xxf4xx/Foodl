@@ -13,8 +13,8 @@ import * as ingredientActions from "../../../store/ingredients/ingredientActions
 import * as recipeActions from "../../../store/recipes/recipeActions";
 import { Ingredient } from "../../Ingredients/models";
 import { IngredientItem, Recipe } from "../models";
-import { IngredientService } from "../../../services/IngredientService";
-import { RecipeService } from "../../../services/RecipeService";
+import { IngredientDbHelper } from "../../../repositories/IngredientDbHelper";
+import { RecipeDbHelper } from "../../../repositories/RecipeDbHelper";
 import { IngredientType, IngredientPrepType } from "../constants";
 
 interface OwnProps {
@@ -24,7 +24,7 @@ interface OwnProps {
 interface StateProps {
     recipe: Recipe;
     ingredients: Ingredient[];
-    loadingIngredients: boolean;
+    //loadingIngredients: boolean;
 }
 
 interface State {
@@ -41,8 +41,6 @@ interface DispatchProps {
     updateIngredientItems: typeof recipeActions.updateIngredientItems;
     addIngredientItem: typeof recipeActions.addIngredientItem;
     updateIngredients: typeof ingredientActions.updateIngredients;
-    fetchIngredientsStart: typeof ingredientActions.fetchIngredientsStart;
-    fetchIngredientsStop: typeof ingredientActions.fetchIngredientsStop;
     addIngredient: typeof ingredientActions.addIngredient;
     updateRecipe: typeof recipeActions.updateRecipe;
 }
@@ -69,14 +67,14 @@ class AddIngredientItemFormBase extends PureComponent<Props, State> {
 
     public componentDidMount() {
         if (this.props.ingredients.length === 0) {
-            this.props.fetchIngredientsStart();
-            IngredientService.getIngredients()
+            //this.props.fetchIngredientsStart();
+            IngredientDbHelper.getIngredients()
                 .then((ingredients) => {
                     this.props.updateIngredients(ingredients);
-                    this.props.fetchIngredientsStop();
+                    //this.props.fetchIngredientsStop();
                 })
                 .catch(() => {
-                    this.props.fetchIngredientsStop();
+                    //this.props.fetchIngredientsStop();
                     toast.error("Error fetching the ingredients!");
                 });
         }
@@ -135,7 +133,7 @@ class AddIngredientItemFormBase extends PureComponent<Props, State> {
         }
 
         if (!ingredients.find((i) => i.name === newIngredientItem.name)) {
-            IngredientService.addIngredient(newIngredientItem.name)
+            IngredientDbHelper.addIngredient(newIngredientItem.name)
                 .then((ingredient) => {
                     if (ingredient) {
                         this.props.addIngredient(ingredient);
@@ -148,7 +146,7 @@ class AddIngredientItemFormBase extends PureComponent<Props, State> {
         }
 
         if(!recipe.ingredientGroups || !recipe.ingredientGroups.includes(newIngredientItem.group)) {
-            RecipeService.addIngredientGroup(recipe.id, newIngredientItem.group)
+            RecipeDbHelper.addIngredientGroup(recipe.id, newIngredientItem.group)
                 .then((groups) => {
                     if (groups) {
                         this.props.updateRecipe({...recipe, ingredientGroups: groups});
@@ -161,7 +159,7 @@ class AddIngredientItemFormBase extends PureComponent<Props, State> {
         }
         
         this.props.updateIngredientItemsStart();
-        RecipeService.addIngredientItem(recipe.id, newIngredientItem)
+        RecipeDbHelper.addIngredientItem(recipe.id, newIngredientItem)
             .then((ingredientItem) => {
                 this.props.addIngredientItem(ingredientItem);
                 this.props.updateIngredientItemsStop();
@@ -303,7 +301,7 @@ class AddIngredientItemFormBase extends PureComponent<Props, State> {
 const mapStateToProps = (state: ApplicationState) => ({
     recipe: state.recipe.recipe,
     ingredients: state.ingredients.ingredients,
-    loadingIngredients: state.ingredients.loadingIngredients,
+    //loadingIngredients: state.ingredients.loadingIngredients,
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
@@ -312,8 +310,8 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
     updateIngredientItems: bindActionCreators(recipeActions.updateIngredientItems, dispatch),
     addIngredientItem: bindActionCreators(recipeActions.addIngredientItem, dispatch),
     updateIngredients: bindActionCreators(ingredientActions.updateIngredients, dispatch),
-    fetchIngredientsStart: bindActionCreators(ingredientActions.fetchIngredientsStart, dispatch),
-    fetchIngredientsStop: bindActionCreators(ingredientActions.fetchIngredientsStop, dispatch),
+    //fetchIngredientsStart: bindActionCreators(ingredientActions.fetchIngredientsStart, dispatch),
+    //fetchIngredientsStop: bindActionCreators(ingredientActions.fetchIngredientsStop, dispatch),
     addIngredient: bindActionCreators(ingredientActions.addIngredient, dispatch),
     updateRecipe: bindActionCreators(recipeActions.updateRecipe, dispatch)
 });

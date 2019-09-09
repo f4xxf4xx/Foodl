@@ -4,17 +4,15 @@ import { Ingredient } from "../../modules/Ingredients/models";
 export interface IngredientState {
     ingredients: Ingredient[];
     loading: boolean;
-    loadingIngredients: boolean;
     updating: boolean;
-    updatingIngredients: boolean;
+    newIngredient: any;
 }
 
 const initialState: IngredientState = {
     ingredients: [],
     loading: false,
-    loadingIngredients: false,
     updating: false,
-    updatingIngredients: false
+    newIngredient: null
 };
 
 export const ingredientReducer = createReducer(initialState, {
@@ -23,12 +21,6 @@ export const ingredientReducer = createReducer(initialState, {
     },
     SET_INGREDIENTS_UPDATING: (state, action) => {
         state.loading = action.payload;
-    },
-    FETCH_INGREDIENTS_START: (state) => {
-        state.loadingIngredients = true;
-    },
-    FETCH_INGREDIENTS_STOP: (state) => {
-        state.loadingIngredients = false;
     },
     UPDATE_INGREDIENTS: (state, action) => {
         state.ingredients = action.payload;
@@ -44,4 +36,7 @@ export const ingredientReducer = createReducer(initialState, {
     DELETE_INGREDIENT: (state, action) => {
         state.ingredients = state.ingredients.filter((i) => i.id !== action.payload);
     },
+    UPDATE_NEW_INGREDIENT: (state, action) => {
+        state.newIngredient = action.payload;
+    }
 });

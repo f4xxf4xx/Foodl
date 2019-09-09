@@ -1,70 +1,35 @@
 import { Paper, Table, TableBody, TableCell, TableHead, TableRow, Typography } from "@material-ui/core";
 import { DeleteForever as DeleteIcon } from "@material-ui/icons";
-import React, { PureComponent } from "react";
-import { connect } from "react-redux";
-import { RouteProps } from "react-router-dom";
-import { toast } from "react-toastify";
-import { bindActionCreators, compose, Dispatch } from "redux";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Loader } from "semantic-ui-react";
 import { ApplicationState } from "../../..";
 import { ButtonError } from "../../../layout/Styles/Buttons";
-import * as ingredientActions from "../../../store/ingredients/ingredientActions";
-import { Ingredient } from "../models";
 import AddIngredientForm from "./AddIngredientForm";
-import { IngredientService } from "../../../services/IngredientService";
+import * as ingredientService from "../../../services/ingredientService";
 
-interface StateProps {
-    ingredients: Ingredient[];
-    loadingIngredients: boolean;
-    updatingIngredients: boolean;
-    auth: any;
-}
+const IngredientsView = () => {
+    const dispatch = useDispatch();
+    //store
+    const ingredients = useSelector((state: ApplicationState) => state.ingredients.ingredients);
+    const loading = useSelector((state: ApplicationState) => state.ingredients.loading);
+    const updating = useSelector((state: ApplicationState) => state.ingredients.updating);
 
-interface DispatchProps {
-    fetchIngredientsStart: typeof ingredientActions.fetchIngredientsStart;
-    fetchIngredientsStop: typeof ingredientActions.fetchIngredientsStop;
-    updateIngredientsStart: typeof ingredientActions.updateIngredientsStart;
-    updateIngredientsStop: typeof ingredientActions.updateIngredientsStop;
-    updateIngredients: typeof ingredientActions.updateIngredients;
-    deleteIngredient: typeof ingredientActions.deleteIngredient;
-}
+    useEffect(() => {
+        const fetch = async () => {
+            dispatch(ingredientService.fetchAsync());
+        }
+        fetch();
+    }, [dispatch]);
 
-type Props = StateProps & DispatchProps & RouteProps;
-
-class IngredientsViewBase extends PureComponent<Props> {
-    public componentDidMount() {
-        this.props.fetchIngredientsStart();
-        return IngredientService.getIngredients()
-            .then((ingredients) => {
-                this.props.updateIngredients(ingredients);
-                this.props.fetchIngredientsStop();
-            })
-            .catch(() => {
-                toast.error("Error fetching the ingredients");
-                this.props.fetchIngredientsStop();
-            });
+    const deleteIngredient = (ingredientId: string) => async () => {
+        dispatch(ingredientService.deleteIngredientAsync(ingredientId));
     }
 
-    public deleteIngredient = (ingredientId: string) => (event: React.MouseEvent<HTMLButtonElement>) => {
-        this.props.updateIngredientsStart();
-        IngredientService.deleteIngredient(ingredientId)
-            .then(() => {
-                this.props.deleteIngredient(ingredientId);
-                this.props.updateIngredientsStop();
-                toast.success("Deleted!");
-            })
-            .catch(() => {
-                this.props.updateIngredientsStop();
-                toast.error("Error deleting the ingredient!");
-            });
-    }
-
-    public renderIngredients() {
-        const { ingredients, updatingIngredients, loadingIngredients } = this.props;
-
+    const renderIngredients = () => {
         return (
             <Paper>
-                {loadingIngredients ?
+                {loading ?
                     <Loader active={true} inline="centered" />
                     :
                     <Table>
@@ -81,8 +46,8 @@ class IngredientsViewBase extends PureComponent<Props> {
                                     <TableCell>
                                         <ButtonError
                                             width="15"
-                                            disabled={updatingIngredients}
-                                            onClick={this.deleteIngredient(ingredient.id)}
+                                            disabled={updating}
+                                            onClick={deleteIngredient(ingredient.id)}
                                         >
                                             <DeleteIcon />
                                         </ButtonError>
@@ -96,40 +61,17 @@ class IngredientsViewBase extends PureComponent<Props> {
         );
     }
 
-    public render() {
-        const { updatingIngredients } = this.props;
+    return (
+        <>
+            <Typography variant="h3">Ingredients</Typography>
+            <Typography variant="subtitle1">
+                Here lies the list of possible ingredients
+            </Typography>
+            <AddIngredientForm />
+            {renderIngredients()}
+        </>
+    );
 
-        return (
-            <>
-                <Typography variant="h3">Ingredients</Typography>
-                <Typography variant="subtitle1">
-                    Here lies the list of possible ingredients
-                </Typography>
-                <AddIngredientForm updating={updatingIngredients} />
-                {this.renderIngredients()}
-            </>
-        );
-    }
 }
-
-const mapStateToProps = (state: ApplicationState) => ({
-    ingredients: state.ingredients.ingredients,
-    loadingIngredients: state.ingredients.loadingIngredients,
-    updatingIngredients: state.ingredients.updatingIngredients,
-    auth: state.firebase.auth,
-});
-
-const mapDispatchToProps = (dispatch: Dispatch) => ({
-    fetchIngredientsStart: bindActionCreators(ingredientActions.fetchIngredientsStart, dispatch),
-    fetchIngredientsStop: bindActionCreators(ingredientActions.fetchIngredientsStop, dispatch),
-    updateIngredientsStart: bindActionCreators(ingredientActions.updateIngredientsStart, dispatch),
-    updateIngredientsStop: bindActionCreators(ingredientActions.updateIngredientsStop, dispatch),
-    updateIngredients: bindActionCreators(ingredientActions.updateIngredients, dispatch),
-    deleteIngredient: bindActionCreators(ingredientActions.deleteIngredient, dispatch),
-});
-
-const IngredientsView = compose(
-    connect<StateProps, DispatchProps>(mapStateToProps, mapDispatchToProps),
-)(IngredientsViewBase);
 
 export default IngredientsView;

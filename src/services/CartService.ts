@@ -1,67 +1,67 @@
 import { toast } from "react-toastify";
 import { db } from "../config";
 import { Ingredient } from "../modules/Ingredients/models";
-import * as cartActions2 from "../store/cart/cartActions2";
 import { CartDbHelper } from "../repositories/CartDbHelper";
+import { setCartLoading, updateCartItems, setCartUpdating, deleteAllCartItems, deleteCartItem, addCartItem, updateNewCartItem } from "../store/cart/cartActions";
 
 export const fetchAsync = (uid: string) => {
     return async dispatch => {
-        dispatch(cartActions2.setCartLoading(true));
+        dispatch(setCartLoading(true));
         try {
             const ingredients = await CartDbHelper.getCartItems(uid);
-            dispatch(cartActions2.updateCartItems(ingredients));
+            dispatch(updateCartItems(ingredients));
         }
         catch (error) {
             toast.error(error);
         }
         finally {
-            dispatch(cartActions2.setCartLoading(false));
+            dispatch(setCartLoading(false));
         }
     }
 }
 
 export const deleteAllItemsAsync = (uid: string) => {
     return async dispatch => {
-        dispatch(cartActions2.setCartUpdating(true));
+        dispatch(setCartUpdating(true));
         try {
             await CartDbHelper.deleteAllItems(uid);
-            dispatch(cartActions2.deleteAllCartItems());
+            dispatch(deleteAllCartItems());
             toast.success("Deleted all!");
         }
         catch (error) {
             toast.error(error);
         }
         finally {
-            dispatch(cartActions2.setCartUpdating(false));
+            dispatch(setCartUpdating(false));
         };
     }
 }
 
 export const deleteItemAsync = (uid: string, cartItemName: string) => {
     return async dispatch => {
-        dispatch(cartActions2.setCartUpdating(true));
+        dispatch(setCartUpdating(true));
         try {
             await CartDbHelper.deleteItem(uid, cartItemName);
-            dispatch(cartActions2.deleteCartItem(cartItemName));
+            dispatch(deleteCartItem(cartItemName));
             toast.success("Deleted!");
         }
         catch (error) {
             toast.error(error);
         }
         finally {
-            dispatch(cartActions2.setCartUpdating(false));
+            dispatch(setCartUpdating(false));
         }
     }
 }
 
 export const addItemAsync = (uid: string, cartItemName: string) => {
     return async dispatch => {
-        dispatch(cartActions2.setCartUpdating(true));
+        dispatch(setCartUpdating(true));
         try {
             const ingredient = await CartDbHelper.addItem(uid, cartItemName);
             if (ingredient) {
-                dispatch(cartActions2.addCartItem(ingredient));
-                dispatch(cartActions2.updateCurrentSelectedIngredient(null));
+                dispatch(addCartItem(ingredient));
+                dispatch(updateNewCartItem(null));
                 toast.success("Added!");
             }
             else {
@@ -72,7 +72,7 @@ export const addItemAsync = (uid: string, cartItemName: string) => {
             toast.error(error);
         }
         finally {
-            dispatch(cartActions2.setCartUpdating(false));
+            dispatch(setCartUpdating(false));
         }
     }
 }
@@ -80,7 +80,7 @@ export const addItemAsync = (uid: string, cartItemName: string) => {
 //Unused, but working way to do realtime fetches
 export const fetchRealTimeAsync = (uid: string) => {
     return async dispatch => {
-        dispatch(cartActions2.setCartLoading(true));
+        dispatch(setCartLoading(true));
         try {
             return await db.collection("carts").doc(uid).onSnapshot((snapshot) => {
                 const items = snapshot.data().items;
@@ -89,14 +89,14 @@ export const fetchRealTimeAsync = (uid: string) => {
                         name: ingredient,
                     };
                 });
-                dispatch(cartActions2.updateCartItems(ingredients));
+                dispatch(updateCartItems(ingredients));
             });
         }
         catch (error) {
             toast.error(error);
         }
         finally {
-            dispatch(cartActions2.setCartLoading(false));
+            dispatch(setCartLoading(false));
         }
     }
 }

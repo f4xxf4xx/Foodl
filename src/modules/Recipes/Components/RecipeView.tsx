@@ -11,7 +11,7 @@ import { Recipe } from "../models";
 import IngredientsElement from "./IngredientsElement";
 import RecipeHeaderElement from "./RecipeHeaderElement";
 import StepsElement from "./StepsElement";
-import { RecipeService } from "../../../services/RecipeService";
+import { RecipeDbHelper } from "../../../repositories/RecipeDbHelper";
 import { Grid, Box } from "@material-ui/core";
 
 interface State {
@@ -51,7 +51,7 @@ class RecipeViewBase extends PureComponent<Props, State> {
         const { auth } = this.props;
 
         this.props.fetchRecipeStart();
-        RecipeService.getRecipeBySlug(auth.uid, id)
+        RecipeDbHelper.getRecipeBySlug(auth.uid, id)
             .then((recipe) => {
                 this.props.updateRecipe(recipe);
                 this.props.fetchRecipeStop();
