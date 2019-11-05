@@ -150,7 +150,7 @@ class IngredientsElementBase extends PureComponent<Props, State> {
         this.props.updateIngredientItemsStart();
         RecipeDbHelper.deleteIngredientGroup(id, currentRemoveGroup)
             .then((groups) => {
-                this.props.updateRecipe({...recipe, ingredientGroups: groups});
+                this.props.updateRecipe({ ...recipe, ingredientGroups: groups });
                 RecipeDbHelper.deleteIngredientOfGroup(id, currentRemoveGroup)
                     .then(ingredientItems => {
                         this.props.updateIngredientItems(ingredientItems);
@@ -173,10 +173,10 @@ class IngredientsElementBase extends PureComponent<Props, State> {
         this.setState({ openedModal: false, currentRemoveGroup: null });
     }
 
-    public renderIngredientGroup = (group: string, index: number) => {
+    public renderIngredientGroup = (groupsLength: number, group: string, index: number) => {
         const { ingredientItems, editing, updatingIngredientItems } = this.props;
         const { openedModal } = this.state;
-        const groupIngredientItems = ingredientItems.filter(ingredientItem => group ? ingredientItem.group === group : ingredientItem.group === undefined);
+        const groupIngredientItems = ingredientItems.filter(ingredientItem => ingredientItem.group === group);
 
         if (!groupIngredientItems || groupIngredientItems.length === 0) {
             return null;
@@ -185,9 +185,11 @@ class IngredientsElementBase extends PureComponent<Props, State> {
         return (
             <React.Fragment key={index}>
                 <Grid justify="space-between" container={true}>
-                    <Grid item={true}>
-                        <Typography variant="h6">{group ? group : "Other"}</Typography>
-                    </Grid>
+                    {groupsLength > 0 &&
+                        <Grid item={true}>
+                            <Typography variant="h6">Other</Typography>
+                        </Grid>
+                    }
                     <Grid item={true}>
                         {editing && group && <ButtonSecondary onClick={this.handleOpenModal(group)} color="secondary">Delete group</ButtonSecondary>}
                     </Grid>
@@ -261,9 +263,9 @@ class IngredientsElementBase extends PureComponent<Props, State> {
                     :
                     <>
                         {ingredientGroups && ingredientGroups.map((ingredientGroup, index) => {
-                            return this.renderIngredientGroup(ingredientGroup, index);
+                            return this.renderIngredientGroup(ingredientGroups.length, ingredientGroup, index);
                         })}
-                        {this.renderIngredientGroup(null, null)}
+                        {ingredientGroups && this.renderIngredientGroup(ingredientGroups.length, null, null)}
                     </>
                 }
                 <Divider />

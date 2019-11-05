@@ -99,13 +99,13 @@ const AddIngredientItemForm = (props: Props) => {
             dispatch(ingredientService.addIngredientAsync(newIngredientItem.name));
         }
 
-        if (!recipe.ingredientGroups || !recipe.ingredientGroups.includes(newIngredientItem.group)) {
+        if (newIngredientItem.group && (!recipe.ingredientGroups || !recipe.ingredientGroups.includes(newIngredientItem.group))) {
             dispatch(recipeService.addIngredientGroupAsync(recipe, newIngredientItem.group));
         }
 
         try {
             dispatch(recipeService.addIngredientItemAsync(recipe, newIngredientItem));
-            setNewIngredientItem(null);
+            setNewIngredientItem({ name: "", quantity: "", type: "", prepType: "", group: null });
             setCurrentSelectIngredient(null);
             setCurrentSelectType(null);
             setCurrentPrepType(null);

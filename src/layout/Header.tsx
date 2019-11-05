@@ -19,10 +19,7 @@ type Props = RouteComponentProps & OwnProps;
 
 const Header = (props: Props) => {
     const auth = useSelector((state: ApplicationState) => state.firebase.auth);
-    const firebase2 = useSelector((state: ApplicationState) => state.firebase);
 
-    console.log(firebase2);
-    
     const onSignOutClick = () => {
         firebase.auth().signOut();
         props.history.push("/");

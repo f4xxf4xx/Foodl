@@ -25,7 +25,6 @@ const initialRecipesState: RecipesState = {
 export const recipesReducer = createReducer(initialRecipesState, {
     FETCH_RECIPES_START: (state) => {
         state.loading = true;
-        state.filters = null;
     },
     FETCH_RECIPES_STOP: (state) => {
         state.loading = false;

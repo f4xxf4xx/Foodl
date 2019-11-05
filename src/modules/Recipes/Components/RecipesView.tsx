@@ -35,7 +35,8 @@ const RecipesView = (props: Props) => {
         }
 
         fetch();
-    }, [auth.uid, dispatch]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [auth.uid]);
 
     const deleteRecipe = (recipeId: string) => async () => {
         dispatch(recipeService.deleteAsync(recipeId));
@@ -81,7 +82,7 @@ const RecipesView = (props: Props) => {
                 label: RecipeType[type],
             };
         });
-        typeOptions.unshift({ label: "No filters", value: null })
+        typeOptions.unshift({ label: "No filters", value: null });
 
         return (
             <>

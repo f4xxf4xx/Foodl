@@ -1,7 +1,7 @@
 import { Box, TextField, Typography } from "@material-ui/core";
 import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { RouteComponentProps } from "react-router-dom";
+import { RouteComponentProps, withRouter } from "react-router-dom";
 import { ApplicationState } from "../../..";
 import { ButtonPrimary } from "../../../layout/Styles/Buttons";
 import { StyledPaper } from "../../../layout/Styles/Sections";
@@ -9,7 +9,7 @@ import * as recipeService from "../../../services/recipeService";
 
 type Props = RouteComponentProps;
 
-const AddRecipeForm = () => {
+const AddRecipeForm = (props: Props) => {
     const dispatch = useDispatch();
     const [newRecipeName, setNewRecipeName] = useState("");
     //store
@@ -26,14 +26,13 @@ const AddRecipeForm = () => {
         }
     }
 
-    const addRecipe = () => {
+    const addRecipe = async () => {
         if (newRecipeName === "") {
             return;
         }
 
-        dispatch(recipeService.addRecipeAsync(newRecipeName, auth.uid));
+        dispatch(recipeService.addRecipeAsync(newRecipeName, auth.uid, props.history));
         setNewRecipeName("");
-        // props.history.push(`/recipe/${recipe.slug}`);
     }
 
     const preventDefault = (e: React.FormEvent<HTMLFormElement>) => {
@@ -67,4 +66,4 @@ const AddRecipeForm = () => {
 
 }
 
-export default AddRecipeForm;
+export default withRouter(AddRecipeForm);
