@@ -19,13 +19,63 @@ class App extends Component {
       <ThemeProvider theme={foodlTheme}>
         <MuiThemeProvider theme={foodlTheme}>
           <Switch>
-            <Route exact={true} path="/" render={() => <MainLayout><HomePage /></MainLayout>} />
-            <PrivateRoute path="/recipes" render={() => <MainLayout><RecipesView /></MainLayout>} />
-            <PrivateRoute path="/recipe/:id" render={() => <MainLayout><RecipeView /></MainLayout>} />
-            <PrivateRoute path="/ingredients" render={() => <MainLayout><IngredientsView /></MainLayout>} />
-            <PrivateRoute path="/cart" render={() => <MainLayout><CartView /></MainLayout>} />/>
-            <GuessRoute path="/login" render={() => <MainLayout><LoginView /></MainLayout>} />/>
-            <GuessRoute path="/register" render={() => <MainLayout><LoginView /></MainLayout>} />/>
+            <Route
+              exact={true}
+              path="/"
+              render={() => (
+                <MainLayout>
+                  <HomePage />
+                </MainLayout>
+              )}
+            />
+            <PrivateRoute
+              path="/recipes"
+              render={() => (
+                <MainLayout>
+                  <RecipesView />
+                </MainLayout>
+              )}
+            />
+            <PrivateRoute
+              path="/recipe/:id"
+              render={() => (
+                <MainLayout>
+                  <RecipeView />
+                </MainLayout>
+              )}
+            />
+            <PrivateRoute
+              path="/ingredients"
+              render={() => (
+                <MainLayout>
+                  <IngredientsView />
+                </MainLayout>
+              )}
+            />
+            <PrivateRoute
+              path="/cart"
+              render={() => (
+                <MainLayout>
+                  <CartView />
+                </MainLayout>
+              )}
+            />
+            <GuessRoute
+              path="/login"
+              render={() => (
+                <MainLayout>
+                  <LoginView />
+                </MainLayout>
+              )}
+            />
+            <GuessRoute
+              path="/register"
+              render={() => (
+                <MainLayout>
+                  <LoginView />
+                </MainLayout>
+              )}
+            />
           </Switch>
         </MuiThemeProvider>
       </ThemeProvider>

@@ -15,7 +15,11 @@ interface State {
   drawerOpen: boolean;
 }
 
-type Props = StateProps;
+interface OwnProps {
+  children: any;
+}
+
+type Props = OwnProps & StateProps;
 
 class MainLayoutBase extends React.Component<Props, State> {
   constructor(props: Props) {
@@ -29,7 +33,7 @@ class MainLayoutBase extends React.Component<Props, State> {
     this.setState((prevProps) => ({
       drawerOpen: !prevProps.drawerOpen,
     }));
-  }
+  };
 
   public render() {
     const { auth } = this.props;
@@ -39,15 +43,10 @@ class MainLayoutBase extends React.Component<Props, State> {
       <Wrapper>
         <CssBaseline />
         <Header toggleDrawer={this.toggleDrawer} />
-        {!auth.isEmpty &&
-          <Sidebar
-            drawerOpen={drawerOpen}
-            toggleDrawer={this.toggleDrawer}
-          />
-        }
-        <div className="main">
-          {this.props.children}
-        </div>
+        {!auth.isEmpty && (
+          <Sidebar drawerOpen={drawerOpen} toggleDrawer={this.toggleDrawer} />
+        )}
+        <div className="main">{this.props.children}</div>
       </Wrapper>
     );
   }
@@ -57,8 +56,8 @@ const mapStateToProps = (state: ApplicationState) => ({
   auth: state.firebase.auth,
 });
 
-const MainLayout = compose(
-  connect<StateProps>(mapStateToProps),
-)(MainLayoutBase);
+const MainLayout = compose(connect<StateProps>(mapStateToProps))(
+  MainLayoutBase
+);
 
 export default MainLayout;
