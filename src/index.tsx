@@ -1,17 +1,23 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
-import { firebaseReducer, getFirebase, reactReduxFirebase } from "react-redux-firebase";
+import {
+  firebaseReducer,
+  getFirebase,
+  reactReduxFirebase,
+} from "react-redux-firebase";
 import { BrowserRouter } from "react-router-dom";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { firestoreReducer, getFirestore, reduxFirestore } from "redux-firestore";
-import { configureStore } from "redux-starter-kit";
+import { configureStore } from "@reduxjs/toolkit";
 import thunk from "redux-thunk";
 import App from "./App";
 import { firebase } from "./config";
 import { cartReducer, CartState } from "./store/cart/cartReducer";
-import { ingredientReducer, IngredientState } from "./store/ingredients/ingredientReducer";
+import {
+  ingredientReducer,
+  IngredientState,
+} from "./store/ingredients/ingredientReducer";
 import { recipeReducer, RecipeState } from "./store/recipes/recipeReducer";
 import { recipesReducer, RecipesState } from "./store/recipes/recipesReducer";
 
@@ -49,13 +55,9 @@ const store = configureStore({
     recipes: recipesReducer,
     cart: cartReducer,
     firebase: firebaseReducer,
-    firestore: firestoreReducer,
   },
-  enhancers: [
-    reactReduxFirebase(firebase, rrfConfig),
-    reduxFirestore(firebase),
-  ],
-  middleware: [thunk.withExtraArgument({ getFirebase, getFirestore })],
+  enhancers: [reactReduxFirebase(firebase, rrfConfig)],
+  middleware: [thunk.withExtraArgument({ getFirebase })],
 });
 
 ReactDOM.render(
@@ -63,6 +65,6 @@ ReactDOM.render(
     <BrowserRouter basename={baseUrl}>
       <App />
     </BrowserRouter>
-  </Provider>
-  ,
-  rootElement);
+  </Provider>,
+  rootElement
+);
