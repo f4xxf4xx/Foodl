@@ -58,9 +58,9 @@ export const addItemAsync = (uid: string, cartItemName: string) => {
     return async dispatch => {
         dispatch(setCartUpdating(true));
         try {
-            const ingredient = await CartDbHelper.addItem(uid, cartItemName);
-            if (ingredient) {
-                dispatch(addCartItem(ingredient));
+            const success = await CartDbHelper.addItem(uid, cartItemName);
+            if (success) {
+                dispatch(addCartItem(cartItemName));
                 dispatch(updateNewCartItem(null));
                 toast.success("Added!");
             }

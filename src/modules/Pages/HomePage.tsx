@@ -11,15 +11,11 @@ const HomePage = () => {
     return (
         <>
             {isAuthenticated(auth) ?
-                <Typography variant="h6">
-                    Welcome, {auth.displayName}
-                </Typography>
+                <h6>Welcome, {auth.displayName}</h6>
                 :
                 <>
-                    <Typography variant="h3" align="center">Foodl</Typography>
-                    <Typography variant="h6" align="center">
-                        An app for foodies
-                    </Typography>
+                    <h3>Foodl</h3>
+                    <h6>An app for foodies</h6>
                     <Grid container={true} spacing={5}>
                         <Grid item={true} xs={12} sm={4} lg={4}>
                             <Typography align="center">

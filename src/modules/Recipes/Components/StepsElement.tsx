@@ -142,7 +142,7 @@ class StepsElementBase extends PureComponent<Props> {
 
     return (
       <>
-        <Typography variant="h5">Steps</Typography>
+        <h5>Steps</h5>
         {loadingSteps ?
           <Loader active={true} inline="centered" />
           :

@@ -63,7 +63,7 @@ const IngredientsView = () => {
 
     return (
         <>
-            <Typography variant="h3">Ingredients</Typography>
+            <h3>Ingredients</h3>
             <Typography variant="subtitle1">
                 Here lies the list of possible ingredients
             </Typography>

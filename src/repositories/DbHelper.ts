@@ -1,15 +1,15 @@
 export class DbHelper {
-    public static async arrayPushUnique(ref: firebase.firestore.DocumentReference, array: any, arrayName: string, item: string) {
+    public static async arrayPushUnique(ref: firebase.firestore.DocumentReference, array: any, arrayName: string, item: string): Promise<boolean> {
         if (array) {
             if (array.includes(item)) {
-                return null;
+                return false;
             }
             array.push(item);
             await ref.update({ [arrayName]: array });
         } else {
             await ref.update({ [arrayName]: [item] });
         }
-        return item;
+        return true;
     }
 
     public static async arrayAddUnique(ref: firebase.firestore.DocumentReference, array: any, arrayName: string, item: string) {
@@ -36,13 +36,13 @@ export class DbHelper {
             return [item];
         }
     }
-    
+
     public static async arrayDelete(ref: firebase.firestore.DocumentReference, array: any, arrayName: string, item: string) {
         if (array) {
-            if(array.includes(item)) {
+            if (array.includes(item)) {
                 const filteredItems = array.filter((arrayItem => arrayItem !== item));
 
-                await ref.update({ [arrayName]: filteredItems});
+                await ref.update({ [arrayName]: filteredItems });
                 return filteredItems;
             }
             return array;

@@ -6,8 +6,8 @@ import { ApplicationState } from "../../..";
 import { ButtonPrimary } from "../../../layout/Styles/Buttons";
 import { StyledPaper } from "../../../layout/Styles/Sections";
 import * as cartActions from "../../../store/cart/cartActions";
-import * as cartService from "../../../services/cartService";
-import * as ingredientService from "../../../services/ingredientService";
+import * as cartService from "../../../services/CartService";
+import * as ingredientService from "../../../services/IngredientService";
 
 const AddCartItemForm = () => {
     const dispatch = useDispatch();
@@ -61,7 +61,7 @@ const AddCartItemForm = () => {
 
     return (
         <StyledPaper>
-            <Typography variant="h6">New cart item</Typography>
+            <h6>New cart item</h6>
             <form onSubmit={preventDefault}>
                 {!ingredientsLoading &&
                     <>

@@ -202,7 +202,7 @@ class RecipeHeaderElementBase extends React.Component<Props, State> {
         )}
         <Grid justify="space-between" container={true}>
           <Grid item={true}>
-            <Typography variant="h3">{recipe.name}</Typography>
+            <h3>{recipe.name}</h3>
           </Grid>
           <Grid item={true}>
             <ButtonPrimary onClick={toggleEdit}>Edit</ButtonPrimary>

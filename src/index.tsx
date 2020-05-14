@@ -5,8 +5,7 @@ import { BrowserRouter } from "react-router-dom";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { configureStore } from "@reduxjs/toolkit";
-import thunk from "redux-thunk";
-import { firebaseReducer, reactReduxFirebase } from "react-redux-firebase";
+import { firebaseReducer, ReactReduxFirebaseProvider, FirebaseReducer } from "react-redux-firebase";
 import "react-toastify/dist/ReactToastify.css";
 import App from "./App";
 import { firebase } from "./config";
@@ -30,13 +29,27 @@ toast.configure({
   draggable: true,
 });
 
+interface UserProfile {
+  email: string
+}
+
+export interface Cart {
+  items: string[]
+}
+
+// create schema for the DB
+interface DBSchema {
+  todos: Cart
+  [name: string]: any
+}
+
+
 export interface ApplicationState {
   ingredients: IngredientState;
   recipe: RecipeState;
   recipes: RecipesState;
   cart: CartState;
-  firebase: any;
-  firestore: firebase.firestore.Firestore;
+  firebase: FirebaseReducer.Reducer<UserProfile, DBSchema>;
 }
 
 const rrfConfig = {
@@ -53,8 +66,6 @@ const store = configureStore({
     cart: cartReducer,
     firebase: firebaseReducer,
   },
-  enhancers: [reactReduxFirebase(firebase, rrfConfig)],
-  middleware: [thunk.withExtraArgument({ getFirebase })],
 });
 
 const rrfProps = {
@@ -65,9 +76,11 @@ const rrfProps = {
 
 ReactDOM.render(
   <Provider store={store}>
-    <BrowserRouter basename={baseUrl}>
-      <App />
-    </BrowserRouter>
+    <ReactReduxFirebaseProvider {...rrfProps}>
+      <BrowserRouter basename={baseUrl}>
+        <App />
+      </BrowserRouter>
+    </ReactReduxFirebaseProvider>
   </Provider>,
   rootElement
 );

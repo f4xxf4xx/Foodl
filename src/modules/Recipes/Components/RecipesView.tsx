@@ -207,7 +207,7 @@ const RecipesView = (props: Props) => {
 
     return (
         <>
-            <Typography variant="h3">My recipes</Typography>
+            <h3>My recipes</h3>
             <Typography paragraph={true}>
                 Here you can manage your own recipes
             </Typography>

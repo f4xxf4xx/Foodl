@@ -1,7 +1,6 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import { Redirect, Route } from "react-router-dom";
-import { Loader } from "semantic-ui-react";
 import { ApplicationState } from "..";
 
 const PrivateRoute = (props) => {
@@ -17,7 +16,7 @@ const PrivateRoute = (props) => {
                 }
             </>
             :
-            <Loader active={true} inline="centered" />
+            <p>Loading...</p>
     );
 }
 

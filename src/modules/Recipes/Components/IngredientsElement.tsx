@@ -257,7 +257,7 @@ class IngredientsElementBase extends PureComponent<Props, State> {
 
         return (
             <>
-                <Typography variant="h5">Ingredients ({ingredientItems.length})</Typography>
+                <h5>Ingredients ({ingredientItems.length})</h5>
                 {loadingIngredientItems ?
                     <Loader active={true} inline="centered" />
                     :

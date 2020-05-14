@@ -1,10 +1,9 @@
 import { Paper, Table, TableBody, TableCell, TableHead, TableRow, Typography } from "@material-ui/core";
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Loader } from "semantic-ui-react";
 import { ApplicationState } from "../../..";
 import { ButtonError } from "../../../layout/Styles/Buttons";
-import * as cartService from "../../../services/cartService";
+import * as cartService from "../../../services/CartService";
 import AddCartItemForm from "./AddCartItemForm";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
@@ -63,9 +62,9 @@ const CartView = () => {
                         </TableBody>
                     </Table>
                     :
-                    <Typography variant="h5">
+                    <h5>
                         Cart is empty
-                    </Typography>
+                    </h5>
                 }
             </Paper>
         );
@@ -73,9 +72,9 @@ const CartView = () => {
 
     return (
         <>
-            <Typography variant="h3">Cart</Typography>
+            <h3>Cart</h3>
             {cartLoading ?
-                <Loader active={true} inline="centered" />
+                <p>Loading...</p>
                 :
                 <>
                     <AddCartItemForm />

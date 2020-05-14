@@ -37,7 +37,7 @@ const AddIngredientForm = () => {
 
     return (
         <StyledPaper>
-            <Typography variant="h6">New ingredient</Typography>
+            <h6>New ingredient</h6>
             <form onSubmit={preventDefault}>
                 <Box>
                     <TextField
