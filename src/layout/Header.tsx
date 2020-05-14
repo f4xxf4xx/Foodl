@@ -1,7 +1,6 @@
 import React from "react";
-import { connect } from "react-redux";
-import { Link as RouterLink, RouteComponentProps, withRouter } from "react-router-dom";
-import { compose } from "redux";
+import { useSelector } from "react-redux";
+import { Link as RouterLink, withRouter, RouteComponentProps } from "react-router-dom";
 import { ApplicationState } from "..";
 import { StyledAppBar } from "./Styles/StyledAppBar";
 import { Toolbar, Link } from "@material-ui/core";
@@ -10,62 +9,46 @@ import { isAuthenticated } from "../helpers/userHelper";
 import { Menu as MenuIcon } from "@material-ui/icons";
 import { StyledSpacer } from "./Styles/StyledSpacer";
 import { ButtonSecondary } from "./Styles/Buttons";
-import { withFirebase } from "react-redux-firebase";
+import { firebase } from "./../config"
 
-interface OwnProps {
-  toggleDrawer: () => void;
+type OwnProps = {
+    toggleDrawer: () => void;
 }
 
-interface StateProps {
-  auth: any;
-  firebase: firebase.app.App;
-}
+type Props = RouteComponentProps & OwnProps;
 
-type Props = OwnProps & StateProps & RouteComponentProps;
+const Header = (props: Props) => {
+    const auth = useSelector((state: ApplicationState) => state.firebase.auth);
 
-class HeaderBase extends React.Component<Props> {
-  public onSignOutClick = () => {
-    this.props.firebase.auth().signOut();
-    this.props.history.push("/");
-  }
+    const onSignOutClick = () => {
+        firebase.auth().signOut();
+        props.history.push("/");
+    }
 
-  public redirectToLogin = () => {
-    this.props.history.push("/login")
-  }
-
-  public render() {
-    const { auth, toggleDrawer } = this.props;
+    const redirectToLogin = () => {
+        props.history.push("/login")
+    }
 
     return (
-      <StyledAppBar position="fixed">
-        <Toolbar>
-          <StyledMenuIcon onClick={toggleDrawer}>
-            {isAuthenticated(auth) &&
-              <MenuIcon />
-            }
-          </StyledMenuIcon>
-          <Link to="/" component={RouterLink} variant="h6" noWrap={true}>
-            Foodl
-          </Link>
-          <StyledSpacer />
-          {isAuthenticated(auth) ?
-            <ButtonSecondary width="80" onClick={this.onSignOutClick}>Sign out</ButtonSecondary>
-            :
-            <ButtonSecondary width="80" onClick={this.redirectToLogin}>Login</ButtonSecondary>
-          }
-        </Toolbar>
-      </StyledAppBar >
+        <StyledAppBar position="fixed">
+            <Toolbar>
+                <StyledMenuIcon onClick={props.toggleDrawer}>
+                    {isAuthenticated(auth) &&
+                        <MenuIcon />
+                    }
+                </StyledMenuIcon>
+                <Link to="/" component={RouterLink} variant="h6" noWrap={true}>
+                    Foodl
+                </Link>
+                <StyledSpacer />
+                {isAuthenticated(auth) ?
+                    <ButtonSecondary width="80" onClick={onSignOutClick}>Sign out</ButtonSecondary>
+                    :
+                    <ButtonSecondary width="80" onClick={redirectToLogin}>Login</ButtonSecondary>
+                }
+            </Toolbar>
+        </StyledAppBar >
     );
-  }
 }
 
-const mapStateToProps = (state: ApplicationState) => ({
-  auth: state.firebase.auth,
-  firebase: state.firebase
-});
-
-const Header = compose(
-  connect<StateProps, {}, OwnProps>(mapStateToProps),
-)(withRouter(withFirebase(HeaderBase)));
-
-export default Header;
+export default withRouter(Header);

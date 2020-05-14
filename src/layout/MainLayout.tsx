@@ -1,63 +1,34 @@
 import { CssBaseline } from "@material-ui/core";
-import React from "react";
-import { connect } from "react-redux";
-import { compose } from "redux";
+import React, { useState } from "react";
+import { useSelector } from "react-redux";
 import { ApplicationState } from "..";
 import Header from "./Header";
 import Sidebar from "./Sidebar";
 import { Wrapper } from "./Styles/Wrapper";
 
-interface StateProps {
-  auth: any;
-}
+const MainLayout = (props) => {
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const auth = useSelector((state: ApplicationState) => state.firebase.auth);
 
-interface State {
-  drawerOpen: boolean;
-}
-
-interface OwnProps {
-  children: any;
-}
-
-type Props = OwnProps & StateProps;
-
-class MainLayoutBase extends React.Component<Props, State> {
-  constructor(props: Props) {
-    super(props);
-    this.state = {
-      drawerOpen: false,
-    };
+  const toggleDrawer = () => {
+    setDrawerOpen(!drawerOpen);
   }
 
-  public toggleDrawer = () => {
-    this.setState((prevProps) => ({
-      drawerOpen: !prevProps.drawerOpen,
-    }));
-  };
-
-  public render() {
-    const { auth } = this.props;
-    const { drawerOpen } = this.state;
-
-    return (
-      <Wrapper>
-        <CssBaseline />
-        <Header toggleDrawer={this.toggleDrawer} />
-        {!auth.isEmpty && (
-          <Sidebar drawerOpen={drawerOpen} toggleDrawer={this.toggleDrawer} />
-        )}
-        <div className="main">{this.props.children}</div>
-      </Wrapper>
-    );
-  }
+  return (
+    <Wrapper>
+      <CssBaseline />
+      <Header toggleDrawer={toggleDrawer} />
+      {!auth.isEmpty &&
+        <Sidebar
+          drawerOpen={drawerOpen}
+          toggleDrawer={toggleDrawer}
+        />
+      }
+      <div className="main">
+        {props.children}
+      </div>
+    </Wrapper>
+  );
 }
-
-const mapStateToProps = (state: ApplicationState) => ({
-  auth: state.firebase.auth,
-});
-
-const MainLayout = compose(connect<StateProps>(mapStateToProps))(
-  MainLayoutBase
-);
 
 export default MainLayout;

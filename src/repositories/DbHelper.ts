@@ -1,4 +1,17 @@
 export class DbHelper {
+    public static async arrayPushUnique(ref: firebase.firestore.DocumentReference, array: any, arrayName: string, item: string) {
+        if (array) {
+            if (array.includes(item)) {
+                return null;
+            }
+            array.push(item);
+            await ref.update({ [arrayName]: array });
+        } else {
+            await ref.update({ [arrayName]: [item] });
+        }
+        return item;
+    }
+
     public static async arrayAddUnique(ref: firebase.firestore.DocumentReference, array: any, arrayName: string, item: string) {
         if (array) {
             if (array.includes(item)) {

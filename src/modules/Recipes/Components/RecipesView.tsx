@@ -1,12 +1,10 @@
 import { CardActionArea, CardActions, Divider, Grid, IconButton, Typography, Box } from "@material-ui/core";
 import DeleteIcon from "@material-ui/icons/Delete";
 import ShareIcon from "@material-ui/icons/Share";
-import React, { PureComponent } from "react";
-import { connect } from "react-redux";
+import React, { useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import { withRouter } from "react-router-dom";
 import { RouteComponentProps } from "react-router-dom";
-import { toast } from "react-toastify";
-import { bindActionCreators, compose, Dispatch } from "redux";
 import { Placeholder } from "semantic-ui-react";
 import { ApplicationState } from "../../..";
 import * as recipesActions from "../../../store/recipes/recipesActions";
@@ -15,122 +13,61 @@ import AddRecipeForm from "./AddRecipeForm";
 import { StyledCard } from "./Styles/StyledCard";
 import { StyledCardContent } from "./Styles/StyledCardContent";
 import { StyledCardMedia } from "./Styles/StyledCardMedia";
-import { RecipeService } from "../../../services/RecipeService";
 import { getTagIcon } from "../helper";
 import { StyledFontAwesomeIcon } from "./Styles/StyledFontAwesomeIcon";
 import { Filters } from "../../../store/recipes/recipesReducer";
 import Select from "react-select";
 import { Cuisine, RecipeType } from "../constants";
+import * as recipeService from "../../../services/recipeService";
 
-interface State {
-    newRecipeName: string;
-}
+type Props = RouteComponentProps;
 
-interface StateProps {
-    recipes: Recipe[];
-    loading: boolean;
-    updating: boolean;
-    auth: any;
-    filters: Filters;
-}
+const RecipesView = (props: Props) => {
+    const dispatch = useDispatch();
+    const recipes = useSelector((state: ApplicationState) => state.recipes.recipes);
+    const loading = useSelector((state: ApplicationState) => state.recipes.loading);
+    const filters = useSelector((state: ApplicationState) => state.recipes.filters);
+    const auth = useSelector((state: ApplicationState) => state.firebase.auth);
 
-interface DispatchProps {
-    fetchRecipesStart: typeof recipesActions.fetchRecipesStart;
-    fetchRecipesStop: typeof recipesActions.fetchRecipesStop;
-    updateRecipesStart: typeof recipesActions.updateRecipesStart;
-    updateRecipesStop: typeof recipesActions.updateRecipesStop;
-    updateRecipes: typeof recipesActions.updateRecipes;
-    addRecipe: typeof recipesActions.addRecipe;
-    deleteRecipe: typeof recipesActions.deleteRecipe;
-    updateFilters: typeof recipesActions.updateFilters;
-}
+    useEffect(() => {
+        const fetch = async () => {
+            dispatch(recipeService.fetchAsync(auth.uid, null));
+        }
 
-type Props = StateProps & RouteComponentProps & DispatchProps;
+        fetch();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [auth.uid]);
 
-class RecipesViewBase extends PureComponent<Props, State> {
-    constructor(props: Props) {
-        super(props);
-        this.state = {
-            newRecipeName: "",
-        };
+    const deleteRecipe = (recipeId: string) => async () => {
+        dispatch(recipeService.deleteAsync(recipeId));
     }
 
-    public componentDidMount() {
-        const { auth } = this.props;
-
-        this.props.fetchRecipesStart();
-        RecipeService.getRecipes(auth.uid, null)
-            .then((recipes) => {
-                this.props.updateRecipes(recipes);
-                this.props.fetchRecipesStop();
-            })
-            .catch(() => {
-                this.props.fetchRecipesStop();
-                toast.error("Error fetching the recipes");
-            });
+    const goToRecipePage = (slug: string) => () => {
+        props.history.push(`/recipe/${slug}`);
     }
 
-    public deleteRecipe = (recipeId: string) => (event: React.MouseEvent<HTMLButtonElement>) => {
-        this.props.updateRecipesStart();
-        RecipeService.deleteRecipe(recipeId)
-            .then(() => {
-                this.props.deleteRecipe(recipeId);
-                this.props.updateRecipesStop();
-                toast.success("Deleted!");
-            })
-            .catch((error) => {
-                console.log(error);
-                this.props.updateRecipesStop();
-                toast.error("Error deleting the recipe");
-            });
-    }
-
-    public goToRecipePage = (slug: string) => (event: React.MouseEvent<HTMLButtonElement>) => {
-        const { history } = this.props;
-
-        history.push(`/recipe/${slug}`);
-    }
-
-    public renderTags(recipe: Recipe) {
+    const renderTags = (recipe: Recipe) => {
         return recipe.tags ?
-            recipe.tags.map((tag, index) => {
-                return (
-                    <StyledFontAwesomeIcon key={index} size="lg" icon={getTagIcon(tag)} />
-                )
-            })
-            :
-            null
-
+            recipe.tags.map((tag, index) => <StyledFontAwesomeIcon key={index} size="lg" icon={getTagIcon(tag)} />)
+            : null
     }
 
-    public filterByAttribute = (attribute: string) => (e: any) => {
-        const { filters, auth } = this.props;
+    const filterByAttribute = (attribute: string) => (e: any) => {
         const value = e.value;
         let newFilters: Filters = null;
 
         if (filters) {
             newFilters = { ...filters, [attribute]: value }
-            this.props.updateFilters(newFilters);
+            dispatch(recipesActions.updateFilters(newFilters));
         } else {
             newFilters = { [attribute]: value };
-            this.props.updateFilters(newFilters);
+            dispatch(recipesActions.updateFilters(newFilters));
         }
 
-        this.props.updateRecipesStart();
-        RecipeService.getRecipes(auth.uid, newFilters)
-            .then((recipes) => {
-                this.props.updateRecipes(recipes);
-                this.props.updateRecipesStop();
-            })
-            .catch((error) => {
-                console.log(error);
-                this.props.updateRecipesStop();
-                toast.error("Error filtering the recipe!");
-            });
+        dispatch(recipeService.fetchAsync(auth.uid, newFilters));
     }
 
-    public renderFilters() {
-        const { filters, loading } = this.props;
+    const renderFilters = () => {
         const cuisineOptions = Object.keys(Cuisine).map((cuisine) => {
             return {
                 value: Cuisine[cuisine],
@@ -145,7 +82,7 @@ class RecipesViewBase extends PureComponent<Props, State> {
                 label: RecipeType[type],
             };
         });
-        typeOptions.unshift({ label: "No filters", value: null })
+        typeOptions.unshift({ label: "No filters", value: null });
 
         return (
             <>
@@ -155,7 +92,7 @@ class RecipesViewBase extends PureComponent<Props, State> {
                         value: filters.cuisine,
                         label: filters.cuisine,
                     }}
-                    onChange={this.filterByAttribute("cuisine")}
+                    onChange={filterByAttribute("cuisine")}
                     isDisabled={loading}
                 />
                 <Select
@@ -164,14 +101,14 @@ class RecipesViewBase extends PureComponent<Props, State> {
                         value: filters.type,
                         label: filters.type,
                     }}
-                    onChange={this.filterByAttribute("type")}
+                    onChange={filterByAttribute("type")}
                     isDisabled={loading}
                 />
             </>
         )
     }
 
-    public renderLoadingRecipes() {
+    const renderLoadingRecipes = () => {
         const cards = [];
         for (let i = 0; i < 6; i++) {
             const element = (
@@ -216,25 +153,23 @@ class RecipesViewBase extends PureComponent<Props, State> {
         return cards;
     }
 
-    public renderRecipes() {
-        const { recipes, loading } = this.props;
-
+    const renderRecipes = () => {
         return (
             <>
                 <Box>
-                    {this.renderFilters()}
+                    {renderFilters()}
                 </Box>
                 <Grid container={true} spacing={2}>
                     {loading ?
-                        this.renderLoadingRecipes()
+                        renderLoadingRecipes()
                         :
                         recipes.map((recipe) =>
                             <Grid key={recipe.id} item={true} xs={12} sm={6} md={4} lg={3}>
                                 <StyledCard>
-                                    <CardActionArea onClick={this.goToRecipePage(recipe.slug)}>
+                                    <CardActionArea onClick={goToRecipePage(recipe.slug)}>
                                         <StyledCardMedia
                                             image={recipe.imageFullPath}
-                                            title="TODO"
+                                            title={recipe.name}
                                         />
                                         <StyledCardContent>
                                             <Typography
@@ -249,7 +184,7 @@ class RecipesViewBase extends PureComponent<Props, State> {
                                                 {recipe.description}
                                             </Typography>
                                             <Box>
-                                                {this.renderTags(recipe)}
+                                                {renderTags(recipe)}
                                             </Box>
                                         </StyledCardContent>
                                         <Divider className={"MuiDivider-root"} light={true} />
@@ -258,7 +193,7 @@ class RecipesViewBase extends PureComponent<Props, State> {
                                         <IconButton aria-label="Share recipe">
                                             <ShareIcon />
                                         </IconButton>
-                                        <IconButton aria-label="Delete recipe" onClick={this.deleteRecipe(recipe.id)}>
+                                        <IconButton aria-label="Delete recipe" onClick={deleteRecipe(recipe.id)}>
                                             <DeleteIcon />
                                         </IconButton>
                                     </CardActions>
@@ -270,41 +205,17 @@ class RecipesViewBase extends PureComponent<Props, State> {
         );
     }
 
-    public render() {
-        return (
-            <>
-                <Typography variant="h3">My recipes</Typography>
-                <Typography paragraph={true}>
-                    Here you can manage your own recipes
-                </Typography>
-                <AddRecipeForm />
-                {this.renderRecipes()}
-            </>
-        );
-    }
+    return (
+        <>
+            <Typography variant="h3">My recipes</Typography>
+            <Typography paragraph={true}>
+                Here you can manage your own recipes
+            </Typography>
+            <AddRecipeForm />
+            {renderRecipes()}
+        </>
+    );
+
 }
 
-const mapStateToProps = (state: ApplicationState) => ({
-    recipes: state.recipes.recipes,
-    loading: state.recipes.loadingRecipes,
-    updating: state.recipes.updatingRecipes,
-    auth: state.firebase.auth,
-    filters: state.recipes.filters,
-});
-
-const mapDispatchToProps = (dispatch: Dispatch) => ({
-    fetchRecipesStart: bindActionCreators(recipesActions.fetchRecipesStart, dispatch),
-    fetchRecipesStop: bindActionCreators(recipesActions.fetchRecipesStop, dispatch),
-    updateRecipesStart: bindActionCreators(recipesActions.updateRecipesStart, dispatch),
-    updateRecipesStop: bindActionCreators(recipesActions.updateRecipesStop, dispatch),
-    updateRecipes: bindActionCreators(recipesActions.updateRecipes, dispatch),
-    addRecipe: bindActionCreators(recipesActions.addRecipe, dispatch),
-    deleteRecipe: bindActionCreators(recipesActions.deleteRecipe, dispatch),
-    updateFilters: bindActionCreators(recipesActions.updateFilters, dispatch)
-});
-
-const RecipesView = compose(
-    connect<StateProps, DispatchProps>(mapStateToProps, mapDispatchToProps),
-)(withRouter(RecipesViewBase));
-
-export default RecipesView;
+export default withRouter(RecipesView);

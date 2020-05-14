@@ -1,4 +1,6 @@
 export enum IngredientType {
+    Box = "Box",
+    Bag = "Bag",
     Can = "Can",
     Cup = "Cup",
     Gram = "Gram",
@@ -38,6 +40,7 @@ export enum Tag {
 }
 
 export enum Cuisine {
+    None = "None",
     American = "American",
     French = "French",
     Greek = "Greek",

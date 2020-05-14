@@ -1,16 +1,13 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
-import {
-  firebaseReducer,
-  getFirebase,
-  reactReduxFirebase,
-} from "react-redux-firebase";
 import { BrowserRouter } from "react-router-dom";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { configureStore } from "@reduxjs/toolkit";
 import thunk from "redux-thunk";
+import { firebaseReducer, reactReduxFirebase } from "react-redux-firebase";
+import "react-toastify/dist/ReactToastify.css";
 import App from "./App";
 import { firebase } from "./config";
 import { cartReducer, CartState } from "./store/cart/cartReducer";
@@ -38,7 +35,7 @@ export interface ApplicationState {
   recipe: RecipeState;
   recipes: RecipesState;
   cart: CartState;
-  firebase: firebase.app.App;
+  firebase: any;
   firestore: firebase.firestore.Firestore;
 }
 
@@ -59,6 +56,12 @@ const store = configureStore({
   enhancers: [reactReduxFirebase(firebase, rrfConfig)],
   middleware: [thunk.withExtraArgument({ getFirebase })],
 });
+
+const rrfProps = {
+  firebase,
+  config: rrfConfig,
+  dispatch: store.dispatch
+}
 
 ReactDOM.render(
   <Provider store={store}>

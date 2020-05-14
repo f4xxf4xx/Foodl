@@ -3,28 +3,24 @@ import { Ingredient } from "../../modules/Ingredients/models";
 
 export interface IngredientState {
     ingredients: Ingredient[];
-    loadingIngredients: boolean;
-    updatingIngredients: boolean;
+    loading: boolean;
+    updating: boolean;
+    newIngredient: any;
 }
 
 const initialState: IngredientState = {
     ingredients: [],
-    loadingIngredients: false,
-    updatingIngredients: false,
+    loading: false,
+    updating: false,
+    newIngredient: null
 };
 
 export const ingredientReducer = createReducer(initialState, {
-    FETCH_INGREDIENTS_START: (state) => {
-        state.loadingIngredients = true;
+    SET_INGREDIENTS_LOADING: (state, action) => {
+        state.loading = action.payload;
     },
-    FETCH_INGREDIENTS_STOP: (state) => {
-        state.loadingIngredients = false;
-    },
-    UPDATE_INGREDIENTS_START: (state) => {
-        state.updatingIngredients = true;
-    },
-    UPDATE_INGREDIENTS_STOP: (state) => {
-        state.updatingIngredients = false;
+    SET_INGREDIENTS_UPDATING: (state, action) => {
+        state.loading = action.payload;
     },
     UPDATE_INGREDIENTS: (state, action) => {
         state.ingredients = action.payload;
@@ -40,4 +36,7 @@ export const ingredientReducer = createReducer(initialState, {
     DELETE_INGREDIENT: (state, action) => {
         state.ingredients = state.ingredients.filter((i) => i.id !== action.payload);
     },
+    UPDATE_NEW_INGREDIENT: (state, action) => {
+        state.newIngredient = action.payload;
+    }
 });

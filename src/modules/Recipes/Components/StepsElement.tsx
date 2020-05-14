@@ -18,7 +18,7 @@ import { ButtonError } from "../../../layout/Styles/Buttons";
 import * as recipeActions from "../../../store/recipes/recipeActions";
 import { Step } from "../models";
 import AddStepForm from "./AddStepForm";
-import { RecipeService } from "../../../services/RecipeService";
+import { RecipeDbHelper } from "../../../repositories/RecipeDbHelper";
 
 interface OwnProps {
   id: string;
@@ -48,7 +48,7 @@ class StepsElementBase extends PureComponent<Props> {
     const { id } = this.props;
 
     this.props.fetchStepsStart();
-    RecipeService.getSteps(id)
+    RecipeDbHelper.getSteps(id)
       .then((steps) => {
         if (steps.length > 0) {
           this.props.updateSteps(steps);
@@ -59,15 +59,14 @@ class StepsElementBase extends PureComponent<Props> {
         this.props.fetchStepsStart();
         toast.error("Error fetching the ingredient items!");
       });
+
   }
 
-  public deleteStep = (stepId: string) => (
-    event: React.MouseEvent<HTMLButtonElement>
-  ) => {
+  public deleteStep = (stepId: string) => (event: React.MouseEvent<HTMLButtonElement>) => {
     const { id } = this.props;
 
     this.props.updateStepsStart();
-    RecipeService.deleteStep(id, stepId)
+    RecipeDbHelper.deleteStep(id, stepId)
       .then(() => {
         this.props.deleteStep(stepId);
         this.props.updateStepsStop();
@@ -77,15 +76,13 @@ class StepsElementBase extends PureComponent<Props> {
         this.props.updateStepsStop();
         toast.error("Error deleting the ingredient item!");
       });
-  };
+  }
 
-  public updateStep = (step: Step, key: string) => (
-    e: React.ChangeEvent<HTMLInputElement>
-  ) => {
+  public updateStep = (step: Step, key: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
 
     this.props.updateStepsStart();
-    RecipeService.updateStepText(this.props.id, step.id, value)
+    RecipeDbHelper.updateStepText(this.props.id, step.id, value)
       .then(() => {
         //TODO refactor to not use updatestep but update steps
         this.props.updateStep({ ...step, [key]: value });
@@ -95,42 +92,49 @@ class StepsElementBase extends PureComponent<Props> {
         this.props.updateStepsStop();
         toast.error("Error updating the step");
       });
-  };
+  }
 
   public renderSteps() {
     const { steps, editing, updatingSteps } = this.props;
 
-    return steps.map((step, index) => (
-      <TableRow key={index}>
-        <TableCell component="th" scope="row">
-          <Typography>{step.order}</Typography>
-        </TableCell>
-        <TableCell>
-          {editing ? (
-            <TextField
-              id="input-step-text"
-              placeholder="Step text"
-              type="text"
-              defaultValue={step.text}
-              onChange={this.updateStep(step, "text")}
-              disabled={updatingSteps}
-            />
-          ) : (
-            <Typography>{step.text}</Typography>
-          )}
-        </TableCell>
-        <TableCell>
-          {editing && (
-            <ButtonError
-              onClick={this.deleteStep(step.id)}
-              disabled={updatingSteps}
-            >
-              Delete step
-            </ButtonError>
-          )}
-        </TableCell>
-      </TableRow>
-    ));
+    return (
+      steps.map((step, index) => (
+        <TableRow key={index}>
+          <TableCell component="th" scope="row">
+            <Typography>
+              {step.order}
+            </Typography>
+          </TableCell>
+          <TableCell>
+            {editing ?
+              <TextField
+                id="input-step-text"
+                placeholder="Step text"
+                type="text"
+                defaultValue={step.text}
+                onBlur={this.updateStep(step, "text")}
+                disabled={updatingSteps}
+              />
+              :
+              <Typography>
+                {step.text}
+              </Typography>
+
+            }
+          </TableCell>
+          <TableCell>
+            {editing &&
+              <ButtonError
+                onClick={this.deleteStep(step.id)}
+                disabled={updatingSteps}
+              >
+                Delete step
+                            </ButtonError>
+            }
+          </TableCell>
+        </TableRow>
+      ))
+    );
   }
 
   public render() {
@@ -139,15 +143,17 @@ class StepsElementBase extends PureComponent<Props> {
     return (
       <>
         <Typography variant="h5">Steps</Typography>
-        {loadingSteps ? (
+        {loadingSteps ?
           <Loader active={true} inline="centered" />
-        ) : (
+          :
           <Table>
-            <TableBody>{this.renderSteps()}</TableBody>
+            <TableBody>
+              {this.renderSteps()}
+            </TableBody>
           </Table>
-        )}
+        }
         <Divider />
-        <AddStepForm editing={editing} currentStepCount={steps.length + 1} />
+        <AddStepForm editing={editing} currentStepCount={(steps.length + 1)} />
       </>
     );
   }

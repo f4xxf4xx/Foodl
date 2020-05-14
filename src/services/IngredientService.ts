@@ -1,43 +1,58 @@
-import { db } from "../config";
-import { Ingredient } from "../modules/Ingredients/models";
+import { IngredientDbHelper } from "../repositories/IngredientDbHelper";
+import { toast } from "react-toastify";
+import { setIngredientsLoading, updateIngredients, setIngredientsUpdating, addIngredient, deleteIngredient } from "../store/ingredients/ingredientActions";
 
-export class IngredientService {
-    public static async getIngredients(): Promise<Ingredient[]> {
-        const ingredients = await db.collection("ingredients")
-            .orderBy("name")
-            .get();
-
-        return ingredients.docs.map((ingredient) => {
-            return {
-                id: ingredient.id,
-                name: ingredient.data().name,
-            };
-        });
-    }
-
-    public static async addIngredient(name: string): Promise<Ingredient> {
-        const newIngredient: Ingredient = {
-            name,
-        };
-
-        const ingredient = await db.collection("ingredients").where("name", "==", name).get();
-
-        if (!ingredient.empty) {
-            return {
-                id: ingredient.docs[0].id,
-                name,
-            };
+export const fetchAsync = () => {
+    return async dispatch => {
+        dispatch(setIngredientsLoading(true));
+        try {
+            const ingredients = await IngredientDbHelper.getIngredients();
+            dispatch(updateIngredients(ingredients));
         }
+        catch (error) {
+            toast.error(error);
+        }
+        finally {
+            dispatch(setIngredientsLoading(false));
+        }
+    }    
+}
 
-        const addedIngredient = await db.collection("ingredients").add(newIngredient);
+export const addIngredientAsync = (label: string) => {
+    return async dispatch => {
+        dispatch(setIngredientsUpdating(true));
+        try {
+            const ingredient = await IngredientDbHelper.addIngredient(label);
+            if(ingredient) {
+                dispatch(addIngredient(ingredient));
+                toast.success("Added!");
+            }
+            else {
+                toast.warn("This ingredient already exists!");
+            }
+        }
+        catch (error) {
+            toast.error(error);
+        }
+        finally {
+            dispatch(setIngredientsUpdating(false));
+        }
+    }    
+}
 
-        return {
-            id: addedIngredient.id,
-            name,
-        };
-    }
-
-    public static deleteIngredient(id: string): Promise<void> {
-        return db.collection("ingredients").doc(id).delete();
+export const deleteIngredientAsync = (id: string) => {
+    return async dispatch => {
+        dispatch(setIngredientsUpdating(true));
+        try {
+            await IngredientDbHelper.deleteIngredient(id);
+            dispatch(deleteIngredient(id));
+            toast.success("Deleted!");
+        }
+        catch(error) {
+            toast.error(error);
+        }
+        finally {
+            dispatch(setIngredientsUpdating(false));
+        }
     }
 }

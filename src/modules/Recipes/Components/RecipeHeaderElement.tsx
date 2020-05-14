@@ -15,7 +15,7 @@ import { ApplicationState } from "../../..";
 import { ButtonPrimary } from "../../../layout/Styles/Buttons";
 import * as recipeActions from "../../../store/recipes/recipeActions";
 import { Recipe } from "../models";
-import { RecipeService } from "../../../services/RecipeService";
+import { RecipeDbHelper } from "../../../repositories/RecipeDbHelper";
 import { StyledChip } from "./Styles/StyledChip";
 import { Cuisine, RecipeType, Tag } from "../constants";
 import { Loader } from "semantic-ui-react";
@@ -58,15 +58,12 @@ class RecipeHeaderElementBase extends React.Component<Props, State> {
       image: null,
     };
   }
-
-  public updateRecipe = (key: string) => (
-    e: React.ChangeEvent<HTMLInputElement>
-  ) => {
+  public updateRecipe = (key: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
     const { recipe } = this.props;
     const value = e.currentTarget.value;
 
     this.props.updateRecipeStart();
-    RecipeService.updateRecipe(recipe.id, key, value)
+    RecipeDbHelper.updateRecipe(recipe.id, key, value)
       .then(() => {
         this.props.updateRecipe({ ...recipe, [key]: value });
         this.props.updateRecipeStop();
@@ -76,16 +73,14 @@ class RecipeHeaderElementBase extends React.Component<Props, State> {
         this.props.updateRecipeStop();
         toast.error("Error updating the recipe!");
       });
-  };
+  }
 
-  public updateContentEditable = (key: string) => (
-    e: React.FocusEvent<HTMLDivElement>
-  ) => {
+  public updateContentEditable = (key: string) => (e: React.FocusEvent<HTMLDivElement>) => {
     const { recipe } = this.props;
     const value = e.target.textContent;
 
     this.props.updateRecipeStart();
-    RecipeService.updateRecipe(recipe.id, key, value)
+    RecipeDbHelper.updateRecipe(recipe.id, key, value)
       .then(() => {
         this.props.updateRecipe({ ...recipe, [key]: value });
         this.props.updateRecipeStop();
@@ -95,16 +90,16 @@ class RecipeHeaderElementBase extends React.Component<Props, State> {
         this.props.updateRecipeStop();
         toast.error("Error updating the recipe!");
       });
-  };
+  }
 
   public updateCuisine = (e: any) => {
     const { recipe } = this.props;
     const value = e.value;
 
     this.props.updateRecipeStart();
-    RecipeService.updateRecipe(recipe.id, "cuisine", value)
+    RecipeDbHelper.updateRecipe(recipe.id, "cuisine", value)
       .then(() => {
-        this.props.updateRecipe({ ...recipe, cuisine: value });
+        this.props.updateRecipe({ ...recipe, "cuisine": value });
         this.props.updateRecipeStop();
         toast.success("Updated!");
       })
@@ -112,16 +107,16 @@ class RecipeHeaderElementBase extends React.Component<Props, State> {
         this.props.updateRecipeStop();
         toast.error("Error updating the recipe!");
       });
-  };
+  }
 
   public updateType = (e: any) => {
     const { recipe } = this.props;
     const value = e.value;
 
     this.props.updateRecipeStart();
-    RecipeService.updateRecipe(recipe.id, "type", value)
+    RecipeDbHelper.updateRecipe(recipe.id, "type", value)
       .then(() => {
-        this.props.updateRecipe({ ...recipe, type: value });
+        this.props.updateRecipe({ ...recipe, "type": value });
         this.props.updateRecipeStop();
         toast.success("Updated!");
       })
@@ -129,14 +124,14 @@ class RecipeHeaderElementBase extends React.Component<Props, State> {
         this.props.updateRecipeStop();
         toast.error("Error updating the recipe!");
       });
-  };
+  }
 
   public addTag = (e: any) => {
     const { recipe } = this.props;
     const value = e.value;
 
     this.props.updateRecipeStart();
-    RecipeService.addTag(recipe.id, value)
+    RecipeDbHelper.addTag(recipe.id, value)
       .then((tags) => {
         this.props.updateRecipe({ ...recipe, tags });
         this.props.updateRecipeStop();
@@ -147,13 +142,13 @@ class RecipeHeaderElementBase extends React.Component<Props, State> {
         this.props.updateRecipeStop();
         toast.error("Error adding the tag!");
       });
-  };
+  }
 
   public deleteTag = (tag: string) => () => {
     const { recipe } = this.props;
 
     this.props.updateRecipeStart();
-    RecipeService.deleteTag(recipe.id, tag)
+    RecipeDbHelper.deleteTag(recipe.id, tag)
       .then((tags) => {
         this.props.updateRecipe({ ...recipe, tags });
         this.props.updateRecipeStop();
@@ -163,34 +158,37 @@ class RecipeHeaderElementBase extends React.Component<Props, State> {
         console.log(error);
         this.props.updateRecipeStop();
         toast.error("Error deleting the tag!");
-      });
-  };
+      })
+
+  }
 
   public updateImage = (e: React.ChangeEvent<HTMLInputElement>) => {
     const image = e.target.files[0];
     this.setState({
-      image,
-    });
-  };
+      image
+    })
+  }
 
   public saveImage = () => {
     const { recipe } = this.props;
     const { image } = this.state;
 
-    StorageHelper.addFile(`recipes/${image.name}`, image).then((filePath) => {
-      this.props.updateRecipeStart();
-      RecipeService.updateRecipe(recipe.id, "image", image.name)
-        .then(() => {
-          this.props.updateRecipe({ ...recipe, image: image.name });
-          this.props.updateRecipeStop();
-          toast.success("Updated!");
-        })
-        .catch(() => {
-          this.props.updateRecipeStop();
-          toast.error("Error updating the recipe!");
-        });
-    });
-  };
+    StorageHelper.addFile(`recipes/${image.name}`, image)
+      .then(filePath => {
+        this.props.updateRecipeStart();
+        RecipeDbHelper.updateRecipe(recipe.id, "image", image.name)
+          .then(() => {
+            this.props.updateRecipe({ ...recipe, "image": image.name });
+            this.props.updateRecipeStop();
+            toast.success("Updated!");
+          })
+          .catch(() => {
+            this.props.updateRecipeStop();
+            toast.error("Error updating the recipe!");
+          });
+      })
+  }
+
 
   public renderRecipeHeader() {
     const { recipe, toggleEdit } = this.props;
@@ -275,8 +273,8 @@ class RecipeHeaderElementBase extends React.Component<Props, State> {
 
     const tagOptionsWithoutCurrentTags = recipe
       ? tagOptions.filter(
-          (tag) => !recipe.tags || !recipe.tags.includes(tag.value)
-        )
+        (tag) => !recipe.tags || !recipe.tags.includes(tag.value)
+      )
       : tagOptions;
 
     return (
@@ -301,7 +299,7 @@ class RecipeHeaderElementBase extends React.Component<Props, State> {
               disabled={updatingRecipe}
               onBlur={this.updateContentEditable("name")}
               tagName="h3"
-              onChange={() => {}}
+              onChange={() => { }}
             />
           </Grid>
           <Grid item={true}>
@@ -315,7 +313,7 @@ class RecipeHeaderElementBase extends React.Component<Props, State> {
             disabled={updatingRecipe}
             onBlur={this.updateContentEditable("description")}
             tagName="p"
-            onChange={() => {}}
+            onChange={() => { }}
           />
         </Box>
         <Box>
@@ -382,11 +380,11 @@ class RecipeHeaderElementBase extends React.Component<Props, State> {
       editing ? (
         this.renderEditHeader()
       ) : (
-        this.renderRecipeHeader()
-      )
+          this.renderRecipeHeader()
+        )
     ) : (
-      <Loader active={true} inline="centered" />
-    );
+        <Loader active={true} inline="centered" />
+      );
   }
 }
 

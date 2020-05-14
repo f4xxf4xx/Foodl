@@ -1,90 +1,39 @@
 import { Paper, Table, TableBody, TableCell, TableHead, TableRow, Typography } from "@material-ui/core";
-import React, { PureComponent } from "react";
-import { connect } from "react-redux";
-import { RouteProps } from "react-router-dom";
-import { toast } from "react-toastify";
-import { bindActionCreators, compose, Dispatch } from "redux";
+import React, { useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import { Loader } from "semantic-ui-react";
 import { ApplicationState } from "../../..";
 import { ButtonError } from "../../../layout/Styles/Buttons";
-import { CartService } from "../../../services/CartService";
-import * as cartActions from "../../../store/cart/cartActions";
-import { Ingredient } from "../../Ingredients/models";
+import * as cartService from "../../../services/cartService";
 import AddCartItemForm from "./AddCartItemForm";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 
-interface StateProps {
-    cartItems: Ingredient[];
-    loadingCartItems: boolean;
-    updatingCartItems: boolean;
-    auth: any;
-}
+const CartView = () => {
+    const dispatch = useDispatch();
+    //store
+    const cartItems = useSelector((state: ApplicationState) => state.cart.cartItems);
+    const cartLoading = useSelector((state: ApplicationState) => state.cart.loading);
+    const cartUpdating = useSelector((state: ApplicationState) => state.cart.updating);
+    const auth = useSelector((state: ApplicationState) => state.firebase.auth);
 
-interface DispatchProps {
-    fetchCartItemsStart: typeof cartActions.fetchCartItemsStart;
-    fetchCartItemsStop: typeof cartActions.fetchCartItemsStop;
-    updateCartItemsStart: typeof cartActions.updateCartItemsStart;
-    updateCartItemsStop: typeof cartActions.updateCartItemsStop;
-    updateCartItems: typeof cartActions.updateCartItems;
-    deleteCartItem: typeof cartActions.deleteCartItem;
-    deleteAllCartItems: typeof cartActions.deleteAllCartItems;
-}
+    useEffect(() => {
+        const fetch = async () => {
+            dispatch(cartService.fetchAsync(auth.uid));
+        }
 
-type Props = StateProps & DispatchProps & RouteProps;
+        fetch();
+    }, [auth.uid, dispatch]);
 
-class CartViewBase extends PureComponent<Props> {
-    public componentDidMount() {
-        const { auth } = this.props;
-
-        this.props.fetchCartItemsStart();
-        return CartService.getCartItems(auth.uid)
-            .then((cartItems) => {
-                this.props.updateCartItems(cartItems);
-                this.props.fetchCartItemsStop();
-            })
-            .catch(() => {
-                toast.error("Error fetching the cart items");
-                this.props.fetchCartItemsStop();
-            });
+    const deleteAllCartItems = () => async () => {
+        dispatch(cartService.deleteAllItemsAsync(auth.uid));
     }
 
-    public deleteAllCartItems = () => (event: React.MouseEvent<HTMLButtonElement>) => {
-        const { auth } = this.props;
-
-        this.props.updateCartItemsStart();
-        CartService.deleteAllItems(auth.uid)
-            .then(() => {
-                this.props.deleteAllCartItems();
-                this.props.updateCartItemsStop();
-                toast.success("Deleted all!");
-            })
-            .catch((error) => {
-                console.log(error);
-                this.props.updateCartItemsStop();
-                toast.error("Error deleting all cart items!");
-            });
+    const deleteCartItem = (cartItemName: string) => async () => {
+        dispatch(cartService.deleteItemAsync(auth.uid, cartItemName));
     }
 
-    public deleteCartItem = (cartItemName: string) => (event: React.MouseEvent<HTMLButtonElement>) => {
-        const { auth } = this.props;
-
-        this.props.updateCartItemsStart();
-        CartService.deleteItem(auth.uid, cartItemName)
-            .then(() => {
-                this.props.deleteCartItem(cartItemName);
-                this.props.updateCartItemsStop();
-                toast.success("Deleted!");
-            })
-            .catch(() => {
-                this.props.updateCartItemsStop();
-                toast.error("Error deleting the cart item!");
-            });
-    }
-
-    public renderCartItems() {
-        const { cartItems, updatingCartItems } = this.props;
-
+    const renderCartItems = () => {
         return (
             <Paper>
                 {cartItems.length > 0
@@ -103,8 +52,8 @@ class CartViewBase extends PureComponent<Props> {
                                     <TableCell>
                                         <ButtonError
                                             width="15"
-                                            disabled={updatingCartItems}
-                                            onClick={this.deleteCartItem(cartItem.name)}
+                                            disabled={cartUpdating}
+                                            onClick={deleteCartItem(cartItem.name)}
                                         >
                                             <FontAwesomeIcon icon={faTrash} />
                                         </ButtonError>
@@ -122,51 +71,26 @@ class CartViewBase extends PureComponent<Props> {
         );
     }
 
-    public render() {
-        const { loadingCartItems } = this.props;
-
-        return (
-            <>
-                <Typography variant="h3">Cart</Typography>
-                {loadingCartItems ?
-                    <Loader active={true} inline="centered" />
-                    :
-                    <>
-                        <AddCartItemForm updating={this.props.updatingCartItems} />
-                        {this.props.cartItems.length > 0 &&
-                            <div>
-                                <ButtonError onClick={this.deleteAllCartItems()}>
-                                    Delete all items
-                                </ButtonError>
-                            </div>
-                        }
-                        {this.renderCartItems()}
-                    </>
-                }
-            </>
-        );
-    }
+    return (
+        <>
+            <Typography variant="h3">Cart</Typography>
+            {cartLoading ?
+                <Loader active={true} inline="centered" />
+                :
+                <>
+                    <AddCartItemForm />
+                    {cartItems && cartItems.length > 0 &&
+                        <div>
+                            <ButtonError disabled={cartUpdating} onClick={deleteAllCartItems()}>
+                                Delete all items
+                            </ButtonError>
+                        </div>
+                    }
+                    {renderCartItems()}
+                </>
+            }
+        </>
+    )
 }
-
-const mapStateToProps = (state: ApplicationState) => ({
-    cartItems: state.cart.cartItems,
-    loadingCartItems: state.cart.loadingCartItems,
-    updatingCartItems: state.cart.updatingCartItems,
-    auth: state.firebase.auth,
-});
-
-const mapDispatchToProps = (dispatch: Dispatch) => ({
-    fetchCartItemsStart: bindActionCreators(cartActions.fetchCartItemsStart, dispatch),
-    fetchCartItemsStop: bindActionCreators(cartActions.fetchCartItemsStop, dispatch),
-    updateCartItemsStart: bindActionCreators(cartActions.updateCartItemsStart, dispatch),
-    updateCartItemsStop: bindActionCreators(cartActions.updateCartItemsStop, dispatch),
-    updateCartItems: bindActionCreators(cartActions.updateCartItems, dispatch),
-    deleteCartItem: bindActionCreators(cartActions.deleteCartItem, dispatch),
-    deleteAllCartItems: bindActionCreators(cartActions.deleteAllCartItems, dispatch),
-});
-
-const CartView = compose(
-    connect<StateProps, DispatchProps>(mapStateToProps, mapDispatchToProps),
-)(CartViewBase);
 
 export default CartView;

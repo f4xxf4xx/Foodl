@@ -1,29 +1,21 @@
 import { Typography, Grid } from "@material-ui/core";
-import React, { PureComponent } from "react";
-import { connect } from "react-redux";
-import { compose } from "redux";
+import React from "react";
+import { useSelector } from "react-redux";
 import { ApplicationState } from "../..";
 import { isAuthenticated } from "../../helpers/userHelper";
 import { Icon } from "@material-ui/core";
 
-interface StateProps {
-    auth: any;
-}
+const HomePage = () => {
+    const auth = useSelector((state: ApplicationState) => state.firebase.auth);
 
-type Props = StateProps;
-
-class HomePageBase extends PureComponent<Props> {
-    public render() {
-        const { auth } = this.props;
-
-        return (
-            <>
-                {isAuthenticated(auth) ?
-                    <Typography variant="h6">
-                        Welcome, {auth.displayName}
-                    </Typography>
-                    :
-                    <>
+    return (
+        <>
+            {isAuthenticated(auth) ?
+                <Typography variant="h6">
+                    Welcome, {auth.displayName}
+                </Typography>
+                :
+                <>
                     <Typography variant="h3" align="center">Foodl</Typography>
                     <Typography variant="h6" align="center">
                         An app for foodies
@@ -54,19 +46,10 @@ class HomePageBase extends PureComponent<Props> {
                             </Typography>
                         </Grid>
                     </Grid>
-                    </>
-                }
-            </>
-        );
-    }
+                </>
+            }
+        </>
+    );
 }
-
-const mapStateToProps = (state: ApplicationState) => ({
-    auth: state.firebase.auth,
-});
-
-const HomePage = compose(
-    connect<StateProps>(mapStateToProps),
-)(HomePageBase);
 
 export default HomePage;

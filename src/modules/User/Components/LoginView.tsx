@@ -1,10 +1,10 @@
 import firebase from "firebase";
 import * as firebaseui from "firebaseui";
-import React, { PureComponent } from "react";
+import React from "react";
 import { StyledLogin } from "./Styles/StyledLogin";
 
-class LoginView extends PureComponent {
-    public authConfig = {
+const LoginView = () => {
+    const authConfig = {
         credentialHelper: firebaseui.auth.CredentialHelper.GOOGLE_YOLO,
         // Popup signin flow rather than redirect flow.
         signInFlow: "popup",
@@ -31,11 +31,10 @@ class LoginView extends PureComponent {
         },
     };
 
-    public render() {
-        return (
-            <StyledLogin uiConfig={this.authConfig} firebaseAuth={firebase.auth()} />
-        );
-    }
+    return (
+        <StyledLogin uiConfig={authConfig} firebaseAuth={firebase.auth()} />
+    );
+
 }
 
 export default LoginView;

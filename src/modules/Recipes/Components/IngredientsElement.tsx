@@ -13,8 +13,8 @@ import { Ingredient } from "../../Ingredients/models";
 import { getIngredientQuantity, getIngredientName } from "../helper";
 import { IngredientItem, Recipe } from "../models";
 import AddIngredientItemForm from "./AddIngredientItemForm";
-import { RecipeService } from "../../../services/RecipeService";
-import { CartService } from "../../../services/CartService";
+import { RecipeDbHelper } from "../../../repositories/RecipeDbHelper";
+import { CartDbHelper } from "../../../repositories/CartDbHelper";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faShoppingCart, faCartPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
 
@@ -41,8 +41,8 @@ interface StateProps {
 interface DispatchProps {
     fetchIngredientItemsStart: typeof recipeActions.fetchIngredientItemsStart;
     fetchIngredientItemsStop: typeof recipeActions.fetchIngredientItemsStop;
-    fetchCartItemsStart: typeof cartActions.fetchCartItemsStart;
-    fetchCartItemsStop: typeof cartActions.fetchCartItemsStop;
+    //fetchCartItemsStart: typeof cartActions.fetchCartItemsStart;
+    //fetchCartItemsStop: typeof cartActions.fetchCartItemsStop;
     updateIngredientItemsStart: typeof recipeActions.updateIngredientItemsStart;
     updateIngredientItemsStop: typeof recipeActions.updateIngredientItemsStop;
     updateIngredientItems: typeof recipeActions.updateIngredientItems;
@@ -65,10 +65,10 @@ class IngredientsElementBase extends PureComponent<Props, State> {
 
     public componentDidMount() {
         const { id, fetchIngredientItemsStart, fetchIngredientItemsStop, auth,
-            updateIngredientItems, cartItems, fetchCartItemsStart, fetchCartItemsStop, updateCartItems } = this.props;
+            updateIngredientItems, cartItems, updateCartItems } = this.props;
 
         fetchIngredientItemsStart();
-        RecipeService.getIngredients(id)
+        RecipeDbHelper.getIngredients(id)
             .then((ingredientItems) => {
                 if (ingredientItems.length > 0) {
                     updateIngredientItems(ingredientItems);
@@ -81,16 +81,16 @@ class IngredientsElementBase extends PureComponent<Props, State> {
             });
 
         if (cartItems.length === 0) {
-            fetchCartItemsStart();
-            CartService.getCartItems(auth.uid)
+            //fetchCartItemsStart();
+            CartDbHelper.getCartItems(auth.uid)
                 .then((cartItems) => {
                     if (cartItems.length > 0) {
                         updateCartItems(cartItems);
                     }
-                    fetchCartItemsStop();
+                    //fetchCartItemsStop();
                 })
                 .catch(() => {
-                    fetchCartItemsStop();
+                    //fetchCartItemsStop();
                     toast.error("Error fetching the cart items!");
                 });
         }
@@ -100,7 +100,7 @@ class IngredientsElementBase extends PureComponent<Props, State> {
         const { id } = this.props;
 
         this.props.updateIngredientItemsStart();
-        RecipeService.deleteIngredientItem(id, ingredientItemId)
+        RecipeDbHelper.deleteIngredientItem(id, ingredientItemId)
             .then(() => {
                 this.props.deleteIngredientItem(ingredientItemId);
                 this.props.updateIngredientItemsStop();
@@ -115,7 +115,7 @@ class IngredientsElementBase extends PureComponent<Props, State> {
     public addCartItem = (ingredientItem: IngredientItem) => () => {
         const { auth } = this.props;
 
-        CartService.addItem(auth.uid, ingredientItem.name)
+        CartDbHelper.addItem(auth.uid, ingredientItem.name)
             .then((ingredient) => {
                 this.props.addCartItem(ingredient);
                 toast.success(`Added ${ingredient.name} to cart!`);
@@ -148,10 +148,10 @@ class IngredientsElementBase extends PureComponent<Props, State> {
         const { currentRemoveGroup } = this.state;
 
         this.props.updateIngredientItemsStart();
-        RecipeService.deleteIngredientGroup(id, currentRemoveGroup)
+        RecipeDbHelper.deleteIngredientGroup(id, currentRemoveGroup)
             .then((groups) => {
-                this.props.updateRecipe({...recipe, ingredientGroups: groups});
-                RecipeService.deleteIngredientOfGroup(id, currentRemoveGroup)
+                this.props.updateRecipe({ ...recipe, ingredientGroups: groups });
+                RecipeDbHelper.deleteIngredientOfGroup(id, currentRemoveGroup)
                     .then(ingredientItems => {
                         this.props.updateIngredientItems(ingredientItems);
                         this.props.updateIngredientItemsStop();
@@ -173,10 +173,10 @@ class IngredientsElementBase extends PureComponent<Props, State> {
         this.setState({ openedModal: false, currentRemoveGroup: null });
     }
 
-    public renderIngredientGroup = (group: string, index: number) => {
+    public renderIngredientGroup = (groupsLength: number, group: string, index: number) => {
         const { ingredientItems, editing, updatingIngredientItems } = this.props;
         const { openedModal } = this.state;
-        const groupIngredientItems = ingredientItems.filter(ingredientItem => group ? ingredientItem.group === group : ingredientItem.group === undefined);
+        const groupIngredientItems = ingredientItems.filter(ingredientItem => ingredientItem.group === group);
 
         if (!groupIngredientItems || groupIngredientItems.length === 0) {
             return null;
@@ -185,9 +185,11 @@ class IngredientsElementBase extends PureComponent<Props, State> {
         return (
             <React.Fragment key={index}>
                 <Grid justify="space-between" container={true}>
-                    <Grid item={true}>
-                        <Typography variant="h6">{group ? group : "Other"}</Typography>
-                    </Grid>
+                    {groupsLength > 0 &&
+                        <Grid item={true}>
+                            <Typography variant="h6">Other</Typography>
+                        </Grid>
+                    }
                     <Grid item={true}>
                         {editing && group && <ButtonSecondary onClick={this.handleOpenModal(group)} color="secondary">Delete group</ButtonSecondary>}
                     </Grid>
@@ -261,9 +263,9 @@ class IngredientsElementBase extends PureComponent<Props, State> {
                     :
                     <>
                         {ingredientGroups && ingredientGroups.map((ingredientGroup, index) => {
-                            return this.renderIngredientGroup(ingredientGroup, index);
+                            return this.renderIngredientGroup(ingredientGroups.length, ingredientGroup, index);
                         })}
-                        {this.renderIngredientGroup(null, null)}
+                        {ingredientGroups && this.renderIngredientGroup(ingredientGroups.length, null, null)}
                     </>
                 }
                 <Divider />
@@ -285,8 +287,8 @@ const mapStateToProps = (state: ApplicationState) => ({
 const mapDispatchToProps = (dispatch: Dispatch) => ({
     fetchIngredientItemsStart: bindActionCreators(recipeActions.fetchIngredientItemsStart, dispatch),
     fetchIngredientItemsStop: bindActionCreators(recipeActions.fetchIngredientItemsStop, dispatch),
-    fetchCartItemsStart: bindActionCreators(cartActions.fetchCartItemsStart, dispatch),
-    fetchCartItemsStop: bindActionCreators(cartActions.fetchCartItemsStop, dispatch),
+    //fetchCartItemsStart: bindActionCreators(cartActions.fetchCartItemsStart, dispatch),
+    //fetchCartItemsStop: bindActionCreators(cartActions.fetchCartItemsStop, dispatch),
     updateIngredientItemsStart: bindActionCreators(recipeActions.updateIngredientItemsStart, dispatch),
     updateIngredientItemsStop: bindActionCreators(recipeActions.updateIngredientItemsStop, dispatch),
     updateIngredientItems: bindActionCreators(recipeActions.updateIngredientItems, dispatch),

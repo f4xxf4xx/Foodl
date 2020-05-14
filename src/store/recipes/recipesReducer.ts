@@ -8,31 +8,32 @@ export interface Filters {
 
 export interface RecipesState {
     recipes: Recipe[];
-    loadingRecipes: boolean;
-    updatingRecipes: boolean;
+    loading: boolean;
+    updating: boolean;
     filters: Filters;
+    newRecipe: any;
 }
 
 const initialRecipesState: RecipesState = {
     recipes: [],
-    loadingRecipes: false,
-    updatingRecipes: false,
-    filters: null
+    loading: false,
+    updating: false,
+    filters: null,
+    newRecipe: null
 };
 
 export const recipesReducer = createReducer(initialRecipesState, {
     FETCH_RECIPES_START: (state) => {
-        state.loadingRecipes = true;
-        state.filters = null;
+        state.loading = true;
     },
     FETCH_RECIPES_STOP: (state) => {
-        state.loadingRecipes = false;
+        state.loading = false;
     },
     UPDATE_RECIPES_START: (state) => {
-        state.updatingRecipes = false;
+        state.updating = false;
     },
     UPDATE_RECIPES_STOP: (state) => {
-        state.updatingRecipes = false;
+        state.updating = false;
     },
     UPDATE_RECIPES: (state, action) => {
         state.recipes = action.payload;
@@ -45,5 +46,8 @@ export const recipesReducer = createReducer(initialRecipesState, {
     },
     UPDATE_FILTERS: (state, action) =>  {
         state.filters = action.payload;
+    },
+    UPDATE_NEW_RECIPE: (state, action) => {
+        state.newRecipe = action.payload;
     }
 });
