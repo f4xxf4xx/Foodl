@@ -1,6 +1,5 @@
-import { Box, Grid, TextField, p, Card, Input } from "@material-ui/core";
 import React from "react";
-import { connect } from "react-redux";
+import { connect, useSelector } from "react-redux";
 import Select from "react-select";
 import { toast } from "react-toastify";
 import { bindActionCreators, compose, Dispatch } from "redux";
@@ -10,48 +9,30 @@ import * as recipeActions from "../../../store/recipes/recipeActions";
 import { Recipe } from "../models";
 import { RecipeDbHelper } from "../../../repositories/RecipeDbHelper";
 import { StyledChip } from "./Styles/StyledChip";
-import { Cuisine, RecipeType, Tag } from "../constants";
-import { Loader } from "semantic-ui-react";
 import ContentEditable from "react-contenteditable";
 import { StyledRecipeInfo } from "./Styles/StyledRecipeInfo";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClock } from "@fortawesome/free-solid-svg-icons";
 import { StyledCardMedia } from "./Styles/StyledCardMedia";
-import { StyledPaper } from "../../../layout/Styles/Sections";
-import { InputWrapper } from "../../../layout/Styles/Forms";
+import { StyledSection } from "../../../layout/Styles/Sections";
 import { StorageHelper } from "../../../services/StorageHelper";
 import AvatarEditor from "react-avatar-editor";
 
-interface StateProps {
-  recipe: Recipe;
-  updatingRecipe: boolean;
-}
-
 interface OwnProps {
+  recipe: Recipe;
   editing: boolean;
   toggleEdit: () => void;
 }
 
-interface DispatchProps {
-  updateRecipeStart: typeof recipeActions.updateRecipeStart;
-  updateRecipeStop: typeof recipeActions.updateRecipeStop;
-  updateRecipe: typeof recipeActions.updateRecipe;
-}
-
-interface State {
-  image: File;
-}
-
-type Props = OwnProps & StateProps & DispatchProps;
-
-class RecipeHeaderElementBase extends React.Component<Props, State> {
-  constructor(props: Props) {
-    super(props);
-    this.state = {
-      image: null,
-    };
-  }
-  public updateRecipe = (key: string) => (
+const RecipeHeaderElement: React.FC<OwnProps> = ({
+  recipe,
+  editing,
+  toggleEdit,
+}) => {
+  const updatingRecipe = useSelector(
+    (state: ApplicationState) => state.recipe.updatingRecipe
+  );
+  const updateRecipe = (key: string) => (
     e: React.ChangeEvent<HTMLInputElement>
   ) => {
     const { recipe } = this.props;
@@ -70,7 +51,7 @@ class RecipeHeaderElementBase extends React.Component<Props, State> {
       });
   };
 
-  public updateContentEditable = (key: string) => (
+  const updateContentEditable = (key: string) => (
     e: React.FocusEvent<HTMLDivElement>
   ) => {
     const { recipe } = this.props;
@@ -89,7 +70,7 @@ class RecipeHeaderElementBase extends React.Component<Props, State> {
       });
   };
 
-  public updateCuisine = (e: any) => {
+  const updateCuisine = (e: any) => {
     const { recipe } = this.props;
     const value = e.value;
 
@@ -106,7 +87,7 @@ class RecipeHeaderElementBase extends React.Component<Props, State> {
       });
   };
 
-  public updateType = (e: any) => {
+  const updateType = (e: any) => {
     const { recipe } = this.props;
     const value = e.value;
 
@@ -123,7 +104,7 @@ class RecipeHeaderElementBase extends React.Component<Props, State> {
       });
   };
 
-  public addTag = (e: any) => {
+  const addTag = (e: any) => {
     const { recipe } = this.props;
     const value = e.value;
 
@@ -141,7 +122,7 @@ class RecipeHeaderElementBase extends React.Component<Props, State> {
       });
   };
 
-  public deleteTag = (tag: string) => () => {
+  const deleteTag = (tag: string) => () => {
     const { recipe } = this.props;
 
     this.props.updateRecipeStart();
@@ -158,14 +139,14 @@ class RecipeHeaderElementBase extends React.Component<Props, State> {
       });
   };
 
-  public updateImage = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const updateImage = (e: React.ChangeEvent<HTMLInputElement>) => {
     const image = e.target.files[0];
     this.setState({
       image,
     });
   };
 
-  public saveImage = () => {
+  const saveImage = () => {
     const { recipe } = this.props;
     const { image } = this.state;
 
@@ -184,36 +165,34 @@ class RecipeHeaderElementBase extends React.Component<Props, State> {
     });
   };
 
-  public renderRecipeHeader() {
+  const renderRecipeHeader = () => {
     const { recipe, toggleEdit } = this.props;
 
     return (
       <>
         {recipe.image && (
-          <Card>
+          <div>
             <StyledCardMedia image={recipe.imageFullPath} title="TODO" />
-          </Card>
+          </div>
         )}
-        <Grid justify="space-between" container={true}>
-          <Grid item={true}>
-            <h3>{recipe.name}</h3>
-          </Grid>
-          <Grid item={true}>
+        <div>
+          <h3>{recipe.name}</h3>
+          <div>
             <ButtonPrimary onClick={toggleEdit}>Edit</ButtonPrimary>
-          </Grid>
-        </Grid>
-        <Box>
-          <p variant="body1">{recipe.description}</p>
-        </Box>
-        <Box>
+          </div>
+        </div>
+        <div>
+          <p>{recipe.description}</p>
+        </div>
+        <div>
           {recipe.type && (
             <StyledRecipeInfo>
-              <p variant="subtitle2">{recipe.type}</p>
+              <p>{recipe.type}</p>
             </StyledRecipeInfo>
           )}
           {recipe.duration && (
             <StyledRecipeInfo>
-              <p variant="subtitle2">
+              <p>
                 <FontAwesomeIcon size="sm" icon={faClock} />
                 {` ${recipe.duration} minutes`}
               </p>
@@ -221,10 +200,10 @@ class RecipeHeaderElementBase extends React.Component<Props, State> {
           )}
           {recipe.cuisine && (
             <StyledRecipeInfo>
-              <p variant="subtitle2">{recipe.cuisine}</p>
+              <p>{recipe.cuisine}</p>
             </StyledRecipeInfo>
           )}
-          <Box>
+          <div>
             {recipe.tags &&
               recipe.tags.map((tag, index) => (
                 <StyledChip
@@ -234,59 +213,27 @@ class RecipeHeaderElementBase extends React.Component<Props, State> {
                   color="secondary"
                 />
               ))}
-          </Box>
-        </Box>
+          </div>
+        </div>
       </>
     );
-  }
+  };
 
-  public renderEditHeader() {
-    const { recipe, updatingRecipe, toggleEdit } = this.props;
-    const { image } = this.state;
-
-    const cuisineOptions = Object.keys(Cuisine).map((cuisine) => {
-      return {
-        value: Cuisine[cuisine],
-        label: Cuisine[cuisine],
-      };
-    });
-
-    const typeOptions = Object.keys(RecipeType).map((type) => {
-      return {
-        value: RecipeType[type],
-        label: RecipeType[type],
-      };
-    });
-
-    const tagOptions = Object.keys(Tag).map((tag) => {
-      return {
-        value: Tag[tag],
-        label: Tag[tag],
-      };
-    });
-
-    const tagOptionsWithoutCurrentTags = recipe
-      ? tagOptions.filter(
-          (tag) => !recipe.tags || !recipe.tags.includes(tag.value)
-        )
-      : tagOptions;
-
+  const renderEditHeader = () => {
     return (
       <>
         {recipe.image && (
-          <Card>
+          <div>
             <StyledCardMedia image={recipe.imageFullPath} title={recipe.name} />
-          </Card>
+          </div>
         )}
-        <StyledPaper width="600">
-          <InputWrapper>
-            <AvatarEditor width={400} height={250} image={image} />
-            <Input id="input-image" type="file" onChange={this.updateImage} />
-          </InputWrapper>
+        <StyledSection width="600">
+          {/* <AvatarEditor width={400} height={250} image={image} /> */}
+          <input id="input-image" type="file" onChange={this.updateImage} />
           <ButtonPrimary onClick={this.saveImage}>Save image</ButtonPrimary>
-        </StyledPaper>
-        <Grid justify="space-between" container={true}>
-          <Grid item={true}>
+        </StyledSection>
+        <div>
+          <div>
             <ContentEditable
               className="Muip-root Muip-h3"
               html={recipe.name}
@@ -295,12 +242,12 @@ class RecipeHeaderElementBase extends React.Component<Props, State> {
               tagName="h3"
               onChange={() => {}}
             />
-          </Grid>
-          <Grid item={true}>
+          </div>
+          <div>
             <ButtonPrimary onClick={toggleEdit}>Stop editing</ButtonPrimary>
-          </Grid>
-        </Grid>
-        <Box>
+          </div>
+        </div>
+        <div>
           <ContentEditable
             className="Muip-root Muip-body1"
             html={recipe.description || "Description"}
@@ -309,8 +256,8 @@ class RecipeHeaderElementBase extends React.Component<Props, State> {
             tagName="p"
             onChange={() => {}}
           />
-        </Box>
-        <Box>
+        </div>
+        <div>
           <StyledRecipeInfo>
             <Select
               options={typeOptions}
@@ -325,7 +272,7 @@ class RecipeHeaderElementBase extends React.Component<Props, State> {
             />
           </StyledRecipeInfo>
           <StyledRecipeInfo>
-            <TextField
+            <input
               placeholder="Duration in minutes"
               defaultValue={recipe.duration}
               onChange={this.updateRecipe("duration")}
@@ -345,7 +292,7 @@ class RecipeHeaderElementBase extends React.Component<Props, State> {
               isDisabled={updatingRecipe}
             />
           </StyledRecipeInfo>
-          <Box>
+          <div>
             {recipe.tags &&
               recipe.tags.map((tag, index) => (
                 <StyledChip
@@ -361,46 +308,21 @@ class RecipeHeaderElementBase extends React.Component<Props, State> {
               value={null}
               onChange={this.addTag}
             />
-          </Box>
-        </Box>
+          </div>
+        </div>
       </>
     );
-  }
+  };
 
-  public render() {
-    const { recipe, editing } = this.props;
-
-    return recipe ? (
-      editing ? (
-        this.renderEditHeader()
-      ) : (
-        this.renderRecipeHeader()
-      )
+  return recipe ? (
+    editing ? (
+      this.renderEditHeader()
     ) : (
-      <Loader active={true} inline="centered" />
-    );
-  }
-}
-
-const mapStateToProps = (state: ApplicationState) => ({
-  recipe: state.recipe.recipe,
-  updatingRecipe: state.recipe.updatingRecipe,
-});
-
-const mapDispatchToProps = (dispatch: Dispatch) => ({
-  updateRecipeStart: bindActionCreators(
-    recipeActions.updateRecipeStart,
-    dispatch
-  ),
-  updateRecipeStop: bindActionCreators(
-    recipeActions.updateRecipeStop,
-    dispatch
-  ),
-  updateRecipe: bindActionCreators(recipeActions.updateRecipe, dispatch),
-});
-
-const RecipeHeaderElement = compose(
-  connect<StateProps, DispatchProps>(mapStateToProps, mapDispatchToProps)
-)(RecipeHeaderElementBase);
+      this.renderRecipeHeader()
+    )
+  ) : (
+    <p>Loading...</p>
+  );
+};
 
 export default RecipeHeaderElement;
