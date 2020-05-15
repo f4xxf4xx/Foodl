@@ -1,30 +1,11 @@
-export enum IngredientType {
-    Box = "Box",
-    Bag = "Bag",
-    Can = "Can",
-    Cup = "Cup",
-    Gram = "Gram",
-    Pack = "Pack",
-    Tablespoon = "Tablespoon",
-    Teaspoon = "Teaspoon",
-    Unit = "Unit",
-}
-
-export enum IngredientPrepType {
-    Chopped = "Chopped",
-    Diced = "Diced",
-    Blanched = "Blanched",
-    Minced = "Minced",
-    Pureed = "Pureed"
-}
-
 export enum RecipeType {
-    Appetizer = "Appetizer",
-    Breakfast = "Breakfast",
-    Dessert = "Dessert",
-    Drink = "Drink",
-    Meal = "Meal",
+  Appetizer = "Appetizer",
+  Breakfast = "Breakfast",
+  Dessert = "Dessert",
+  Drink = "Drink",
+  Meal = "Meal",
 }
+/*
 
 export enum Tag {
     BBQ = "BBQ",
@@ -48,3 +29,4 @@ export enum Cuisine {
     Indian = "Indian",
     Mexican = "Mexican",
 }
+*/

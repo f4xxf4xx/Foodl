@@ -5,15 +5,15 @@ import { BrowserRouter } from "react-router-dom";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { configureStore } from "@reduxjs/toolkit";
-import { firebaseReducer, ReactReduxFirebaseProvider, FirebaseReducer } from "react-redux-firebase";
+import {
+  firebaseReducer,
+  ReactReduxFirebaseProvider,
+  FirebaseReducer,
+} from "react-redux-firebase";
 import "react-toastify/dist/ReactToastify.css";
 import App from "./App";
 import { firebase } from "./config";
 import { cartReducer, CartState } from "./store/cart/cartReducer";
-import {
-  ingredientReducer,
-  IngredientState,
-} from "./store/ingredients/ingredientReducer";
 import { recipeReducer, RecipeState } from "./store/recipes/recipeReducer";
 import { recipesReducer, RecipesState } from "./store/recipes/recipesReducer";
 
@@ -30,22 +30,19 @@ toast.configure({
 });
 
 interface UserProfile {
-  email: string
+  email: string;
 }
 
 export interface Cart {
-  items: string[]
+  items: string[];
 }
 
 // create schema for the DB
 interface DBSchema {
-  todos: Cart
-  [name: string]: any
+  carts: Cart;
 }
 
-
 export interface ApplicationState {
-  ingredients: IngredientState;
   recipe: RecipeState;
   recipes: RecipesState;
   cart: CartState;
@@ -60,7 +57,6 @@ const rrfConfig = {
 
 const store = configureStore({
   reducer: {
-    ingredients: ingredientReducer,
     recipe: recipeReducer,
     recipes: recipesReducer,
     cart: cartReducer,
@@ -71,8 +67,8 @@ const store = configureStore({
 const rrfProps = {
   firebase,
   config: rrfConfig,
-  dispatch: store.dispatch
-}
+  dispatch: store.dispatch,
+};
 
 ReactDOM.render(
   <Provider store={store}>

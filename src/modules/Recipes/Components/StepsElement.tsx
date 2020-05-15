@@ -5,7 +5,7 @@ import {
   TableCell,
   TableRow,
   TextField,
-  Typography,
+  p,
 } from "@material-ui/core";
 import React, { PureComponent } from "react";
 import { connect } from "react-redux";
@@ -59,10 +59,11 @@ class StepsElementBase extends PureComponent<Props> {
         this.props.fetchStepsStart();
         toast.error("Error fetching the ingredient items!");
       });
-
   }
 
-  public deleteStep = (stepId: string) => (event: React.MouseEvent<HTMLButtonElement>) => {
+  public deleteStep = (stepId: string) => (
+    event: React.MouseEvent<HTMLButtonElement>
+  ) => {
     const { id } = this.props;
 
     this.props.updateStepsStart();
@@ -76,9 +77,11 @@ class StepsElementBase extends PureComponent<Props> {
         this.props.updateStepsStop();
         toast.error("Error deleting the ingredient item!");
       });
-  }
+  };
 
-  public updateStep = (step: Step, key: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
+  public updateStep = (step: Step, key: string) => (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
     const value = e.target.value;
 
     this.props.updateStepsStart();
@@ -92,49 +95,42 @@ class StepsElementBase extends PureComponent<Props> {
         this.props.updateStepsStop();
         toast.error("Error updating the step");
       });
-  }
+  };
 
   public renderSteps() {
     const { steps, editing, updatingSteps } = this.props;
 
-    return (
-      steps.map((step, index) => (
-        <TableRow key={index}>
-          <TableCell component="th" scope="row">
-            <Typography>
-              {step.order}
-            </Typography>
-          </TableCell>
-          <TableCell>
-            {editing ?
-              <TextField
-                id="input-step-text"
-                placeholder="Step text"
-                type="text"
-                defaultValue={step.text}
-                onBlur={this.updateStep(step, "text")}
-                disabled={updatingSteps}
-              />
-              :
-              <Typography>
-                {step.text}
-              </Typography>
-
-            }
-          </TableCell>
-          <TableCell>
-            {editing &&
-              <ButtonError
-                onClick={this.deleteStep(step.id)}
-                disabled={updatingSteps}
-              >
-                Delete step
-                            </ButtonError>
-            }
-          </TableCell>
-        </TableRow>
-      ))
-    );
+    return steps.map((step, index) => (
+      <TableRow key={index}>
+        <TableCell component="th" scope="row">
+          <p>{step.order}</p>
+        </TableCell>
+        <TableCell>
+          {editing ? (
+            <TextField
+              id="input-step-text"
+              placeholder="Step text"
+              type="text"
+              defaultValue={step.text}
+              onBlur={this.updateStep(step, "text")}
+              disabled={updatingSteps}
+            />
+          ) : (
+            <p>{step.text}</p>
+          )}
+        </TableCell>
+        <TableCell>
+          {editing && (
+            <ButtonError
+              onClick={this.deleteStep(step.id)}
+              disabled={updatingSteps}
+            >
+              Delete step
+            </ButtonError>
+          )}
+        </TableCell>
+      </TableRow>
+    ));
   }
 
   public render() {
@@ -143,17 +139,15 @@ class StepsElementBase extends PureComponent<Props> {
     return (
       <>
         <h5>Steps</h5>
-        {loadingSteps ?
+        {loadingSteps ? (
           <Loader active={true} inline="centered" />
-          :
+        ) : (
           <Table>
-            <TableBody>
-              {this.renderSteps()}
-            </TableBody>
+            <TableBody>{this.renderSteps()}</TableBody>
           </Table>
-        }
+        )}
         <Divider />
-        <AddStepForm editing={editing} currentStepCount={(steps.length + 1)} />
+        <AddStepForm editing={editing} currentStepCount={steps.length + 1} />
       </>
     );
   }

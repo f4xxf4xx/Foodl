@@ -23,7 +23,7 @@ service cloud.firestore {
         return get(/databases/$(database)/documents/recipes/$(recipe)).data;
       }
 
-      match /ingredientItems/{ingredientItem} {
+      match /ingredients/{Ingredient} {
         allow read: if isAuthenticated() && getRecipeData().uid == request.auth.uid;
         allow write: if isAuthenticated() && getRecipeData().uid == request.auth.uid;
       }

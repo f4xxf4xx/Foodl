@@ -1,34 +1,23 @@
-import { Icon, ListItem, ListItemIcon, ListItemText } from "@material-ui/core";
 import React from "react";
-import { Link, RouteComponentProps, withRouter } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { ListItemLink } from "./links";
 
 interface OwnProps {
-    key: number;
-    currentPath: string;
-    link: ListItemLink;
+  key: number;
+  currentPath: string;
+  link: ListItemLink;
 }
 
-type Props = OwnProps & RouteComponentProps;
+const SidebarLink: React.FC<OwnProps> = (props: OwnProps) => {
+  const active = props.currentPath === props.link.path;
 
-const SidebarLink = (props: Props) => {
-    const active = props.currentPath === props.link.path;
+  return (
+    <Link key={props.key} to={props.link.path}>
+      {active && "*"}
+      <span>{props.link.icon}</span>
+      {props.link.name}
+    </Link>
+  );
+};
 
-    return (
-        <ListItem
-            key={props.key}
-            button={true}
-            component={Link}
-            to={props.link.path}
-            disableRipple={true}
-            selected={active}
-        >
-            <ListItemIcon>
-                <Icon>{props.link.icon}</Icon>
-            </ListItemIcon>
-            <ListItemText primary={props.link.name} />
-        </ListItem>
-    );
-}
-
-export default withRouter(SidebarLink);
+export default SidebarLink;

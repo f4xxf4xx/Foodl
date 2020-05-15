@@ -8,13 +8,19 @@ export const updateRecipeStop = createAction("UPDATE_RECIPE_STOP");
 export const updateRecipe = createAction("UPDATE_RECIPE");
 
 // INGREDIENT ITEMS
-export const fetchIngredientItemsStart = createAction("FETCH_INGREDIENTITEMS_START");
-export const fetchIngredientItemsStop = createAction("FETCH_INGREDIENTITEMS_STOP");
-export const updateIngredientItemsStart = createAction("UPDATE_INGREDIENTITEMS_START");
-export const updateIngredientItemsStop = createAction("UPDATE_INGREDIENTITEMS_STOP");
-export const updateIngredientItems = createAction("UPDATE_INGREDIENTITEMS");
-export const addIngredientItem = createAction("ADD_INGREDIENTITEM");
-export const deleteIngredientItem = createAction("DELETE_INGREDIENTITEM");
+export const fetchIngredientsStart = createAction(
+  "FETCH_INGREDIENTITEMS_START"
+);
+export const fetchIngredientsStop = createAction("FETCH_INGREDIENTITEMS_STOP");
+export const updateIngredientsStart = createAction(
+  "UPDATE_INGREDIENTITEMS_START"
+);
+export const updateIngredientsStop = createAction(
+  "UPDATE_INGREDIENTITEMS_STOP"
+);
+export const updateIngredients = createAction("UPDATE_INGREDIENTITEMS");
+export const addIngredient = createAction("ADD_INGREDIENTITEM");
+export const deleteIngredient = createAction("DELETE_INGREDIENTITEM");
 
 // STEPS
 export const fetchStepsStart = createAction("FETCH_STEPS_START");

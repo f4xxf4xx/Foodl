@@ -1,15 +1,8 @@
-import { createAction } from "redux-starter-kit";
+import { createAction } from "@reduxjs/toolkit";
 
-// Long hard-way method of creating the action, without the helper from redux starter kit
-// export const updateCartItems = cartItems => ({
-//     type: "UPDATE_CARTITEMS",
-//     payload: cartItems
-// });
-
-export const setCartLoading = createAction("SET_CART_LOADING");
-export const setCartUpdating = createAction("SET_CART_UPDATING");
-export const updateCartItems = createAction("UPDATE_CARTITEMS");
-export const addCartItem = createAction("cartItem");
-export const deleteCartItem = createAction("DELETE_CARTITEM");
-export const deleteAllCartItems = createAction("DELETE_ALL_CARTITEMS");
-export const updateNewCartItem = createAction("UPDATE_NEW_CART_ITEM");
+export const setCartLoading = createAction<boolean>("SET_CART_LOADING");
+export const setCartUpdating = createAction<boolean>("SET_CART_UPDATING");
+export const updateCartItems = createAction<string[]>("UPDATE_CART_ITEMS");
+export const addCartItem = createAction<string>("ADD_CART_ITEM");
+export const deleteCartItem = createAction<string, string>("DELETE_CART_ITEM");
+export const deleteAllCartItems = createAction<string>("DELETE_CART_ITEMS");

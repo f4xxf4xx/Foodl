@@ -1,51 +1,46 @@
-import { Typography, Grid } from "@material-ui/core";
 import React from "react";
 import { useSelector } from "react-redux";
 import { ApplicationState } from "../..";
 import { isAuthenticated } from "../../helpers/userHelper";
-import { Icon } from "@material-ui/core";
 
 const HomePage = () => {
-    const auth = useSelector((state: ApplicationState) => state.firebase.auth);
+  const auth = useSelector((state: ApplicationState) => state.firebase.auth);
 
-    return (
+  return (
+    <>
+      {isAuthenticated(auth) ? (
+        <h6>Welcome, {auth.displayName}</h6>
+      ) : (
         <>
-            {isAuthenticated(auth) ?
-                <h6>Welcome, {auth.displayName}</h6>
-                :
-                <>
-                    <h3>Foodl</h3>
-                    <h6>An app for foodies</h6>
-                    <Grid container={true} spacing={5}>
-                        <Grid item={true} xs={12} sm={4} lg={4}>
-                            <Typography align="center">
-                                <Icon>library_books</Icon>
-                            </Typography>
-                            <Typography paragraph={true} align="justify">
-                                Manage your own cookbook by creating recipes, and share the recipes to the people you love.
-                            </Typography>
-                        </Grid>
-                        <Grid item={true} xs={12} sm={4} lg={4}>
-                            <Typography align="center">
-                                <Icon>shopping_cart</Icon>
-                            </Typography>
-                            <Typography paragraph={true} align="justify">
-                                Keep track of food you need to buy to make recipes, or for ingredients you are running low of.
-                            </Typography>
-                        </Grid>
-                        <Grid item={true} xs={12} sm={4} lg={4}>
-                            <Typography align="center">
-                                <Icon>restaurant</Icon>
-                            </Typography>
-                            <Typography paragraph={true} align="justify">
-                                Share restaurants you suggest to your friends and keep a bucket list of restaurants you want to go to.
-                            </Typography>
-                        </Grid>
-                    </Grid>
-                </>
-            }
+          <h3>Foodl</h3>
+          <h6>An app for foodies</h6>
+          <div>
+            <div>
+              <p>library_books</p>
+              <p>
+                Manage your own cookbook by creating recipes, and share the
+                recipes to the people you love.
+              </p>
+            </div>
+            <div>
+              <p>shopping_cart</p>
+              <p>
+                Keep track of food you need to buy to make recipes, or for
+                ingredients you are running low of.
+              </p>
+            </div>
+            <div>
+              <p>restaurant</p>
+              <p>
+                Share restaurants you suggest to your friends and keep a bucket
+                list of restaurants you want to go to.
+              </p>
+            </div>
+          </div>
         </>
-    );
-}
+      )}
+    </>
+  );
+};
 
 export default HomePage;

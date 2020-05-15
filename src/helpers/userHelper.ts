@@ -1,1 +1,4 @@
-export const isAuthenticated = (auth: any) => auth.isLoaded && !auth.isEmpty;
+import { FirebaseReducer } from "react-redux-firebase";
+
+export const isAuthenticated = (auth: FirebaseReducer.AuthState) =>
+  auth.isLoaded && !auth.isEmpty;

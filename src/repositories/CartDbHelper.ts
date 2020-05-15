@@ -1,49 +1,47 @@
 import { db } from "../config";
-import { Ingredient } from "../modules/Ingredients/models";
 import { DbHelper } from "./DbHelper";
 
 export class CartDbHelper {
-    public static async getCartItems(userid: string): Promise<Ingredient[]> {
-        const cart = await db.collection("carts").doc(userid).get();
+  public static async getCartItems(userid: string): Promise<string[]> {
+    const cart = await db.collection("carts").doc(userid).get();
 
-        if (cart.exists) {
-            return cart.data().items.map((ingredient: Ingredient) => {
-                return {
-                    name: ingredient,
-                };
-            });
-        }
-        return [];
+    if (cart.exists) {
+      return cart.data().items.map((item: string) => item);
     }
+    return [];
+  }
 
-    public static async addItem(userid: string, name: string): Promise<boolean> {
-        const cartRef = db.collection("carts").doc(userid);
-        const cart = await cartRef.get();
+  public static async addItem(userid: string, name: string): Promise<boolean> {
+    const cartRef = db.collection("carts").doc(userid);
+    const cart = await cartRef.get();
 
-        if (cart.exists) {
-            const items = cart.data().items;
+    if (cart.exists) {
+      const items = cart.data().items;
 
-            return await DbHelper.arrayPushUnique(cartRef, items, "items", name)
-        }
-        return false
+      return await DbHelper.arrayPushUnique(cartRef, items, "items", name);
     }
+    return false;
+  }
 
-    public static async deleteItem(userid: string, name: string): Promise<boolean> {
-        const cartRef = db.collection("carts").doc(userid);
-        const cart = await cartRef.get();
+  public static async deleteItem(
+    userid: string,
+    name: string
+  ): Promise<boolean> {
+    const cartRef = db.collection("carts").doc(userid);
+    const cart = await cartRef.get();
 
-        if (cart.exists) {
-            const items = cart.data().items;
-            const newItems = items.filter((item) => item !== name);
+    if (cart.exists) {
+      const items = cart.data().items;
+      const newItems = items.filter((item) => item !== name);
 
-            await cartRef.set({ items: newItems });
-            return
-        }
-        return false
+      await cartRef.set({ items: newItems });
+      return;
     }
+    return false;
+  }
 
-    public static async deleteAllItems(userid: string): Promise<void> {
-        const cartRef =  db.collection("carts").doc(userid)
-        await cartRef.set({ items: [] });
-    }
+  public static async deleteAllItems(userid: string): Promise<void> {
+    const cartRef = db.collection("carts").doc(userid);
+    await cartRef.set({ items: [] });
+  }
 }
