@@ -1,22 +1,18 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { ApplicationState } from "../../..";
-import { ButtonPrimary, ButtonSecondary } from "../../../layout/Styles/Buttons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faShoppingCart, faCartPlus } from "@fortawesome/free-solid-svg-icons";
 import { useFirebaseConnect, isLoaded, isEmpty } from "react-redux-firebase";
-import { addCartItem } from "../../../store/cart/cartActions";
 import AddIngredientForm from "./AddIngredientForm";
+import { Recipe } from "../models";
 
-interface OwnProps {
-  ingredients: string[];
+interface Props {
+  recipe: Recipe;
   editing: boolean;
 }
 
-const IngredientsElement: React.FC<OwnProps> = ({ ingredients, editing }) => {
+const IngredientsElement: React.FC<Props> = ({ recipe, editing }) => {
   const firebase = useSelector((state: ApplicationState) => state.firebase);
   const uid = firebase.auth.uid;
-  const dispatch = useDispatch();
 
   useFirebaseConnect([{ path: `carts/${uid}` }]);
   const cart = useSelector(
@@ -34,7 +30,7 @@ const IngredientsElement: React.FC<OwnProps> = ({ ingredients, editing }) => {
 
   return (
     <>
-      <h5>Ingredients ({ingredients.length})</h5>
+      <h5>Ingredients ({recipe.ingredients.length})</h5>
       {/* <>
             {ingredientGroups &&
               ingredientGroups.map((ingredientGroup, index) => {
@@ -47,7 +43,7 @@ const IngredientsElement: React.FC<OwnProps> = ({ ingredients, editing }) => {
             {ingredientGroups &&
               renderIngredientGroup(ingredientGroups.length, null, null)}
           </> */}
-      {ingredients.forEach((ingredient) => (
+      {recipe.ingredients.forEach((ingredient) => (
         <p>{ingredient}</p>
       ))}
       <AddIngredientForm editing={editing} />

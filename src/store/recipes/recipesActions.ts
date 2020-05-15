@@ -1,11 +1,11 @@
-import { createAction } from "redux-starter-kit";
+import { createAction } from "@reduxjs/toolkit";
+import { Recipe } from "../../modules/Recipes/models";
+import { Filters } from "./recipesReducer";
 
-export const fetchRecipesStart = createAction("FETCH_RECIPES_START");
-export const fetchRecipesStop = createAction("FETCH_RECIPES_STOP");
-export const updateRecipesStart = createAction("UPDATE_RECIPES_START");
-export const updateRecipesStop = createAction("UPDATE_RECIPES_STOP");
-export const updateRecipes = createAction("UPDATE_RECIPES");
-export const addRecipe = createAction("ADD_RECIPE");
-export const deleteRecipe = createAction("DELETE_RECIPE");
-export const updateFilters = createAction("UPDATE_FILTERS");
-export const updateNewRecipe = createAction("UPDATE_NEW_RECIPE");
+export const setRecipesLoading = createAction<boolean>("SET_RECIPES_LOADING");
+export const setRecipesUpdating = createAction<boolean>("SET_RECIPES_UPDATING");
+export const updateRecipes = createAction<Recipe[]>("UPDATE_RECIPES");
+export const addRecipe = createAction<Recipe>("ADD_RECIPE");
+export const deleteRecipe = createAction<string>("DELETE_RECIPE");
+export const updateFilters = createAction<Filters>("UPDATE_FILTERS");
+export const updateNewRecipe = createAction<Recipe>("UPDATE_NEW_RECIPE");

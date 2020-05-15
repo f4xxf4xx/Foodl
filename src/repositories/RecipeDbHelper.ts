@@ -19,7 +19,6 @@ export class RecipeDbHelper {
       cuisine: data.data().cuisine,
       duration: data.data().duration,
       tags: data.data().tags,
-      ingredientGroups: data.data().ingredientGroups,
     };
 
     if (recipe.image) {

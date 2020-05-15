@@ -1,9 +1,9 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import { Redirect, Route } from "react-router-dom";
+import { Redirect, Route, RouteProps } from "react-router-dom";
 import { ApplicationState } from "..";
 
-const PrivateRoute: React.FC = (props) => {
+const PrivateRoute: React.FC<RouteProps> = (props) => {
   const auth = useSelector((state: ApplicationState) => state.firebase.auth);
 
   return auth.isLoaded ? (

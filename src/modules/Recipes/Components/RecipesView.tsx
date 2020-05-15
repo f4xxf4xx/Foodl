@@ -1,32 +1,14 @@
-import {
-  CardActionArea,
-  CardActions,
-  Divider,
-  Grid,
-  IconButton,
-  p,
-  Box,
-} from "@material-ui/core";
-import DeleteIcon from "@material-ui/icons/Delete";
-import ShareIcon from "@material-ui/icons/Share";
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { withRouter } from "react-router-dom";
 import { RouteComponentProps } from "react-router-dom";
-import { Placeholder } from "semantic-ui-react";
 import { ApplicationState } from "../../..";
 import * as recipesActions from "../../../store/recipes/recipesActions";
 import { Recipe } from "../models";
 import AddRecipeForm from "./AddRecipeForm";
-import { StyledCard } from "./Styles/StyledCard";
-import { StyledCardContent } from "./Styles/StyledCardContent";
-import { StyledCardMedia } from "./Styles/StyledCardMedia";
 import { getTagIcon } from "../helper";
-import { StyledFontAwesomeIcon } from "./Styles/StyledFontAwesomeIcon";
 import { Filters } from "../../../store/recipes/recipesReducer";
-import Select from "react-select";
-import { Cuisine, RecipeType } from "../constants";
-import * as recipeService from "../../../services/recipeService";
+import * as RecipeService from "../../../services/RecipeService";
 
 type Props = RouteComponentProps;
 
@@ -45,7 +27,7 @@ const RecipesView = (props: Props) => {
 
   useEffect(() => {
     const fetch = async () => {
-      dispatch(recipeService.fetchAsync(auth.uid, null));
+      dispatch(RecipeService.fetchRecipesAsync(auth.uid, null));
     };
 
     fetch();
@@ -53,7 +35,7 @@ const RecipesView = (props: Props) => {
   }, [auth.uid]);
 
   const deleteRecipe = (recipeId: string) => async () => {
-    dispatch(recipeService.deleteAsync(recipeId));
+    dispatch(RecipeService.deleteAsync(recipeId));
   };
 
   const goToRecipePage = (slug: string) => () => {
@@ -62,28 +44,12 @@ const RecipesView = (props: Props) => {
 
   const renderTags = (recipe: Recipe) => {
     return recipe.tags
-      ? recipe.tags.map((tag, index) => (
-          <StyledFontAwesomeIcon key={index} size="lg" icon={getTagIcon(tag)} />
-        ))
+      ? recipe.tags.map((tag, index) => <p key={index}>{tag}</p>)
       : null;
   };
 
-  const filterByAttribute = (attribute: string) => (e: any) => {
-    const value = e.value;
-    let newFilters: Filters = null;
-
-    if (filters) {
-      newFilters = { ...filters, [attribute]: value };
-      dispatch(recipesActions.updateFilters(newFilters));
-    } else {
-      newFilters = { [attribute]: value };
-      dispatch(recipesActions.updateFilters(newFilters));
-    }
-
-    dispatch(recipeService.fetchAsync(auth.uid, newFilters));
-  };
-
   const renderFilters = () => {
+    /*
     const cuisineOptions = Object.keys(Cuisine).map((cuisine) => {
       return {
         value: Cuisine[cuisine],
@@ -128,87 +94,36 @@ const RecipesView = (props: Props) => {
         />
       </>
     );
-  };
-
-  const renderLoadingRecipes = () => {
-    const cards = [];
-    for (let i = 0; i < 6; i++) {
-      const element = (
-        <Grid key={i} item={true} xs={12} sm={6} md={4} lg={3}>
-          <StyledCard>
-            <Placeholder>
-              <Placeholder.Image square />
-            </Placeholder>
-            <StyledCardContent>
-              <Placeholder>
-                <Placeholder.Header>
-                  <p variant={"h6"} gutterBottom={true}>
-                    <Placeholder.Line length="short" />
-                  </p>
-                </Placeholder.Header>
-                <Placeholder.Paragraph>
-                  <p variant={"caption"}>
-                    <Placeholder.Line length="medium" />
-                  </p>
-                </Placeholder.Paragraph>
-              </Placeholder>
-            </StyledCardContent>
-            <Divider className={"MuiDivider-root"} light={true} />
-            <CardActions disableSpacing={true}>
-              <IconButton aria-label="Share recipe" disabled={true}>
-                <ShareIcon />
-              </IconButton>
-              <IconButton aria-label="Delete recipe" disabled={true}>
-                <DeleteIcon />
-              </IconButton>
-            </CardActions>
-          </StyledCard>
-        </Grid>
-      );
-      cards.push(element);
-    }
-    return cards;
+    */
+    return <></>;
   };
 
   const renderRecipes = () => {
     return (
       <>
-        <Box>{renderFilters()}</Box>
-        <Grid container={true} spacing={2}>
-          {loading
-            ? renderLoadingRecipes()
-            : recipes.map((recipe) => (
-                <Grid key={recipe.id} item={true} xs={12} sm={6} md={4} lg={3}>
-                  <StyledCard>
-                    <CardActionArea onClick={goToRecipePage(recipe.slug)}>
-                      <StyledCardMedia
-                        image={recipe.imageFullPath}
-                        title={recipe.name}
-                      />
-                      <StyledCardContent>
-                        <p variant={"h6"} gutterBottom={true}>
-                          {recipe.name}
-                        </p>
-                        <p variant={"caption"}>{recipe.description}</p>
-                        <Box>{renderTags(recipe)}</Box>
-                      </StyledCardContent>
-                      <Divider className={"MuiDivider-root"} light={true} />
-                    </CardActionArea>
-                    <CardActions disableSpacing={true}>
-                      <IconButton aria-label="Share recipe">
-                        <ShareIcon />
-                      </IconButton>
-                      <IconButton
-                        aria-label="Delete recipe"
-                        onClick={deleteRecipe(recipe.id)}
-                      >
-                        <DeleteIcon />
-                      </IconButton>
-                    </CardActions>
-                  </StyledCard>
-                </Grid>
-              ))}
-        </Grid>
+        <div>{renderFilters()}</div>
+        <div>
+          {loading ? (
+            <p>Loading...</p>
+          ) : (
+            recipes.map((recipe) => (
+              <div key={recipe.id}>
+                <img
+                  src={recipe.imageFullPath}
+                  alt={recipe.name}
+                  title={recipe.name}
+                  onClick={goToRecipePage(recipe.slug)}
+                />
+                <div>
+                  <p>{recipe.name}</p>
+                  <p>{recipe.description}</p>
+                  <div>{renderTags(recipe)}</div>
+                </div>
+                <button onClick={deleteRecipe(recipe.id)}>Delete</button>
+              </div>
+            ))
+          )}
+        </div>
       </>
     );
   };
@@ -216,7 +131,6 @@ const RecipesView = (props: Props) => {
   return (
     <>
       <h3>My recipes</h3>
-      <p paragraph={true}>Here you can manage your own recipes</p>
       <AddRecipeForm />
       {renderRecipes()}
     </>

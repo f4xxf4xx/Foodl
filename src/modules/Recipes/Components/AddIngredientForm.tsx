@@ -4,20 +4,23 @@ import Creatable from "react-select/creatable";
 import { ApplicationState } from "../../..";
 import { ButtonPrimary } from "../../../layout/Styles/Buttons";
 import { StyledSection } from "../../../layout/Styles/Sections";
-import * as recipeService from "../../../services/recipeService";
+import * as recipeService from "../../../services/RecipeService";
 
-interface OwnProps {
+interface Props {
   editing: boolean;
 }
 
-const AddIngredientForm: React.FC<OwnProps> = (props: OwnProps) => {
+const AddIngredientForm: React.FC<Props> = (props: Props) => {
   const dispatch = useDispatch();
   const [newIngredient, setNewIngredient] = useState<string>();
   const [group, setGroup] = useState<string>();
   const recipe = useSelector((state: ApplicationState) => state.recipe.recipe);
+  const ingredientGroups = useSelector(
+    (state: ApplicationState) => state.recipe.ingredientGroups
+  );
   const ingredientGroupOptions =
-    recipe.ingredientGroups &&
-    recipe.ingredientGroups.map((group) => {
+    ingredientGroups &&
+    ingredientGroups.map((group) => {
       return {
         value: group,
         label: group,
@@ -33,16 +36,13 @@ const AddIngredientForm: React.FC<OwnProps> = (props: OwnProps) => {
       return false;
     }
 
-    if (
-      group &&
-      (!recipe.ingredientGroups || !recipe.ingredientGroups.includes(group))
-    ) {
+    if (group && (!ingredientGroups || !ingredientGroups.includes(group))) {
       dispatch(recipeService.addIngredientGroupAsync(recipe, group));
     }
 
     try {
-      dispatch(recipeService.addIngredientAsync(recipe, newIngredient));
-      setGroup(null);
+      //dispatch(addIngredientAsync(recipe, newIngredient));
+      //setGroup(null);
     } finally {
     }
   };

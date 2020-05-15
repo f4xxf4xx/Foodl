@@ -1,19 +1,16 @@
-import { Box, TextField, p } from "@material-ui/core";
 import React, { useState } from "react";
 import { ButtonPrimary } from "../../../layout/Styles/Buttons";
-import { StyledPaper } from "../../../layout/Styles/Sections";
+import { StyledSection } from "../../../layout/Styles/Sections";
 import { useDispatch, useSelector } from "react-redux";
-import * as recipeService from "../../../services/recipeService";
+import * as RecipeService from "../../../services/RecipeService";
 import { ApplicationState } from "../../..";
 
-interface OwnProps {
+interface Props {
   editing: boolean;
   currentStepCount: number;
 }
 
-type Props = OwnProps;
-
-const AddStepForm = (props: Props) => {
+const AddStepForm: React.FC<Props> = (props: Props) => {
   const dispatch = useDispatch();
   const [newStep, setNewStep] = useState({
     order: props.currentStepCount,
@@ -30,7 +27,7 @@ const AddStepForm = (props: Props) => {
       return;
     }
 
-    dispatch(recipeService.addStepAsync(recipe.id, newStep));
+    dispatch(RecipeService.addStepAsync(recipe.id, newStep));
     setNewStep({
       ...newStep,
       text: "",
@@ -45,23 +42,19 @@ const AddStepForm = (props: Props) => {
   return (
     <>
       {props.editing && (
-        <StyledPaper>
+        <StyledSection>
           <form onSubmit={preventDefault}>
-            <p variant="h6">Add step</p>
-            <Box>
-              <TextField
+            <p>Add step</p>
+            <div>
+              <input
                 id="input-text"
-                label="Text"
-                multiline={true}
-                rows={2}
-                rowsMax={4}
                 value={newStep.text}
                 onChange={updateFormText}
               />
-            </Box>
+            </div>
             <ButtonPrimary onClick={addStep}>Add</ButtonPrimary>
           </form>
-        </StyledPaper>
+        </StyledSection>
       )}
     </>
   );

@@ -1,11 +1,10 @@
-import { Box, TextField, p } from "@material-ui/core";
 import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { RouteComponentProps, withRouter } from "react-router-dom";
 import { ApplicationState } from "../../..";
 import { ButtonPrimary } from "../../../layout/Styles/Buttons";
-import { StyledPaper } from "../../../layout/Styles/Sections";
-import * as recipeService from "../../../services/recipeService";
+import { StyledSection } from "../../../layout/Styles/Sections";
+import * as recipeService from "../../../services/RecipeService";
 
 type Props = RouteComponentProps;
 
@@ -44,25 +43,24 @@ const AddRecipeForm = (props: Props) => {
   };
 
   return (
-    <StyledPaper>
-      <p variant="h6">New recipe</p>
+    <StyledSection>
+      <p>New recipe</p>
       <form onSubmit={preventDefault}>
-        <Box>
-          <TextField
+        <div>
+          <input
             id="input-recipe-name"
-            label="Recipe name"
             type="text"
             onChange={updateRecipeName}
             value={newRecipeName}
             disabled={updatingRecipes}
             onKeyPress={handleKeyPress}
           />
-        </Box>
+        </div>
         <ButtonPrimary onClick={addRecipe} disabled={updatingRecipes}>
           Create
         </ButtonPrimary>
       </form>
-    </StyledPaper>
+    </StyledSection>
   );
 };
 

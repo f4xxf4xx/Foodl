@@ -1,30 +1,25 @@
 import React from "react";
-import { connect, useSelector } from "react-redux";
+import { connect, useSelector, useDispatch } from "react-redux";
 import Select from "react-select";
 import { toast } from "react-toastify";
-import { bindActionCreators, compose, Dispatch } from "redux";
 import { ApplicationState } from "../../..";
 import { ButtonPrimary } from "../../../layout/Styles/Buttons";
-import * as recipeActions from "../../../store/recipes/recipeActions";
 import { Recipe } from "../models";
 import { RecipeDbHelper } from "../../../repositories/RecipeDbHelper";
-import { StyledChip } from "./Styles/StyledChip";
 import ContentEditable from "react-contenteditable";
-import { StyledRecipeInfo } from "./Styles/StyledRecipeInfo";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClock } from "@fortawesome/free-solid-svg-icons";
-import { StyledCardMedia } from "./Styles/StyledCardMedia";
 import { StyledSection } from "../../../layout/Styles/Sections";
 import { StorageHelper } from "../../../services/StorageHelper";
 import AvatarEditor from "react-avatar-editor";
 
-interface OwnProps {
+interface Props {
   recipe: Recipe;
   editing: boolean;
   toggleEdit: () => void;
 }
 
-const RecipeHeaderElement: React.FC<OwnProps> = ({
+const RecipeHeaderElement: React.FC<Props> = ({
   recipe,
   editing,
   toggleEdit,
@@ -32,111 +27,107 @@ const RecipeHeaderElement: React.FC<OwnProps> = ({
   const updatingRecipe = useSelector(
     (state: ApplicationState) => state.recipe.updatingRecipe
   );
+  const dispatch = useDispatch();
+
   const updateRecipe = (key: string) => (
     e: React.ChangeEvent<HTMLInputElement>
   ) => {
-    const { recipe } = this.props;
     const value = e.currentTarget.value;
 
-    this.props.updateRecipeStart();
+    /*updateRecipeStart();
     RecipeDbHelper.updateRecipe(recipe.id, key, value)
       .then(() => {
-        this.props.updateRecipe({ ...recipe, [key]: value });
-        this.props.updateRecipeStop();
+        updateRecipe({ ...recipe, [key]: value });
+        updateRecipeStop();
         toast.success("Updated!");
       })
       .catch(() => {
-        this.props.updateRecipeStop();
+        updateRecipeStop();
         toast.error("Error updating the recipe!");
       });
+      */
   };
 
   const updateContentEditable = (key: string) => (
     e: React.FocusEvent<HTMLDivElement>
   ) => {
-    const { recipe } = this.props;
     const value = e.target.textContent;
 
-    this.props.updateRecipeStart();
+    /* updateRecipeStart();
     RecipeDbHelper.updateRecipe(recipe.id, key, value)
       .then(() => {
-        this.props.updateRecipe({ ...recipe, [key]: value });
-        this.props.updateRecipeStop();
+        updateRecipe({ ...recipe, [key]: value });
+        updateRecipeStop();
         toast.success("Updated!");
       })
       .catch(() => {
-        this.props.updateRecipeStop();
+        updateRecipeStop();
         toast.error("Error updating the recipe!");
-      });
+      }); */
   };
 
   const updateCuisine = (e: any) => {
-    const { recipe } = this.props;
     const value = e.value;
 
-    this.props.updateRecipeStart();
+    /* updateRecipeStart();
     RecipeDbHelper.updateRecipe(recipe.id, "cuisine", value)
       .then(() => {
-        this.props.updateRecipe({ ...recipe, cuisine: value });
-        this.props.updateRecipeStop();
+        updateRecipe({ ...recipe, cuisine: value });
+        updateRecipeStop();
         toast.success("Updated!");
       })
       .catch(() => {
-        this.props.updateRecipeStop();
+        updateRecipeStop();
         toast.error("Error updating the recipe!");
-      });
+      }); */
   };
 
   const updateType = (e: any) => {
-    const { recipe } = this.props;
     const value = e.value;
 
-    this.props.updateRecipeStart();
+    /* updateRecipeStart();
     RecipeDbHelper.updateRecipe(recipe.id, "type", value)
       .then(() => {
-        this.props.updateRecipe({ ...recipe, type: value });
-        this.props.updateRecipeStop();
+        updateRecipe({ ...recipe, type: value });
+        updateRecipeStop();
         toast.success("Updated!");
       })
       .catch(() => {
-        this.props.updateRecipeStop();
+        updateRecipeStop();
         toast.error("Error updating the recipe!");
-      });
+      }); */
   };
 
   const addTag = (e: any) => {
-    const { recipe } = this.props;
     const value = e.value;
 
-    this.props.updateRecipeStart();
+    /*  updateRecipeStart();
     RecipeDbHelper.addTag(recipe.id, value)
       .then((tags) => {
-        this.props.updateRecipe({ ...recipe, tags });
-        this.props.updateRecipeStop();
+        updateRecipe({ ...recipe, tags });
+        updateRecipeStop();
         toast.success("Added tag!");
       })
       .catch((error) => {
         console.log(error);
-        this.props.updateRecipeStop();
+        updateRecipeStop();
         toast.error("Error adding the tag!");
-      });
+      }); */
   };
 
   const deleteTag = (tag: string) => () => {
-    const { recipe } = this.props;
-
-    this.props.updateRecipeStart();
+    /*  updateRecipeStart();
     RecipeDbHelper.deleteTag(recipe.id, tag)
       .then((tags) => {
-        this.props.updateRecipe({ ...recipe, tags });
-        this.props.updateRecipeStop();
+        updateRecipe({ ...recipe, tags });
+        updateRecipeStop();
         toast.success("Deleted tag!");
       })
       .catch((error) => {
         console.log(error);
-        this.props.updateRecipeStop();
+        updateRecipeStop();
         toast.error("Error deleting the tag!");
-      });
+      }); */
   };
 
   const updateImage = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -147,32 +138,29 @@ const RecipeHeaderElement: React.FC<OwnProps> = ({
   };
 
   const saveImage = () => {
-    const { recipe } = this.props;
     const { image } = this.state;
 
-    StorageHelper.addFile(`recipes/${image.name}`, image).then((filePath) => {
-      this.props.updateRecipeStart();
+    /* StorageHelper.addFile(`recipes/${image.name}`, image).then((filePath) => {
+      updateRecipeStart();
       RecipeDbHelper.updateRecipe(recipe.id, "image", image.name)
         .then(() => {
-          this.props.updateRecipe({ ...recipe, image: image.name });
-          this.props.updateRecipeStop();
+          updateRecipe({ ...recipe, image: image.name });
+          updateRecipeStop();
           toast.success("Updated!");
         })
         .catch(() => {
-          this.props.updateRecipeStop();
+          updateRecipeStop();
           toast.error("Error updating the recipe!");
         });
-    });
+    }); */
   };
 
   const renderRecipeHeader = () => {
-    const { recipe, toggleEdit } = this.props;
-
     return (
       <>
         {recipe.image && (
           <div>
-            <StyledCardMedia image={recipe.imageFullPath} title="TODO" />
+            <img src={recipe.imageFullPath} alt={recipe.name} />
           </div>
         )}
         <div>
@@ -186,33 +174,26 @@ const RecipeHeaderElement: React.FC<OwnProps> = ({
         </div>
         <div>
           {recipe.type && (
-            <StyledRecipeInfo>
+            <div>
               <p>{recipe.type}</p>
-            </StyledRecipeInfo>
+            </div>
           )}
           {recipe.duration && (
-            <StyledRecipeInfo>
+            <div>
               <p>
                 <FontAwesomeIcon size="sm" icon={faClock} />
                 {` ${recipe.duration} minutes`}
               </p>
-            </StyledRecipeInfo>
+            </div>
           )}
           {recipe.cuisine && (
-            <StyledRecipeInfo>
+            <div>
               <p>{recipe.cuisine}</p>
-            </StyledRecipeInfo>
+            </div>
           )}
           <div>
             {recipe.tags &&
-              recipe.tags.map((tag, index) => (
-                <StyledChip
-                  key={index}
-                  size="small"
-                  label={tag}
-                  color="secondary"
-                />
-              ))}
+              recipe.tags.map((tag, index) => <div key={index}>{tag}</div>)}
           </div>
         </div>
       </>
@@ -224,7 +205,7 @@ const RecipeHeaderElement: React.FC<OwnProps> = ({
       <>
         {recipe.image && (
           <div>
-            <StyledCardMedia image={recipe.imageFullPath} title={recipe.name} />
+            <img src={recipe.imageFullPath} alt={recipe.name} />
           </div>
         )}
         <StyledSection width="600">
@@ -258,7 +239,7 @@ const RecipeHeaderElement: React.FC<OwnProps> = ({
           />
         </div>
         <div>
-          <StyledRecipeInfo>
+          {/* <div>
             <Select
               options={typeOptions}
               value={
@@ -270,16 +251,16 @@ const RecipeHeaderElement: React.FC<OwnProps> = ({
               onChange={this.updateType}
               isDisabled={updatingRecipe}
             />
-          </StyledRecipeInfo>
-          <StyledRecipeInfo>
+          </div> */}
+          <div>
             <input
               placeholder="Duration in minutes"
               defaultValue={recipe.duration}
               onChange={this.updateRecipe("duration")}
               disabled={updatingRecipe}
             />
-          </StyledRecipeInfo>
-          <StyledRecipeInfo>
+          </div>
+          {/* <div>
             <Select
               options={cuisineOptions}
               value={
@@ -291,23 +272,20 @@ const RecipeHeaderElement: React.FC<OwnProps> = ({
               onChange={this.updateCuisine}
               isDisabled={updatingRecipe}
             />
-          </StyledRecipeInfo>
+          </div> */}
           <div>
             {recipe.tags &&
               recipe.tags.map((tag, index) => (
-                <StyledChip
-                  key={index}
-                  size="small"
-                  label={tag}
-                  color="secondary"
-                  onDelete={this.deleteTag(tag)}
-                />
+                <div key={index}>
+                  <button onClick={this.deleteTag(tag)}>X</button>
+                  {tag}
+                </div>
               ))}
-            <Select
+            {/* <Select
               options={tagOptionsWithoutCurrentTags}
               value={null}
               onChange={this.addTag}
-            />
+            /> */}
           </div>
         </div>
       </>

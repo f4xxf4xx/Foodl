@@ -7,10 +7,10 @@ export interface Recipe {
   imageFullPath?: string;
   slug: string;
   type?: string;
-  duration?: number;
-  tags?: string[];
+  duration?: string;
   cuisine?: string;
-  ingredientGroups?: string[];
+  tags?: string[];
+  ingredients?: string[];
 }
 
 export interface Step {

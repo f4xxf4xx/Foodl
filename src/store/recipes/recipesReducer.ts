@@ -1,4 +1,4 @@
-import { createReducer } from "redux-starter-kit";
+import { createReducer } from "@reduxjs/toolkit";
 import { Recipe } from "../../modules/Recipes/models";
 
 export interface Filters {
@@ -11,7 +11,7 @@ export interface RecipesState {
     loading: boolean;
     updating: boolean;
     filters: Filters;
-    newRecipe: any;
+    newRecipe: Recipe;
 }
 
 const initialRecipesState: RecipesState = {
@@ -23,17 +23,11 @@ const initialRecipesState: RecipesState = {
 };
 
 export const recipesReducer = createReducer(initialRecipesState, {
-    FETCH_RECIPES_START: (state) => {
-        state.loading = true;
+    SET_RECIPES_LOADING: (state, action) => {
+        state.loading = action.payload;
     },
-    FETCH_RECIPES_STOP: (state) => {
-        state.loading = false;
-    },
-    UPDATE_RECIPES_START: (state) => {
-        state.updating = false;
-    },
-    UPDATE_RECIPES_STOP: (state) => {
-        state.updating = false;
+    SET_RECIPES_UPDATING: (state, action) => {
+        state.updating = action.payload;
     },
     UPDATE_RECIPES: (state, action) => {
         state.recipes = action.payload;

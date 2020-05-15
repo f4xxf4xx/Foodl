@@ -3,44 +3,51 @@ import { RecipeDbHelper } from "../repositories/RecipeDbHelper";
 import { Filters } from "../store/recipes/recipesReducer";
 import {
   updateRecipes,
-  fetchRecipesStart,
-  fetchRecipesStop,
+  setRecipesLoading,
+  setRecipesUpdating,
   deleteRecipe,
-  updateRecipesStop,
-  updateRecipesStart,
   addRecipe,
 } from "../store/recipes/recipesActions";
 import {
-  updateRecipeStart,
-  updateRecipeStop,
+  setRecipeLoading,
+  setRecipeUpdating,
   updateRecipe,
-  updateIngredientsStart,
-  updateIngredientsStop,
-  addIngredient,
-  updateStepsStart,
-  updateStepsStop,
-  addStep,
+  setIngredientGroupsUpdating,
 } from "../store/recipes/recipeActions";
 import { Recipe, Step } from "../modules/Recipes/models";
 import { History } from "history";
 
-export const fetchAsync = (uid: string, filters: Filters) => {
+export const fetchRecipesAsync = (uid: string, filters: Filters) => {
   return async (dispatch) => {
-    dispatch(fetchRecipesStart());
+    dispatch(setRecipeLoading(true));
     try {
       const recipes = await RecipeDbHelper.getRecipes(uid, filters);
       dispatch(updateRecipes(recipes));
     } catch (error) {
       toast.error(error);
     } finally {
-      dispatch(fetchRecipesStop());
+      dispatch(setRecipeLoading(false));
+    }
+  };
+};
+
+export const fetchRecipeBySlugAsync = (uid: string, slug: string) => {
+  return async (dispatch) => {
+    dispatch(setRecipeLoading(true));
+    try {
+      const recipe = await RecipeDbHelper.getRecipeBySlug(uid, slug);
+      dispatch(updateRecipe(recipe));
+    } catch (error) {
+      toast.error(error);
+    } finally {
+      dispatch(setRecipeLoading(false));
     }
   };
 };
 
 export const deleteAsync = (recipeId: string) => {
   return async (dispatch) => {
-    dispatch(updateRecipeStart());
+    dispatch(setRecipeUpdating(true));
     try {
       await RecipeDbHelper.deleteRecipe(recipeId);
       dispatch(deleteRecipe(recipeId));
@@ -48,48 +55,30 @@ export const deleteAsync = (recipeId: string) => {
     } catch (error) {
       toast.error(error);
     } finally {
-      dispatch(updateRecipeStop());
+      dispatch(setRecipeUpdating(false));
     }
   };
 };
 
 export const addIngredientGroupAsync = (recipe: Recipe, group: string) => {
   return async (dispatch) => {
-    dispatch(updateRecipeStart());
+    dispatch(setRecipeUpdating(true));
     try {
-      const groups = await RecipeDbHelper.addIngredientGroup(recipe.id, group);
-      if (groups) {
-        dispatch(updateRecipe({ ...recipe, ingredientGroups: groups }));
-      }
+      //const groups = await RecipeDbHelper.addIngredientGroup(recipe.id, group);
+      //if (groups) {
+      //  dispatch(updateRecipe({ ...recipe, ingredientGroups: groups }));
+      //}
     } catch (error) {
       toast.error(error);
     } finally {
-      dispatch(updateRecipeStop());
-    }
-  };
-};
-
-export const addIngredientAsync = (recipe: Recipe, ingredient: string) => {
-  return async (dispatch) => {
-    dispatch(updateIngredientsStart());
-    try {
-      const newIngredient = await RecipeDbHelper.addIngredient(
-        recipe.id,
-        ingredient
-      );
-      dispatch(addIngredient(newIngredient));
-      toast.success("Added!");
-    } catch (error) {
-      toast.error(error);
-    } finally {
-      dispatch(updateIngredientsStop());
+      dispatch(setRecipeUpdating(false));
     }
   };
 };
 
 export const addRecipeAsync = (name: string, uid: string, history: History) => {
   return async (dispatch) => {
-    dispatch(updateRecipesStart());
+    dispatch(setRecipesUpdating(true));
     try {
       const recipe = await RecipeDbHelper.addRecipe(name, uid);
       dispatch(addRecipe(recipe));
@@ -98,22 +87,22 @@ export const addRecipeAsync = (name: string, uid: string, history: History) => {
     } catch (error) {
       toast.error(error);
     } finally {
-      dispatch(updateRecipesStop());
+      dispatch(setRecipesUpdating(false));
     }
   };
 };
 
 export const addStepAsync = (id: string, newStep: Step) => {
   return async (dispatch) => {
-    dispatch(updateStepsStart());
+    dispatch(setRecipesUpdating(true));
     try {
-      const step = await RecipeDbHelper.addStep(id, newStep);
-      dispatch(addStep(step));
+      //const step = await RecipeDbHelper.addStep(id, newStep);
+      //dispatch(addStep(step));
       toast.success("Added!");
     } catch (error) {
       toast.error("Error adding the step item!");
     } finally {
-      dispatch(updateStepsStop());
+      dispatch(setRecipesUpdating(false));
     }
   };
 };

@@ -1,182 +1,89 @@
-import {
-  Divider,
-  Table,
-  TableBody,
-  TableCell,
-  TableRow,
-  TextField,
-  p,
-} from "@material-ui/core";
-import React, { PureComponent } from "react";
-import { connect } from "react-redux";
-import { RouteComponentProps, withRouter } from "react-router-dom";
-import { toast } from "react-toastify";
-import { bindActionCreators, compose, Dispatch } from "redux";
-import { Loader } from "semantic-ui-react";
+import React from "react";
+import { useSelector, useDispatch } from "react-redux";
 import { ApplicationState } from "../../..";
 import { ButtonError } from "../../../layout/Styles/Buttons";
-import * as recipeActions from "../../../store/recipes/recipeActions";
-import { Step } from "../models";
+import { Step, Recipe } from "../models";
 import AddStepForm from "./AddStepForm";
-import { RecipeDbHelper } from "../../../repositories/RecipeDbHelper";
+import { updateStep, deleteStep } from "../../../store/recipes/recipeActions";
 
-interface OwnProps {
-  id: string;
+interface Props {
+  recipe: Recipe;
   editing: boolean;
 }
 
-interface StateProps {
-  steps: Step[];
-  loadingSteps: boolean;
-  updatingSteps: boolean;
-}
+const StepsElement: React.FC<Props> = ({ recipe, editing }) => {
+  const loadingSteps = useSelector(
+    (state: ApplicationState) => state.recipe.loadingSteps
+  );
+  const updatingSteps = useSelector(
+    (state: ApplicationState) => state.recipe.updatingSteps
+  );
+  const dispatch = useDispatch();
+  const steps: Step[] = [
+    {
+      order: 1,
+      text: "mix",
+    },
+    {
+      order: 2,
+      text: "stir",
+    },
+  ];
 
-interface DispatchProps {
-  fetchStepsStart: typeof recipeActions.fetchStepsStart;
-  fetchStepsStop: typeof recipeActions.fetchStepsStop;
-  updateStepsStart: typeof recipeActions.updateStepsStart;
-  updateStepsStop: typeof recipeActions.updateStepsStop;
-  updateSteps: typeof recipeActions.updateSteps;
-  updateStep: typeof recipeActions.updateStep;
-  deleteStep: typeof recipeActions.deleteStep;
-}
-
-type Props = OwnProps & StateProps & RouteComponentProps & DispatchProps;
-
-class StepsElementBase extends PureComponent<Props> {
-  public componentDidMount() {
-    const { id } = this.props;
-
-    this.props.fetchStepsStart();
-    RecipeDbHelper.getSteps(id)
-      .then((steps) => {
-        if (steps.length > 0) {
-          this.props.updateSteps(steps);
-        }
-        this.props.fetchStepsStop();
-      })
-      .catch(() => {
-        this.props.fetchStepsStart();
-        toast.error("Error fetching the ingredient items!");
-      });
-  }
-
-  public deleteStep = (stepId: string) => (
-    event: React.MouseEvent<HTMLButtonElement>
-  ) => {
-    const { id } = this.props;
-
-    this.props.updateStepsStart();
-    RecipeDbHelper.deleteStep(id, stepId)
-      .then(() => {
-        this.props.deleteStep(stepId);
-        this.props.updateStepsStop();
-        toast.success("Deleted!");
-      })
-      .catch(() => {
-        this.props.updateStepsStop();
-        toast.error("Error deleting the ingredient item!");
-      });
-  };
-
-  public updateStep = (step: Step, key: string) => (
-    e: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    const value = e.target.value;
-
-    this.props.updateStepsStart();
-    RecipeDbHelper.updateStepText(this.props.id, step.id, value)
-      .then(() => {
-        //TODO refactor to not use updatestep but update steps
-        this.props.updateStep({ ...step, [key]: value });
-        this.props.updateStepsStop();
-      })
-      .catch(() => {
-        this.props.updateStepsStop();
-        toast.error("Error updating the step");
-      });
-  };
-
-  public renderSteps() {
-    const { steps, editing, updatingSteps } = this.props;
-
-    return steps.map((step, index) => (
-      <TableRow key={index}>
-        <TableCell component="th" scope="row">
+  const renderSteps = () => {
+    return steps.map((step) => (
+      <tr key={step.id}>
+        <th>
           <p>{step.order}</p>
-        </TableCell>
-        <TableCell>
+        </th>
+        <td>
           {editing ? (
-            <TextField
+            <input
               id="input-step-text"
               placeholder="Step text"
               type="text"
               defaultValue={step.text}
-              onBlur={this.updateStep(step, "text")}
+              onBlur={() =>
+                dispatch(
+                  updateStep({
+                    id: step.id,
+                    text: step.text,
+                  })
+                )
+              }
               disabled={updatingSteps}
             />
           ) : (
             <p>{step.text}</p>
           )}
-        </TableCell>
-        <TableCell>
+        </td>
+        <td>
           {editing && (
             <ButtonError
-              onClick={this.deleteStep(step.id)}
+              onClick={() => dispatch(deleteStep(step.id))}
               disabled={updatingSteps}
             >
               Delete step
             </ButtonError>
           )}
-        </TableCell>
-      </TableRow>
+        </td>
+      </tr>
     ));
-  }
+  };
 
-  public render() {
-    const { loadingSteps, editing, steps } = this.props;
-
-    return (
-      <>
-        <h5>Steps</h5>
-        {loadingSteps ? (
-          <Loader active={true} inline="centered" />
-        ) : (
-          <Table>
-            <TableBody>{this.renderSteps()}</TableBody>
-          </Table>
-        )}
-        <Divider />
-        <AddStepForm editing={editing} currentStepCount={steps.length + 1} />
-      </>
-    );
-  }
-}
-
-const mapStateToProps = (state: ApplicationState) => ({
-  steps: state.recipe.steps,
-  loadingSteps: state.recipe.loadingSteps,
-  updatingSteps: state.recipe.updatingSteps,
-});
-
-const mapDispatchToProps = (dispatch: Dispatch) => ({
-  fetchStepsStart: bindActionCreators(recipeActions.fetchStepsStart, dispatch),
-  fetchStepsStop: bindActionCreators(recipeActions.fetchStepsStop, dispatch),
-  updateStepsStart: bindActionCreators(
-    recipeActions.updateStepsStart,
-    dispatch
-  ),
-  updateStepsStop: bindActionCreators(recipeActions.updateStepsStop, dispatch),
-  updateSteps: bindActionCreators(recipeActions.updateSteps, dispatch),
-  updateStep: bindActionCreators(recipeActions.updateStep, dispatch),
-  deleteStep: bindActionCreators(recipeActions.deleteStep, dispatch),
-});
-
-const StepsElement = compose(
-  connect<StateProps, DispatchProps, OwnProps>(
-    mapStateToProps,
-    mapDispatchToProps
-  )
-)(withRouter(StepsElementBase));
+  return (
+    <>
+      <h5>Steps</h5>
+      {loadingSteps ? (
+        <p>Loading...</p>
+      ) : (
+        <table>
+          <tbody>{renderSteps()}</tbody>
+        </table>
+      )}
+      <AddStepForm editing={editing} currentStepCount={steps.length + 1} />
+    </>
+  );
+};
 
 export default StepsElement;

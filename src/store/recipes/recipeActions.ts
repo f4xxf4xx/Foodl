@@ -1,33 +1,28 @@
-import { createAction } from "redux-starter-kit";
+import { createAction } from "@reduxjs/toolkit";
+import { Recipe } from "../../modules/Recipes/models";
 
-// RECIPE
-export const fetchRecipeStart = createAction("FETCH_RECIPE_START");
-export const fetchRecipeStop = createAction("FETCH_RECIPE_STOP");
-export const updateRecipeStart = createAction("UPDATE_RECIPE_START");
-export const updateRecipeStop = createAction("UPDATE_RECIPE_STOP");
-export const updateRecipe = createAction("UPDATE_RECIPE");
+export const setRecipeLoading = createAction<boolean>("SET_RECIPE_LOADING");
+export const setRecipeUpdating = createAction<boolean>("SET_RECIPE_UPDATING");
+export const updateRecipe = createAction<Recipe>("UPDATE_RECIPE");
 
-// INGREDIENT ITEMS
-export const fetchIngredientsStart = createAction(
-  "FETCH_INGREDIENTITEMS_START"
+export const setIngredientGroupsLoading = createAction<boolean>(
+  "SET_INGREDIENT_GROUPS_LOADING"
 );
-export const fetchIngredientsStop = createAction("FETCH_INGREDIENTITEMS_STOP");
-export const updateIngredientsStart = createAction(
-  "UPDATE_INGREDIENTITEMS_START"
+export const setIngredientGroupsUpdating = createAction<boolean>(
+  "SET_INGREDIENT_GROUPS_UPDATING"
 );
-export const updateIngredientsStop = createAction(
-  "UPDATE_INGREDIENTITEMS_STOP"
+export const updateIngredientGroups = createAction<string[]>(
+  "UPDATE_INGREDIENT_GROUPS"
 );
-export const updateIngredients = createAction("UPDATE_INGREDIENTITEMS");
-export const addIngredient = createAction("ADD_INGREDIENTITEM");
-export const deleteIngredient = createAction("DELETE_INGREDIENTITEM");
 
-// STEPS
-export const fetchStepsStart = createAction("FETCH_STEPS_START");
-export const fetchStepsStop = createAction("FETCH_STEPS_STOP");
-export const updateStepsStart = createAction("UPDATE_STEPS_START");
-export const updateStepsStop = createAction("UPDATE_STEPS_STOP");
-export const updateSteps = createAction("UPDATE_STEPS");
-export const updateStep = createAction("UPDATE_STEP");
-export const addStep = createAction("ADD_STEP");
-export const deleteStep = createAction("DELETE_STEP");
+export const setStepsLoading = createAction<boolean>("SET_STEPS_LOADING");
+export const setStepsUpdating = createAction<boolean>("SET_STEPS_UPDATING");
+export const updateSteps = createAction<string[]>("UPDATE_STEPS");
+export const addStep = createAction<string>("ADD_STEP");
+
+interface UpdateStepPayload {
+  id: string;
+  text: string;
+}
+export const updateStep = createAction<UpdateStepPayload>("UPDATE_STEP");
+export const deleteStep = createAction<string>("DELETE_STEP");
