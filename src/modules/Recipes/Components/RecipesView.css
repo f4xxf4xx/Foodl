@@ -1,0 +1,19 @@
+.recipes {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: normal;
+}
+
+.recipe-card {
+  margin-left: 24px;
+  flex: 0 1 calc(15% - 1em);
+}
+
+.recipe-card img {
+  max-width: 300px;
+}
+
+.recipe-card-tag {
+  display: inline;
+  margin: 4px;
+}

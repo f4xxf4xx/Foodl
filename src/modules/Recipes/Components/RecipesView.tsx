@@ -8,7 +8,12 @@ import { Recipe } from "../models";
 import AddRecipeForm from "./AddRecipeForm";
 import { getTagIcon } from "../helper";
 import { Filters } from "../../../store/recipes/recipesReducer";
-import * as RecipeService from "../../../services/RecipeService";
+
+import "./RecipesView.css";
+import {
+  fetchRecipesAsync,
+  deleteRecipeAsync,
+} from "../../../store/recipes/recipesActions";
 
 type Props = RouteComponentProps;
 
@@ -27,15 +32,15 @@ const RecipesView = (props: Props) => {
 
   useEffect(() => {
     const fetch = async () => {
-      dispatch(RecipeService.fetchRecipesAsync(auth.uid, null));
+      dispatch(fetchRecipesAsync(auth.uid, null));
     };
 
     fetch();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [auth.uid]);
+  }, [auth.uid, dispatch]);
 
   const deleteRecipe = (recipeId: string) => async () => {
-    dispatch(RecipeService.deleteAsync(recipeId));
+    dispatch(deleteRecipeAsync(recipeId));
   };
 
   const goToRecipePage = (slug: string) => () => {
@@ -44,7 +49,11 @@ const RecipesView = (props: Props) => {
 
   const renderTags = (recipe: Recipe) => {
     return recipe.tags
-      ? recipe.tags.map((tag, index) => <p key={index}>{tag}</p>)
+      ? recipe.tags.map((tag, index) => (
+          <p className="recipe-card-tag" key={index}>
+            {tag}
+          </p>
+        ))
       : null;
   };
 
@@ -102,12 +111,12 @@ const RecipesView = (props: Props) => {
     return (
       <>
         <div>{renderFilters()}</div>
-        <div>
+        <div className="recipes">
           {loading ? (
-            <p>Loading...</p>
+            <h1>Loading...</h1>
           ) : (
             recipes.map((recipe) => (
-              <div key={recipe.id}>
+              <div className="recipe-card" key={recipe.id}>
                 <img
                   src={recipe.imageFullPath}
                   alt={recipe.name}

@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { ApplicationState } from "../../..";
 import { useFirebaseConnect, isLoaded, isEmpty } from "react-redux-firebase";
 import AddIngredientForm from "./AddIngredientForm";
 import { Recipe } from "../models";
+import { fetchCartAsync } from "../../../store/cart/cartActions";
 
 interface Props {
   recipe: Recipe;
@@ -11,26 +12,36 @@ interface Props {
 }
 
 const IngredientsElement: React.FC<Props> = ({ recipe, editing }) => {
-  const firebase = useSelector((state: ApplicationState) => state.firebase);
-  const uid = firebase.auth.uid;
+  const auth = useSelector((state: ApplicationState) => state.firebase.auth);
+  const cart = useSelector((state: ApplicationState) => state.cart);
+  const dispatch = useDispatch();
 
-  useFirebaseConnect([{ path: `carts/${uid}` }]);
-  const cart = useSelector(
-    (state: ApplicationState) =>
-      state.firebase.data.carts && state.firebase.data.carts[uid]
-  );
+  useEffect(() => {
+    if (auth.uid) {
+      const fetch = async () => {
+        dispatch(fetchCartAsync(auth.uid));
+      };
 
-  if (!isLoaded(cart)) {
-    return <div>Loading...</div>;
-  }
+      fetch();
+    }
+  }, [auth.uid, dispatch]);
 
-  if (isEmpty(cart)) {
-    return <div>Cart empty</div>;
-  }
+  const renderIngredients = () => {
+    if (!recipe.ingredients || recipe.ingredients.length === 0) {
+      return "No ingredients";
+    }
+    return recipe.ingredients?.map((ingredient, index) => (
+      <p key={index}>{ingredient}</p>
+    ));
+  };
 
   return (
-    <>
-      <h5>Ingredients ({recipe.ingredients.length})</h5>
+    <div className="recipe-ingredients">
+      <h5>
+        Ingredients{" "}
+        {recipe.ingredients?.length && `(${recipe.ingredients?.length})`}
+      </h5>
+      {renderIngredients()}
       {/* <>
             {ingredientGroups &&
               ingredientGroups.map((ingredientGroup, index) => {
@@ -43,11 +54,8 @@ const IngredientsElement: React.FC<Props> = ({ recipe, editing }) => {
             {ingredientGroups &&
               renderIngredientGroup(ingredientGroups.length, null, null)}
           </> */}
-      {recipe.ingredients.forEach((ingredient) => (
-        <p>{ingredient}</p>
-      ))}
       <AddIngredientForm editing={editing} />
-    </>
+    </div>
   );
 };
 

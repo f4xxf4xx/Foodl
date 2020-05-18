@@ -4,7 +4,7 @@ import Creatable from "react-select/creatable";
 import { ApplicationState } from "../../..";
 import { ButtonPrimary } from "../../../layout/Styles/Buttons";
 import { StyledSection } from "../../../layout/Styles/Sections";
-import * as recipeService from "../../../services/RecipeService";
+import { addIngredientGroupAsync } from "../../../store/recipes/recipeActions";
 
 interface Props {
   editing: boolean;
@@ -37,7 +37,7 @@ const AddIngredientForm: React.FC<Props> = (props: Props) => {
     }
 
     if (group && (!ingredientGroups || !ingredientGroups.includes(group))) {
-      dispatch(recipeService.addIngredientGroupAsync(recipe, group));
+      dispatch(addIngredientGroupAsync(recipe, group));
     }
 
     try {

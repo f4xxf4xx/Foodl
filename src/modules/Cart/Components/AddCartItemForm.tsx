@@ -1,49 +1,43 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { ApplicationState } from "../../..";
 import { ButtonPrimary } from "../../../layout/Styles/Buttons";
-import { StyledSection } from "../../../layout/Styles/Sections";
-import * as cartService from "../../../services/CartService";
+import { addCartItemAsync } from "../../../store/cart/cartActions";
 
 const AddCartItemForm = () => {
   const dispatch = useDispatch();
-  const [newCartItem, setNewCartItem] = useState<string>();
+  const [newCartItem, setNewCartItem] = useState<string>("");
   const firebase = useSelector((state: ApplicationState) => state.firebase);
-  const cartUpdating = useSelector(
-    (state: ApplicationState) => state.cart.updating
-  );
 
   const addIngredient = async () => {
     if (!newCartItem) {
       return;
     }
-    dispatch(cartService.addItemAsync(firebase.auth.uid, newCartItem));
-  };
-
-  const updateCurrentSelectedIngredient = (e: any) => {
-    setNewCartItem(e);
+    setNewCartItem("");
+    dispatch(addCartItemAsync(firebase.auth.uid, newCartItem));
   };
 
   const preventDefault = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
   };
 
+  const handleSubmit = (e) => {
+    setNewCartItem(e.currentTarget.value);
+  };
+
   return (
-    <StyledSection>
-      <h6>New cart item</h6>
+    <div className="cart-new-item">
+      <h2>New cart item</h2>
       <form onSubmit={preventDefault}>
-        <div>
-          <input
-            id="input-ingredient"
-            value={newCartItem}
-            onChange={updateCurrentSelectedIngredient}
-          />
-        </div>
-        <ButtonPrimary onClick={addIngredient} disabled={cartUpdating}>
-          Add
-        </ButtonPrimary>
+        <input
+          className="cart-new-item-input"
+          id="input-ingredient"
+          value={newCartItem}
+          onChange={handleSubmit}
+        />
+        <ButtonPrimary onClick={addIngredient}>Add</ButtonPrimary>
       </form>
-    </StyledSection>
+    </div>
   );
 };
 

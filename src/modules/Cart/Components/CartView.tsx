@@ -2,97 +2,88 @@ import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { ApplicationState } from "../../..";
 import { ButtonError } from "../../../layout/Styles/Buttons";
-import * as cartService from "../../../services/CartService";
 import AddCartItemForm from "./AddCartItemForm";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 
+import "./Cart.css";
+import {
+  fetchCartAsync,
+  deleteAllCartItemsAsync,
+  deleteCartItemAsync,
+} from "../../../store/cart/cartActions";
+
 const CartView = () => {
   const dispatch = useDispatch();
   //store
-  const cartItems = useSelector(
-    (state: ApplicationState) => state.cart.cartItems
-  );
-  const cartLoading = useSelector(
-    (state: ApplicationState) => state.cart.loading
-  );
-  const cartUpdating = useSelector(
-    (state: ApplicationState) => state.cart.updating
-  );
+  const cart = useSelector((state: ApplicationState) => state.cart);
   const auth = useSelector((state: ApplicationState) => state.firebase.auth);
 
   useEffect(() => {
     const fetch = async () => {
-      dispatch(cartService.fetchAsync(auth.uid));
+      dispatch(fetchCartAsync(auth.uid));
     };
 
     fetch();
   }, [auth.uid, dispatch]);
 
   const deleteAllCartItems = () => async () => {
-    dispatch(cartService.deleteAllItemsAsync(auth.uid));
+    dispatch(deleteAllCartItemsAsync(auth.uid));
   };
 
   const deleteCartItem = (cartItemName: string) => async () => {
-    dispatch(cartService.deleteItemAsync(auth.uid, cartItemName));
+    dispatch(deleteCartItemAsync(auth.uid, cartItemName));
   };
 
   const renderCartItems = () => {
+    if (cart.loading) {
+      return <p>Loading...</p>;
+    }
+    if (cart.cartItems.length === 0) {
+      return <h5>Cart is empty</h5>;
+    }
     return (
-      <div>
-        {cartItems.length > 0 ? (
-          <table>
-            <th>
-              <tr>
-                <th>Ingredients</th>
-                <th>Delete</th>
-              </tr>
-            </th>
-            <tbody>
-              {cartItems.map((cartItem, index) => (
-                <tr key={index}>
-                  <td>{cartItem}</td>
-                  <td>
-                    <ButtonError
-                      width="15"
-                      disabled={cartUpdating}
-                      onClick={deleteCartItem(cartItem)}
-                    >
-                      <FontAwesomeIcon icon={faTrash} />
-                    </ButtonError>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        ) : (
-          <h5>Cart is empty</h5>
-        )}
-      </div>
+      <table className="cart-table">
+        <thead className="cart-table-header">
+          <tr>
+            <th>Ingredients</th>
+            <th>Delete</th>
+          </tr>
+        </thead>
+        <tbody className="cart-table-body">
+          {cart.cartItems.map((cartItem, index) => (
+            <tr key={index}>
+              <td>{cartItem}</td>
+              <td>
+                <ButtonError
+                  width="15"
+                  disabled={cart.updating}
+                  onClick={deleteCartItem(cartItem)}
+                >
+                  <FontAwesomeIcon icon={faTrash} />
+                </ButtonError>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     );
   };
 
   return (
     <>
-      <h3>Cart</h3>
-      {cartLoading ? (
-        <p>Loading...</p>
-      ) : (
-        <>
-          <AddCartItemForm />
-          {cartItems && cartItems.length > 0 && (
-            <div>
-              <ButtonError
-                disabled={cartUpdating}
-                onClick={deleteAllCartItems()}
-              >
-                Delete all items
-              </ButtonError>
-            </div>
-          )}
-          {renderCartItems()}
-        </>
-      )}
+      <h1>Cart</h1>
+      <AddCartItemForm />
+      <div>
+        <ButtonError
+          width="100"
+          disabled={cart.updating}
+          onClick={deleteAllCartItems()}
+        >
+          Delete all items
+        </ButtonError>
+      </div>
+      {renderCartItems()}
     </>
   );
 };

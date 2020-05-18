@@ -1,0 +1,57 @@
+body {
+}
+
+.header {
+  height: 40px;
+  background-color: lightgray;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  position: fixed;
+}
+
+.sidebar {
+  top: 40px;
+  background-color: lightsteelblue;
+  width: 240px;
+  height: 100vh;
+  position: fixed;
+}
+
+.logo {
+  margin-top: 8px;
+  margin-left: 8px;
+}
+
+.user-actions {
+  margin-right: 8px;
+  margin-top: 8px;
+}
+
+.sidebar-list {
+  margin: 0px;
+  padding-left: 8px;
+}
+
+.sidebar-item {
+  margin-top: 8px;
+  font-size: 20px;
+}
+
+.sidebar-item-active {
+  margin-top: 8px;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.main {
+  margin-left: 240px;
+  padding: 12px;
+  padding-top: 52px;
+}
+
+.divider {
+  display: block;
+  margin-top: 8px;
+  border-bottom: 1px black solid;
+}

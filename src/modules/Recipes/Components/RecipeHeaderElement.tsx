@@ -10,7 +10,7 @@ import ContentEditable from "react-contenteditable";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClock } from "@fortawesome/free-solid-svg-icons";
 import { StyledSection } from "../../../layout/Styles/Sections";
-import { StorageHelper } from "../../../services/StorageHelper";
+import { StorageHelper } from "../../../repositories/StorageHelper";
 import AvatarEditor from "react-avatar-editor";
 
 interface Props {
@@ -132,14 +132,12 @@ const RecipeHeaderElement: React.FC<Props> = ({
 
   const updateImage = (e: React.ChangeEvent<HTMLInputElement>) => {
     const image = e.target.files[0];
-    this.setState({
-      image,
-    });
+    //setState({
+    //  image,
+    //});
   };
 
   const saveImage = () => {
-    const { image } = this.state;
-
     /* StorageHelper.addFile(`recipes/${image.name}`, image).then((filePath) => {
       updateRecipeStart();
       RecipeDbHelper.updateRecipe(recipe.id, "image", image.name)
@@ -210,8 +208,8 @@ const RecipeHeaderElement: React.FC<Props> = ({
         )}
         <StyledSection width="600">
           {/* <AvatarEditor width={400} height={250} image={image} /> */}
-          <input id="input-image" type="file" onChange={this.updateImage} />
-          <ButtonPrimary onClick={this.saveImage}>Save image</ButtonPrimary>
+          <input id="input-image" type="file" onChange={updateImage} />
+          <ButtonPrimary onClick={saveImage}>Save image</ButtonPrimary>
         </StyledSection>
         <div>
           <div>
@@ -219,7 +217,7 @@ const RecipeHeaderElement: React.FC<Props> = ({
               className="Muip-root Muip-h3"
               html={recipe.name}
               disabled={updatingRecipe}
-              onBlur={this.updateContentEditable("name")}
+              onBlur={updateContentEditable("name")}
               tagName="h3"
               onChange={() => {}}
             />
@@ -233,7 +231,7 @@ const RecipeHeaderElement: React.FC<Props> = ({
             className="Muip-root Muip-body1"
             html={recipe.description || "Description"}
             disabled={updatingRecipe}
-            onBlur={this.updateContentEditable("description")}
+            onBlur={updateContentEditable("description")}
             tagName="p"
             onChange={() => {}}
           />
@@ -248,7 +246,7 @@ const RecipeHeaderElement: React.FC<Props> = ({
                   label: recipe.type,
                 }
               }
-              onChange={this.updateType}
+              onChange={updateType}
               isDisabled={updatingRecipe}
             />
           </div> */}
@@ -256,7 +254,7 @@ const RecipeHeaderElement: React.FC<Props> = ({
             <input
               placeholder="Duration in minutes"
               defaultValue={recipe.duration}
-              onChange={this.updateRecipe("duration")}
+              onChange={updateRecipe("duration")}
               disabled={updatingRecipe}
             />
           </div>
@@ -269,7 +267,7 @@ const RecipeHeaderElement: React.FC<Props> = ({
                   label: recipe.cuisine,
                 }
               }
-              onChange={this.updateCuisine}
+              onChange={updateCuisine}
               isDisabled={updatingRecipe}
             />
           </div> */}
@@ -277,14 +275,14 @@ const RecipeHeaderElement: React.FC<Props> = ({
             {recipe.tags &&
               recipe.tags.map((tag, index) => (
                 <div key={index}>
-                  <button onClick={this.deleteTag(tag)}>X</button>
+                  <button onClick={deleteTag(tag)}>X</button>
                   {tag}
                 </div>
               ))}
             {/* <Select
               options={tagOptionsWithoutCurrentTags}
               value={null}
-              onChange={this.addTag}
+              onChange={addTag}
             /> */}
           </div>
         </div>
@@ -294,9 +292,9 @@ const RecipeHeaderElement: React.FC<Props> = ({
 
   return recipe ? (
     editing ? (
-      this.renderEditHeader()
+      renderEditHeader()
     ) : (
-      this.renderRecipeHeader()
+      renderRecipeHeader()
     )
   ) : (
     <p>Loading...</p>

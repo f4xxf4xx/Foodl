@@ -9,7 +9,7 @@ const HomePage = () => {
   return (
     <>
       {isAuthenticated(auth) ? (
-        <h6>Welcome, {auth.displayName}</h6>
+        <h3>Welcome, {auth.displayName}</h3>
       ) : (
         <>
           <h3>Foodl</h3>

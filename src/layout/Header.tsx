@@ -5,6 +5,8 @@ import { ApplicationState } from "..";
 import { isAuthenticated } from "../helpers/userHelper";
 import { firebase } from "./../config";
 
+import "./Styles/MainLayout.css";
+
 const Header: React.FC = () => {
   const auth = useSelector((state: ApplicationState) => state.firebase.auth);
   const history = useHistory();
@@ -19,14 +21,19 @@ const Header: React.FC = () => {
   };
 
   return (
-    <div>
-      <div>{isAuthenticated(auth) && <p>Menu icon</p>}</div>
-      <Link to="/">Foodl</Link>
-      {isAuthenticated(auth) ? (
-        <button onClick={onSignOutClick}>Sign out</button>
-      ) : (
-        <button onClick={redirectToLogin}>Login</button>
-      )}
+    <div className="header">
+      <div className="logo">
+        <Link to="/">
+          <h3>Foodl</h3>
+        </Link>
+      </div>
+      <div className="user-actions">
+        {isAuthenticated(auth) ? (
+          <button onClick={onSignOutClick}>Sign out</button>
+        ) : (
+          <button onClick={redirectToLogin}>Login</button>
+        )}
+      </div>
     </div>
   );
 };

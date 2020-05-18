@@ -4,7 +4,7 @@ import { RouteComponentProps, withRouter } from "react-router-dom";
 import { ApplicationState } from "../../..";
 import { ButtonPrimary } from "../../../layout/Styles/Buttons";
 import { StyledSection } from "../../../layout/Styles/Sections";
-import * as recipeService from "../../../services/RecipeService";
+import { addRecipeAsync } from "../../../store/recipes/recipesActions";
 
 type Props = RouteComponentProps;
 
@@ -32,9 +32,7 @@ const AddRecipeForm = (props: Props) => {
       return;
     }
 
-    dispatch(
-      recipeService.addRecipeAsync(newRecipeName, auth.uid, props.history)
-    );
+    dispatch(addRecipeAsync(newRecipeName, auth.uid, props.history));
     setNewRecipeName("");
   };
 

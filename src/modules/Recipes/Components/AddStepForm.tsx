@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import { ButtonPrimary } from "../../../layout/Styles/Buttons";
 import { StyledSection } from "../../../layout/Styles/Sections";
 import { useDispatch, useSelector } from "react-redux";
-import * as RecipeService from "../../../services/RecipeService";
 import { ApplicationState } from "../../..";
+import { addStepAsync } from "../../../store/recipes/recipeActions";
 
 interface Props {
   editing: boolean;
@@ -27,7 +27,7 @@ const AddStepForm: React.FC<Props> = (props: Props) => {
       return;
     }
 
-    dispatch(RecipeService.addStepAsync(recipe.id, newStep));
+    dispatch(addStepAsync(recipe.id, newStep));
     setNewStep({
       ...newStep,
       text: "",

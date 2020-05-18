@@ -8,6 +8,14 @@ import HomePage from "./modules/Pages/HomePage";
 import RecipesView from "./modules/Recipes/Components/RecipesView";
 import RecipeView from "./modules/Recipes/Components/RecipeView";
 import LoginView from "./modules/User/Components/LoginView";
+import { library } from "@fortawesome/fontawesome-svg-core";
+import {
+  faHome,
+  faShoppingCart,
+  faBook,
+} from "@fortawesome/free-solid-svg-icons";
+
+library.add(faHome, faShoppingCart, faBook);
 
 const App: React.FC = () => {
   return (
@@ -30,7 +38,7 @@ const App: React.FC = () => {
         )}
       />
       <PrivateRoute
-        path="/recipe/:id"
+        path="/recipe/:slug"
         render={() => (
           <MainLayout>
             <RecipeView />

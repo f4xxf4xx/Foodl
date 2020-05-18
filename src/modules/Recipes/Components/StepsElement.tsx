@@ -21,10 +21,12 @@ const StepsElement: React.FC<Props> = ({ recipe, editing }) => {
   const dispatch = useDispatch();
   const steps: Step[] = [
     {
+      id: "1",
       order: 1,
       text: "mix",
     },
     {
+      id: "2",
       order: 2,
       text: "stir",
     },
@@ -72,7 +74,7 @@ const StepsElement: React.FC<Props> = ({ recipe, editing }) => {
   };
 
   return (
-    <>
+    <div className="recipe-steps">
       <h5>Steps</h5>
       {loadingSteps ? (
         <p>Loading...</p>
@@ -82,7 +84,7 @@ const StepsElement: React.FC<Props> = ({ recipe, editing }) => {
         </table>
       )}
       <AddStepForm editing={editing} currentStepCount={steps.length + 1} />
-    </>
+    </div>
   );
 };
 

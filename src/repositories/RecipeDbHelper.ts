@@ -19,6 +19,7 @@ export class RecipeDbHelper {
       cuisine: data.data().cuisine,
       duration: data.data().duration,
       tags: data.data().tags,
+      ingredients: data.data().ingredients,
     };
 
     if (recipe.image) {
@@ -70,6 +71,7 @@ export class RecipeDbHelper {
     uid: string,
     slug: string
   ): Promise<Recipe> {
+    console.log("do fetch");
     const recipes = await db
       .collection("recipes")
       .where("uid", "==", uid)
@@ -168,7 +170,7 @@ export class RecipeDbHelper {
   public static async addIngredientGroup(
     recipeId: string,
     ingredientGroup: string
-  ): Promise<string> {
+  ): Promise<boolean> {
     const recipeRef = db.collection("recipes").doc(recipeId);
     const recipe = await recipeRef.get();
 
@@ -182,7 +184,7 @@ export class RecipeDbHelper {
         ingredientGroup
       );
     }
-    return Promise.resolve(null);
+    return Promise.resolve(true);
   }
 
   public static async deleteIngredientGroup(

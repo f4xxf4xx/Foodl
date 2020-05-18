@@ -7,10 +7,10 @@ type DimensionProps = {
 
 export const ButtonPrimary = styled.button<DimensionProps>`
   && {
-    background: linear-gradient(45deg, #217fff 30%, #43adff 90%);
+    background-color: ${(props) => (props.disabled ? "lightgray" : "#4183c4")};
     border-radius: 3px;
     border: 0;
-    color: white;
+    color: ${(props) => (props.disabled ? "#4183c4" : "white")};
     padding: 0 15px;
 
     &:hover {
@@ -45,7 +45,7 @@ export const ButtonSecondary = styled.button<DimensionProps>`
 
 export const ButtonError = styled.button<DimensionProps>`
   && {
-    background: linear-gradient(45deg, #e10005 30%, #ff4145 90%);
+    background-color: ${(props) => (props.disabled ? "lightgray" : "red")};
     border-radius: 3px;
     border: 0;
     color: white;
