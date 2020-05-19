@@ -1,197 +1,104 @@
-import React from "react";
-import { connect, useSelector, useDispatch } from "react-redux";
-import Select from "react-select";
-import { toast } from "react-toastify";
+import React, { useState, useRef } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import { ApplicationState } from "../../..";
-import { ButtonPrimary } from "../../../layout/Styles/Buttons";
-import { Recipe } from "../models";
-import { RecipeDbHelper } from "../../../repositories/RecipeDbHelper";
 import ContentEditable from "react-contenteditable";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClock } from "@fortawesome/free-solid-svg-icons";
-import { StyledSection } from "../../../layout/Styles/Sections";
-import { StorageHelper } from "../../../repositories/StorageHelper";
-import AvatarEditor from "react-avatar-editor";
+import {
+  updateRecipeAsync,
+  addTagAsync,
+  deleteTagAsync,
+} from "../../../store/recipes/recipeActions";
 
 interface Props {
-  recipe: Recipe;
   editing: boolean;
   toggleEdit: () => void;
 }
 
-const RecipeHeaderElement: React.FC<Props> = ({
-  recipe,
-  editing,
-  toggleEdit,
-}) => {
+const RecipeHeaderElement: React.FC<Props> = ({ editing, toggleEdit }) => {
+  const auth = useSelector((state: ApplicationState) => state.firebase.auth);
+  const recipe = useSelector((state: ApplicationState) => state.recipe.recipe);
+  const [newImage, setNewImage] = useState<File>(null);
+  const [newTag, setNewTag] = useState<string>("");
+  const imageEditorRef = useRef<any>();
+  const dispatch = useDispatch();
   const updatingRecipe = useSelector(
     (state: ApplicationState) => state.recipe.updatingRecipe
   );
-  const dispatch = useDispatch();
 
   const updateRecipe = (key: string) => (
     e: React.ChangeEvent<HTMLInputElement>
   ) => {
     const value = e.currentTarget.value;
 
-    /*updateRecipeStart();
-    RecipeDbHelper.updateRecipe(recipe.id, key, value)
-      .then(() => {
-        updateRecipe({ ...recipe, [key]: value });
-        updateRecipeStop();
-        toast.success("Updated!");
-      })
-      .catch(() => {
-        updateRecipeStop();
-        toast.error("Error updating the recipe!");
-      });
-      */
+    dispatch(updateRecipeAsync(recipe, key, value));
   };
 
   const updateContentEditable = (key: string) => (
     e: React.FocusEvent<HTMLDivElement>
   ) => {
     const value = e.target.textContent;
-
-    /* updateRecipeStart();
-    RecipeDbHelper.updateRecipe(recipe.id, key, value)
-      .then(() => {
-        updateRecipe({ ...recipe, [key]: value });
-        updateRecipeStop();
-        toast.success("Updated!");
-      })
-      .catch(() => {
-        updateRecipeStop();
-        toast.error("Error updating the recipe!");
-      }); */
+    if (recipe[key] !== value) {
+      dispatch(updateRecipeAsync(recipe, key, value));
+    }
   };
 
-  const updateCuisine = (e: any) => {
-    const value = e.value;
-
-    /* updateRecipeStart();
-    RecipeDbHelper.updateRecipe(recipe.id, "cuisine", value)
-      .then(() => {
-        updateRecipe({ ...recipe, cuisine: value });
-        updateRecipeStop();
-        toast.success("Updated!");
-      })
-      .catch(() => {
-        updateRecipeStop();
-        toast.error("Error updating the recipe!");
-      }); */
+  const handleChangeTag = (e) => {
+    setNewTag(e.currentTarget.value);
   };
 
-  const updateType = (e: any) => {
-    const value = e.value;
-
-    /* updateRecipeStart();
-    RecipeDbHelper.updateRecipe(recipe.id, "type", value)
-      .then(() => {
-        updateRecipe({ ...recipe, type: value });
-        updateRecipeStop();
-        toast.success("Updated!");
-      })
-      .catch(() => {
-        updateRecipeStop();
-        toast.error("Error updating the recipe!");
-      }); */
-  };
-
-  const addTag = (e: any) => {
-    const value = e.value;
-
-    /*  updateRecipeStart();
-    RecipeDbHelper.addTag(recipe.id, value)
-      .then((tags) => {
-        updateRecipe({ ...recipe, tags });
-        updateRecipeStop();
-        toast.success("Added tag!");
-      })
-      .catch((error) => {
-        console.log(error);
-        updateRecipeStop();
-        toast.error("Error adding the tag!");
-      }); */
+  const addTag = () => {
+    dispatch(addTagAsync(recipe, newTag));
+    setNewTag("");
   };
 
   const deleteTag = (tag: string) => () => {
-    /*  updateRecipeStart();
-    RecipeDbHelper.deleteTag(recipe.id, tag)
-      .then((tags) => {
-        updateRecipe({ ...recipe, tags });
-        updateRecipeStop();
-        toast.success("Deleted tag!");
-      })
-      .catch((error) => {
-        console.log(error);
-        updateRecipeStop();
-        toast.error("Error deleting the tag!");
-      }); */
+    dispatch(deleteTagAsync(recipe, tag));
   };
 
   const updateImage = (e: React.ChangeEvent<HTMLInputElement>) => {
     const image = e.target.files[0];
-    //setState({
-    //  image,
-    //});
+    setNewImage(image);
   };
 
   const saveImage = () => {
-    /* StorageHelper.addFile(`recipes/${image.name}`, image).then((filePath) => {
-      updateRecipeStart();
-      RecipeDbHelper.updateRecipe(recipe.id, "image", image.name)
-        .then(() => {
-          updateRecipe({ ...recipe, image: image.name });
-          updateRecipeStop();
-          toast.success("Updated!");
-        })
-        .catch(() => {
-          updateRecipeStop();
-          toast.error("Error updating the recipe!");
-        });
-    }); */
+    //const canvas = imageEditorRef.getImage();
+    // dispatch(updateImageAsync(recipe, canvas));
   };
 
   const renderRecipeHeader = () => {
     return (
       <>
+        <div>
+          <button onClick={toggleEdit}>Edit</button>
+        </div>
         {recipe.image && (
-          <div>
-            <img src={recipe.imageFullPath} alt={recipe.name} />
-          </div>
+          <img
+            className="recipe-image"
+            src={recipe.imageFullPath}
+            alt={recipe.name}
+          />
         )}
         <div>
-          <h3>{recipe.name}</h3>
-          <div>
-            <ButtonPrimary onClick={toggleEdit}>Edit</ButtonPrimary>
-          </div>
+          <h1>{recipe.name}</h1>
         </div>
         <div>
           <p>{recipe.description}</p>
-        </div>
-        <div>
-          {recipe.type && (
-            <div>
-              <p>{recipe.type}</p>
-            </div>
-          )}
+          {recipe.type && <p>{recipe.type}</p>}
           {recipe.duration && (
-            <div>
-              <p>
-                <FontAwesomeIcon size="sm" icon={faClock} />
-                {` ${recipe.duration} minutes`}
-              </p>
-            </div>
+            <p>
+              <FontAwesomeIcon size="sm" icon={faClock} />
+              {` ${recipe.duration} minutes`}
+            </p>
           )}
-          {recipe.cuisine && (
-            <div>
-              <p>{recipe.cuisine}</p>
-            </div>
-          )}
-          <div>
+          {recipe.cuisine && <p>{recipe.cuisine}</p>}
+          <div className="recipe-tags">
             {recipe.tags &&
-              recipe.tags.map((tag, index) => <div key={index}>{tag}</div>)}
+              recipe.tags.map((tag, index) => (
+                <div className="recipe-tag" key={index}>
+                  <p>{tag}</p>
+                </div>
+              ))}
           </div>
         </div>
       </>
@@ -199,78 +106,46 @@ const RecipeHeaderElement: React.FC<Props> = ({
   };
 
   const renderEditHeader = () => {
+    console.log(recipe);
     return (
       <>
+        <button onClick={toggleEdit}>Stop editing</button>
         {recipe.image && (
-          <div>
-            <img src={recipe.imageFullPath} alt={recipe.name} />
-          </div>
+          <img
+            className="recipe-image"
+            src={recipe.imageFullPath}
+            alt={recipe.name}
+          />
         )}
-        <StyledSection width="600">
-          {/* <AvatarEditor width={400} height={250} image={image} /> */}
-          <input id="input-image" type="file" onChange={updateImage} />
-          <ButtonPrimary onClick={saveImage}>Save image</ButtonPrimary>
-        </StyledSection>
         <div>
-          <div>
-            <ContentEditable
-              className="Muip-root Muip-h3"
-              html={recipe.name}
-              disabled={updatingRecipe}
-              onBlur={updateContentEditable("name")}
-              tagName="h3"
-              onChange={() => {}}
-            />
-          </div>
-          <div>
-            <ButtonPrimary onClick={toggleEdit}>Stop editing</ButtonPrimary>
-          </div>
+          <input id="input-image" type="file" onChange={updateImage} />
+          <button onClick={saveImage}>Save image</button>
+        </div>
+        <div>
+          <ContentEditable
+            className="Muip-root Muip-h1"
+            html={recipe.name}
+            onBlur={updateContentEditable("name")}
+            tagName="h1"
+            onChange={() => {}}
+          />
         </div>
         <div>
           <ContentEditable
             className="Muip-root Muip-body1"
             html={recipe.description || "Description"}
-            disabled={updatingRecipe}
             onBlur={updateContentEditable("description")}
             tagName="p"
             onChange={() => {}}
           />
         </div>
         <div>
-          {/* <div>
-            <Select
-              options={typeOptions}
-              value={
-                recipe.type && {
-                  value: recipe.type,
-                  label: recipe.type,
-                }
-              }
-              onChange={updateType}
-              isDisabled={updatingRecipe}
-            />
-          </div> */}
-          <div>
-            <input
-              placeholder="Duration in minutes"
-              defaultValue={recipe.duration}
-              onChange={updateRecipe("duration")}
-              disabled={updatingRecipe}
-            />
-          </div>
-          {/* <div>
-            <Select
-              options={cuisineOptions}
-              value={
-                recipe.cuisine && {
-                  value: recipe.cuisine,
-                  label: recipe.cuisine,
-                }
-              }
-              onChange={updateCuisine}
-              isDisabled={updatingRecipe}
-            />
-          </div> */}
+          <input
+            placeholder="Duration in minutes"
+            defaultValue={recipe.duration}
+            onBlur={updateRecipe("duration")}
+            disabled={updatingRecipe}
+          />
           <div>
             {recipe.tags &&
               recipe.tags.map((tag, index) => (
@@ -279,11 +154,8 @@ const RecipeHeaderElement: React.FC<Props> = ({
                   {tag}
                 </div>
               ))}
-            {/* <Select
-              options={tagOptionsWithoutCurrentTags}
-              value={null}
-              onChange={addTag}
-            /> */}
+            <input value={newTag} onChange={handleChangeTag} />
+            <button onClick={addTag}>Add</button>
           </div>
         </div>
       </>

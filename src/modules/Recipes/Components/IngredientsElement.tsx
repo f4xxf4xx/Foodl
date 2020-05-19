@@ -1,19 +1,28 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { ApplicationState } from "../../..";
-import { useFirebaseConnect, isLoaded, isEmpty } from "react-redux-firebase";
 import AddIngredientForm from "./AddIngredientForm";
-import { Recipe } from "../models";
+import { IngredientGroup } from "../models";
 import { fetchCartAsync } from "../../../store/cart/cartActions";
+import {
+  fetchIngredientGroupsAsync,
+  deleteIngredientAsync,
+  deleteIngredientGroupItemAsync,
+} from "../../../store/recipes/recipeActions";
 
 interface Props {
-  recipe: Recipe;
   editing: boolean;
 }
 
-const IngredientsElement: React.FC<Props> = ({ recipe, editing }) => {
+const IngredientsElement: React.FC<Props> = ({ editing }) => {
   const auth = useSelector((state: ApplicationState) => state.firebase.auth);
-  const cart = useSelector((state: ApplicationState) => state.cart);
+  const recipe = useSelector((state: ApplicationState) => state.recipe.recipe);
+  const ingredientGroups = useSelector(
+    (state: ApplicationState) => state.recipe.ingredientGroups
+  );
+  const updatingIngredients = useSelector(
+    (state: ApplicationState) => state.recipe.updatingIngredientGroups
+  );
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -26,35 +35,83 @@ const IngredientsElement: React.FC<Props> = ({ recipe, editing }) => {
     }
   }, [auth.uid, dispatch]);
 
-  const renderIngredients = () => {
-    if (!recipe.ingredients || recipe.ingredients.length === 0) {
-      return "No ingredients";
+  useEffect(() => {
+    if (auth.uid) {
+      const fetch = async () => {
+        dispatch(fetchIngredientGroupsAsync(recipe.id));
+      };
+
+      fetch();
     }
+  }, [auth.uid, recipe, dispatch]);
+
+  /* // TODO
+  if (!recipe.ingredients || recipe.ingredients.length === 0) {
+    return "No ingredients";
+  } */
+
+  const deleteIngredient = (ingredient: string) => (e: any) => {
+    dispatch(deleteIngredientAsync(recipe, ingredient));
+  };
+
+  const deleteIngredientGroupItem = (
+    ingredientGroup: IngredientGroup,
+    ingredient: string
+  ) => (e: any) => {
+    dispatch(
+      deleteIngredientGroupItemAsync(recipe, ingredientGroup, ingredient)
+    );
+  };
+
+  const renderIngredients = () => {
     return recipe.ingredients?.map((ingredient, index) => (
-      <p key={index}>{ingredient}</p>
+      <p key={index}>
+        {ingredient}
+        {editing && (
+          <button
+            disabled={updatingIngredients}
+            onClick={deleteIngredient(ingredient)}
+          >
+            X
+          </button>
+        )}
+      </p>
     ));
+  };
+
+  const renderIngredientGroup = (ingredientGroup: IngredientGroup) => {
+    return (
+      <div key={ingredientGroup.id}>
+        <h3>{ingredientGroup.name}</h3>
+        {ingredientGroup.items?.map((ingredient, index) => (
+          <p key={index}>
+            {ingredient}
+            {editing && (
+              <button
+                disabled={updatingIngredients}
+                onClick={deleteIngredientGroupItem(ingredientGroup, ingredient)}
+              >
+                X
+              </button>
+            )}
+          </p>
+        ))}
+        <AddIngredientForm
+          editing={editing}
+          ingredientGroup={ingredientGroup}
+        />
+      </div>
+    );
   };
 
   return (
     <div className="recipe-ingredients">
-      <h5>
-        Ingredients{" "}
-        {recipe.ingredients?.length && `(${recipe.ingredients?.length})`}
-      </h5>
+      <h2>Ingredients</h2>
       {renderIngredients()}
-      {/* <>
-            {ingredientGroups &&
-              ingredientGroups.map((ingredientGroup, index) => {
-                return renderIngredientGroup(
-                  ingredientGroups.length,
-                  ingredientGroup,
-                  index
-                );
-              })}
-            {ingredientGroups &&
-              renderIngredientGroup(ingredientGroups.length, null, null)}
-          </> */}
-      <AddIngredientForm editing={editing} />
+      <AddIngredientForm editing={editing} ingredientGroup={null} />
+      {ingredientGroups?.map((ingredientGroup) =>
+        renderIngredientGroup(ingredientGroup)
+      )}
     </div>
   );
 };

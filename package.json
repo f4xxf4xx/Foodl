@@ -15,7 +15,6 @@
     "firebase": "^7.14.3",
     "firebaseui": "^4.5.0",
     "react": "^16.9.0",
-    "react-avatar-editor": "^11.0.7",
     "react-contenteditable": "^3.3.1",
     "react-dom": "^16.9.0",
     "react-firebaseui": "^4.1.0",

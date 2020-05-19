@@ -1,79 +1,68 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import Creatable from "react-select/creatable";
 import { ApplicationState } from "../../..";
-import { ButtonPrimary } from "../../../layout/Styles/Buttons";
-import { StyledSection } from "../../../layout/Styles/Sections";
-import { addIngredientGroupAsync } from "../../../store/recipes/recipeActions";
+import {
+  addIngredientGroupItemAsync,
+  addIngredientAsync,
+} from "../../../store/recipes/recipeActions";
+import { IngredientGroup } from "../models";
 
 interface Props {
   editing: boolean;
+  ingredientGroup: IngredientGroup;
 }
 
-const AddIngredientForm: React.FC<Props> = (props: Props) => {
+const AddIngredientForm: React.FC<Props> = ({ editing, ingredientGroup }) => {
   const dispatch = useDispatch();
-  const [newIngredient, setNewIngredient] = useState<string>();
-  const [group, setGroup] = useState<string>();
+  const [newIngredient, setNewIngredient] = useState<string>("");
   const recipe = useSelector((state: ApplicationState) => state.recipe.recipe);
-  const ingredientGroups = useSelector(
-    (state: ApplicationState) => state.recipe.ingredientGroups
+  const updatingIngredientGroups = useSelector(
+    (state: ApplicationState) => state.recipe.updatingIngredientGroups
   );
-  const ingredientGroupOptions =
-    ingredientGroups &&
-    ingredientGroups.map((group) => {
-      return {
-        value: group,
-        label: group,
-      };
-    });
-
-  const updateGroup = (e: any) => {
-    setGroup(e ? e.label : null);
-  };
 
   const addIngredient = () => {
-    if (!newIngredient) {
-      return false;
+    if (newIngredient === "") {
+      return;
     }
-
-    if (group && (!ingredientGroups || !ingredientGroups.includes(group))) {
-      dispatch(addIngredientGroupAsync(recipe, group));
+    if (ingredientGroup?.id) {
+      dispatch(
+        addIngredientGroupItemAsync(recipe, ingredientGroup, newIngredient)
+      );
+    } else {
+      dispatch(addIngredientAsync(recipe, newIngredient));
     }
-
-    try {
-      //dispatch(addIngredientAsync(recipe, newIngredient));
-      //setGroup(null);
-    } finally {
-    }
+    setNewIngredient("");
   };
 
   const preventDefault = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
   };
 
+  const handleChange = (e: any) => {
+    setNewIngredient(e.currentTarget.value);
+  };
+
   return (
     <>
-      {props.editing && (
-        <StyledSection>
-          <form onSubmit={preventDefault}>
-            <p>Add ingredient</p>
-            <label htmlFor="input-ingredient">Ingredient</label>
-            <input
-              id="input-ingredient"
-              value={newIngredient}
-              onBlur={() => setNewIngredient}
-            />
-            <label htmlFor="input-ingredient">Group</label>
-            <Creatable
-              id="input-group"
-              options={ingredientGroupOptions}
-              value={group}
-              onChange={updateGroup}
-              isClearable
-            />
-            <ButtonPrimary onClick={addIngredient}>Add</ButtonPrimary>
-          </form>
-        </StyledSection>
+      {editing && (
+        <form onSubmit={preventDefault}>
+          <label
+            htmlFor={`input-ingredient-${
+              ingredientGroup && ingredientGroup.name
+            }`}
+          >
+            Add ingredient
+          </label>
+          <input
+            id={`input-ingredient-${ingredientGroup && ingredientGroup.name}`}
+            value={newIngredient}
+            onChange={handleChange}
+            disabled={updatingIngredientGroups}
+          />
+          <button onClick={addIngredient}>
+            {updatingIngredientGroups ? "Loading" : "Add"}
+          </button>
+        </form>
       )}
     </>
   );

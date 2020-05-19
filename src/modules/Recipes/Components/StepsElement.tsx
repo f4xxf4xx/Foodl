@@ -1,7 +1,6 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { ApplicationState } from "../../..";
-import { ButtonError } from "../../../layout/Styles/Buttons";
 import { Step, Recipe } from "../models";
 import AddStepForm from "./AddStepForm";
 import { updateStep, deleteStep } from "../../../store/recipes/recipeActions";
@@ -41,7 +40,7 @@ const StepsElement: React.FC<Props> = ({ recipe, editing }) => {
         <td>
           {editing ? (
             <input
-              id="input-step-text"
+              className="input-step-text"
               placeholder="Step text"
               type="text"
               defaultValue={step.text}
@@ -61,12 +60,12 @@ const StepsElement: React.FC<Props> = ({ recipe, editing }) => {
         </td>
         <td>
           {editing && (
-            <ButtonError
+            <button
               onClick={() => dispatch(deleteStep(step.id))}
               disabled={updatingSteps}
             >
               Delete step
-            </ButtonError>
+            </button>
           )}
         </td>
       </tr>
@@ -75,7 +74,7 @@ const StepsElement: React.FC<Props> = ({ recipe, editing }) => {
 
   return (
     <div className="recipe-steps">
-      <h5>Steps</h5>
+      <h2>Steps</h2>
       {loadingSteps ? (
         <p>Loading...</p>
       ) : (

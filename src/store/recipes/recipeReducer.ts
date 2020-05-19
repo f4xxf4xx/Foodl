@@ -1,9 +1,9 @@
 import { createReducer } from "@reduxjs/toolkit";
-import { Recipe, Step } from "../../modules/Recipes/models";
+import { Recipe, Step, IngredientGroup } from "../../modules/Recipes/models";
 
 export interface RecipeState {
   recipe: Recipe;
-  ingredientGroups: string[];
+  ingredientGroups: IngredientGroup[];
   steps: Step[];
   loadingRecipe: boolean;
   updatingRecipe: boolean;
@@ -35,7 +35,6 @@ export const recipeReducer = createReducer(initialRecipeState, {
   UPDATE_RECIPE: (state, action) => {
     state.recipe = action.payload;
   },
-
   SET_INGREDIENT_GROUPS_LOADING: (state, action) => {
     state.loadingIngredientGroups = action.payload;
   },
@@ -44,6 +43,13 @@ export const recipeReducer = createReducer(initialRecipeState, {
   },
   UPDATE_INGREDIENT_GROUPS: (state, action) => {
     state.ingredientGroups = action.payload;
+  },
+  UPDATE_INGREDIENT_GROUP: (state, action) => {
+    console.log(action.payload);
+    const ingredientGroup = state.ingredientGroups.find(
+      (ingredientGroup) => ingredientGroup.id === action.payload.id
+    );
+    ingredientGroup.items = action.payload.items;
   },
 
   SET_STEPS_LOADING: (state, action) => {

@@ -2,8 +2,6 @@ import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { RouteComponentProps, withRouter } from "react-router-dom";
 import { ApplicationState } from "../../..";
-import { ButtonPrimary } from "../../../layout/Styles/Buttons";
-import { StyledSection } from "../../../layout/Styles/Sections";
 import { addRecipeAsync } from "../../../store/recipes/recipesActions";
 
 type Props = RouteComponentProps;
@@ -21,7 +19,7 @@ const AddRecipeForm = (props: Props) => {
     setNewRecipeName(e.target.value);
   };
 
-  const handleKeyPress = (event) => {
+  const handleKeyPress = (event: any) => {
     if (event.charCode === 13) {
       addRecipe();
     }
@@ -41,7 +39,7 @@ const AddRecipeForm = (props: Props) => {
   };
 
   return (
-    <StyledSection>
+    <div>
       <p>New recipe</p>
       <form onSubmit={preventDefault}>
         <div>
@@ -54,11 +52,11 @@ const AddRecipeForm = (props: Props) => {
             onKeyPress={handleKeyPress}
           />
         </div>
-        <ButtonPrimary onClick={addRecipe} disabled={updatingRecipes}>
+        <button onClick={addRecipe} disabled={updatingRecipes}>
           Create
-        </ButtonPrimary>
+        </button>
       </form>
-    </StyledSection>
+    </div>
   );
 };
 

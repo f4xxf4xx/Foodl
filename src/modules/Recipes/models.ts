@@ -13,6 +13,12 @@ export interface Recipe {
   ingredients?: string[];
 }
 
+export interface IngredientGroup {
+  id?: string;
+  name: string;
+  items: string[];
+}
+
 export interface Step {
   id?: string;
   order: number;

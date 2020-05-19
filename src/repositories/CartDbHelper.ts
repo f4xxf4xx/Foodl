@@ -16,9 +16,7 @@ export class CartDbHelper {
     const cart = await cartRef.get();
 
     if (cart.exists) {
-      const items = cart.data().items;
-
-      return await DbHelper.arrayPushUnique(cartRef, items, "items", name);
+      return await DbHelper.arrayPushUnique(cartRef, "items", name);
     }
     return false;
   }

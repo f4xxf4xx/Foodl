@@ -1,7 +1,6 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { ApplicationState } from "../../..";
-import { ButtonPrimary } from "../../../layout/Styles/Buttons";
 import { addCartItemAsync } from "../../../store/cart/cartActions";
 
 const AddCartItemForm = () => {
@@ -13,15 +12,15 @@ const AddCartItemForm = () => {
     if (!newCartItem) {
       return;
     }
-    setNewCartItem("");
     dispatch(addCartItemAsync(firebase.auth.uid, newCartItem));
+    setNewCartItem("");
   };
 
   const preventDefault = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
   };
 
-  const handleSubmit = (e) => {
+  const handleChange = (e: any) => {
     setNewCartItem(e.currentTarget.value);
   };
 
@@ -31,11 +30,10 @@ const AddCartItemForm = () => {
       <form onSubmit={preventDefault}>
         <input
           className="cart-new-item-input"
-          id="input-ingredient"
           value={newCartItem}
-          onChange={handleSubmit}
+          onChange={handleChange}
         />
-        <ButtonPrimary onClick={addIngredient}>Add</ButtonPrimary>
+        <button onClick={addIngredient}>Add</button>
       </form>
     </div>
   );

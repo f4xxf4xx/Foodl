@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { ApplicationState } from "../../..";
-import { ButtonError } from "../../../layout/Styles/Buttons";
 import AddCartItemForm from "./AddCartItemForm";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
@@ -42,6 +41,7 @@ const CartView = () => {
     if (cart.cartItems.length === 0) {
       return <h5>Cart is empty</h5>;
     }
+
     return (
       <table className="cart-table">
         <thead className="cart-table-header">
@@ -55,13 +55,12 @@ const CartView = () => {
             <tr key={index}>
               <td>{cartItem}</td>
               <td>
-                <ButtonError
-                  width="15"
+                <button
                   disabled={cart.updating}
                   onClick={deleteCartItem(cartItem)}
                 >
                   <FontAwesomeIcon icon={faTrash} />
-                </ButtonError>
+                </button>
               </td>
             </tr>
           ))}
@@ -75,13 +74,9 @@ const CartView = () => {
       <h1>Cart</h1>
       <AddCartItemForm />
       <div>
-        <ButtonError
-          width="100"
-          disabled={cart.updating}
-          onClick={deleteAllCartItems()}
-        >
+        <button disabled={cart.updating} onClick={deleteAllCartItems()}>
           Delete all items
-        </ButtonError>
+        </button>
       </div>
       {renderCartItems()}
     </>

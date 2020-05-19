@@ -8,6 +8,8 @@ import StepsElement from "./StepsElement";
 import { useParams } from "react-router-dom";
 import { fetchRecipeBySlugAsync } from "../../../store/recipes/recipeActions";
 
+import "./RecipeView.css";
+
 const RecipeView: React.FC = () => {
   const [editing, setEditing] = useState<boolean>();
   const loadingRecipe = useSelector(
@@ -17,7 +19,6 @@ const RecipeView: React.FC = () => {
   const auth = useSelector((state: ApplicationState) => state.firebase.auth);
   const dispatch = useDispatch();
   const { slug } = useParams();
-  console.log(recipe);
 
   useEffect(() => {
     if (auth.uid) {
@@ -37,11 +38,10 @@ const RecipeView: React.FC = () => {
           {recipe ? (
             <>
               <RecipeHeaderElement
-                recipe={recipe}
                 editing={editing}
                 toggleEdit={() => setEditing(!editing)}
               />
-              <IngredientsElement editing={editing} recipe={recipe} />
+              <IngredientsElement editing={editing} />
               <StepsElement editing={editing} recipe={recipe} />
             </>
           ) : null}

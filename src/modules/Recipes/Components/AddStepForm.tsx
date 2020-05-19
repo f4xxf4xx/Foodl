@@ -1,6 +1,4 @@
 import React, { useState } from "react";
-import { ButtonPrimary } from "../../../layout/Styles/Buttons";
-import { StyledSection } from "../../../layout/Styles/Sections";
 import { useDispatch, useSelector } from "react-redux";
 import { ApplicationState } from "../../..";
 import { addStepAsync } from "../../../store/recipes/recipeActions";
@@ -23,7 +21,7 @@ const AddStepForm: React.FC<Props> = (props: Props) => {
   };
 
   const addStep = () => {
-    if (newStep.text === "") {
+    if (newStep.text === "" || !recipe.id) {
       return;
     }
 
@@ -42,7 +40,7 @@ const AddStepForm: React.FC<Props> = (props: Props) => {
   return (
     <>
       {props.editing && (
-        <StyledSection>
+        <div>
           <form onSubmit={preventDefault}>
             <p>Add step</p>
             <div>
@@ -52,9 +50,9 @@ const AddStepForm: React.FC<Props> = (props: Props) => {
                 onChange={updateFormText}
               />
             </div>
-            <ButtonPrimary onClick={addStep}>Add</ButtonPrimary>
+            <button onClick={addStep}>Add</button>
           </form>
-        </StyledSection>
+        </div>
       )}
     </>
   );

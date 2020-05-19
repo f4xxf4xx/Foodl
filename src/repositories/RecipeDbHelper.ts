@@ -1,6 +1,6 @@
 import slugify from "react-slugify";
 import { db, storage } from "../config";
-import { Recipe, Step } from "../modules/Recipes/models";
+import { Recipe, Step, IngredientGroup } from "../modules/Recipes/models";
 import { Filters } from "../store/recipes/recipesReducer";
 import { DbHelper } from "./DbHelper";
 
@@ -71,7 +71,6 @@ export class RecipeDbHelper {
     uid: string,
     slug: string
   ): Promise<Recipe> {
-    console.log("do fetch");
     const recipes = await db
       .collection("recipes")
       .where("uid", "==", uid)
@@ -140,14 +139,20 @@ export class RecipeDbHelper {
     return await db.collection("recipes").doc(recipeId).delete();
   }
 
-  public static async getIngredients(recipeId: string): Promise<string[]> {
-    const ingredients = await db
+  public static async getIngredientGroups(
+    recipeId: string
+  ): Promise<IngredientGroup[]> {
+    const ingredientGroups = await db
       .collection("recipes")
       .doc(recipeId)
-      .collection("ingredients")
+      .collection("ingredientGroups")
       .get();
 
-    return ingredients.docs.map((Ingredient) => Ingredient.data().name);
+    return ingredientGroups.docs.map((ingredientGroup) => ({
+      id: ingredientGroup.id,
+      name: ingredientGroup.data().name,
+      items: ingredientGroup.data().items,
+    }));
   }
 
   public static async getSteps(recipeId: string): Promise<Step[]> {
@@ -165,77 +170,6 @@ export class RecipeDbHelper {
         order: step.data().order,
       };
     });
-  }
-
-  public static async addIngredientGroup(
-    recipeId: string,
-    ingredientGroup: string
-  ): Promise<boolean> {
-    const recipeRef = db.collection("recipes").doc(recipeId);
-    const recipe = await recipeRef.get();
-
-    if (recipe.exists) {
-      const ingredientGroups = recipe.data().ingredientGroups;
-
-      return DbHelper.arrayAddUnique(
-        recipeRef,
-        ingredientGroups,
-        "ingredientGroups",
-        ingredientGroup
-      );
-    }
-    return Promise.resolve(true);
-  }
-
-  public static async deleteIngredientGroup(
-    recipeId: string,
-    groupName: string
-  ): Promise<void> {
-    const recipeRef = db.collection("recipes").doc(recipeId);
-    const recipe = await recipeRef.get();
-
-    if (recipe.exists) {
-      const groups = recipe.data().ingredientGroups;
-
-      return DbHelper.arrayDelete(
-        recipeRef,
-        groups,
-        "ingredientGroups",
-        groupName
-      );
-    }
-
-    return Promise.resolve(null);
-  }
-
-  public static async deleteIngredientOfGroup(
-    recipeId: string,
-    groupName: string
-  ): Promise<string[]> {
-    const ingredients = await db
-      .collection("recipes")
-      .doc(recipeId)
-      .collection("ingredients")
-      .where("group", "==", groupName)
-      .get();
-
-    ingredients.docs.forEach((Ingredient) => {
-      Ingredient.ref.delete();
-    });
-
-    return this.getIngredients(recipeId);
-  }
-
-  public static async deletestring(
-    recipeId: string,
-    IngredientId: string
-  ): Promise<void> {
-    return await db
-      .collection("recipes")
-      .doc(recipeId)
-      .collection("ingredients")
-      .doc(IngredientId)
-      .delete();
   }
 
   public static async addStep(recipeId: string, step: Step): Promise<Step> {
@@ -261,28 +195,97 @@ export class RecipeDbHelper {
       .delete();
   }
 
-  public static async addTag(recipeId: string, tag: string): Promise<string> {
+  public static async addTag(recipeId: string, tag: string): Promise<string[]> {
     const recipeRef = db.collection("recipes").doc(recipeId);
     const recipe = await recipeRef.get();
 
     if (recipe.exists) {
-      const tags = recipe.data().tags;
-
-      return DbHelper.arrayAddUnique(recipeRef, tags, "tags", tag);
+      return DbHelper.arrayAddUnique(recipeRef, "tags", tag);
     }
     return Promise.resolve(null);
   }
 
-  public static async deleteTag(recipeId: string, tag: string): Promise<void> {
+  public static async deleteTag(
+    recipeId: string,
+    tag: string
+  ): Promise<string[]> {
     const recipeRef = db.collection("recipes").doc(recipeId);
     const recipe = await recipeRef.get();
 
     if (recipe.exists) {
-      const tags = recipe.data().tags;
-
-      return DbHelper.arrayDelete(recipeRef, tags, "tags", tag);
+      return DbHelper.arrayDelete(recipeRef, "tags", tag);
     }
 
+    return Promise.resolve(null);
+  }
+
+  public static async addIngredient(
+    recipeId: string,
+    ingredient: string
+  ): Promise<boolean> {
+    const recipeRef = db.collection("recipes").doc(recipeId);
+    const recipe = await recipeRef.get();
+
+    console.log(recipe);
+
+    if (recipe.exists) {
+      return DbHelper.arrayPushUnique(recipeRef, "ingredients", ingredient);
+    }
+    return Promise.resolve(false);
+  }
+
+  public static async deleteIngredient(
+    recipeId: string,
+    ingredient: string
+  ): Promise<string[]> {
+    const recipeRef = db.collection("recipes").doc(recipeId);
+    const recipe = await recipeRef.get();
+
+    if (recipe.exists) {
+      return DbHelper.arrayDelete(recipeRef, "ingredients", ingredient);
+    }
+
+    return Promise.resolve(null);
+  }
+
+  public static async deleteIngredientGroupItem(
+    recipeId: string,
+    ingredientGroupId: string,
+    ingredient: string
+  ): Promise<string[]> {
+    const ingredientGroupRef = db
+      .collection("recipes")
+      .doc(recipeId)
+      .collection("ingredientGroups")
+      .doc(ingredientGroupId);
+    const ingredientGroup = await ingredientGroupRef.get();
+
+    if (ingredientGroup.exists) {
+      return DbHelper.arrayDelete(ingredientGroupRef, "items", ingredient);
+    }
+
+    return Promise.resolve(null);
+  }
+
+  public static async addIngredientGroupItem(
+    recipeId: string,
+    groupId: string,
+    ingredient: string
+  ): Promise<string[]> {
+    const ingredientGroupRef = db
+      .collection("recipes")
+      .doc(recipeId)
+      .collection("ingredientGroups")
+      .doc(groupId);
+    const ingredientGroup = await ingredientGroupRef.get();
+
+    if (ingredientGroup.exists) {
+      return await DbHelper.arrayAddUnique(
+        ingredientGroupRef,
+        "items",
+        ingredient
+      );
+    }
     return Promise.resolve(null);
   }
 }
