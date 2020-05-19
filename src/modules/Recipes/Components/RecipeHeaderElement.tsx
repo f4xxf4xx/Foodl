@@ -106,10 +106,11 @@ const RecipeHeaderElement: React.FC<Props> = ({ editing, toggleEdit }) => {
   };
 
   const renderEditHeader = () => {
-    console.log(recipe);
     return (
       <>
-        <button onClick={toggleEdit}>Stop editing</button>
+        <div>
+          <button onClick={toggleEdit}>Stop editing</button>
+        </div>
         {recipe.image && (
           <img
             className="recipe-image"

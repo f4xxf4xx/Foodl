@@ -8,18 +8,20 @@ export class RecipeDbHelper {
   private static async mapRecipe(
     data: firebase.firestore.DocumentSnapshot
   ): Promise<Recipe> {
+    const recipeData = data.data();
     const recipe: Recipe = {
       id: data.id,
-      uid: data.data().uid,
-      slug: data.data().slug,
-      name: data.data().name,
-      description: data.data().description,
-      image: data.data().image,
-      type: data.data().type,
-      cuisine: data.data().cuisine,
-      duration: data.data().duration,
-      tags: data.data().tags,
-      ingredients: data.data().ingredients,
+      uid: recipeData.uid,
+      slug: recipeData.slug,
+      name: recipeData.name,
+      description: recipeData.description,
+      image: recipeData.image,
+      type: recipeData.type,
+      cuisine: recipeData.cuisine,
+      duration: recipeData.duration,
+      tags: recipeData.tags,
+      ingredients: recipeData.ingredients,
+      notes: recipeData.notes,
     };
 
     if (recipe.image) {
@@ -225,8 +227,6 @@ export class RecipeDbHelper {
   ): Promise<boolean> {
     const recipeRef = db.collection("recipes").doc(recipeId);
     const recipe = await recipeRef.get();
-
-    console.log(recipe);
 
     if (recipe.exists) {
       return DbHelper.arrayPushUnique(recipeRef, "ingredients", ingredient);

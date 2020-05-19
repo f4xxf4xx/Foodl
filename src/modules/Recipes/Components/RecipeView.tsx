@@ -43,6 +43,7 @@ const RecipeView: React.FC = () => {
               />
               <IngredientsElement editing={editing} />
               <StepsElement editing={editing} recipe={recipe} />
+              <p>{recipe.notes}</p>
             </>
           ) : null}
         </>

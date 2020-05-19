@@ -11,6 +11,7 @@ export interface Recipe {
   cuisine?: string;
   tags?: string[];
   ingredients?: string[];
+  notes?: string;
 }
 
 export interface IngredientGroup {
