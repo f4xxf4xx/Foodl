@@ -5,7 +5,7 @@ import { RouteComponentProps, withRouter } from "react-router-dom";
 import { ApplicationState } from "../../..";
 import { ButtonPrimary } from "../../../layout/Styles/Buttons";
 import { StyledPaper } from "../../../layout/Styles/Sections";
-import * as recipeService from "../../../services/recipeService";
+import * as recipeService from "../../../services/RecipeService";
 
 type Props = RouteComponentProps;
 

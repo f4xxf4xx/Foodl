@@ -5,7 +5,7 @@ import { ApplicationState } from "../../..";
 import { ButtonPrimary } from "../../../layout/Styles/Buttons";
 import { StyledPaper } from "../../../layout/Styles/Sections";
 import * as ingredientActions from "../../../store/ingredients/ingredientActions";
-import * as ingredientService from "../../../services/ingredientService";
+import * as ingredientService from "../../../services/IngredientService";
 
 const AddIngredientForm = () => {
     const dispatch = useDispatch();

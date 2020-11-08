@@ -6,7 +6,7 @@ import { Loader } from "semantic-ui-react";
 import { ApplicationState } from "../../..";
 import { ButtonError } from "../../../layout/Styles/Buttons";
 import AddIngredientForm from "./AddIngredientForm";
-import * as ingredientService from "../../../services/ingredientService";
+import * as ingredientService from "../../../services/IngredientService";
 
 const IngredientsView = () => {
     const dispatch = useDispatch();

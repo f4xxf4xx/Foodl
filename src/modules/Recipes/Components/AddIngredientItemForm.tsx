@@ -9,8 +9,8 @@ import { InputWrapper } from "../../../layout/Styles/Forms";
 import { StyledPaper } from "../../../layout/Styles/Sections";
 import { IngredientItem } from "../models";
 import { IngredientType, IngredientPrepType } from "../constants";
-import * as ingredientService from "../../../services/ingredientService";
-import * as recipeService from "../../../services/recipeService";
+import * as ingredientService from "../../../services/IngredientService";
+import * as recipeService from "../../../services/RecipeService";
 
 interface OwnProps {
     editing: boolean;
