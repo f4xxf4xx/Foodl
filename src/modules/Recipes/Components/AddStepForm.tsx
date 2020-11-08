@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { ButtonPrimary } from "../../../layout/Styles/Buttons";
 import { StyledPaper } from "../../../layout/Styles/Sections";
 import { useDispatch, useSelector } from "react-redux";
-import * as recipeService from "../../../services/recipeService";
+import * as recipeService from "../../../services/RecipeService";
 import { ApplicationState } from "../../..";
 
 interface OwnProps {

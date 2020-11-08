@@ -18,7 +18,7 @@ import { StyledFontAwesomeIcon } from "./Styles/StyledFontAwesomeIcon";
 import { Filters } from "../../../store/recipes/recipesReducer";
 import Select from "react-select";
 import { Cuisine, RecipeType } from "../constants";
-import * as recipeService from "../../../services/recipeService";
+import * as recipeService from "../../../services/RecipeService";
 
 type Props = RouteComponentProps;
 
