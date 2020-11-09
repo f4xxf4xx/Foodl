@@ -4,7 +4,7 @@ import { ApplicationState } from "index";
 import Header from "layout/Header";
 import Sidebar from "layout/Sidebar";
 
-import "Styles/MainLayout.css";
+import "layout/Styles/MainLayout.css";
 
 const MainLayout: React.FC = (props) => {
   const auth = useSelector((state: ApplicationState) => state.firebase.auth);
