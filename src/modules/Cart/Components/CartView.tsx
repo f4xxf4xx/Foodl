@@ -14,7 +14,6 @@ import {
 
 const CartView = () => {
   const dispatch = useDispatch();
-  //store
   const cart = useSelector((state: ApplicationState) => state.cart);
   const auth = useSelector((state: ApplicationState) => state.firebase.auth);
 
