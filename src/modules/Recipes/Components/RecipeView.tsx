@@ -1,14 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { ApplicationState } from "../../..";
-import { Recipe } from "../models";
-import IngredientsElement from "./IngredientsElement";
-import RecipeHeaderElement from "./RecipeHeaderElement";
-import StepsElement from "./StepsElement";
+import { ApplicationState } from "index";
+import IngredientsElement from "modules/Recipes/Components/IngredientsElement";
+import RecipeHeaderElement from "modules/Recipes/Components/RecipeHeaderElement";
+import StepsElement from "modules/Recipes/Components/StepsElement";
 import { useParams } from "react-router-dom";
-import { fetchRecipeBySlugAsync } from "../../../store/recipes/recipeActions";
+import { fetchRecipeBySlugAsync } from "store/recipes/recipeActions";
 
-import "./RecipeView.css";
+import "modules/Recipes/Components/RecipeView.css";
 
 const RecipeView: React.FC = () => {
   const [editing, setEditing] = useState<boolean>();

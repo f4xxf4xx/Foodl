@@ -1,9 +1,9 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import { Link, useHistory } from "react-router-dom";
-import { ApplicationState } from "..";
-import { isAuthenticated } from "../helpers/userHelper";
-import { firebase } from "./../config";
+import { ApplicationState } from "index";
+import { isAuthenticated } from "helpers/userHelper";
+import { firebase } from "config";
 
 import "./Styles/MainLayout.css";
 

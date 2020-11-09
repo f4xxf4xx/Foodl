@@ -7,7 +7,6 @@ export class DbHelper {
     const object = await ref.get();
     const array = object.data()[key];
 
-    console.log("array ", array);
     if (array) {
       if (array.includes(item)) {
         return false;

@@ -2,18 +2,15 @@ import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { withRouter } from "react-router-dom";
 import { RouteComponentProps } from "react-router-dom";
-import { ApplicationState } from "../../..";
-import * as recipesActions from "../../../store/recipes/recipesActions";
-import { Recipe } from "../models";
-import AddRecipeForm from "./AddRecipeForm";
-import { getTagIcon } from "../helper";
-import { Filters } from "../../../store/recipes/recipesReducer";
-
-import "./RecipesView.css";
+import { ApplicationState } from "index";
+import { Recipe } from "modules/Recipes/models";
+import AddRecipeForm from "modules/Recipes/Components/AddRecipeForm";
 import {
   fetchRecipesAsync,
   deleteRecipeAsync,
-} from "../../../store/recipes/recipesActions";
+} from "store/recipes/recipesActions";
+
+import "modules/Recipes/Components/RecipesView.css";
 
 type Props = RouteComponentProps;
 

@@ -1,7 +1,7 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import { ApplicationState } from "../..";
-import { isAuthenticated } from "../../helpers/userHelper";
+import { ApplicationState } from "index";
+import { isAuthenticated } from "helpers/userHelper";
 
 const HomePage = () => {
   const auth = useSelector((state: ApplicationState) => state.firebase.auth);

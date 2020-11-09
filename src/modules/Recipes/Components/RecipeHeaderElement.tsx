@@ -1,6 +1,6 @@
 import React, { useState, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { ApplicationState } from "../../..";
+import { ApplicationState } from "index";
 import ContentEditable from "react-contenteditable";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClock } from "@fortawesome/free-solid-svg-icons";
@@ -8,7 +8,7 @@ import {
   updateRecipeAsync,
   addTagAsync,
   deleteTagAsync,
-} from "../../../store/recipes/recipeActions";
+} from "store/recipes/recipeActions";
 
 interface Props {
   editing: boolean;

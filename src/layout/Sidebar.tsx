@@ -1,8 +1,8 @@
 import React from "react";
 import { useLocation, Link } from "react-router-dom";
-import { getAdminLinks, getLinks } from "./links";
+import { getLinks } from "layout/links";
 
-import "./Styles/MainLayout.css";
+import "layout/Styles/MainLayout.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const Sidebar: React.FC = () => {
