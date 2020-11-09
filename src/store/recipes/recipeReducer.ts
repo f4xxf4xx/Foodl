@@ -1,5 +1,5 @@
 import { createReducer } from "@reduxjs/toolkit";
-import { Recipe, Step, IngredientGroup } from "../../modules/Recipes/models";
+import { Recipe, Step, IngredientGroup } from "modules/Recipes/models";
 
 export interface RecipeState {
   recipe: Recipe;

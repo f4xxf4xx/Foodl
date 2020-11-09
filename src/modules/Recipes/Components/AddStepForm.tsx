@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { ApplicationState } from "../../..";
-import { addStepAsync } from "../../../store/recipes/recipeActions";
+import { ApplicationState } from "index";
+import { addStepAsync } from "store/recipes/recipeActions";
 
 interface Props {
   editing: boolean;

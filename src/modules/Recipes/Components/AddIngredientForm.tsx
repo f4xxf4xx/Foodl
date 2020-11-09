@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { ApplicationState } from "../../..";
+import { ApplicationState } from "index";
 import {
   addIngredientGroupItemAsync,
   addIngredientAsync,
-} from "../../../store/recipes/recipeActions";
-import { IngredientGroup } from "../models";
+} from "store/recipes/recipeActions";
+import { IngredientGroup } from "modules/Recipes/models";
 
 interface Props {
   editing: boolean;

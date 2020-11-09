@@ -1,5 +1,5 @@
-import { db } from "../config";
-import { DbHelper } from "./DbHelper";
+import { db } from "config";
+import { DbHelper } from "repositories/DbHelper";
 
 export class CartDbHelper {
   public static async getCartItems(userid: string): Promise<string[]> {

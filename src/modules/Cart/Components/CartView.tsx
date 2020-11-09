@@ -1,20 +1,19 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { ApplicationState } from "../../..";
-import AddCartItemForm from "./AddCartItemForm";
+import { ApplicationState } from "index";
+import AddCartItemForm from "modules/Cart/Components/AddCartItemForm";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 
-import "./Cart.css";
+import "modules/Cart/Components/Cart.css";
 import {
   fetchCartAsync,
   deleteAllCartItemsAsync,
   deleteCartItemAsync,
-} from "../../../store/cart/cartActions";
+} from "store/cart/cartActions";
 
 const CartView = () => {
   const dispatch = useDispatch();
-  //store
   const cart = useSelector((state: ApplicationState) => state.cart);
   const auth = useSelector((state: ApplicationState) => state.firebase.auth);
 

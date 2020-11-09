@@ -1,14 +1,14 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { ApplicationState } from "../../..";
-import AddIngredientForm from "./AddIngredientForm";
-import { IngredientGroup } from "../models";
-import { fetchCartAsync } from "../../../store/cart/cartActions";
+import { ApplicationState } from "index";
+import AddIngredientForm from "modules/Recipes/Components/AddIngredientForm";
+import { IngredientGroup } from "modules/Recipes/models";
+import { fetchCartAsync } from "store/cart/cartActions";
 import {
   fetchIngredientGroupsAsync,
   deleteIngredientAsync,
   deleteIngredientGroupItemAsync,
-} from "../../../store/recipes/recipeActions";
+} from "store/recipes/recipeActions";
 
 interface Props {
   editing: boolean;

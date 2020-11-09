@@ -1,13 +1,13 @@
 import React from "react";
 import { Route, Switch } from "react-router";
-import GuessRoute from "./layout/GuessRoute";
-import MainLayout from "./layout/MainLayout";
-import PrivateRoute from "./layout/PrivateRoute";
-import CartView from "./modules/Cart/Components/CartView";
-import HomePage from "./modules/Pages/HomePage";
-import RecipesView from "./modules/Recipes/Components/RecipesView";
-import RecipeView from "./modules/Recipes/Components/RecipeView";
-import LoginView from "./modules/User/Components/LoginView";
+import GuessRoute from "layout/GuessRoute";
+import MainLayout from "layout/MainLayout";
+import PrivateRoute from "layout/PrivateRoute";
+import CartView from "modules/Cart/Components/CartView";
+import HomePage from "modules/Pages/HomePage";
+import RecipesView from "modules/Recipes/Components/RecipesView";
+import RecipeView from "modules/Recipes/Components/RecipeView";
+import LoginView from "modules/User/Components/LoginView";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import {
   faHome,

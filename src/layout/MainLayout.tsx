@@ -1,10 +1,10 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import { ApplicationState } from "..";
-import Header from "./Header";
-import Sidebar from "./Sidebar";
+import { ApplicationState } from "index";
+import Header from "layout/Header";
+import Sidebar from "layout/Sidebar";
 
-import "./Styles/MainLayout.css";
+import "Styles/MainLayout.css";
 
 const MainLayout: React.FC = (props) => {
   const auth = useSelector((state: ApplicationState) => state.firebase.auth);

@@ -1,8 +1,8 @@
 import slugify from "react-slugify";
-import { db, storage } from "../config";
-import { Recipe, Step, IngredientGroup } from "../modules/Recipes/models";
-import { Filters } from "../store/recipes/recipesReducer";
-import { DbHelper } from "./DbHelper";
+import { db, storage } from "config";
+import { Recipe, Step, IngredientGroup } from "modules/Recipes/models";
+import { Filters } from "store/recipes/recipesReducer";
+import { DbHelper } from "repositories/DbHelper";
 
 export class RecipeDbHelper {
   private static async mapRecipe(
