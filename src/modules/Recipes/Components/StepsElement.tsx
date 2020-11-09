@@ -1,9 +1,9 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { ApplicationState } from "../../..";
-import { Step, Recipe } from "../models";
-import AddStepForm from "./AddStepForm";
-import { updateStep, deleteStep } from "../../../store/recipes/recipeActions";
+import { ApplicationState } from "index";
+import { Step, Recipe } from "modules/Recipes/models";
+import AddStepForm from "modules/Recipes/Components/AddStepForm";
+import { updateStep, deleteStep } from "store/recipes/recipeActions";
 
 interface Props {
   recipe: Recipe;

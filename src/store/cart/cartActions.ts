@@ -1,7 +1,7 @@
 import { createAction } from "@reduxjs/toolkit";
-import { CartDbHelper } from "../../repositories/CartDbHelper";
+import { CartDbHelper } from "repositories/CartDbHelper";
 import { toast } from "react-toastify";
-import { db } from "../../config";
+import { db } from "config";
 
 export const setCartLoading = createAction<boolean>("SET_CART_LOADING");
 export const setCartUpdating = createAction<boolean>("SET_CART_UPDATING");

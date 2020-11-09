@@ -1,8 +1,8 @@
 import { createAction } from "@reduxjs/toolkit";
-import { Recipe } from "../../modules/Recipes/models";
-import { Filters } from "./recipesReducer";
+import { Recipe } from "modules/Recipes/models";
+import { Filters } from "store/recipes/recipesReducer";
 import { toast } from "react-toastify";
-import { RecipeDbHelper } from "../../repositories/RecipeDbHelper";
+import { RecipeDbHelper } from "repositories/RecipeDbHelper";
 import { History } from "history";
 
 export const setRecipesLoading = createAction<boolean>("SET_RECIPES_LOADING");

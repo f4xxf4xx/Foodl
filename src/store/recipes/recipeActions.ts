@@ -1,8 +1,8 @@
 import { createAction } from "@reduxjs/toolkit";
-import { Recipe, Step, IngredientGroup } from "../../modules/Recipes/models";
+import { Recipe, Step, IngredientGroup } from "modules/Recipes/models";
 import { toast } from "react-toastify";
-import { RecipeDbHelper } from "../../repositories/RecipeDbHelper";
-import { StorageHelper } from "../../repositories/StorageHelper";
+import { RecipeDbHelper } from "repositories/RecipeDbHelper";
+import { StorageHelper } from "repositories/StorageHelper";
 
 export const setRecipeLoading = createAction<boolean>("SET_RECIPE_LOADING");
 export const setRecipeUpdating = createAction<boolean>("SET_RECIPE_UPDATING");
