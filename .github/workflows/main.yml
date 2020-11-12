@@ -1,0 +1,28 @@
+name: CI
+
+on:
+  push:
+    branches:
+    - master
+
+jobs:
+  build:
+    name: Build, test & deploy
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+    - name: Install node & npm
+      uses: actions/setup-node@v1
+      with:
+        node-version: '15'
+    - name: Install dependencies, build & test
+      run: |
+        npm install
+        npm run build
+    - name: Deploy to Firebase Hosting
+      uses: w9jds/firebase-action@master
+      with:
+        args: deploy --only hosting
+      env:
+        FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}

@@ -22,9 +22,6 @@ const RecipesView = (props: Props) => {
   const loading = useSelector(
     (state: ApplicationState) => state.recipes.loading
   );
-  const filters = useSelector(
-    (state: ApplicationState) => state.recipes.filters
-  );
   const auth = useSelector((state: ApplicationState) => state.firebase.auth);
 
   useEffect(() => {
