@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { ApplicationState } from "index";
 import ContentEditable from "react-contenteditable";
@@ -16,11 +16,9 @@ interface Props {
 }
 
 const RecipeHeaderElement: React.FC<Props> = ({ editing, toggleEdit }) => {
-  const auth = useSelector((state: ApplicationState) => state.firebase.auth);
   const recipe = useSelector((state: ApplicationState) => state.recipe.recipe);
-  const [newImage, setNewImage] = useState<File>(null);
+  const [, setNewImage] = useState<File>(null);
   const [newTag, setNewTag] = useState<string>("");
-  const imageEditorRef = useRef<any>();
   const dispatch = useDispatch();
   const updatingRecipe = useSelector(
     (state: ApplicationState) => state.recipe.updatingRecipe
