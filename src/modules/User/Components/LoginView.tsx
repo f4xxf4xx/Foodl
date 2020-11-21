@@ -1,5 +1,6 @@
-import firebase from "firebase";
+import * as firebase from "firebase/app";
 import * as firebaseui from "firebaseui";
+import { auth } from "config";
 import React from "react";
 import { StyledLogin } from "modules/User/Components/Styles/StyledLogin";
 
@@ -31,7 +32,7 @@ const LoginView = () => {
     },
   };
 
-  return <StyledLogin uiConfig={authConfig} firebaseAuth={firebase.auth()} />;
+  return <StyledLogin uiConfig={authConfig} firebaseAuth={auth} />;
 };
 
 export default LoginView;
