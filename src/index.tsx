@@ -16,6 +16,7 @@ import { firebase } from "config";
 import { cartReducer, CartState } from "store/cart/cartReducer";
 import { recipeReducer, RecipeState } from "store/recipes/recipeReducer";
 import { recipesReducer, RecipesState } from "store/recipes/recipesReducer";
+import 'index.css';
 
 const baseUrl = document.getElementsByTagName("base")[0].getAttribute("href");
 const rootElement = document.getElementById("root");
