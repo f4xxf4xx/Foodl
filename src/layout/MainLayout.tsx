@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState } from "react";
+import { useViewportScroll } from "framer-motion";
 import styled from "styled-components";
 import { useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
@@ -16,6 +17,26 @@ const StyledHeader = styled(Header)<{ theme: Theme }>`
   top: 0;
   left: 0;
   right: 0;
+  background: transparent;
+  box-shadow: 0 0 0 rgba(0,0,0,0),
+              0 0 0 rgba(0,0,0,0),
+              0 0 0 rgba(0,0,0,0),
+              0 0 0 rgba(0,0,0,0),
+              0 0 0 rgba(0,0,0,0);
+
+  transition: background .1s ease-in,
+              box-shadow .2s ease-in,
+              transform .2s ease-in;
+
+  &.raised {
+    background: ${({ theme }) => theme.colors.dark.green};
+    box-shadow: 0 1px 1px rgba(0,0,0,.08),
+                0 2px 2px rgba(0,0,0,.08),
+                0 4px 4px rgba(0,0,0,.08),
+                0 8px 8px rgba(0,0,0,.08),
+                0 16px 16px rgba(0,0,0,.08);
+    transform: scale(1.01);
+  }
 
   & + section, & + main {
     padding-top: ${({ theme }) => theme.sizes.headerHeight};
@@ -25,6 +46,9 @@ const StyledHeader = styled(Header)<{ theme: Theme }>`
 const MainLayout: React.FC = (props) => {
   const auth = useSelector((state: ApplicationState) => state.firebase.auth);
   const history = useHistory();
+  const [headerRaised, setHeaderRaised] = useState(false);
+  const { scrollY } = useViewportScroll();
+  scrollY.onChange(y => setHeaderRaised(!!y));
 
   const onSignOutClick = () => {
     firebase.auth().signOut();
@@ -41,7 +65,7 @@ const MainLayout: React.FC = (props) => {
 
   return (
     <>
-      <StyledHeader>
+      <StyledHeader className={headerRaised ? "raised" : ""}>
         <div className="user-actions">
           {isAuthenticated(auth) ? (
             <button onClick={onSignOutClick}>Sign out</button>
