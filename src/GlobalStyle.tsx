@@ -42,4 +42,8 @@ export const GlobalStyle = createGlobalStyle<{ theme: Theme }>`
   h6 {
     font-size: ${({ theme }) => theme.fontSizes.h6};
   }
+
+  div {
+    box-sizing: border-box;
+  }
 `;

@@ -1,41 +1,28 @@
 import React from "react";
-import { useSelector } from "react-redux";
-import { Link, useHistory } from "react-router-dom";
-import { ApplicationState } from "index";
-import { isAuthenticated } from "helpers/userHelper";
-import { firebase } from "config";
+import styled from "styled-components";
+import { Theme } from "theme";
+import { Container } from "components/Container";
+import { Logo } from "components/Logo";
 
 import "./Styles/MainLayout.css";
 
-const Header: React.FC = () => {
-  const auth = useSelector((state: ApplicationState) => state.firebase.auth);
-  const history = useHistory();
+const StyledContainer = styled(Container as any)<{ theme: Theme }>`
+  min-height: ${({ theme }) => theme.sizes.headerHeight};
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 
-  const onSignOutClick = () => {
-    firebase.auth().signOut();
-    history.push("/");
-  };
+  & > .spacer {
+    flex-grow: 1;
+  }
+`;
 
-  const redirectToLogin = () => {
-    history.push("/login");
-  };
-
-  return (
-    <div className="header">
-      <div className="logo">
-        <Link to="/">
-          <h3>Foodl</h3>
-        </Link>
-      </div>
-      <div className="user-actions">
-        {isAuthenticated(auth) ? (
-          <button onClick={onSignOutClick}>Sign out</button>
-        ) : (
-          <button onClick={redirectToLogin}>Login</button>
-        )}
-      </div>
-    </div>
-  );
-};
-
-export default Header;
+export const Header: React.FC<{ className?: string, children?: any }> = props => (
+  <header className={props.className}>
+    <StyledContainer>
+      <Logo />
+      <div className="spacer"></div>
+      { props.children }
+    </StyledContainer>
+  </header>
+);

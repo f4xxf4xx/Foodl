@@ -33,8 +33,12 @@ export const theme = {
     xsmall: '4px',
     small: '8px',
     medium: '16px',
-    large: '32px',
-    xlarge: '64px'
+    large: '24px',
+    xlarge: '32px'
+  },
+  sizes: {
+    headerHeight: '120px',
+    containerWidth: '1024px'
   },
   fonts: {
     body: `Comfortaa, Roboto, 'Open Sans'`,
@@ -47,7 +51,10 @@ export const theme = {
     h4: '1.75em',
     h3: '2em',
     h2: '2.25em',
-    h1: '2.5em'
+    h1: '2.5em',
+    regular: '12px',
+    medium: '16px',
+    large: '22px',
   },
   colors: {
     ...colorPalette,
@@ -60,11 +67,15 @@ export const theme = {
     modes: {
       inverted: {
         text: colorPalette.white,
-        background: colorPalette.green,
+        background: `linear-gradient(0deg, ${colorPalette.green}, ${colorPalette.dark.green});`,
         primary: colorPalette.white,
         secondary: colorPalette.light.orange,
       }
     }
+  },
+  breakpoints: {
+    medium: '768px',
+    large: '1024px'
   }
 };
 
