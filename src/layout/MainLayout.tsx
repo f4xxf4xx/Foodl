@@ -1,44 +1,18 @@
-import React, { useState } from "react";
-import { useViewportScroll } from "framer-motion";
+import React from "react";
 import styled from "styled-components";
 import { useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { ApplicationState } from "index";
 import { firebase } from "config";
 import { isAuthenticated } from "helpers/userHelper";
-import { Header } from "layout/Header";
 import Sidebar from "layout/Sidebar";
+import { Header } from "layout/Header";
 import { Theme } from "theme";
 
 import "layout/Styles/MainLayout.css";
 
-const StyledHeader = styled(Header)<{ theme: Theme }>`
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  background: transparent;
-  box-shadow: 0 0 0 rgba(0,0,0,0),
-              0 0 0 rgba(0,0,0,0),
-              0 0 0 rgba(0,0,0,0),
-              0 0 0 rgba(0,0,0,0),
-              0 0 0 rgba(0,0,0,0);
-
-  transition: background .1s ease-in,
-              box-shadow .2s ease-in,
-              transform .2s ease-in;
-
-  &.raised {
-    background: ${({ theme }) => theme.colors.dark.green};
-    box-shadow: 0 1px 1px rgba(0,0,0,.08),
-                0 2px 2px rgba(0,0,0,.08),
-                0 4px 4px rgba(0,0,0,.08),
-                0 8px 8px rgba(0,0,0,.08),
-                0 16px 16px rgba(0,0,0,.08);
-    transform: scale(1.01);
-  }
-
-  & + section, & + main {
+const StyledSection = styled.section<{ theme: Theme }>`
+  & > *:first-child {
     padding-top: ${({ theme }) => theme.sizes.headerHeight};
   }
 `;
@@ -46,9 +20,6 @@ const StyledHeader = styled(Header)<{ theme: Theme }>`
 const MainLayout: React.FC = (props) => {
   const auth = useSelector((state: ApplicationState) => state.firebase.auth);
   const history = useHistory();
-  const [headerRaised, setHeaderRaised] = useState(false);
-  const { scrollY } = useViewportScroll();
-  scrollY.onChange(y => setHeaderRaised(!!y));
 
   const onSignOutClick = () => {
     firebase.auth().signOut();
@@ -65,7 +36,7 @@ const MainLayout: React.FC = (props) => {
 
   return (
     <>
-      <StyledHeader className={headerRaised ? "raised" : ""}>
+      <Header>
         <div className="user-actions">
           {isAuthenticated(auth) ? (
             <button onClick={onSignOutClick}>Sign out</button>
@@ -73,9 +44,11 @@ const MainLayout: React.FC = (props) => {
             <button onClick={redirectToLogin}>Login</button>
           )}
         </div>
-      </StyledHeader>
+      </Header>
       {!auth.isEmpty && <Sidebar />}
-      { props.children }
+      <StyledSection>
+        { props.children }
+      </StyledSection>
     </>
   );
 };

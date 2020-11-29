@@ -37,7 +37,7 @@ export const theme = {
     xlarge: '32px'
   },
   sizes: {
-    headerHeight: '120px',
+    headerHeight: '80px',
     containerWidth: '1024px'
   },
   fonts: {
@@ -65,9 +65,23 @@ export const theme = {
     highlight: colorPalette.light.yellow,
     muted: colorPalette.dark.gray,
     modes: {
-      inverted: {
+      green: {
         text: colorPalette.white,
-        background: `linear-gradient(0deg, ${colorPalette.green}, ${colorPalette.dark.green});`,
+        background: `radial-gradient(circle at top left, ${colorPalette.dark.yellow}, transparent 66%),
+                     radial-gradient(circle at bottom right, ${colorPalette.blue}, transparent 66%),
+                     radial-gradient(circle at top right, ${colorPalette.light.blue}, transparent 33%),
+                     radial-gradient(circle at bottom left, ${colorPalette.light.yellow}, transparent 33%),
+                     ${colorPalette.dark.green}`,
+        primary: colorPalette.white,
+        secondary: colorPalette.light.orange,
+      },
+      yellow: {
+        text: colorPalette.white,
+        background: `radial-gradient(circle at top left, ${colorPalette.dark.green}, transparent 66%),
+                     radial-gradient(circle at bottom right, ${colorPalette.dark.orange}, transparent 66%),
+                     radial-gradient(circle at top right, ${colorPalette.light.orange}, transparent 33%),
+                     radial-gradient(circle at bottom left, ${colorPalette.light.green}, transparent 33%),
+                     ${colorPalette.dark.yellow}`,
         primary: colorPalette.white,
         secondary: colorPalette.light.orange,
       }

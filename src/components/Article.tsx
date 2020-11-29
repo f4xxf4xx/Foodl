@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { Theme } from "theme";
 
-export const Section = styled.section<{ colorMode?: string, theme: Theme }>`
+export const Article = styled.article<{ colorMode?: string, theme: Theme }>`
   width: 100%;
 
   ${({colorMode, theme}) => colorMode ? `

@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { Section } from "components/Section";
+import { Article } from "components/Article";
 import { Container } from "components/Container";
 import { Headline } from "components/Headline";
 import { AnimatedCookbook } from "components/AnimatedCookbook";
@@ -28,10 +28,10 @@ const StyledContainer = styled(Container as any)<{ theme: Theme }>`
 
 export const LandingPage: React.FC = () => (
   <>
-    <Section colorMode="inverted">
+    <Article colorMode="green">
       <StyledContainer className="inverted">
         <Headline>
-          <h5>Cookbooks are meant to be simple.</h5>
+          <h2>Cookbooks are meant to be simple.</h2>
           <p>
             Foodl is your virtual cookbook. It helps you organize your
             recipes in the most simple and intuitive way.
@@ -39,11 +39,11 @@ export const LandingPage: React.FC = () => (
         </Headline>
         <AnimatedCookbook />
       </StyledContainer>
-    </Section>
-    <Section>
+    </Article>
+    <Article>
       <StyledContainer>
         <Headline>
-          <h5>Food is all about sharing.</h5>
+          <h2>Food is all about sharing.</h2>
           <p>
             Foodl brings you closer to friends and family. It enables you
             to share your entire cookbook to the ones you love.
@@ -51,11 +51,11 @@ export const LandingPage: React.FC = () => (
         </Headline>
         <AnimatedSharing />
       </StyledContainer>
-    </Section>
-    <Section colorMode="inverted">
+    </Article>
+    <Article colorMode="yellow">
       <StyledContainer className="inverted">
         <Headline>
-          <h5>Groceries shouldn’t take all day.</h5>
+          <h2>Groceries shouldn’t take all day.</h2>
           <p>
             Foodl saves time by building your grocery list. Spend less
             time planning and more time cooking.
@@ -63,8 +63,8 @@ export const LandingPage: React.FC = () => (
         </Headline>
         <AnimatedGroceries />
       </StyledContainer>
-    </Section>
-    <Section>
+    </Article>
+    <Article>
       <StyledContainer>
         <Headline>
           <h5>Register now!</h5>
@@ -73,6 +73,6 @@ export const LandingPage: React.FC = () => (
           </p>
         </Headline>
       </StyledContainer>
-    </Section>
+    </Article>
   </>
 );

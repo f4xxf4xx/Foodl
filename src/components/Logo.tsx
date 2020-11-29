@@ -14,7 +14,7 @@ const StyledLink = styled(Link)<{ theme: Theme }>`
   }
 
   & svg path {
-    fill: ${({ theme }) => theme.colors.modes.inverted.text};
+    fill: ${({ theme }) => theme.colors.modes.green.text};
   }
 `;
 
