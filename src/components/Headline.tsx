@@ -3,6 +3,7 @@ import { Theme } from "theme";
 
 export const Headline = styled.div<{ theme: Theme }>`
   padding: ${({ theme }) => theme.space.large};
+  text-shadow: ${({ theme }) => theme.shadows.heading};
   text-align: center;
 
   @media (min-width: ${({ theme }) => theme.breakpoints.medium}) {

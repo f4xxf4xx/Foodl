@@ -24,6 +24,15 @@ const colorPalette = {
     red: '#F0A491',
     gray: '#FAFAFA',
     white: '#FFFFFF'
+  },
+  xlight: {
+    blue: '#AFCEDA',
+    green: '#B5EBE5',
+    yellow: '#F8EDD2',
+    orange: '#FCE4D0',
+    red: '#F8D4CA',
+    gray: '#FAFAFA',
+    white: '#FFFFFF'
   }
 };
 
@@ -37,12 +46,13 @@ export const theme = {
     xlarge: '32px'
   },
   sizes: {
-    headerHeight: '80px',
+    headerHeight: '48px',
+    headerWidth: '768px',
     containerWidth: '1024px'
   },
   fonts: {
     body: `Comfortaa, Roboto, 'Open Sans'`,
-    heading: `Comfortaa, Roboto, 'Open Sans'`
+    heading: `Montserrat, Roboto, 'Open Sans'`
   },
   fontSizes: {
     body: '1em',
@@ -51,7 +61,7 @@ export const theme = {
     h4: '1.75em',
     h3: '2em',
     h2: '2.25em',
-    h1: '2.5em',
+    h1: '3em',
     regular: '12px',
     medium: '16px',
     large: '22px',
@@ -65,27 +75,21 @@ export const theme = {
     highlight: colorPalette.light.yellow,
     muted: colorPalette.dark.gray,
     modes: {
-      green: {
-        text: colorPalette.white,
-        background: `radial-gradient(circle at top left, ${colorPalette.dark.yellow}, transparent 66%),
-                     radial-gradient(circle at bottom right, ${colorPalette.blue}, transparent 66%),
-                     radial-gradient(circle at top right, ${colorPalette.light.blue}, transparent 33%),
-                     radial-gradient(circle at bottom left, ${colorPalette.light.yellow}, transparent 33%),
-                     ${colorPalette.dark.green}`,
-        primary: colorPalette.white,
-        secondary: colorPalette.light.orange,
-      },
-      yellow: {
-        text: colorPalette.white,
-        background: `radial-gradient(circle at top left, ${colorPalette.dark.green}, transparent 66%),
-                     radial-gradient(circle at bottom right, ${colorPalette.dark.orange}, transparent 66%),
-                     radial-gradient(circle at top right, ${colorPalette.light.orange}, transparent 33%),
-                     radial-gradient(circle at bottom left, ${colorPalette.light.green}, transparent 33%),
-                     ${colorPalette.dark.yellow}`,
-        primary: colorPalette.white,
+      accent: {
+        text: colorPalette.dark.blue,
+        background: `radial-gradient(circle at top left, ${colorPalette.xlight.green}, transparent 66%),
+                     radial-gradient(circle at bottom right, ${colorPalette.xlight.blue}, transparent 66%),
+                     radial-gradient(circle at top right, ${colorPalette.xlight.red}, transparent 66%),
+                     radial-gradient(circle at bottom left, ${colorPalette.xlight.orange}, transparent 66%),
+                     ${colorPalette.light.yellow}`,
+        primary: colorPalette.green,
         secondary: colorPalette.light.orange,
       }
     }
+  },
+  shadows: {
+    panel: "rgba(50,50,93,0.25) 0 4px 4px, rgba(0,0,0,0.3) 0 4px 16px",
+    heading: "0 4px 4px rgba(50,50,93,0.25), 0 4px 16px rgba(0, 0, 0, 0.3)"
   },
   breakpoints: {
     medium: '768px',

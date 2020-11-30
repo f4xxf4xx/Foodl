@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { motion, useViewportScroll, useTransform } from "framer-motion";
-import { AnimatedSvgWrapper } from "components/AnimatedSvgWrapper";
+import { AnimatedSvgWrapper } from "pages/LandingPage/AnimatedSvgWrapper";
 
 export const AnimatedGroceries: React.FC = () => {
   const ref = useRef<HTMLDivElement>();

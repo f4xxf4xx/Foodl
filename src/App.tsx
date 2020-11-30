@@ -4,7 +4,7 @@ import GuessRoute from "layout/GuessRoute";
 import MainLayout from "layout/MainLayout";
 import PrivateRoute from "layout/PrivateRoute";
 import CartView from "modules/Cart/Components/CartView";
-import { LandingPage } from "modules/Pages/LandingPage";
+import { LandingPage } from "pages/LandingPage/LandingPage";
 import RecipesView from "modules/Recipes/Components/RecipesView";
 import RecipeView from "modules/Recipes/Components/RecipeView";
 import LoginView from "modules/User/Components/LoginView";

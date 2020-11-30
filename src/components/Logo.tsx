@@ -9,12 +9,12 @@ const StyledLink = styled(Link)<{ theme: Theme }>`
 
   & svg {
     width: auto;
-    height: ${({ theme }) => theme.fontSizes.h3};
+    height: ${({ theme }) => theme.fontSizes.h6};
     vertical-align: middle;
   }
 
   & svg path {
-    fill: ${({ theme }) => theme.colors.modes.green.text};
+    fill: ${({ theme }) => theme.colors.text};
   }
 `;
 
