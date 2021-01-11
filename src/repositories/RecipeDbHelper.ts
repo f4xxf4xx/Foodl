@@ -1,7 +1,7 @@
 import slugify from "react-slugify";
 import { db, storage } from "config";
-import { Recipe, Step, IngredientGroup } from "modules/Recipes/models";
-import { Filters } from "store/recipes/recipesReducer";
+import { Recipe, Step, IngredientGroup } from "modules/recipes/models";
+import { Filters } from "store/recipes/recipes-reducer";
 import { DbHelper } from "repositories/DbHelper";
 
 export class RecipeDbHelper {

@@ -1,38 +1,34 @@
 // Colors
 const colorPalette = {
-  blue: '#356274',
-  green: '#32BBAB',
-  yellow: '#EBCB7A',
-  orange: '#F5AF75',
-  red: '#EA8065',
-  gray: '#F0F0F0',
-  white: '#FFFFFF',
+  blue: '#494C6F',
+  green: '#3EB246',
+  yellow: '#DEB449',
+  orange: '#E67D40',
+  red: '#DC1839',
+  gray: '#EDF2F4',
   dark: {
-    blue: '#264653',
-    green: '#2A9D8F',
-    yellow: '#E9C46A',
-    orange: '#F4A261',
-    red: '#E76F51',
-    gray: '#CECECE',
-    white: '#FFFFFF'
+    blue: '#2B2D42',
+    green: '#1F4F22',
+    yellow: '#705718',
+    orange: '#743714',
+    red: '#620F1D',
+    gray: '#D6DBDD'
   },
   light: {
-    blue: '#5698B2',
-    green: '#62D5C8',
-    yellow: '#F1DA9F',
-    orange: '#F8C59C',
-    red: '#F0A491',
-    gray: '#FAFAFA',
-    white: '#FFFFFF'
+    blue: '#8F92B6',
+    green: '#7BCC81',
+    yellow: '#E1C172',
+    orange: '#E6996D',
+    red: '#E66177',
+    gray: '#F9F9FA'
   },
   xlight: {
-    blue: '#AFCEDA',
-    green: '#B5EBE5',
-    yellow: '#F8EDD2',
-    orange: '#FCE4D0',
-    red: '#F8D4CA',
-    gray: '#FAFAFA',
-    white: '#FFFFFF'
+    blue: '#D5D6E3',
+    green: '#CDEBCF',
+    yellow: '#F3E7C9',
+    orange: '#F5D8C7',
+    red: '#F6C3CB',
+    gray: '#FDFDFE'
   }
 };
 
@@ -46,54 +42,68 @@ export const theme = {
     xlarge: '32px'
   },
   sizes: {
-    headerHeight: '48px',
-    headerWidth: '768px',
-    containerWidth: '1024px'
+    headerHeight: '80px'
   },
   fonts: {
     body: `Comfortaa, Roboto, 'Open Sans'`,
     heading: `Montserrat, Roboto, 'Open Sans'`
   },
   fontSizes: {
-    body: '1em',
-    h6: '1.25em',
-    h5: '1.5em',
-    h4: '1.75em',
+    body: '12px',
+    h6: '1.3333em',
+    h5: '1.3333em',
+    h4: '1.6667em',
     h3: '2em',
-    h2: '2.25em',
-    h1: '3em',
-    regular: '12px',
-    medium: '16px',
-    large: '22px',
+    h2: '2.6667em',
+    h1: '4em',
+    regular: '1em',
+    medium: '1.3333em',
+    large: '1.6667em',
   },
   colors: {
     ...colorPalette,
     text: colorPalette.dark.blue,
-    background: colorPalette.white,
-    primary: colorPalette.green,
-    secondary: colorPalette.orange,
+    background: colorPalette.xlight.gray,
+    primary: colorPalette.orange,
+    secondary: colorPalette.green,
     highlight: colorPalette.light.yellow,
     muted: colorPalette.dark.gray,
     modes: {
       accent: {
-        text: colorPalette.dark.blue,
-        background: `radial-gradient(circle at top left, ${colorPalette.xlight.green}, transparent 66%),
-                     radial-gradient(circle at bottom right, ${colorPalette.xlight.blue}, transparent 66%),
-                     radial-gradient(circle at top right, ${colorPalette.xlight.red}, transparent 66%),
-                     radial-gradient(circle at bottom left, ${colorPalette.xlight.orange}, transparent 66%),
-                     ${colorPalette.light.yellow}`,
-        primary: colorPalette.green,
+        text: colorPalette.xlight.gray,
+        background: colorPalette.orange,
+        primary: colorPalette.orange,
         secondary: colorPalette.light.orange,
       }
     }
   },
   shadows: {
     panel: "rgba(50,50,93,0.25) 0 4px 4px, rgba(0,0,0,0.3) 0 4px 16px",
-    heading: "0 4px 4px rgba(50,50,93,0.25), 0 4px 16px rgba(0, 0, 0, 0.3)"
+    heading: "none"
+  },
+  animations: {
+    appearing: {
+      hidden: {
+        opacity: 0,
+        translateY: 64,
+        scale: .90,
+        transition: {
+          duration: .2
+        }
+      },
+      visible: {
+        opacity: 1,
+        translateY: 0,
+        scale: 1,
+        transition: {
+          duration: .2
+        }
+      }
+    }
   },
   breakpoints: {
-    medium: '768px',
-    large: '1024px'
+    medium: 768,
+    large: 1024
   }
 };
 
