@@ -13,6 +13,7 @@ const StyledHeader = styled(motion.header)<{ theme: Theme }>`
   left: 0;
   right: 0;
   z-index: 48;
+  background-color: ${({ theme }) => theme.colors.background};
 `;
 
 const StyledContainer = styled(Container as any)<{ theme: Theme }>`
