@@ -4,7 +4,6 @@ import { Theme } from "theme";
 
 const StyledH3 = styled.h3<{ theme: Theme }>`
   position: relative;
-  margin-top: ${({theme}) => theme.space.large};
 
   &::after {
     content: "";
@@ -22,11 +21,14 @@ const StyledH3 = styled.h3<{ theme: Theme }>`
 
 interface Props {
   title: string;
+  className?: string;
 }
 
 export const Feature: React.FC<Props> = props => {
-  return (<>
-    <StyledH3>{props.title}</StyledH3>
-    {props.children}
-  </>);
+  return (
+    <div className={props.className}>
+      <StyledH3>{props.title}</StyledH3>
+      {props.children}
+    </div>
+  );
 }

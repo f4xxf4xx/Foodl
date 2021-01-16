@@ -80,7 +80,7 @@ const StyledOverviewHeadlineSpill = styled(OverviewHeadlineSpill)<{theme: Theme}
 `;
 
 interface Props {
-
+  onScrollToNext: () => void;
 }
 
 export const OverviewHeadline: React.FC<Props> = props => {
@@ -99,7 +99,7 @@ export const OverviewHeadline: React.FC<Props> = props => {
       <StyledScrollDown>
         or scroll down to learn more
       </StyledScrollDown>
-      <ScrollDownIndicator onClick={() => {}} />
+      <ScrollDownIndicator onClick={props.onScrollToNext} />
       <StyledGraphics>
         <StyledOverviewHeadlineGraphics />
         <StyledOverviewHeadlineSpill />

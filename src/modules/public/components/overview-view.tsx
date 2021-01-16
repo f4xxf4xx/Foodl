@@ -1,15 +1,22 @@
-import React, { useRef } from "react";
+import React, { useRef, RefObject } from "react";
 import styled, { withTheme } from "styled-components";
 import { OverviewHeadline } from "modules/public/components/overview-headline";
 import { OverviewFeatures } from "modules/public/components/overview-features";
 import { Theme } from "theme";
 
+function scrollTo<T extends Element>(ref: RefObject<T>): void {
+  const element = ref.current;
+  if (element) {
+    element.scrollIntoView({behavior: 'smooth'});
+  }
+}
+
 export const OverviewView: React.FC = props => {
-  const nextArticleRef = useRef<HTMLDivElement>();
+  const nextArticleRef = useRef<Element>();
   return (
     <>
-      <OverviewHeadline />
-      <OverviewFeatures />
+      <OverviewHeadline onScrollToNext={() => scrollTo(nextArticleRef)} />
+      <OverviewFeatures ref={nextArticleRef} />
     </>
   );
 };

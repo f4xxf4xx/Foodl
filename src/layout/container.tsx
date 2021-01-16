@@ -13,4 +13,8 @@ export const Container = styled.div<Props>`
   @media (max-width: ${({ theme }) => theme.breakpoints.large-1}px) {
     max-width: ${({ theme }) => theme.breakpoints.medium}px;
   }
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.medium-1}px) {
+    max-width: ${({ theme }) => theme.breakpoints.small}px;
+  }
 `;
