@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { ApplicationState } from "index";
+import { Container } from "layout/container";
 import AddCartItemForm from "modules/cart/components/add-cart-item-form";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
@@ -69,7 +70,7 @@ const CartView = () => {
   };
 
   return (
-    <>
+    <Container>
       <h1>Cart</h1>
       <AddCartItemForm />
       <div>
@@ -78,7 +79,7 @@ const CartView = () => {
         </button>
       </div>
       {renderCartItems()}
-    </>
+    </Container>
   );
 };
 

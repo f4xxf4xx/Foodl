@@ -33,31 +33,10 @@ const App: React.FC = () => {
           <PublicRoute path="/pricing" exact={true} component={FeaturesView} />
           <PublicRoute path="/login" exact={true} component={LoginView} />
           <PublicRoute path="/register" exact={true} component={LoginView} />
-          
-          <AppRoute
-            path="/recipes"
-            render={() => (
-              <MainLayout>
-                <RecipesView />
-              </MainLayout>
-            )}
-          />
-          <AppRoute
-            path="/recipe/:slug"
-            render={() => (
-              <MainLayout>
-                <RecipeView />
-              </MainLayout>
-            )}
-          />
-          <AppRoute
-            path="/cart"
-            render={() => (
-              <MainLayout>
-                <CartView />
-              </MainLayout>
-            )}
-          />
+
+          <AppRoute path="/recipes" exact={true} component={RecipesView} />
+          <AppRoute path="/recipe/:slug" component={RecipeView} />
+          <AppRoute path="/cart" component={CartView} />
         </Switch>
       </MainLayout>
     </ThemeProvider>

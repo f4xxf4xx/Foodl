@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { ApplicationState } from "index";
+import { Container } from "layout/container";
 import IngredientsElement from "modules/recipes/components/ingredients-element";
 import RecipeHeaderElement from "modules/recipes/components/recipe-header-element";
 import StepsElement from "modules/recipes/components/steps-element";
@@ -29,7 +30,7 @@ const RecipeView: React.FC = () => {
   }, [auth.uid, slug, dispatch]);
 
   return (
-    <>
+    <Container>
       {loadingRecipe ? (
         <p>Loading...</p>
       ) : (
@@ -47,7 +48,7 @@ const RecipeView: React.FC = () => {
           ) : null}
         </>
       )}
-    </>
+    </Container>
   );
 };
 

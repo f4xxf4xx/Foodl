@@ -5,10 +5,14 @@ import { getLinks } from "layout/links";
 import "layout/Styles/MainLayout.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-export const Sidebar: React.FC = () => {
+interface Props {
+  className?: string;
+}
+
+export const Sidebar: React.FC<Props> = props => {
   const location = useLocation();
   return (
-    <div className="sidebar">
+    <aside className={props.className}>
       <ul className="sidebar-list">
         {getLinks().map((link, index) => {
           const active = location.pathname === link.path;
@@ -27,18 +31,6 @@ export const Sidebar: React.FC = () => {
           );
         })}
       </ul>
-      {/* <span className="divider" />
-      <ul className="sidebar-list">
-        {getAdminLinks().map((link, index) => (
-          <li className="sidebar-item">
-            <SidebarLink
-              key={index}
-              currentPath={location.pathname}
-              link={link}
-            />
-          </li>
-        ))}
-      </ul> */}
-    </div>
+    </aside>
   );
 };

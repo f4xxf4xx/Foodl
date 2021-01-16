@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { withRouter } from "react-router-dom";
 import { RouteComponentProps } from "react-router-dom";
 import { ApplicationState } from "index";
+import { Container } from "layout/container";
 import { Recipe } from "modules/recipes/models";
 import AddRecipeForm from "modules/recipes/components/add-recipe-form";
 import {
@@ -132,11 +133,11 @@ const RecipesView = (props: Props) => {
   };
 
   return (
-    <>
+    <Container>
       <h3>My recipes</h3>
       <AddRecipeForm />
       {renderRecipes()}
-    </>
+    </Container>
   );
 };
 
