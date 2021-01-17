@@ -1,8 +1,7 @@
 import React, { useRef, RefObject } from "react";
-import styled, { withTheme } from "styled-components";
 import { OverviewHeadline } from "modules/public/components/overview-headline";
 import { OverviewFeatures } from "modules/public/components/overview-features";
-import { Theme } from "theme";
+import { OverviewPricing } from "modules/public/components/overview-pricing";
 
 function scrollTo<T extends Element>(ref: RefObject<T>): void {
   const element = ref.current;
@@ -17,6 +16,7 @@ export const OverviewView: React.FC = props => {
     <>
       <OverviewHeadline onScrollToNext={() => scrollTo(nextArticleRef)} />
       <OverviewFeatures ref={nextArticleRef} />
+      <OverviewPricing />
     </>
   );
 };
