@@ -35,7 +35,6 @@ const StyledContainer = styled(Container as any)<{ theme: Theme }>`
         "feature2"
         "feature3"
         "graphics";
-    justify-items: center;
   }
 `;
 
@@ -74,7 +73,7 @@ interface Props {
 export const OverviewFeatures = forwardRef<Element, Props>((_, ref) => (
   <StyledContainer ref={ref}>
     <StyledHeading>Features</StyledHeading>
-    <StyledFeature1 title="1. Cookbooks are meant to be simple">
+    <StyledFeature1 title="Cookbooks are meant to be simple">
       <StyledParagraph>
         Foodl organizes your recipes by ingredients, activity and custom
         tags. This enables you to efficiently search your saved recipes.
@@ -91,7 +90,7 @@ export const OverviewFeatures = forwardRef<Element, Props>((_, ref) => (
         Home assistants can assist you during the preparation. 
       </StyledParagraph>
     </StyledFeature1>
-    <StyledFeature2 title="2. Groceries shouldn’t take all day">
+    <StyledFeature2 title="Groceries shouldn’t take all day">
       <StyledParagraph>
         Given your meal planning, Foodl can automatically build your grocery
         list and export it to your favourite list application.
@@ -101,7 +100,7 @@ export const OverviewFeatures = forwardRef<Element, Props>((_, ref) => (
         grocery list.
       </StyledParagraph>
     </StyledFeature2>
-    <StyledFeature3 title="3. Food is all about sharing">
+    <StyledFeature3 title="Food is all about sharing">
       <StyledParagraph>
         Invite friends or family to view and contribute to your cookbook.
       </StyledParagraph>

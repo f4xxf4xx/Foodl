@@ -2,10 +2,8 @@ import { createGlobalStyle } from 'styled-components';
 import { Theme } from 'theme';
 
 export const GlobalStyle = createGlobalStyle<{ theme: Theme }>`
-  body {
-    margin: 0;
+  html {
     background: ${({ theme }) => theme.colors.background};
-
     color: ${({ theme }) => theme.colors.text};
     font-family: ${({ theme }) => theme.fonts.body};
     font-size: ${({ theme }) => theme.fontSizes.body};
@@ -13,6 +11,10 @@ export const GlobalStyle = createGlobalStyle<{ theme: Theme }>`
 
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    margin: 0;
   }
 
   h1, h2, h3, h4, h5, h6 {
@@ -32,10 +34,5 @@ export const GlobalStyle = createGlobalStyle<{ theme: Theme }>`
 
   div {
     box-sizing: border-box;
-  }
-  
-  * {
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
   }
 `;

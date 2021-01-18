@@ -9,13 +9,13 @@ const StyledContainer = styled.div<{ theme: Theme, color: string }>`
   background-color: ${({theme, color}) => theme.colors.background};
   border: 1px solid ${({theme, color}) => theme.colors.xlight[color]};
   border-radius: ${({theme}) => theme.space.large};
+  text-align: center;
 `;
 
 const StyledTitle = styled.p<{ theme: Theme }>`
   font-family: ${({ theme }) => theme.fonts.heading};
   font-size: ${({ theme }) => theme.fontSizes.h3};
   font-weight: bold;
-  text-align: center;
   text-transform: uppercase;
 `;
 
@@ -25,7 +25,6 @@ const StyledDescription = styled.p<{ theme: Theme, color: string }>`
   font-size: ${({ theme }) => theme.fontSizes.h4};
   font-weight: bold;
   letter-spacing: 0;
-  text-align: center;
   margin-top: ${({ theme }) => theme.space.small};
 `;
 
