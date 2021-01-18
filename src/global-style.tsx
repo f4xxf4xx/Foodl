@@ -17,6 +17,12 @@ export const GlobalStyle = createGlobalStyle<{ theme: Theme }>`
     margin: 0;
   }
 
+  #root {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+
   h1, h2, h3, h4, h5, h6 {
     font-family: ${({ theme }) => theme.fonts.heading};
     letter-spacing: 0;
