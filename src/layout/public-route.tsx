@@ -7,7 +7,7 @@ const PublicRoute: React.FC<RouteProps> = (props) => {
   const auth = useSelector((state: ApplicationState) => state.firebase.auth);
 
   return auth.isLoaded
-    ? auth.isEmpty ? <Route {...props} /> : <Redirect to="/" />
+    ? auth.isEmpty ? <Route {...props} /> : <Redirect to="/home" />
     : <p>Loading...</p>;
 };
 

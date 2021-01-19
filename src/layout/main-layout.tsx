@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useSelector } from "react-redux";
-import { useHistory } from "react-router-dom";
 import { ApplicationState } from "index";
-import { firebase } from "config";
 import { Header } from "layout/header";
 import { PublicNav } from "layout/public-nav";
+import { AppNav } from "layout/app-nav";
 import { Footer } from "layout/footer";
 import { Theme } from "theme";
 import "layout/Styles/MainLayout.css";
@@ -48,12 +47,6 @@ function setIsWindowScrollable(isScrollable: boolean) {
 const MainLayout: React.FC = (props) => {
   const auth = useSelector((state: ApplicationState) => state.firebase.auth);
   const [isDrawerOpened, setIsDrawerOpened] = useState(false);
-  const history = useHistory();
-
-  const onSignOutClick = () => {
-    firebase.auth().signOut();
-    history.push("/");
-  };
 
   useEffect(() => setIsWindowScrollable(!isDrawerOpened), [isDrawerOpened]);
 
@@ -65,15 +58,11 @@ const MainLayout: React.FC = (props) => {
       <StyledHeader
         isDrawerOpened={isDrawerOpened}
         onMenuClick={() => setIsDrawerOpened(!isDrawerOpened)}
-      >
-        {auth.isEmpty 
-          ? <PublicNav />
-          : <button onClick={onSignOutClick}>Sign out</button>
-        }
-      </StyledHeader>
-      { isDrawerOpened && <StyledBackdrop
+        children={auth.isEmpty ? <PublicNav /> : <AppNav />}
+      />
+      {isDrawerOpened && <StyledBackdrop
         onClick={() => setIsDrawerOpened(!isDrawerOpened)}
-      /> }
+      />}
       <StyledMain className={isDrawerOpened && "pushed-back"}>
         { props.children }
       </StyledMain>
