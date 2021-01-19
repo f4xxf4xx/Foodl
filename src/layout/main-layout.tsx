@@ -1,40 +1,53 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { ApplicationState } from "index";
 import { firebase } from "config";
-import { Sidebar } from "layout/sidebar";
 import { Header } from "layout/header";
 import { PublicNav } from "layout/public-nav";
-import { PublicNavActions } from "layout/public-nav-actions";
 import { Footer } from "layout/footer";
+import { Theme } from "theme";
 import "layout/Styles/MainLayout.css";
 
 const StyledHeader = styled(Header)`
   flex: 0 0 auto;
 `;
 
-const StyledMain = styled.main`
+const StyledBackdrop = styled.div<{ theme: Theme }>`
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-color: ${({theme}) => theme.colors.dark.blue};
+  opacity: .12;
+  z-index: 24;
+`;
+
+const StyledMain = styled.main<{theme: Theme}>`
   flex: 1 0 auto;
+  transition: transform .2s ease-out;
+
+  &.pushed-back {
+    transform: translateX(-${({theme}) => theme.space.large});
+  }
 `;
 
 const StyledFooter = styled(Footer)`
   flex: 0 0 auto;
 `;
 
-const StyledSidebar = styled(Sidebar)`
-  top: 80px;
-  background-color: lightsteelblue;
-  width: 240px;
-  height: 100vh;
-  position: fixed;
-`;
-
-
+function setIsWindowScrollable(isScrollable: boolean) {
+  const html = document.documentElement;
+  if (html) {
+    html.style['overflow'] = isScrollable ? 'auto' : 'hidden';
+  }
+}
 
 const MainLayout: React.FC = (props) => {
   const auth = useSelector((state: ApplicationState) => state.firebase.auth);
+  const [isDrawerOpened, setIsDrawerOpened] = useState(false);
   const history = useHistory();
 
   const onSignOutClick = () => {
@@ -42,20 +55,26 @@ const MainLayout: React.FC = (props) => {
     history.push("/");
   };
 
+  useEffect(() => setIsWindowScrollable(!isDrawerOpened), [isDrawerOpened]);
+
   if (!auth.isLoaded) {
     return <p>Loading...</p>;
   }
   return (
     <>
       <StyledHeader
-        center={<PublicNav/>}
-        right={auth.isEmpty 
-          ? <PublicNavActions />
+        isDrawerOpened={isDrawerOpened}
+        onMenuClick={() => setIsDrawerOpened(!isDrawerOpened)}
+      >
+        {auth.isEmpty 
+          ? <PublicNav />
           : <button onClick={onSignOutClick}>Sign out</button>
         }
-      />
-      {!auth.isEmpty && <StyledSidebar />}
-      <StyledMain>
+      </StyledHeader>
+      { isDrawerOpened && <StyledBackdrop
+        onClick={() => setIsDrawerOpened(!isDrawerOpened)}
+      /> }
+      <StyledMain className={isDrawerOpened && "pushed-back"}>
         { props.children }
       </StyledMain>
       <StyledFooter />

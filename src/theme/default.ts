@@ -37,12 +37,14 @@ export const theme = {
     none: '0',
     xsmall: '4px',
     small: '8px',
-    medium: '16px',
+    medium: '12px',
     large: '24px',
-    xlarge: '32px'
+    xlarge: '48px'
   },
   sizes: {
-    headerHeight: '80px'
+    headerHeight: '80px',
+    controlHeight: '48px',
+    drawerWidth: '256px'
   },
   fonts: {
     body: `Comfortaa, Roboto, 'Open Sans'`,

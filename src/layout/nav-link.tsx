@@ -12,7 +12,7 @@ const spring = {
 
 const StyledLink = styled(Link)<{ theme: Theme }>`
   position: relative;
-  height: ${({theme}) => theme.space.xlarge};
+  height: ${({theme}) => theme.fontSizes.h2};
   display: inline-flex;
   align-items: flex-end;
   padding: 0 ${({theme}) => theme.space.xsmall};
@@ -22,7 +22,15 @@ const StyledLink = styled(Link)<{ theme: Theme }>`
   text-decoration: none;
 
   & + & {
+    margin: 0;
     margin-left: ${({theme}) => theme.space.medium};
+  }
+
+  @media (max-width: ${({theme}) => theme.breakpoints.medium}px) {
+    & + & {
+      margin: 0;
+      margin-top: ${({theme}) => theme.space.medium};
+    }
   }
 `;
 

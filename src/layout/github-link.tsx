@@ -19,7 +19,12 @@ interface Props {
 
 export const GithubLink: React.FC<Props> = ({href, className}) => {
   return (
-    <StyledLink href={href} className={className}>
+    <StyledLink
+      href={href}
+      className={className}
+      target="_blank"
+      rel="noopener noreferrer"
+    >
       <StyledSvg
         xmlns="http://www.w3.org/2000/svg"
         className="svg-inline--fa fa-github fa-w-16"

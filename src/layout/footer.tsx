@@ -20,6 +20,10 @@ const StyledContainer = styled(Container as any)<{ theme: Theme }>`
   & > * + * {
     margin-left: ${({theme}) => theme.space.large};
   }
+
+  @media (max-width: ${({theme}) => theme.breakpoints.medium}px) {
+    max-width: initial;
+  }
 `;
 
 const StyledTrademark = styled.span<{ theme: Theme }>`
