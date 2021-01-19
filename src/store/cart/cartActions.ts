@@ -9,14 +9,14 @@ export const setCartUpdating = createAction<boolean>("SET_CART_UPDATING");
 export const fetchCartItemsAsync = (
   uid: string,
   setItems: React.Dispatch<React.SetStateAction<any[]>>
-) => (dispatch) => {
+) => async (dispatch) => {
   dispatch(setCartLoading(true));
 
-  const unsubscribe = db
+  const unsubscribe = await db
     .collection("carts")
     .doc(uid)
     .onSnapshot((snap) => {
-      const currentItems = snap.data()["items"].map((doc) => doc);
+      const currentItems = snap.data()["items"];
       setItems(currentItems);
     });
 
@@ -47,10 +47,9 @@ export const deleteCartItemAsync = (uid: string, name: string) => async (
     const cart = await cartRef.get();
 
     if (cart.exists) {
-      const items = cart.data().items;
-      const newItems = items.filter((item) => item !== name);
-
-      await cartRef.set({ items: newItems });
+      cartRef.update({
+        items: firebase.firestore.FieldValue.arrayRemove(name),
+      });
     } else {
       toast.warn("No cart!");
     }

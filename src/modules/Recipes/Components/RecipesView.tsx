@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { withRouter } from "react-router-dom";
 import { RouteComponentProps } from "react-router-dom";
@@ -16,21 +16,15 @@ type Props = RouteComponentProps;
 
 const RecipesView = (props: Props) => {
   const dispatch = useDispatch();
-  const recipes = useSelector(
-    (state: ApplicationState) => state.recipes.recipes
-  );
-  const loading = useSelector(
-    (state: ApplicationState) => state.recipes.loading
+  const isLoading = useSelector(
+    (state: ApplicationState) => state.recipes.isLoading
   );
   const auth = useSelector((state: ApplicationState) => state.firebase.auth);
 
-  useEffect(() => {
-    const fetch = async () => {
-      dispatch(fetchRecipesAsync(auth.uid, null));
-    };
+  const [recipes, setRecipes] = useState<Recipe[]>([]);
 
-    fetch();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => {
+    dispatch(fetchRecipesAsync(auth.uid, null, setRecipes));
   }, [auth.uid, dispatch]);
 
   const deleteRecipe = (recipeId: string) => async () => {
@@ -106,7 +100,7 @@ const RecipesView = (props: Props) => {
       <>
         <div>{renderFilters()}</div>
         <div className="recipes">
-          {loading ? (
+          {isLoading ? (
             <h1>Loading...</h1>
           ) : (
             recipes.map((recipe) => (
