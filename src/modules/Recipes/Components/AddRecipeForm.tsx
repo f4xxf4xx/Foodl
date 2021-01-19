@@ -12,7 +12,7 @@ const AddRecipeForm = (props: Props) => {
   //store
   const auth = useSelector((state: ApplicationState) => state.firebase.auth);
   const updatingRecipes = useSelector(
-    (state: ApplicationState) => state.recipes.updating
+    (state: ApplicationState) => state.recipes.isUpdating
   );
 
   const updateRecipeName = (e: React.ChangeEvent<HTMLInputElement>) => {
