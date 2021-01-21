@@ -31,7 +31,7 @@ const App: React.FC = () => {
           <PublicRoute path="/login" exact={true} component={LoginView} />
           <PublicRoute path="/register" exact={true} component={LoginView} />
 
-          <AppRoute path="/recipes" exact={true} component={RecipesView} />
+          <AppRoute path="/recipes" component={RecipesView} />
           <AppRoute path="/recipe/:slug" component={RecipeView} />
           <AppRoute path="/cart" component={CartView} />
         </Switch>

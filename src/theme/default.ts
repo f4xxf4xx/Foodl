@@ -42,9 +42,9 @@ export const theme = {
     xlarge: '48px'
   },
   sizes: {
-    headerHeight: '80px',
-    controlHeight: '48px',
-    drawerWidth: '256px'
+    headerHeight: 80,
+    controlHeight: 48,
+    drawerWidth: 256
   },
   fonts: {
     body: `Comfortaa, Roboto, 'Open Sans'`,
@@ -102,6 +102,10 @@ export const theme = {
           duration: .2
         }
       }
+    },
+    transition: {
+      duration: .2,
+      type: "spring"
     }
   },
   breakpoints: {

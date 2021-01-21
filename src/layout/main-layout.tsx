@@ -1,5 +1,7 @@
-import React, { useState, useEffect } from "react";
-import styled from "styled-components";
+import React, { useState, useEffect, useContext } from "react";
+import styled, { ThemeContext } from "styled-components";
+import { motion, AnimatePresence } from "framer-motion";
+import { useMediaQuery } from 'react-responsive'
 import { useSelector } from "react-redux";
 import { ApplicationState } from "index";
 import { Header } from "layout/header";
@@ -13,24 +15,18 @@ const StyledHeader = styled(Header)`
   flex: 0 0 auto;
 `;
 
-const StyledBackdrop = styled.div<{ theme: Theme }>`
+const StyledBackdrop = styled(motion.div)<{ theme: Theme }>`
   position: fixed;
   top: 0;
   right: 0;
   bottom: 0;
   left: 0;
   background-color: ${({theme}) => theme.colors.dark.blue};
-  opacity: .12;
   z-index: 24;
 `;
 
-const StyledMain = styled.main<{theme: Theme}>`
+const StyledContent = styled(motion.main)<{theme: Theme}>`
   flex: 1 0 auto;
-  transition: transform .2s ease-out;
-
-  &.pushed-back {
-    transform: translateX(-${({theme}) => theme.space.large});
-  }
 `;
 
 const StyledFooter = styled(Footer)`
@@ -45,10 +41,15 @@ function setIsWindowScrollable(isScrollable: boolean) {
 }
 
 const MainLayout: React.FC = (props) => {
+  const theme = useContext<Theme>(ThemeContext);
   const auth = useSelector((state: ApplicationState) => state.firebase.auth);
+  const isMobile = useMediaQuery({
+    query: `(max-width: ${theme.breakpoints.medium-1}px)`
+  });
   const [isDrawerOpened, setIsDrawerOpened] = useState(false);
 
   useEffect(() => setIsWindowScrollable(!isDrawerOpened), [isDrawerOpened]);
+  
 
   if (!auth.isLoaded) {
     return <p>Loading...</p>;
@@ -56,16 +57,31 @@ const MainLayout: React.FC = (props) => {
   return (
     <>
       <StyledHeader
+        mode={isMobile ? "drawer" : "header"}
         isDrawerOpened={isDrawerOpened}
         onMenuClick={() => setIsDrawerOpened(!isDrawerOpened)}
         children={auth.isEmpty ? <PublicNav /> : <AppNav />}
       />
-      {isDrawerOpened && <StyledBackdrop
-        onClick={() => setIsDrawerOpened(!isDrawerOpened)}
-      />}
-      <StyledMain className={isDrawerOpened && "pushed-back"}>
+      <AnimatePresence>
+        {isDrawerOpened && <StyledBackdrop
+          initial={{ opacity: 0 }}
+          animate={{ opacity: .12 }}
+          exit={{ opacity: 0 }}
+          transition={theme.animations.transition}
+          onClick={() => setIsDrawerOpened(false)}
+        />}
+      </AnimatePresence>
+      <StyledContent
+        initial="visible"
+        animate={isDrawerOpened ? "hidden" : "visible"}
+        variants={{
+          visible: {x: 0},
+          hidden: {x: -24}
+        }}
+        transition={theme.animations.transition}
+      >
         { props.children }
-      </StyledMain>
+      </StyledContent>
       <StyledFooter />
     </>
   );

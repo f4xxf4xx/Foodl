@@ -1,4 +1,4 @@
-import React, { ComponentType, FunctionComponent } from "react";
+import React, { useMemo, ComponentType, FC } from "react";
 import styled, { css } from "styled-components";
 import { Link } from "react-router-dom";
 import { Theme } from "theme";
@@ -7,7 +7,7 @@ const sharedStyles = css<{ theme: Theme }>`
   display: inline-flex;
   flex-direction: row;
   align-items: center;
-  min-height: ${({theme}) => theme.sizes.controlHeight};
+  min-height: ${({theme}) => theme.sizes.controlHeight}px;
   padding: ${({theme}) => `${theme.space.small} ${theme.space.medium}`};
   border: 1px solid transparent;
   border-radius: ${({theme}) => theme.space.xsmall};
@@ -38,10 +38,6 @@ const StyledButton = styled.button<{ theme: Theme }>`
   ${sharedStyles}
 `;
 
-function withProps<P>(Comp: ComponentType<P>, extraProps: any): FunctionComponent<P> {
-  return props => (<Comp {...props} {...extraProps} />);
-}
-
 interface Props {
   type: 'link' | 'button' | 'submit';
   mode: 'normal' | 'primary' | 'accent';
@@ -50,22 +46,23 @@ interface Props {
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
 }
 
-interface InternalProps {
-  className?: string;
+function useButtonType(props: Props): [ComponentType<any>, Partial<Props>] {
+  const { type, to, onClick } = props;
+  return useMemo(() => {
+    if (type === "link") {
+      return [ StyledLink, { to } ];
+    } else {
+      return [ StyledButton, { type, onClick } ];
+    }
+  }, [type, to, onClick]);
 }
 
-export const Button: FunctionComponent<Props> = props => {
-  const { type, mode, className, to, onClick, ...rest } = props;
-
-  let Button: ComponentType<InternalProps>;
-  if (props.type === 'link') {
-    Button = withProps<InternalProps>(StyledLink, { to });
-  } else {
-    Button = withProps<InternalProps>(StyledButton, { type, onClick })
-  }
+export const Button: FC<Props> = props => {
+  const { mode, className } = props;
+  const [Button, extraProps] = useButtonType(props);
 
   return (
-    <Button className={`${className} btn-${mode}`} {...rest}>
+    <Button className={`${className} btn-${mode}`} {...extraProps}>
       {props.children}
     </Button>
   )

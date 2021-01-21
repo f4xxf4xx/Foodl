@@ -1,10 +1,10 @@
-import React from "react";
-import styled from "styled-components";
+import React, { useContext } from "react";
+import styled, { ThemeContext } from "styled-components";
 import { motion } from "framer-motion";
 import { Theme } from "theme";
 import { Container } from "layout/container";
 import { Logo } from "components/logo";
-import { BurgerButton } from "./burger-button";
+import { BurgerButton } from "layout/burger-button";
 
 const StyledHeader = styled(motion.header)<{ theme: Theme }>`
   position: sticky;
@@ -16,7 +16,7 @@ const StyledHeader = styled(motion.header)<{ theme: Theme }>`
 `;
 
 const StyledContainer = styled(Container as any)<{ theme: Theme }>`
-  min-height: ${({ theme }) => theme.sizes.headerHeight};
+  min-height: ${({ theme }) => theme.sizes.headerHeight}px;
   max-width: ${({ theme }) => theme.sizes.headerWidth};
   padding: 0 ${({ theme }) => theme.space.large};
 
@@ -31,12 +31,7 @@ const StyledContainer = styled(Container as any)<{ theme: Theme }>`
 `;
 
 const StyledBurgerButton = styled(BurgerButton)<{ theme: Theme }>`
-  display: none;
-
-  @media (max-width: ${({theme}) => theme.breakpoints.medium}px) {
-    display: inline-flex;
-    flex: 0 0 auto;
-  }
+  flex: 0 0 auto;
 `;
 
 const StyledLogoWrapper = styled.div<{ theme: Theme }>`
@@ -49,49 +44,64 @@ const StyledLogoWrapper = styled.div<{ theme: Theme }>`
   }
 `;
 
-const StyledDrawer = styled.div`
+const StyledHeaderNav = styled.div<{ theme: Theme }>`
   display: flex;
   flex-direction: row;
   align-items: center;
   flex: 1 0 0;
+`;
 
-  @media (max-width: ${({theme}) => theme.breakpoints.medium}px) {
-    position: fixed;
-    top: ${({theme}) => theme.sizes.headerHeight};
-    left: 0;
-    width: ${({theme}) => theme.sizes.drawerWidth};
-    height: calc(100vh - ${({theme}) => theme.sizes.headerHeight});
-    padding: ${({theme}) => theme.space.large} 0;
+const StyledDrawerNav = styled(motion.div)<{ theme: Theme }>`
+  position: fixed;
+  top: ${({theme}) => theme.sizes.headerHeight}px;
+  left: 0;
+  display: flex;
+  width: ${({theme}) => theme.sizes.drawerWidth}px;
+  height: calc(100vh - ${({theme}) => theme.sizes.headerHeight}px);
+  padding: ${({theme}) => theme.space.large} 0;
 
-    background: ${({theme}) => theme.colors.background};
-    flex-direction: column;
-    align-items: start;
-    transform: translateX(-${({theme}) => theme.sizes.drawerWidth});
-    transition: transform .2s ease-out;
-    
-    &.drawer-open {
-      transform: translateX(0);
-    }
-  }
+  background: ${({theme}) => theme.colors.background};
+  flex-direction: column;
+  align-items: start;
 `;
 
 interface Props {
-  className?: string;
+  mode: 'header' | 'drawer';
   isDrawerOpened: boolean;
-  onMenuClick?: React.MouseEventHandler<HTMLButtonElement>;
+  className?: string;
+  onMenuClick?: (isDrawerOpened: boolean) => void;
 }
 
-export const Header: React.FC<Props> = props => (
-  <StyledHeader className={props.className}>
-    <StyledContainer>
-      <StyledBurgerButton onClick={props.onMenuClick} />
-      <StyledLogoWrapper children={<Logo />} />
-      <StyledDrawer
-        className={props.isDrawerOpened && "drawer-open"}
+export const Header: React.FC<Props> = (props) => {
+  const theme = useContext<Theme>(ThemeContext);
+  const isDrawerMode = props.mode === 'drawer';
+
+  const Nav = isDrawerMode
+    ? p => <StyledDrawerNav 
+        variants={{
+          drawerOpened: { x: 0 },
+          drawerClosed: { x: -theme.sizes.drawerWidth }
+        }}
+        transition={theme.animations.transition}
         aria-hidden={!props.isDrawerOpened}
-      >
-        { props.children }
-      </StyledDrawer>
-    </StyledContainer>
-  </StyledHeader>
-);
+        {...p}
+      />
+    : p => <StyledHeaderNav {...p} />;
+  
+  return (
+    <StyledHeader
+      className={props.className}
+      initial="drawerClosed"
+      animate={props.isDrawerOpened ? "drawerOpened" : "drawerClosed"}
+    >
+      <StyledContainer>
+        {isDrawerMode && <StyledBurgerButton 
+          isOpen={props.isDrawerOpened}
+          onClick={() => props.onMenuClick(props.isDrawerOpened)}
+        />}
+        <StyledLogoWrapper children={<Logo />} />
+        <Nav>{ props.children }</Nav>
+      </StyledContainer>
+    </StyledHeader>
+  );
+}
