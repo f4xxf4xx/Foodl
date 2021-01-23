@@ -9,8 +9,8 @@ import { Theme } from "theme";
 
 const StyledContainer = styled(Container as any)<{theme: Theme}>`
   display: grid;
-  grid-gap: ${({theme}) => theme.space.large};
-  padding: ${({theme}) => theme.space.large};
+  grid-gap: ${({theme}) => theme.space.large}px;
+  padding: ${({theme}) => theme.space.large}px;
   grid-template-columns: 1fr 1fr;
   grid-template-rows: auto;
   grid-template-areas:
@@ -71,11 +71,11 @@ const StyledOverviewHeadlineGraphics = styled(OverviewHeadlineGraphics)`
 
 const StyledOverviewHeadlineSpill = styled(OverviewHeadlineSpill)<{theme: Theme}>`
   position: absolute;
-  top: -${({theme}) => theme.space.large};
-  right: -${({theme}) => theme.space.large};
-  bottom: -${({theme}) => theme.space.large};
+  top: -${({theme}) => theme.space.large}px;
+  right: -${({theme}) => theme.space.large}px;
+  bottom: -${({theme}) => theme.space.large}px;
   z-index: -1;
-  height: calc(100% + ${({theme}) => theme.space.large} * 2);
+  height: calc(100% + ${({theme}) => theme.space.large * 2}px);
   width: auto;
 `;
 

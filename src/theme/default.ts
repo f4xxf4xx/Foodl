@@ -34,12 +34,12 @@ const colorPalette = {
 
 export const theme = {
   space: {
-    none: '0',
-    xsmall: '4px',
-    small: '8px',
-    medium: '12px',
-    large: '24px',
-    xlarge: '48px'
+    none: 0,
+    xsmall: 4,
+    small: 8,
+    medium: 12,
+    large: 24,
+    xlarge: 48
   },
   sizes: {
     headerHeight: 80,

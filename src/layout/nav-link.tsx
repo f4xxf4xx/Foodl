@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { Link, matchPath, useLocation } from "react-router-dom";
 import { Theme } from "theme";
 
@@ -15,7 +15,7 @@ const StyledLink = styled(Link)<{ theme: Theme }>`
   height: ${({theme}) => theme.fontSizes.h2};
   display: inline-flex;
   align-items: flex-end;
-  padding: 0 ${({theme}) => theme.space.xsmall};
+  padding: 0 ${({theme}) => theme.space.xsmall}px;
   color: ${({theme}) => theme.colors.text};
   font-size: ${({theme}) => theme.fontSizes.medium};
   text-transform: uppercase;
@@ -23,13 +23,13 @@ const StyledLink = styled(Link)<{ theme: Theme }>`
 
   & + & {
     margin: 0;
-    margin-left: ${({theme}) => theme.space.medium};
+    margin-left: ${({theme}) => theme.space.medium}px;
   }
 
   @media (max-width: ${({theme}) => theme.breakpoints.medium}px) {
     & + & {
       margin: 0;
-      margin-top: ${({theme}) => theme.space.medium};
+      margin-top: ${({theme}) => theme.space.medium}px;
     }
   }
 `;
@@ -39,8 +39,8 @@ const StyledUnderline = styled(motion.div)<{ theme: Theme }>`
   left: 0;
   right: 0;
   bottom: 0;
-  height: ${({theme}) => theme.space.small};
-  border-radius: ${({theme}) => theme.space.small};
+  height: ${({theme}) => theme.space.small}px;
+  border-radius: ${({theme}) => theme.space.small}px;
   background-color: ${({theme}) => theme.colors.xlight.orange};
   z-index: -1;
 `;
@@ -60,11 +60,15 @@ export const NavLink: React.FC<Props> = props => {
   return (
     <StyledLink to={props.to}>
       {props.children}
-      {active && (<StyledUnderline
-        layoutId={props.layoutId}
-        initial={false}
-        transition={spring}
-      />)}
+      <AnimatePresence>
+        {active && (<StyledUnderline
+          layoutId={props.layoutId}
+          initial={{ x: -24, opacity: 0 }}
+          animate={{ x: 0, opacity: 1 }}
+          exit={{ x: 24, opacity: 0 }}
+          transition={spring}
+        />)}
+      </AnimatePresence>
     </StyledLink>
   );
 }

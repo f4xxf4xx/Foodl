@@ -5,7 +5,7 @@ import { Loading } from "layout/loading";
 import { ApplicationState } from "index";
 
 export const AppRoute: React.FC<RouteProps> = (props) => {
-  const auth = useSelector((state: ApplicationState) => state.firebase.auth);
+  const auth = useSelector((state: ApplicationState) => state.firebase.auth)
 
   return auth.isLoaded
     ? auth.isEmpty ? <Redirect to="/login" /> : <Route {...props} />

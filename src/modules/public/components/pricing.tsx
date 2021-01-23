@@ -5,10 +5,10 @@ import { Theme } from "theme";
 const StyledContainer = styled.div<{ theme: Theme, color: string }>`
   position: relative;
   width: 100%;
-  padding: ${({theme}) => theme.space.large};
+  padding: ${({theme}) => theme.space.large}px;
   background-color: ${({theme, color}) => theme.colors.background};
   border: 1px solid ${({theme, color}) => theme.colors.xlight[color]};
-  border-radius: ${({theme}) => theme.space.large};
+  border-radius: ${({theme}) => theme.space.large}px;
   text-align: center;
 `;
 
@@ -25,7 +25,7 @@ const StyledDescription = styled.p<{ theme: Theme, color: string }>`
   font-size: ${({ theme }) => theme.fontSizes.h4};
   font-weight: bold;
   letter-spacing: 0;
-  margin-top: ${({ theme }) => theme.space.small};
+  margin-top: ${({ theme }) => theme.space.small}px;
 `;
 
 const StyledSpill = styled.div<{ theme: Theme }>`
@@ -34,7 +34,7 @@ const StyledSpill = styled.div<{ theme: Theme }>`
   left: 0;
   right: 0;
   bottom: 0;
-  margin: -${({theme}) => theme.space.large};
+  margin: -${({theme}) => theme.space.large}px;
   z-index: -1;
 `;
 

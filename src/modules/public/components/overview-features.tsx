@@ -7,8 +7,8 @@ import { Theme } from "theme";
 
 const StyledContainer = styled(Container as any)<{ theme: Theme }>`
   display: grid;
-  grid-gap: ${({theme}) => theme.space.large};
-  padding: ${({theme}) => theme.space.large};
+  grid-gap: ${({theme}) => theme.space.large}px;
+  padding: ${({theme}) => theme.space.large}px;
   grid-template-columns: 1fr 1fr;
   grid-template-rows: auto;
   grid-template-areas:
@@ -55,7 +55,7 @@ const StyledFeature3 = styled(Feature)`
 `;
 
 const StyledParagraph = styled.p<{ theme: Theme }>`
-  margin-top: ${({theme}) => theme.space.small};
+  margin-top: ${({theme}) => theme.space.small}px;
   font-size: ${({theme}) => theme.fontSizes.medium};
 `;
 

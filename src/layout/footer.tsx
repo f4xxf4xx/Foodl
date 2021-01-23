@@ -6,7 +6,7 @@ import { GithubLink } from "layout/github-link";
 import { Theme } from "theme";
 
 const StyledFooter = styled.footer<{ theme: Theme }>`
-  margin-top: ${({theme}) => theme.space.xlarge};
+  margin-top: ${({theme}) => theme.space.xlarge}px;
   color: ${({theme}) => theme.colors.background};
   background-color: ${({theme}) => theme.colors.text};
 `;
@@ -15,10 +15,10 @@ const StyledContainer = styled(Container as any)<{ theme: Theme }>`
   display: flex;
   flex-direction: row;
   align-items: baseline;
-  padding: ${({theme}) => theme.space.large};
+  padding: ${({theme}) => theme.space.large}px;
 
   & > * + * {
-    margin-left: ${({theme}) => theme.space.large};
+    margin-left: ${({theme}) => theme.space.large}px;
   }
 
   @media (max-width: ${({theme}) => theme.breakpoints.medium}px) {

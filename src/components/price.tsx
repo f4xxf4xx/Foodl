@@ -10,7 +10,7 @@ const StyledContainer = styled.div`
 
 const StyledDollarSign = styled.span<{ theme: Theme }>`
   font-size: .5em;
-  margin-right: ${({theme}) => theme.space.small};
+  margin-right: ${({theme}) => theme.space.small}px;
 `;
 
 const StyledDollarAmount = styled.span<{ theme: Theme }>`
@@ -27,7 +27,7 @@ const StyledCentAmount = styled.span<{ theme: Theme }>`
 
 const StyledTerm = styled.span<{ theme: Theme }>`
   font-size: .33em;
-  margin-left: ${({theme}) => theme.space.small};
+  margin-left: ${({theme}) => theme.space.small}px;
   line-height: 1em;
 `;
 

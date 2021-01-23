@@ -10,19 +10,19 @@ import { Theme } from "theme";
 const StyledNav = styled.nav<{ theme: Theme}>`
   display: flex;
   flex-direction: inherit;
-  padding: 0 0 0 ${({ theme }) => theme.space.large};
+  padding: 0 0 0 ${({ theme }) => theme.space.large}px;
   flex: 1 0 0;
   align-items: start;
 `;
 
 const StyledActions = styled.div<{ theme: Theme}>`
-  padding: 0 0 0 ${({ theme }) => theme.space.large};
+  padding: 0 0 0 ${({ theme }) => theme.space.large}px;
   flex: 0 0 auto;
 `;
 
 const StyledButton = styled(Button)<{ theme: Theme }>`
   & + & {
-    margin-left: ${({theme}) => theme.space.small};
+    margin-left: ${({theme}) => theme.space.small}px;
   }
 `;
 interface Props {
@@ -41,9 +41,9 @@ export const AppNav: React.FC<Props> = ({className}) => {
     <>
       <StyledNav className={className}>
         <AnimateSharedLayout>
-          <NavLink to="/home" layoutId="nav-link">Home</NavLink>
-          <NavLink to="/recipes" layoutId="nav-link">Recipes</NavLink>
-          <NavLink to="/cart" layoutId="nav-link">Cart</NavLink>
+          <NavLink to="/app" layoutId="nav-link">Home</NavLink>
+          <NavLink to="/app/recipes" layoutId="nav-link">Recipes</NavLink>
+          <NavLink to="/app/cart" layoutId="nav-link">Cart</NavLink>
         </AnimateSharedLayout>
       </StyledNav>
       <StyledActions>

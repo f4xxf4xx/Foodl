@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useMemo, ComponentType } from "react";
 import styled, { ThemeContext } from "styled-components";
 import { motion } from "framer-motion";
 import { Theme } from "theme";
@@ -18,7 +18,7 @@ const StyledHeader = styled(motion.header)<{ theme: Theme }>`
 const StyledContainer = styled(Container as any)<{ theme: Theme }>`
   min-height: ${({ theme }) => theme.sizes.headerHeight}px;
   max-width: ${({ theme }) => theme.sizes.headerWidth};
-  padding: 0 ${({ theme }) => theme.space.large};
+  padding: 0 ${({ theme }) => theme.space.large}px;
 
   display: flex;
   flex-direction: row;
@@ -58,35 +58,46 @@ const StyledDrawerNav = styled(motion.div)<{ theme: Theme }>`
   display: flex;
   width: ${({theme}) => theme.sizes.drawerWidth}px;
   height: calc(100vh - ${({theme}) => theme.sizes.headerHeight}px);
-  padding: ${({theme}) => theme.space.large} 0;
+  padding: ${({theme}) => theme.space.large}px 0;
 
   background: ${({theme}) => theme.colors.background};
   flex-direction: column;
   align-items: start;
 `;
 
+function useNavType(props: Props): [ComponentType<any>, any] {
+  const { mode, isDrawerOpened } = props;
+  const theme = useContext<Theme>(ThemeContext);
+  const drawerWidth = theme.sizes.drawerWidth;
+  const transition = theme.animations.transition;
+
+  return useMemo(() => {
+    if (mode === "header") {
+      return [StyledHeaderNav, {}]
+    } else {
+      return [StyledDrawerNav, {
+        variants: {
+          drawerOpened: { x: 0 },
+          drawerClosed: { x: -drawerWidth }
+        },
+        'aria-hidden': !isDrawerOpened,
+        transition
+      }];
+    }
+  }, [mode, isDrawerOpened, drawerWidth, transition]);
+}
+
 interface Props {
   mode: 'header' | 'drawer';
   isDrawerOpened: boolean;
+  homePath: string;
   className?: string;
   onMenuClick?: (isDrawerOpened: boolean) => void;
 }
 
 export const Header: React.FC<Props> = (props) => {
-  const theme = useContext<Theme>(ThemeContext);
+  const [Nav, extraProps] = useNavType(props);
   const isDrawerMode = props.mode === 'drawer';
-
-  const Nav = isDrawerMode
-    ? p => <StyledDrawerNav 
-        variants={{
-          drawerOpened: { x: 0 },
-          drawerClosed: { x: -theme.sizes.drawerWidth }
-        }}
-        transition={theme.animations.transition}
-        aria-hidden={!props.isDrawerOpened}
-        {...p}
-      />
-    : p => <StyledHeaderNav {...p} />;
   
   return (
     <StyledHeader
@@ -99,8 +110,10 @@ export const Header: React.FC<Props> = (props) => {
           isOpen={props.isDrawerOpened}
           onClick={() => props.onMenuClick(props.isDrawerOpened)}
         />}
-        <StyledLogoWrapper children={<Logo />} />
-        <Nav>{ props.children }</Nav>
+        <StyledLogoWrapper>
+          <Logo homePath={props.homePath} />
+        </StyledLogoWrapper>
+        <Nav {...extraProps}>{ props.children }</Nav>
       </StyledContainer>
     </StyledHeader>
   );

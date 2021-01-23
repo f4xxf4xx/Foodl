@@ -10,8 +10,8 @@ import { Theme } from "theme";
 
 const StyledContainer = styled(Container as any)`
   display: grid;
-  grid-gap: ${({theme}) => theme.space.large};
-  padding: ${({theme}) => theme.space.large};
+  grid-gap: ${({theme}) => theme.space.large}px;
+  padding: ${({theme}) => theme.space.large}px;
   grid-template-columns: 1fr 1fr;
   grid-template-rows: auto;
   grid-template-areas:
@@ -38,14 +38,14 @@ const StyledContainer = styled(Container as any)`
 `;
 
 const StyledList = styled.ul<{ theme: Theme }>`
-  margin: ${({theme}) => theme.space.large} 0;
-  padding-inline-start: ${({theme}) => theme.space.large};
+  margin: ${({theme}) => theme.space.large}px 0;
+  padding-inline-start: ${({theme}) => theme.space.large}px;
   font-size: ${({theme}) => theme.fontSizes.medium};
   text-align: start;
 `;
 
 const StyledActions = styled.div<{ theme: Theme }>`
-  margin-top: ${({theme}) => theme.space.large};
+  margin-top: ${({theme}) => theme.space.large}px;
 `;
 
 const StyledHeading = styled.h2`

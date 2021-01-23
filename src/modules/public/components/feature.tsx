@@ -9,11 +9,11 @@ const StyledH3 = styled.h3<{ theme: Theme }>`
     content: "";
     display: inline-block;
     position: absolute;
-    left: -${({theme}) => theme.space.xsmall};
-    top: calc(1em - ${({theme}) => theme.space.small} / 2);
+    left: -${({theme}) => theme.space.xsmall}px;
+    top: calc(1em - ${({theme}) => theme.space.small / 2}px);
     width: 33%;
-    height: ${({theme}) => theme.space.small};
-    border-radius: ${({theme}) => theme.space.small};
+    height: ${({theme}) => theme.space.small}px;
+    border-radius: ${({theme}) => theme.space.small}px;
     background-color: ${({theme}) => theme.colors.xlight.orange};
     z-index: -1;
   }

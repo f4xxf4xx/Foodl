@@ -2,11 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import styled, { ThemeContext } from "styled-components";
 import { motion, AnimatePresence } from "framer-motion";
 import { useMediaQuery } from 'react-responsive'
-import { useSelector } from "react-redux";
-import { ApplicationState } from "index";
 import { Header } from "layout/header";
-import { PublicNav } from "layout/public-nav";
-import { AppNav } from "layout/app-nav";
 import { Footer } from "layout/footer";
 import { Theme } from "theme";
 import "layout/Styles/MainLayout.css";
@@ -40,9 +36,13 @@ function setIsWindowScrollable(isScrollable: boolean) {
   }
 }
 
-const MainLayout: React.FC = (props) => {
+interface Props {
+  homePath: string;
+  nav: JSX.Element;
+}
+
+export const MainLayout: React.FC<Props> = (props) => {
   const theme = useContext<Theme>(ThemeContext);
-  const auth = useSelector((state: ApplicationState) => state.firebase.auth);
   const isMobile = useMediaQuery({
     query: `(max-width: ${theme.breakpoints.medium-1}px)`
   });
@@ -50,17 +50,14 @@ const MainLayout: React.FC = (props) => {
 
   useEffect(() => setIsWindowScrollable(!isDrawerOpened), [isDrawerOpened]);
   
-
-  if (!auth.isLoaded) {
-    return <p>Loading...</p>;
-  }
   return (
     <>
       <StyledHeader
         mode={isMobile ? "drawer" : "header"}
         isDrawerOpened={isDrawerOpened}
+        homePath={props.homePath}
         onMenuClick={() => setIsDrawerOpened(!isDrawerOpened)}
-        children={auth.isEmpty ? <PublicNav /> : <AppNav />}
+        children={props.nav}
       />
       <AnimatePresence>
         {isDrawerOpened && <StyledBackdrop
@@ -86,5 +83,3 @@ const MainLayout: React.FC = (props) => {
     </>
   );
 };
-
-export default MainLayout;

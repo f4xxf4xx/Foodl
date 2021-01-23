@@ -8,9 +8,9 @@ const sharedStyles = css<{ theme: Theme }>`
   flex-direction: row;
   align-items: center;
   min-height: ${({theme}) => theme.sizes.controlHeight}px;
-  padding: ${({theme}) => `${theme.space.small} ${theme.space.medium}`};
+  padding: ${({theme}) => `${theme.space.small}px ${theme.space.medium}px`};
   border: 1px solid transparent;
-  border-radius: ${({theme}) => theme.space.xsmall};
+  border-radius: ${({theme}) => theme.space.xsmall}px;
   box-sizing: border-box;
   vertical-align: middle;
 

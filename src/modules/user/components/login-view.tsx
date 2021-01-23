@@ -10,7 +10,7 @@ export const LoginView: React.FC = () => {
     // Popup signin flow rather than redirect flow.
     signInFlow: "popup",
     // Redirect to /recipes after sign in is successful. Alternatively you can provide a callbacks.signInSuccess function.
-    signInSuccessUrl: "/recipes",
+    signInSuccessUrl: "/app",
     signInOptions: [
       firebase.auth.EmailAuthProvider.PROVIDER_ID,
       firebase.auth.GoogleAuthProvider.PROVIDER_ID,

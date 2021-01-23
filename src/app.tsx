@@ -1,8 +1,10 @@
 import React from "react";
-import { Switch } from "react-router";
-import PublicRoute from "layout/public-route";
-import MainLayout from "layout/main-layout";
+import { Switch, Route } from "react-router";
+import { MainLayout } from "layout/main-layout";
+import { AppNav } from "layout/app-nav";
+import { PublicNav } from "layout/public-nav";
 import { AppRoute } from "layout/app-route";
+import { PublicRoute } from "layout/public-route";
 import CartView from "modules/cart/components/cart-view";
 import { OverviewView } from "modules/public/components/overview-view";
 import RecipesView from "modules/recipes/components/recipes-view";
@@ -25,17 +27,26 @@ const App: React.FC = () => {
   return (
     <ThemeProvider theme={theme}>
       <GlobalStyle />
-      <MainLayout>
-        <Switch>
-          <PublicRoute path="/" exact={true} component={OverviewView} />
-          <PublicRoute path="/login" exact={true} component={LoginView} />
-          <PublicRoute path="/register" exact={true} component={LoginView} />
-
-          <AppRoute path="/recipes" component={RecipesView} />
-          <AppRoute path="/recipe/:slug" component={RecipeView} />
-          <AppRoute path="/cart" component={CartView} />
-        </Switch>
-      </MainLayout>
+      <Switch>
+        <AppRoute path="/app">
+          <MainLayout homePath="/app" nav={<AppNav />}>
+            <Switch>
+              <Route path="/recipes" component={RecipesView} />
+              <Route path="/recipe/:slug" component={RecipeView} />
+              <Route path="/cart" component={CartView} />
+            </Switch>
+          </MainLayout>
+        </AppRoute>
+        <PublicRoute path="/">
+          <MainLayout homePath="/" nav={<PublicNav />}>
+            <Switch>
+              <Route path="/" exact={true} component={OverviewView} />
+              <Route path="/login" exact={true} component={LoginView} />
+              <Route path="/register" exact={true} component={LoginView} />
+            </Switch>
+          </MainLayout>
+        </PublicRoute>
+      </Switch>
     </ThemeProvider>
   );
 };
