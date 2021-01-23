@@ -31,9 +31,9 @@ const App: React.FC = () => {
         <AppRoute path="/app">
           <MainLayout homePath="/app" nav={<AppNav />}>
             <Switch>
-              <Route path="/recipes" component={RecipesView} />
-              <Route path="/recipe/:slug" component={RecipeView} />
-              <Route path="/cart" component={CartView} />
+              <Route path="/app/recipes" component={RecipesView} />
+              <Route path="/app/recipe/:slug" component={RecipeView} />
+              <Route path="/app/cart" component={CartView} />
             </Switch>
           </MainLayout>
         </AppRoute>

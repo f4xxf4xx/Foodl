@@ -1,5 +1,4 @@
 import { createReducer } from "@reduxjs/toolkit";
-import { Recipe } from "modules/recipes/models";
 
 export interface Filters {
   type?: string;
@@ -7,41 +6,30 @@ export interface Filters {
 }
 
 export interface RecipesState {
-  recipes: Recipe[];
-  loading: boolean;
-  updating: boolean;
+  isLoading: boolean;
+  isUpdating: boolean;
   filters: Filters;
-  newRecipe: Recipe;
+  newRecipeId: string;
 }
 
 const initialRecipesState: RecipesState = {
-  recipes: [],
-  loading: false,
-  updating: false,
+  isLoading: false,
+  isUpdating: false,
   filters: null,
-  newRecipe: null,
+  newRecipeId: "",
 };
 
 export const recipesReducer = createReducer(initialRecipesState, {
   SET_RECIPES_LOADING: (state, action) => {
-    state.loading = action.payload;
+    state.isLoading = action.payload;
   },
   SET_RECIPES_UPDATING: (state, action) => {
-    state.updating = action.payload;
-  },
-  UPDATE_RECIPES: (state, action) => {
-    state.recipes = action.payload;
-  },
-  ADD_RECIPE: (state, action) => {
-    state.recipes.push(action.payload);
-  },
-  DELETE_RECIPE: (state, action) => {
-    state.recipes = state.recipes.filter((i) => i.id !== action.payload);
+    state.isUpdating = action.payload;
   },
   UPDATE_FILTERS: (state, action) => {
     state.filters = action.payload;
   },
   UPDATE_NEW_RECIPE: (state, action) => {
-    state.newRecipe = action.payload;
+    state.newRecipeId = action.payload;
   },
 });

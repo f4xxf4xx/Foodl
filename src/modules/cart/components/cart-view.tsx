@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { ApplicationState } from "index";
 import { Container } from "layout/container";
@@ -8,22 +8,19 @@ import { faTrash } from "@fortawesome/free-solid-svg-icons";
 
 import "modules/cart/components/cart.css";
 import {
-  fetchCartAsync,
-  deleteAllCartItemsAsync,
+  fetchCartItemsAsync,
   deleteCartItemAsync,
+  deleteAllCartItemsAsync,
 } from "store/cart/cart-actions";
 
 const CartView = () => {
   const dispatch = useDispatch();
   const cart = useSelector((state: ApplicationState) => state.cart);
   const auth = useSelector((state: ApplicationState) => state.firebase.auth);
+  const [items, setItems] = useState([]);
 
   useEffect(() => {
-    const fetch = async () => {
-      dispatch(fetchCartAsync(auth.uid));
-    };
-
-    fetch();
+    dispatch(fetchCartItemsAsync(auth.uid, setItems));
   }, [auth.uid, dispatch]);
 
   const deleteAllCartItems = () => async () => {
@@ -35,10 +32,10 @@ const CartView = () => {
   };
 
   const renderCartItems = () => {
-    if (cart.loading) {
+    if (cart.isLoading) {
       return <p>Loading...</p>;
     }
-    if (cart.cartItems.length === 0) {
+    if (items.length === 0) {
       return <h5>Cart is empty</h5>;
     }
 
@@ -51,12 +48,12 @@ const CartView = () => {
           </tr>
         </thead>
         <tbody className="cart-table-body">
-          {cart.cartItems.map((cartItem, index) => (
+          {items.map((cartItem, index) => (
             <tr key={index}>
               <td>{cartItem}</td>
               <td>
                 <button
-                  disabled={cart.updating}
+                  disabled={cart.isUpdating}
                   onClick={deleteCartItem(cartItem)}
                 >
                   <FontAwesomeIcon icon={faTrash} />
@@ -74,7 +71,7 @@ const CartView = () => {
       <h1>Cart</h1>
       <AddCartItemForm />
       <div>
-        <button disabled={cart.updating} onClick={deleteAllCartItems()}>
+        <button disabled={cart.isUpdating} onClick={deleteAllCartItems()}>
           Delete all items
         </button>
       </div>

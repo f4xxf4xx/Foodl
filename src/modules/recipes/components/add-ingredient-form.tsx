@@ -1,36 +1,26 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { ApplicationState } from "index";
-import {
-  addIngredientGroupItemAsync,
-  addIngredientAsync,
-} from "store/recipes/recipe-actions";
-import { IngredientGroup } from "modules/recipes/models";
+import { addIngredientAsync } from "store/recipes/recipe-actions";
+import { Recipe } from "modules/recipes/models";
 
 interface Props {
-  editing: boolean;
-  ingredientGroup: IngredientGroup;
+  recipe: Recipe;
+  isEditing: boolean;
 }
 
-const AddIngredientForm: React.FC<Props> = ({ editing, ingredientGroup }) => {
+const AddIngredientForm: React.FC<Props> = ({ recipe, isEditing }) => {
   const dispatch = useDispatch();
   const [newIngredient, setNewIngredient] = useState<string>("");
-  const recipe = useSelector((state: ApplicationState) => state.recipe.recipe);
-  const updatingIngredientGroups = useSelector(
-    (state: ApplicationState) => state.recipe.updatingIngredientGroups
+  const isUpdatingRecipe = useSelector(
+    (state: ApplicationState) => state.recipe.isUpdating
   );
 
   const addIngredient = () => {
     if (newIngredient === "") {
       return;
     }
-    if (ingredientGroup?.id) {
-      dispatch(
-        addIngredientGroupItemAsync(recipe, ingredientGroup, newIngredient)
-      );
-    } else {
-      dispatch(addIngredientAsync(recipe, newIngredient));
-    }
+    dispatch(addIngredientAsync(recipe, newIngredient));
     setNewIngredient("");
   };
 
@@ -44,23 +34,17 @@ const AddIngredientForm: React.FC<Props> = ({ editing, ingredientGroup }) => {
 
   return (
     <>
-      {editing && (
+      {isEditing && (
         <form onSubmit={preventDefault}>
-          <label
-            htmlFor={`input-ingredient-${
-              ingredientGroup && ingredientGroup.name
-            }`}
-          >
-            Add ingredient
-          </label>
+          <label htmlFor="input-ingredient">Add ingredient</label>
           <input
-            id={`input-ingredient-${ingredientGroup && ingredientGroup.name}`}
+            id="input-ingredient"
             value={newIngredient}
             onChange={handleChange}
-            disabled={updatingIngredientGroups}
+            disabled={isUpdatingRecipe}
           />
           <button onClick={addIngredient}>
-            {updatingIngredientGroups ? "Loading" : "Add"}
+            {isUpdatingRecipe ? "Loading" : "Add"}
           </button>
         </form>
       )}

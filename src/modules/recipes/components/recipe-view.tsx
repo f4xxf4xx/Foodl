@@ -4,45 +4,42 @@ import { ApplicationState } from "index";
 import { Container } from "layout/container";
 import IngredientsElement from "modules/recipes/components/ingredients-element";
 import RecipeHeaderElement from "modules/recipes/components/recipe-header-element";
-import StepsElement from "modules/recipes/components/steps-element";
+import { Recipe } from "modules/recipes/models";
 import { useParams } from "react-router-dom";
 import { fetchRecipeBySlugAsync } from "store/recipes/recipe-actions";
 
 import "modules/recipes/components/recipe-view.css";
 
 const RecipeView: React.FC = () => {
-  const [editing, setEditing] = useState<boolean>();
-  const loadingRecipe = useSelector(
-    (state: ApplicationState) => state.recipe.loadingRecipe
-  );
-  const recipe = useSelector((state: ApplicationState) => state.recipe.recipe);
-  const auth = useSelector((state: ApplicationState) => state.firebase.auth);
   const dispatch = useDispatch();
+  const [editing, setEditing] = useState<boolean>();
+  const [recipe, setRecipe] = useState<Recipe>();
+  const isLoading = useSelector(
+    (state: ApplicationState) => state.recipe.isLoading
+  );
+  const auth = useSelector((state: ApplicationState) => state.firebase.auth);
   const { slug } = useParams();
 
   useEffect(() => {
     if (auth.uid) {
-      const fetch = async () => {
-        dispatch(fetchRecipeBySlugAsync(auth.uid, slug));
-      };
-      fetch();
+      dispatch(fetchRecipeBySlugAsync(auth.uid, slug, setRecipe));
     }
   }, [auth.uid, slug, dispatch]);
 
   return (
     <Container>
-      {loadingRecipe ? (
+      {isLoading ? (
         <p>Loading...</p>
       ) : (
         <>
           {recipe ? (
             <>
               <RecipeHeaderElement
+                recipe={recipe}
                 editing={editing}
                 toggleEdit={() => setEditing(!editing)}
               />
-              <IngredientsElement editing={editing} />
-              <StepsElement editing={editing} recipe={recipe} />
+              <IngredientsElement recipe={recipe} isEditing={editing} />
               <p>{recipe.notes}</p>
             </>
           ) : null}

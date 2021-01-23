@@ -1,27 +1,26 @@
-import React, { useState } from "react";
+import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { ApplicationState } from "index";
 import ContentEditable from "react-contenteditable";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClock } from "@fortawesome/free-solid-svg-icons";
-import {
-  updateRecipeAsync,
-  addTagAsync,
-  deleteTagAsync,
-} from "store/recipes/recipe-actions";
+import { updateRecipeAsync } from "store/recipes/recipe-actions";
+import { Recipe } from "modules/recipes/models";
 
 interface Props {
+  recipe: Recipe;
   editing: boolean;
   toggleEdit: () => void;
 }
 
-const RecipeHeaderElement: React.FC<Props> = ({ editing, toggleEdit }) => {
-  const recipe = useSelector((state: ApplicationState) => state.recipe.recipe);
-  const [, setNewImage] = useState<File>(null);
-  const [newTag, setNewTag] = useState<string>("");
+const RecipeHeaderElement: React.FC<Props> = ({
+  recipe,
+  editing,
+  toggleEdit,
+}) => {
   const dispatch = useDispatch();
-  const updatingRecipe = useSelector(
-    (state: ApplicationState) => state.recipe.updatingRecipe
+  const isUpdatingRecipe = useSelector(
+    (state: ApplicationState) => state.recipe.isUpdating
   );
 
   const updateRecipe = (key: string) => (
@@ -39,29 +38,6 @@ const RecipeHeaderElement: React.FC<Props> = ({ editing, toggleEdit }) => {
     if (recipe[key] !== value) {
       dispatch(updateRecipeAsync(recipe, key, value));
     }
-  };
-
-  const handleChangeTag = (e) => {
-    setNewTag(e.currentTarget.value);
-  };
-
-  const addTag = () => {
-    dispatch(addTagAsync(recipe, newTag));
-    setNewTag("");
-  };
-
-  const deleteTag = (tag: string) => () => {
-    dispatch(deleteTagAsync(recipe, tag));
-  };
-
-  const updateImage = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const image = e.target.files[0];
-    setNewImage(image);
-  };
-
-  const saveImage = () => {
-    //const canvas = imageEditorRef.getImage();
-    // dispatch(updateImageAsync(recipe, canvas));
   };
 
   const renderRecipeHeader = () => {
@@ -117,10 +93,6 @@ const RecipeHeaderElement: React.FC<Props> = ({ editing, toggleEdit }) => {
           />
         )}
         <div>
-          <input id="input-image" type="file" onChange={updateImage} />
-          <button onClick={saveImage}>Save image</button>
-        </div>
-        <div>
           <ContentEditable
             className="Muip-root Muip-h1"
             html={recipe.name}
@@ -143,19 +115,8 @@ const RecipeHeaderElement: React.FC<Props> = ({ editing, toggleEdit }) => {
             placeholder="Duration in minutes"
             defaultValue={recipe.duration}
             onBlur={updateRecipe("duration")}
-            disabled={updatingRecipe}
+            disabled={isUpdatingRecipe}
           />
-          <div>
-            {recipe.tags &&
-              recipe.tags.map((tag, index) => (
-                <div key={index}>
-                  <button onClick={deleteTag(tag)}>X</button>
-                  {tag}
-                </div>
-              ))}
-            <input value={newTag} onChange={handleChangeTag} />
-            <button onClick={addTag}>Add</button>
-          </div>
         </div>
       </>
     );
