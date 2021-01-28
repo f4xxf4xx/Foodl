@@ -1,12 +1,17 @@
-import React from "react";
+import React, { forwardRef } from "react";
 import styled from "styled-components";
+import { motion, MotionProps } from "framer-motion";
 import { Theme } from "theme";
 
-const StyledContainer = styled.div<{ theme: Theme, color: string }>`
+const StyledContainer = styled.div`
   position: relative;
   width: 100%;
+`;
+
+const StyledBox = styled(motion.div)<{ theme: Theme, color: string }>`
+  width: 100%;
   padding: ${({theme}) => theme.space.large}px;
-  background-color: ${({theme, color}) => theme.colors.background};
+  background-color: ${({theme}) => theme.colors.background};
   border: 1px solid ${({theme, color}) => theme.colors.xlight[color]};
   border-radius: ${({theme}) => theme.space.large}px;
   text-align: center;
@@ -42,15 +47,19 @@ interface Props {
   title: string;
   description: string;
   color: string;
+  motion: MotionProps;
   className?: string;
   backgroundSpill?: JSX.Element;
+  children?: string | JSX.Element | JSX.Element[];
 }
 
-export const Pricing: React.FC<Props> = props => (
-  <StyledContainer className={props.className} color={props.color}>
-    <StyledTitle>{props.title}</StyledTitle>
-    <StyledDescription color={props.color}>{props.description}</StyledDescription>
-    {props.children}
+export const Pricing = forwardRef<HTMLDivElement, Props>((props, ref) => (
+  <StyledContainer className={props.className}>
+    <StyledBox ref={ref} color={props.color} {...props.motion}>
+      <StyledTitle>{props.title}</StyledTitle>
+      <StyledDescription color={props.color}>{props.description}</StyledDescription>
+      {props.children}
+    </StyledBox>
     {props.backgroundSpill && <StyledSpill>{props.backgroundSpill}</StyledSpill>}
   </StyledContainer>
-);
+));
