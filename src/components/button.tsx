@@ -1,4 +1,4 @@
-import React, { useMemo, ComponentType, FC } from "react";
+import React, { useMemo, ComponentType } from "react";
 import styled, { css } from "styled-components";
 import { Link } from "react-router-dom";
 import { Theme } from "theme";
@@ -41,6 +41,7 @@ const StyledButton = styled.button<{ theme: Theme }>`
 interface Props {
   type: 'link' | 'button' | 'submit';
   mode: 'normal' | 'primary' | 'accent';
+  children?: JSX.Element | string;
   className?: string;
   to?: string;
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
@@ -57,13 +58,12 @@ function useButtonType(props: Props): [ComponentType<any>, Partial<Props>] {
   }, [type, to, onClick]);
 }
 
-export const Button: FC<Props> = props => {
+export const Button = React.forwardRef<HTMLElement, Props>((props, ref) => {
   const { mode, className } = props;
   const [Button, extraProps] = useButtonType(props);
-
   return (
-    <Button className={`${className} btn-${mode}`} {...extraProps}>
+    <Button ref={ref} className={`${className} btn-${mode}`} {...extraProps}>
       {props.children}
     </Button>
   )
-};
+});

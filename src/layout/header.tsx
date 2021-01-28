@@ -25,7 +25,7 @@ const StyledContainer = styled(Container as any)<{ theme: Theme }>`
   align-items: center;
   z-index: 1024;
 
-  @media (max-width: ${({theme}) => theme.breakpoints.medium}px) {
+  @media (max-width: ${({theme}) => theme.breakpoints.medium-1}px) {
     max-width: initial;
   }
 `;
@@ -38,7 +38,7 @@ const StyledLogoWrapper = styled.div<{ theme: Theme }>`
   flex: 0 0 auto;
   text-align: center;
 
-  @media (max-width: ${({theme}) => theme.breakpoints.medium}px) {
+  @media (max-width: ${({theme}) => theme.breakpoints.medium-1}px) {
     flex: 1 0 auto;
     margin-right: 50px;
   }

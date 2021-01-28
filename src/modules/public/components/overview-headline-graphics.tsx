@@ -1,7 +1,8 @@
-import React from "react";
+import React, { forwardRef } from "react";
 import styled from "styled-components";
+import { motion, MotionProps } from "framer-motion";
 
-const StyledSvg = styled.svg`
+const StyledSvg = styled(motion.svg)`
   filter: drop-shadow(0 0 64px rgba(43, 45, 66, .12));
 `;
 
@@ -9,14 +10,19 @@ interface Props {
   className?: string;
 }
 
-export const OverviewHeadlineGraphics: React.FC<Props> = ({className}) => (
+export const OverviewHeadlineGraphics = forwardRef<SVGSVGElement, Props & MotionProps>((props, ref) => (
   <StyledSvg
+    ref={ref}
     xmlns="http://www.w3.org/2000/svg"
     xmlnsXlink="http://www.w3.org/1999/xlink"
     width="464"
     height="349"
     viewBox="0 0 464 349"
-    className={className}
+    className={props.className}
+    initial={props.initial}
+    animate={props.animate}
+    variants={props.variants}
+    transition={props.transition}
   >
     <defs>
       <radialGradient
@@ -2504,4 +2510,4 @@ export const OverviewHeadlineGraphics: React.FC<Props> = ({className}) => (
       </g>
     </g>
   </StyledSvg>
-);
+));

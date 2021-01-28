@@ -1,11 +1,7 @@
 import styled from "styled-components";
 import { Theme } from "theme";
 
-interface Props {
-  theme: Theme;
-}
-
-export const Container = styled.div<Props>`
+export const Container = styled.div<{ theme: Theme }>`
   width: 100%;
   max-width: ${({ theme }) => theme.breakpoints.large}px;
   margin: 0 auto;

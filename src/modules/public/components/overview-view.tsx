@@ -11,7 +11,7 @@ function scrollTo<T extends Element>(ref: RefObject<T>): void {
 }
 
 export const OverviewView: React.FC = props => {
-  const nextArticleRef = useRef<Element>();
+  const nextArticleRef = useRef<HTMLDivElement>();
   return (
     <>
       <OverviewHeadline onScrollToNext={() => scrollTo(nextArticleRef)} />

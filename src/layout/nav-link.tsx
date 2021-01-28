@@ -1,14 +1,8 @@
-import React from "react";
-import styled from "styled-components";
+import React, { useContext } from "react";
+import styled, { ThemeContext } from "styled-components";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link, matchPath, useLocation } from "react-router-dom";
 import { Theme } from "theme";
-
-const spring = {
-  type: "spring",
-  stiffness: 500,
-  damping: 30
-};
 
 const StyledLink = styled(Link)<{ theme: Theme }>`
   position: relative;
@@ -26,7 +20,7 @@ const StyledLink = styled(Link)<{ theme: Theme }>`
     margin-left: ${({theme}) => theme.space.medium}px;
   }
 
-  @media (max-width: ${({theme}) => theme.breakpoints.medium}px) {
+  @media (max-width: ${({theme}) => theme.breakpoints.medium-1}px) {
     & + & {
       margin: 0;
       margin-top: ${({theme}) => theme.space.medium}px;
@@ -55,6 +49,7 @@ interface Props {
 }
 
 export const NavLink: React.FC<Props> = props => {
+  const theme = useContext<Theme>(ThemeContext);
   const location = useLocation();
   const active = isActive(props.to, location.pathname);
   return (
@@ -66,7 +61,7 @@ export const NavLink: React.FC<Props> = props => {
           initial={{ x: -24, opacity: 0 }}
           animate={{ x: 0, opacity: 1 }}
           exit={{ x: 24, opacity: 0 }}
-          transition={spring}
+          transition={theme.animations.transition}
         />)}
       </AnimatePresence>
     </StyledLink>

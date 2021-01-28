@@ -85,26 +85,22 @@ export const theme = {
     heading: "none"
   },
   animations: {
-    appearing: {
+    appear: {
       hidden: {
         opacity: 0,
-        translateY: 64,
-        scale: .90,
-        transition: {
-          duration: .2
-        }
+        y: 24,
+        scale: .90
       },
       visible: {
         opacity: 1,
-        translateY: 0,
-        scale: 1,
-        transition: {
-          duration: .2
-        }
+        y: 0,
+        scale: 1
       }
     },
     transition: {
       duration: .2,
+      stiffness: 500,
+      damping: 30,
       type: "spring"
     }
   },
