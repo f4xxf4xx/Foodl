@@ -5,6 +5,7 @@ import { AppNav } from "layout/app-nav";
 import { PublicNav } from "layout/public-nav";
 import { AppRoute } from "layout/app-route";
 import { PublicRoute } from "layout/public-route";
+import { NotFound } from "layout/not-found";
 import CartView from "modules/cart/components/cart-view";
 import { OverviewView } from "modules/public/components/overview-view";
 import RecipesView from "modules/recipes/components/recipes-view";
@@ -34,6 +35,7 @@ const App: React.FC = () => {
               <Route path="/app/recipes" component={RecipesView} />
               <Route path="/app/recipe/:slug" component={RecipeView} />
               <Route path="/app/cart" component={CartView} />
+              <Route component={NotFound} />
             </Switch>
           </MainLayout>
         </AppRoute>
@@ -43,6 +45,7 @@ const App: React.FC = () => {
               <Route path="/" exact={true} component={OverviewView} />
               <Route path="/login" exact={true} component={LoginView} />
               <Route path="/register" exact={true} component={LoginView} />
+              <Route component={NotFound} />
             </Switch>
           </MainLayout>
         </PublicRoute>
