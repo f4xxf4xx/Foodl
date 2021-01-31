@@ -13,11 +13,7 @@ import RecipeView from "modules/recipes/components/recipe-view";
 import { LoginView } from "modules/user/components/login-view";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { ThemeProvider } from 'styled-components';
-import {
-  faHome,
-  faShoppingCart,
-  faBook,
-} from "@fortawesome/free-solid-svg-icons";
+import { faHome, faShoppingCart, faBook } from "@fortawesome/free-solid-svg-icons";
 import { GlobalStyle } from 'global-style';
 import { theme } from 'theme';
 

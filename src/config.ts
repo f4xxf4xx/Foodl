@@ -3,16 +3,7 @@ import "firebase/auth";
 import "firebase/firestore";
 import "firebase/storage";
 
-export const config = {
-  appName: "foodl",
-  apiKey: "AIzaSyAvdF-pxNDyB4ZmcAHOscjrgn5OntQBLqM",
-  authDomain: "foodl-396b6.firebaseapp.com",
-  databaseURL: "https://foodl-396b6.firebaseio.com",
-  projectId: "foodl-396b6",
-  storageBucket: "foodl-396b6.appspot.com",
-  messagingSenderId: "706507477963",
-  appId: "1:706507477963:web:fde416d4d549c347",
-};
+export const config = JSON.parse(process.env.REACT_APP_FIREBASE_CONFIG);
 
 firebase.initializeApp(config);
 
