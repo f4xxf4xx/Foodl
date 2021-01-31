@@ -25,4 +25,3 @@ export const Loading: React.FC = () => (
     </SpinningBox>
   </StyledContainer>
 );
-

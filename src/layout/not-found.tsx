@@ -33,4 +33,3 @@ export const NotFound: React.FC = () => (
     </SpinningBox>
   </StyledContainer>
 );
-
