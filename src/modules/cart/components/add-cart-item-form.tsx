@@ -6,13 +6,13 @@ import { addCartItemAsync } from "store/cart/cart-actions";
 const AddCartItemForm = () => {
   const dispatch = useDispatch();
   const [newCartItem, setNewCartItem] = useState<string>("");
-  const firebase = useSelector((state: ApplicationState) => state.firebase);
+  const profile = useSelector((state: ApplicationState) => state.user.profile);
 
   const addIngredient = async () => {
     if (!newCartItem) {
       return;
     }
-    dispatch(addCartItemAsync(firebase.auth.uid, newCartItem));
+    dispatch(addCartItemAsync(profile.uid, newCartItem));
     setNewCartItem("");
   };
 

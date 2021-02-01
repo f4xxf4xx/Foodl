@@ -1,10 +1,14 @@
 import React, { useContext, useMemo, ComponentType } from "react";
+import { useSelector } from "react-redux";
 import styled, { ThemeContext } from "styled-components";
 import { motion } from "framer-motion";
 import { Theme } from "theme";
 import { Container } from "layout/container";
 import { Logo } from "components/logo";
 import { BurgerButton } from "layout/burger-button";
+import { AppNav } from "layout/app-nav";
+import { PublicNav } from "layout/public-nav";
+import { ApplicationState } from "index";
 
 const StyledHeader = styled(motion.header)<{ theme: Theme }>`
   position: sticky;
@@ -90,7 +94,6 @@ function useNavType(props: Props): [ComponentType<any>, any] {
 interface Props {
   mode: 'header' | 'drawer';
   isDrawerOpened: boolean;
-  homePath: string;
   className?: string;
   onMenuClick?: (isDrawerOpened: boolean) => void;
 }
@@ -98,6 +101,9 @@ interface Props {
 export const Header: React.FC<Props> = (props) => {
   const [Nav, extraProps] = useNavType(props);
   const isDrawerMode = props.mode === 'drawer';
+  const isAuthenticated = useSelector(
+    (state: ApplicationState) => !!state.user.profile
+  );
   
   return (
     <StyledHeader
@@ -111,9 +117,11 @@ export const Header: React.FC<Props> = (props) => {
           onClick={() => props.onMenuClick(props.isDrawerOpened)}
         />}
         <StyledLogoWrapper>
-          <Logo homePath={props.homePath} />
+          <Logo homePath={isAuthenticated ? "/app" : "/"} />
         </StyledLogoWrapper>
-        <Nav {...extraProps}>{ props.children }</Nav>
+        <Nav {...extraProps}>
+          {isAuthenticated ? <AppNav /> : <PublicNav />}
+        </Nav>
       </StyledContainer>
     </StyledHeader>
   );

@@ -7,7 +7,7 @@ import { Theme } from "theme";
 const StyledContainer = styled(Container as any)`
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  height: 66vh;
   align-items: center;
   justify-content: center;
 `;

@@ -10,7 +10,7 @@ const AddRecipeForm = (props: Props) => {
   const dispatch = useDispatch();
   const [newRecipeName, setNewRecipeName] = useState("");
   //store
-  const auth = useSelector((state: ApplicationState) => state.firebase.auth);
+  const profile = useSelector((state: ApplicationState) => state.user.profile);
   const updatingRecipes = useSelector(
     (state: ApplicationState) => state.recipes.isUpdating
   );
@@ -30,7 +30,7 @@ const AddRecipeForm = (props: Props) => {
       return;
     }
 
-    dispatch(addRecipeAsync(newRecipeName, auth.uid, props.history));
+    dispatch(addRecipeAsync(newRecipeName, profile.uid, props.history));
     setNewRecipeName("");
   };
 

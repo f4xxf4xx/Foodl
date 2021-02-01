@@ -3,19 +3,19 @@ import "firebase/auth";
 import "firebase/firestore";
 import "firebase/storage";
 
-export const config = JSON.parse(process.env.REACT_APP_FIREBASE_CONFIG);
+const config = JSON.parse(process.env.REACT_APP_FIREBASE_CONFIG);
 
 firebase.initializeApp(config);
-
 const auth = firebase.auth();
-const db = firebase.firestore();
+const firestore = firebase.firestore();
 const storage = firebase.storage();
 
+auth.useDeviceLanguage();
 if (process.env.NODE_ENV !== "production") {
-  db.settings({
+  firestore.settings({
     host: "localhost:8080",
     ssl: false,
   });
 }
 
-export { auth, db, storage, firebase };
+export { auth, firestore, storage };

@@ -1,5 +1,5 @@
 import { createAction } from "@reduxjs/toolkit";
-import { db } from "config";
+import { firestore } from "firebase-config";
 import { Recipe } from "modules/recipes/models";
 import { toast } from "react-toastify";
 import { StorageHelper } from "repositories/StorageHelper";
@@ -13,7 +13,7 @@ const updateRecipe = async (
   key: string,
   value: string
 ): Promise<void> => {
-  return await db
+  return await firestore
     .collection("recipes")
     .doc(recipeId)
     .update({
@@ -28,7 +28,7 @@ export const fetchRecipeBySlugAsync = (
 ) => async (dispatch) => {
   dispatch(setRecipeLoading(true));
 
-  const unsubscribe = await db
+  const unsubscribe = await firestore
     .collection("recipes")
     .where("uid", "==", uid)
     .where("slug", "==", slug)
@@ -67,7 +67,7 @@ export const addIngredientAsync = (
 ) => async (dispatch) => {
   dispatch(setRecipeUpdating(true));
   try {
-    const recipeRef = db.collection("recipes").doc(recipe.id);
+    const recipeRef = firestore.collection("recipes").doc(recipe.id);
     const currentRecipe = await recipeRef.get();
 
     if (currentRecipe.exists) {
@@ -89,7 +89,7 @@ export const deleteIngredientAsync = (
 ) => async (dispatch) => {
   dispatch(setRecipeUpdating(true));
   try {
-    const recipeRef = db.collection("recipes").doc(recipe.id);
+    const recipeRef = firestore.collection("recipes").doc(recipe.id);
     const currentRecipe = await recipeRef.get();
 
     if (currentRecipe.exists) {

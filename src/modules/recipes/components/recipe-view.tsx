@@ -8,8 +8,6 @@ import { Recipe } from "modules/recipes/models";
 import { useParams } from "react-router-dom";
 import { fetchRecipeBySlugAsync } from "store/recipes/recipe-actions";
 
-import "modules/recipes/components/recipe-view.css";
-
 const RecipeView: React.FC = () => {
   const dispatch = useDispatch();
   const [editing, setEditing] = useState<boolean>();
@@ -17,14 +15,14 @@ const RecipeView: React.FC = () => {
   const isLoading = useSelector(
     (state: ApplicationState) => state.recipe.isLoading
   );
-  const auth = useSelector((state: ApplicationState) => state.firebase.auth);
+  const profile = useSelector((state: ApplicationState) => state.user.profile);
   const { slug } = useParams();
 
   useEffect(() => {
-    if (auth.uid) {
-      dispatch(fetchRecipeBySlugAsync(auth.uid, slug, setRecipe));
+    if (profile.uid) {
+      dispatch(fetchRecipeBySlugAsync(profile.uid, slug, setRecipe));
     }
-  }, [auth.uid, slug, dispatch]);
+  }, [profile.uid, slug, dispatch]);
 
   return (
     <Container>

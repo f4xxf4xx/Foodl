@@ -2,8 +2,6 @@ import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { ApplicationState } from "index";
 import ContentEditable from "react-contenteditable";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faClock } from "@fortawesome/free-solid-svg-icons";
 import { updateRecipeAsync } from "store/recipes/recipe-actions";
 import { Recipe } from "modules/recipes/models";
 
@@ -61,7 +59,6 @@ const RecipeHeaderElement: React.FC<Props> = ({
           {recipe.type && <p>{recipe.type}</p>}
           {recipe.duration && (
             <p>
-              <FontAwesomeIcon size="sm" icon={faClock} />
               {` ${recipe.duration} minutes`}
             </p>
           )}

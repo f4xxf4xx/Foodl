@@ -3,10 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { ApplicationState } from "index";
 import { Container } from "layout/container";
 import AddCartItemForm from "modules/cart/components/add-cart-item-form";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrash } from "@fortawesome/free-solid-svg-icons";
 
-import "modules/cart/components/cart.css";
 import {
   fetchCartItemsAsync,
   deleteCartItemAsync,
@@ -16,19 +13,19 @@ import {
 const CartView = () => {
   const dispatch = useDispatch();
   const cart = useSelector((state: ApplicationState) => state.cart);
-  const auth = useSelector((state: ApplicationState) => state.firebase.auth);
+  const profile = useSelector((state: ApplicationState) => state.user.profile);
   const [items, setItems] = useState([]);
 
   useEffect(() => {
-    dispatch(fetchCartItemsAsync(auth.uid, setItems));
-  }, [auth.uid, dispatch]);
+    dispatch(fetchCartItemsAsync(profile.uid, setItems));
+  }, [profile.uid, dispatch]);
 
   const deleteAllCartItems = () => async () => {
-    dispatch(deleteAllCartItemsAsync(auth.uid));
+    dispatch(deleteAllCartItemsAsync(profile.uid));
   };
 
   const deleteCartItem = (cartItemName: string) => async () => {
-    dispatch(deleteCartItemAsync(auth.uid, cartItemName));
+    dispatch(deleteCartItemAsync(profile.uid, cartItemName));
   };
 
   const renderCartItems = () => {
@@ -56,7 +53,7 @@ const CartView = () => {
                   disabled={cart.isUpdating}
                   onClick={deleteCartItem(cartItem)}
                 >
-                  <FontAwesomeIcon icon={faTrash} />
+                  Delete
                 </button>
               </td>
             </tr>

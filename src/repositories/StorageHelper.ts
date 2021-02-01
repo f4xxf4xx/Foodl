@@ -1,4 +1,4 @@
-import { storage } from "config";
+import { storage } from "firebase-config";
 
 export class StorageHelper {
   public static async addFileAsync(path: string, file: File): Promise<string> {
