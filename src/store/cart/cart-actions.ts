@@ -16,8 +16,11 @@ export const fetchCartItemsAsync = (
     .collection("carts")
     .doc(uid)
     .onSnapshot((snap) => {
-      const currentItems = snap.data()["items"];
-      setItems(currentItems);
+      const cart = snap.data();
+      if(cart && cart["items"]) {
+        setItems(cart["items"]);
+
+      }
     });
 
   dispatch(setCartLoading(false));
