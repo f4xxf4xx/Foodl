@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { RouteComponentProps, withRouter } from "react-router-dom";
 import { ApplicationState } from "index";
-import { addRecipeAsync } from "store/recipes/recipes-actions";
+import { addRecipeAsync } from "modules/recipes/store/recipes-actions";
 
 type Props = RouteComponentProps;
 

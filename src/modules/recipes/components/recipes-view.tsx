@@ -9,7 +9,7 @@ import AddRecipeForm from "modules/recipes/components/add-recipe-form";
 import {
   fetchRecipesAsync,
   deleteRecipeAsync,
-} from "store/recipes/recipes-actions";
+} from "modules/recipes/store/recipes-actions";
 
 type Props = RouteComponentProps;
 

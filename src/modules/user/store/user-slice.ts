@@ -1,12 +1,12 @@
 import firebase from "firebase/app";
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk, createAction } from "@reduxjs/toolkit";
 import { auth } from "firebase-config";
 
 export interface Profile {
   uid: string;
   fullName: string;
   email: string;
-  pictureUrl: string;
+  photoUrl: string;
 }
 
 export interface UserState {
@@ -14,14 +14,18 @@ export interface UserState {
   profile?: Profile;
 }
 
-function mapUser(user: firebase.auth.UserCredential): Profile {
-  const fbUser = user && user.user;
+export function mapUser(user: firebase.User): Profile {
   return {
-    uid: fbUser.uid,
-    fullName: fbUser.displayName,
-    email: fbUser.email,
-    pictureUrl: fbUser.photoURL
+    uid: user.uid,
+    fullName: user.displayName,
+    email: user.email,
+    photoUrl: user.photoURL
   };
+}
+
+function mapUserCredential(userCredential: firebase.auth.UserCredential): Profile {
+  const user = userCredential && userCredential.user;
+  return mapUser(user)
 }
 
 export const logInWithGoogle = createAsyncThunk(
@@ -29,7 +33,7 @@ export const logInWithGoogle = createAsyncThunk(
   async () => {
     console.log('loginWithGoogle');
     const provider = new firebase.auth.GoogleAuthProvider();
-    return mapUser(await auth.signInWithPopup(provider));
+    return mapUserCredential(await auth.signInWithPopup(provider));
   }
 );
 
@@ -38,10 +42,12 @@ export const logOut = createAsyncThunk(
   () => auth.signOut()
 )
 
+export const loginAction = createAction<Profile>("SET_LOGIN");
+
 const userSlice = createSlice({
   name: "user",
   initialState: { isLoading: false } as UserState,
-  reducers: { },
+  reducers: {},
   extraReducers: builder => {
 
     builder.addCase(logInWithGoogle.pending, (state) => {
@@ -56,11 +62,13 @@ const userSlice = createSlice({
       state.isLoading = false;
       state.profile = action.payload;
     });
-
+    builder.addCase(loginAction, (state, action) => {
+      state.profile = action.payload
+    })
     builder.addCase(logOut.pending, (state) => {
       state.isLoading = true;
     });
-    
+
     builder.addCase(logOut.rejected, (state) => {
       state.isLoading = false;
     });

@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { ApplicationState } from "index";
 import AddIngredientForm from "modules/recipes/components/add-ingredient-form";
 import { Recipe } from "modules/recipes/models";
-import { deleteIngredientAsync } from "store/recipes/recipe-actions";
+import { deleteIngredientAsync } from "modules/recipes/store/recipe-actions";
 
 interface Props {
   recipe: Recipe;

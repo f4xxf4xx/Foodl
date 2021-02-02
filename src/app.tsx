@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Switch, Route } from "react-router";
 import { MainLayout } from "layout/main-layout";
 import { AppRoute } from "layout/app-route";
@@ -12,8 +12,32 @@ import { LoginView } from "modules/user/components/login-view";
 import { ThemeProvider } from 'styled-components';
 import { GlobalStyle } from 'global-style';
 import { theme } from 'theme';
+import { useDispatch } from "react-redux";
+import { auth } from "firebase-config";
+import { loginAction, mapUser } from "modules/user/store/user-slice";
 
 export const App: React.FC = () => {
+  const dispatch = useDispatch()
+  const [initializing, setInitializing] = useState(true);
+
+  function onAuthStateChanged(user) {
+    if (user) {
+      dispatch(loginAction(mapUser(user)))
+    }
+    if (initializing) {
+      setInitializing(false);
+    }
+  }
+
+  useEffect(() => {
+    const subscriber = auth.onAuthStateChanged(onAuthStateChanged);
+    return subscriber;
+  }, []);
+
+  if (initializing) {
+    return <p>Loading user...</p>
+  };
+
   return (
     <ThemeProvider theme={theme}>
       <GlobalStyle />

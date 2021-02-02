@@ -8,7 +8,7 @@ import {
   fetchCartItemsAsync,
   deleteCartItemAsync,
   deleteAllCartItemsAsync,
-} from "store/cart/cart-actions";
+} from "modules/cart/store/cart-actions";
 
 const CartView = () => {
   const dispatch = useDispatch();

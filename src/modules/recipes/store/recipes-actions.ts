@@ -1,6 +1,6 @@
 import { createAction } from "@reduxjs/toolkit";
 import { Recipe } from "modules/recipes/models";
-import { Filters } from "store/recipes/recipes-reducer";
+import { Filters } from "modules/recipes/store/recipes-reducer";
 import { toast } from "react-toastify";
 import { History } from "history";
 import { firestore } from "firebase-config";

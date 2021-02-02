@@ -6,7 +6,7 @@ import IngredientsElement from "modules/recipes/components/ingredients-element";
 import RecipeHeaderElement from "modules/recipes/components/recipe-header-element";
 import { Recipe } from "modules/recipes/models";
 import { useParams } from "react-router-dom";
-import { fetchRecipeBySlugAsync } from "store/recipes/recipe-actions";
+import { fetchRecipeBySlugAsync } from "modules/recipes/store/recipe-actions";
 
 const RecipeView: React.FC = () => {
   const dispatch = useDispatch();

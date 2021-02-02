@@ -7,6 +7,7 @@ const config = JSON.parse(process.env.REACT_APP_FIREBASE_CONFIG);
 
 firebase.initializeApp(config);
 const auth = firebase.auth();
+
 const firestore = firebase.firestore();
 const storage = firebase.storage();
 

@@ -2,7 +2,7 @@ import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { ApplicationState } from "index";
 import ContentEditable from "react-contenteditable";
-import { updateRecipeAsync } from "store/recipes/recipe-actions";
+import { updateRecipeAsync } from "modules/recipes/store/recipe-actions";
 import { Recipe } from "modules/recipes/models";
 
 interface Props {

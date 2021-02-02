@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { ApplicationState } from "index";
-import { addCartItemAsync } from "store/cart/cart-actions";
+import { addCartItemAsync } from "modules/cart/store/cart-actions";
 
 const AddCartItemForm = () => {
   const dispatch = useDispatch();
