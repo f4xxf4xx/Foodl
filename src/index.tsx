@@ -11,11 +11,12 @@ import {
   FirebaseReducer,
 } from "react-redux-firebase";
 import "react-toastify/dist/ReactToastify.css";
-import App from "App";
+import App from "app";
 import { firebase } from "config";
-import { cartReducer, CartState } from "store/cart/cartReducer";
-import { recipeReducer, RecipeState } from "store/recipes/recipeReducer";
-import { recipesReducer, RecipesState } from "store/recipes/recipesReducer";
+import { cartReducer, CartState } from "store/cart/cart-reducer";
+import { recipeReducer, RecipeState } from "store/recipes/recipe-reducer";
+import { recipesReducer, RecipesState } from "store/recipes/recipes-reducer";
+import 'index.css';
 
 const baseUrl = document.getElementsByTagName("base")[0].getAttribute("href");
 const rootElement = document.getElementById("root");
