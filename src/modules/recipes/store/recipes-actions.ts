@@ -13,12 +13,15 @@ export const updateNewRecipeId = createAction<Recipe>("UPDATE_NEW_RECIPE_ID");
 
 export const fetchRecipesAsync = (
   uid: string,
+  cookbookId: string,
   filters: Filters,
   setRecipes: React.Dispatch<React.SetStateAction<Recipe[]>>
 ) => async (dispatch) => {
   dispatch(setRecipesLoading(true));
 
-  let recipesRef = firestore.collection("recipes").where("uid", "==", uid);
+  let recipesRef = firestore.collection("recipes")
+    .where("uid", "==", uid)
+    .where("cookbookId", '==', cookbookId)
 
   if (filters) {
     if (filters.cuisine) {
@@ -72,6 +75,7 @@ export const addRecipeAsync = (
       uid,
       name,
       slug,
+      cookbookId: "1" //temp
     };
 
     await firestore.collection("recipes").add(newRecipe);

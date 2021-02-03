@@ -7,6 +7,7 @@ import { NotFound } from "layout/not-found";
 import CartView from "modules/cart/components/cart-view";
 import { OverviewView } from "modules/public/components/overview-view";
 import RecipesView from "modules/recipes/components/recipes-view";
+import CookbooksView from "modules/cookbooks/components/cookbooks-view"
 import RecipeView from "modules/recipes/components/recipe-view";
 import { LoginView } from "modules/user/components/login-view";
 import { ThemeProvider } from 'styled-components';
@@ -43,13 +44,15 @@ export const App: React.FC = () => {
       <GlobalStyle />
       <MainLayout>
         <Switch>
-          <PublicRoute path="/" exact={true} component={OverviewView} />
-          <PublicRoute path="/login" exact={true} component={LoginView} />
-          <PublicRoute path="/register" exact={true} component={LoginView} />
+          <PublicRoute path="/" exact component={OverviewView} />
+          <PublicRoute path="/login" exact component={LoginView} />
+          <PublicRoute path="/register" exact component={LoginView} />
 
-          <AppRoute path="/app/recipes" component={RecipesView} />
-          <AppRoute path="/app/recipe/:slug" component={RecipeView} />
-          <AppRoute path="/app/cart" component={CartView} />
+          <AppRoute path="/app/cookbooks" exact component={CookbooksView} />
+          <AppRoute path="/app/cookbooks/:cookbookId" exact component={RecipesView} />
+          <AppRoute path="/app/recipes" exact component={RecipesView} />
+          <AppRoute path="/app/recipe/:slug" exact component={RecipeView} />
+          <AppRoute path="/app/cart" exact component={CartView} />
           <Route component={NotFound} />
         </Switch>
       </MainLayout>

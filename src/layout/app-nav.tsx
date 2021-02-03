@@ -41,7 +41,7 @@ export const AppNav: React.FC<Props> = ({className}) => {
       <StyledNav className={className}>
         <AnimateSharedLayout>
           <NavLink to="/app" layoutId="nav-link">Home</NavLink>
-          <NavLink to="/app/recipes" layoutId="nav-link">Recipes</NavLink>
+          <NavLink to="/app/cookbooks" layoutId="nav-link">My cookbooks</NavLink>
           <NavLink to="/app/cart" layoutId="nav-link">Cart</NavLink>
         </AnimateSharedLayout>
       </StyledNav>

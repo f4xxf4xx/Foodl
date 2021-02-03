@@ -1,5 +1,6 @@
 export interface Recipe {
   id?: string;
+  cookbookId: string;
   uid: string;
   name: string;
   description?: string;

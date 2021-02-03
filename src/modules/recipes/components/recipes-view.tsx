@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { withRouter } from "react-router-dom";
-import { RouteComponentProps } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import { ApplicationState } from "index";
 import { Container } from "layout/container";
 import { Recipe } from "modules/recipes/models";
@@ -10,37 +9,41 @@ import {
   fetchRecipesAsync,
   deleteRecipeAsync,
 } from "modules/recipes/store/recipes-actions";
+import { auth } from "firebase-config";
+import { Cookbook } from "modules/cookbooks/models";
+import { fetchCookbookAsync } from "modules/cookbooks/store/cookbooks-actions";
 
-type Props = RouteComponentProps;
-
-const RecipesView = (props: Props) => {
+const RecipesView = () => {
   const dispatch = useDispatch();
+  const history = useHistory();
+  const { cookbookId } = useParams();
   const isLoading = useSelector(
     (state: ApplicationState) => state.recipes.isLoading
   );
-  const profile = useSelector((state: ApplicationState) => state.user.profile);
 
+  const uid = auth.currentUser.uid;
   const [recipes, setRecipes] = useState<Recipe[]>([]);
+  const [cookbook, setCookbook] = useState<Cookbook>();
 
   useEffect(() => {
-    dispatch(fetchRecipesAsync(profile.uid, null, setRecipes));
-  }, [profile.uid, dispatch]);
+    dispatch(fetchRecipesAsync(uid, cookbookId, null, setRecipes));
+  }, [uid, cookbookId, dispatch]);
+
+  useEffect(() => {
+    dispatch(fetchCookbookAsync(uid, cookbookId, setCookbook));
+  }, [uid, cookbookId, dispatch]);
 
   const deleteRecipe = (recipeId: string) => async () => {
     dispatch(deleteRecipeAsync(recipeId));
   };
 
-  const goToRecipePage = (slug: string) => () => {
-    props.history.push(`/recipe/${slug}`);
-  };
-
   const renderTags = (recipe: Recipe) => {
     return recipe.tags
       ? recipe.tags.map((tag, index) => (
-          <p className="recipe-card-tag" key={index}>
-            {tag}
-          </p>
-        ))
+        <p className="recipe-card-tag" key={index}>
+          {tag}
+        </p>
+      ))
       : null;
   };
 
@@ -102,23 +105,24 @@ const RecipesView = (props: Props) => {
           {isLoading ? (
             <h1>Loading...</h1>
           ) : (
-            recipes.map((recipe) => (
-              <div className="recipe-card" key={recipe.id}>
-                <img
-                  src={recipe.imageFullPath}
-                  alt={recipe.name}
-                  title={recipe.name}
-                  onClick={goToRecipePage(recipe.slug)}
-                />
-                <div>
-                  <p>{recipe.name}</p>
-                  <p>{recipe.description}</p>
-                  <div>{renderTags(recipe)}</div>
+              recipes.map((recipe) => (
+                <div className="recipe-card" key={recipe.id}>
+                  <img
+                    src="https://via.placeholder.com/150"
+                    // src={recipe.imageFullPath}
+                    alt={recipe.name}
+                    title={recipe.name}
+                    onClick={() => history.push(`/app/recipe/${recipe.slug}`)}
+                  />
+                  <div>
+                    <p>{recipe.name}</p>
+                    <p>{recipe.description}</p>
+                    <div>{renderTags(recipe)}</div>
+                  </div>
+                  <button onClick={deleteRecipe(recipe.id)}>Delete</button>
                 </div>
-                <button onClick={deleteRecipe(recipe.id)}>Delete</button>
-              </div>
-            ))
-          )}
+              ))
+            )}
         </div>
       </>
     );
@@ -126,11 +130,12 @@ const RecipesView = (props: Props) => {
 
   return (
     <Container>
-      <h3>My recipes</h3>
+      <h5><button onClick={() => history.push(`/app/cookbooks`)}>&lt;My cookbooks</button></h5>
+      <h3>{cookbook?.name}</h3>
       <AddRecipeForm />
       {renderRecipes()}
     </Container>
   );
 };
 
-export default withRouter(RecipesView);
+export default RecipesView;
