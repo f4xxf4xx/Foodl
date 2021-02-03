@@ -1,10 +1,10 @@
 import React from "react";
 import styled from "styled-components";
-import { useHistory } from "react-router-dom";
+import { useDispatch } from "react-redux";
 import { AnimateSharedLayout } from "framer-motion";
 import { Button } from "components/button";
 import { NavLink } from "layout/nav-link";
-import { firebase } from "config";
+import { logOut } from "modules/user/store/user-slice";
 import { Theme } from "theme";
 
 const StyledNav = styled.nav<{ theme: Theme}>`
@@ -30,11 +30,10 @@ interface Props {
 }
 
 export const AppNav: React.FC<Props> = ({className}) => {
-  const history = useHistory();
+  const dispatch = useDispatch();
 
   const onSignOutClick = () => {
-    firebase.auth().signOut();
-    history.push("/");
+    dispatch(logOut());
   };
 
   return (

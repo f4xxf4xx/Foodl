@@ -1,4 +1,7 @@
-## Working with your own local environment
+## Getting Started
+
+
+## Working Locally
 ### Context
 The package `firebase-tools` provides the _Firebase Local Emulator Suite_, allowing developpers to use locally emulated Firebase services instead of using production services and polluting production data.
 

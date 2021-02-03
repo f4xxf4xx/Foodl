@@ -5,7 +5,6 @@ import { useMediaQuery } from 'react-responsive'
 import { Header } from "layout/header";
 import { Footer } from "layout/footer";
 import { Theme } from "theme";
-import "layout/Styles/MainLayout.css";
 
 const StyledHeader = styled(Header)`
   flex: 0 0 auto;
@@ -36,10 +35,7 @@ function setIsWindowScrollable(isScrollable: boolean) {
   }
 }
 
-interface Props {
-  homePath: string;
-  nav: JSX.Element;
-}
+interface Props { }
 
 export const MainLayout: React.FC<Props> = (props) => {
   const theme = useContext<Theme>(ThemeContext);
@@ -55,9 +51,7 @@ export const MainLayout: React.FC<Props> = (props) => {
       <StyledHeader
         mode={isMobile ? "drawer" : "header"}
         isDrawerOpened={isDrawerOpened}
-        homePath={props.homePath}
         onMenuClick={() => setIsDrawerOpened(!isDrawerOpened)}
-        children={props.nav}
       />
       <AnimatePresence>
         {isDrawerOpened && <StyledBackdrop

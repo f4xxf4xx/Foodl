@@ -1,36 +1,29 @@
 import React from "react";
-import * as firebase from "firebase/app";
-import * as firebaseui from "firebaseui";
-import { auth } from "config";
-import { StyledLogin } from "modules/user/components/Styles/StyledLogin";
+import styled from "styled-components";
+import { useDispatch } from "react-redux";
+import { Button } from "components/button";
+import { Container } from "layout/container";
+import { logInWithGoogle } from "modules/user/store/user-slice";
+import { Theme } from "theme";
+
+const StyledContainer = styled(Container as any)<{ theme: Theme }>`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: ${({theme}) => theme.space.large}px;
+`;
 
 export const LoginView: React.FC = () => {
-  const authConfig = {
-    credentialHelper: firebaseui.auth.CredentialHelper.GOOGLE_YOLO,
-    // Popup signin flow rather than redirect flow.
-    signInFlow: "popup",
-    // Redirect to /recipes after sign in is successful. Alternatively you can provide a callbacks.signInSuccess function.
-    signInSuccessUrl: "/app",
-    signInOptions: [
-      firebase.auth.EmailAuthProvider.PROVIDER_ID,
-      firebase.auth.GoogleAuthProvider.PROVIDER_ID,
-    ],
-    callbacks: {
-      signInSuccessWithAuthResult: (authResult) => {
-        if (authResult.additionalUserInfo.isNewUser) {
-          console.log("new user");
-        }
-
-        // TODO verify if user exists in db
-        console.log("success");
-        return true;
-      },
-      signInFailure: (error) => {
-        console.log("fail");
-        return error;
-      },
-    },
-  };
-
-  return <StyledLogin uiConfig={authConfig} firebaseAuth={auth} />;
+  const dispatch = useDispatch();
+  return (
+    <StyledContainer>
+      <Button
+        type="button"
+        mode="accent"
+        onClick={() => dispatch(logInWithGoogle())}
+      >
+        Log in with Google
+      </Button>
+    </StyledContainer>
+  )
 };

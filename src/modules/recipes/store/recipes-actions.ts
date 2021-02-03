@@ -1,9 +1,9 @@
 import { createAction } from "@reduxjs/toolkit";
 import { Recipe } from "modules/recipes/models";
-import { Filters } from "store/recipes/recipes-reducer";
+import { Filters } from "modules/recipes/store/recipes-reducer";
 import { toast } from "react-toastify";
 import { History } from "history";
-import { db } from "config";
+import { firestore } from "firebase-config";
 import slugify from "react-slugify";
 
 export const setRecipesLoading = createAction<boolean>("SET_RECIPES_LOADING");
@@ -18,7 +18,7 @@ export const fetchRecipesAsync = (
 ) => async (dispatch) => {
   dispatch(setRecipesLoading(true));
 
-  let recipesRef = db.collection("recipes").where("uid", "==", uid);
+  let recipesRef = firestore.collection("recipes").where("uid", "==", uid);
 
   if (filters) {
     if (filters.cuisine) {
@@ -51,7 +51,7 @@ export const fetchRecipesAsync = (
 export const deleteRecipeAsync = (recipeId: string) => async (dispatch) => {
   dispatch(setRecipesUpdating(true));
   try {
-    await db.collection("recipes").doc(recipeId).delete();
+    await firestore.collection("recipes").doc(recipeId).delete();
     toast.success("Deleted recipe!");
   } catch (error) {
     console.log(error);
@@ -74,7 +74,7 @@ export const addRecipeAsync = (
       slug,
     };
 
-    await db.collection("recipes").add(newRecipe);
+    await firestore.collection("recipes").add(newRecipe);
     toast.success("Added!");
     history.push(`/recipe/${slug}`);
   } catch (error) {

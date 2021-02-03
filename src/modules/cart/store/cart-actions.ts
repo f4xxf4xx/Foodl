@@ -1,6 +1,6 @@
 import { createAction } from "@reduxjs/toolkit";
 import { toast } from "react-toastify";
-import { db } from "config";
+import { firestore } from "firebase-config";
 import * as firebase from "firebase/app";
 
 export const setCartLoading = createAction<boolean>("SET_CART_LOADING");
@@ -12,7 +12,7 @@ export const fetchCartItemsAsync = (
 ) => async (dispatch) => {
   dispatch(setCartLoading(true));
 
-  const unsubscribe = await db
+  const unsubscribe = await firestore
     .collection("carts")
     .doc(uid)
     .onSnapshot((snap) => {
@@ -31,7 +31,7 @@ export const fetchCartItemsAsync = (
 export const deleteAllCartItemsAsync = (uid: string) => async (dispatch) => {
   dispatch(setCartUpdating(true));
   try {
-    const cartRef = db.collection("carts").doc(uid);
+    const cartRef = firestore.collection("carts").doc(uid);
     await cartRef.set({ items: [] });
     toast.success("Deleted all!");
   } catch (error) {
@@ -46,7 +46,7 @@ export const deleteCartItemAsync = (uid: string, name: string) => async (
 ) => {
   dispatch(setCartUpdating(true));
   try {
-    const cartRef = db.collection("carts").doc(uid);
+    const cartRef = firestore.collection("carts").doc(uid);
     const cart = await cartRef.get();
 
     if (cart.exists) {
@@ -69,7 +69,7 @@ export const addCartItemAsync = (uid: string, name: string) => async (
 ) => {
   dispatch(setCartUpdating(true));
   try {
-    const cartRef = db.collection("carts").doc(uid);
+    const cartRef = firestore.collection("carts").doc(uid);
     const cart = await cartRef.get();
 
     if (cart.exists) {

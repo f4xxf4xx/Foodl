@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { ApplicationState } from "index";
-import { addIngredientAsync } from "store/recipes/recipe-actions";
+import { addIngredientAsync } from "modules/recipes/store/recipe-actions";
 import { Recipe } from "modules/recipes/models";
 
 interface Props {

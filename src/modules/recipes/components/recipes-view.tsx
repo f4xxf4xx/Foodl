@@ -9,25 +9,22 @@ import AddRecipeForm from "modules/recipes/components/add-recipe-form";
 import {
   fetchRecipesAsync,
   deleteRecipeAsync,
-} from "store/recipes/recipes-actions";
-
-import "modules/recipes/components/recipes-view.css";
+} from "modules/recipes/store/recipes-actions";
 
 type Props = RouteComponentProps;
 
 const RecipesView = (props: Props) => {
-  console.log('recipes-view');
   const dispatch = useDispatch();
   const isLoading = useSelector(
     (state: ApplicationState) => state.recipes.isLoading
   );
-  const auth = useSelector((state: ApplicationState) => state.firebase.auth);
+  const profile = useSelector((state: ApplicationState) => state.user.profile);
 
   const [recipes, setRecipes] = useState<Recipe[]>([]);
 
   useEffect(() => {
-    dispatch(fetchRecipesAsync(auth.uid, null, setRecipes));
-  }, [auth.uid, dispatch]);
+    dispatch(fetchRecipesAsync(profile.uid, null, setRecipes));
+  }, [profile.uid, dispatch]);
 
   const deleteRecipe = (recipeId: string) => async () => {
     dispatch(deleteRecipeAsync(recipeId));

@@ -1,8 +1,6 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Switch, Route } from "react-router";
 import { MainLayout } from "layout/main-layout";
-import { AppNav } from "layout/app-nav";
-import { PublicNav } from "layout/public-nav";
 import { AppRoute } from "layout/app-route";
 import { PublicRoute } from "layout/public-route";
 import { NotFound } from "layout/not-found";
@@ -11,47 +9,50 @@ import { OverviewView } from "modules/public/components/overview-view";
 import RecipesView from "modules/recipes/components/recipes-view";
 import RecipeView from "modules/recipes/components/recipe-view";
 import { LoginView } from "modules/user/components/login-view";
-import { library } from "@fortawesome/fontawesome-svg-core";
 import { ThemeProvider } from 'styled-components';
-import {
-  faHome,
-  faShoppingCart,
-  faBook,
-} from "@fortawesome/free-solid-svg-icons";
 import { GlobalStyle } from 'global-style';
 import { theme } from 'theme';
+import { useDispatch } from "react-redux";
+import { auth } from "firebase-config";
+import { loginAction, mapUser } from "modules/user/store/user-slice";
 
+export const App: React.FC = () => {
+  const dispatch = useDispatch()
+  const [initializing, setInitializing] = useState(true);
 
-library.add(faHome, faShoppingCart, faBook);
+  function onAuthStateChanged(user) {
+    if (user) {
+      dispatch(loginAction(mapUser(user)))
+    }
+    if (initializing) {
+      setInitializing(false);
+    }
+  }
 
-const App: React.FC = () => {
+  useEffect(() => {
+    const subscriber = auth.onAuthStateChanged(onAuthStateChanged);
+    return subscriber;
+  }, []);
+
+  if (initializing) {
+    return <p>Loading user...</p>
+  };
+
   return (
     <ThemeProvider theme={theme}>
       <GlobalStyle />
-      <Switch>
-        <AppRoute path="/app">
-          <MainLayout homePath="/app" nav={<AppNav />}>
-            <Switch>
-              <Route path="/app/recipes" component={RecipesView} />
-              <Route path="/app/recipe/:slug" component={RecipeView} />
-              <Route path="/app/cart" component={CartView} />
-              <Route component={NotFound} />
-            </Switch>
-          </MainLayout>
-        </AppRoute>
-        <PublicRoute path="/">
-          <MainLayout homePath="/" nav={<PublicNav />}>
-            <Switch>
-              <Route path="/" exact={true} component={OverviewView} />
-              <Route path="/login" exact={true} component={LoginView} />
-              <Route path="/register" exact={true} component={LoginView} />
-              <Route component={NotFound} />
-            </Switch>
-          </MainLayout>
-        </PublicRoute>
-      </Switch>
+      <MainLayout>
+        <Switch>
+          <PublicRoute path="/" exact={true} component={OverviewView} />
+          <PublicRoute path="/login" exact={true} component={LoginView} />
+          <PublicRoute path="/register" exact={true} component={LoginView} />
+
+          <AppRoute path="/app/recipes" component={RecipesView} />
+          <AppRoute path="/app/recipe/:slug" component={RecipeView} />
+          <AppRoute path="/app/cart" component={CartView} />
+          <Route component={NotFound} />
+        </Switch>
+      </MainLayout>
     </ThemeProvider>
   );
 };
-
-export default App;

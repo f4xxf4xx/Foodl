@@ -6,9 +6,7 @@ import IngredientsElement from "modules/recipes/components/ingredients-element";
 import RecipeHeaderElement from "modules/recipes/components/recipe-header-element";
 import { Recipe } from "modules/recipes/models";
 import { useParams } from "react-router-dom";
-import { fetchRecipeBySlugAsync } from "store/recipes/recipe-actions";
-
-import "modules/recipes/components/recipe-view.css";
+import { fetchRecipeBySlugAsync } from "modules/recipes/store/recipe-actions";
 
 const RecipeView: React.FC = () => {
   const dispatch = useDispatch();
@@ -17,14 +15,14 @@ const RecipeView: React.FC = () => {
   const isLoading = useSelector(
     (state: ApplicationState) => state.recipe.isLoading
   );
-  const auth = useSelector((state: ApplicationState) => state.firebase.auth);
+  const profile = useSelector((state: ApplicationState) => state.user.profile);
   const { slug } = useParams();
 
   useEffect(() => {
-    if (auth.uid) {
-      dispatch(fetchRecipeBySlugAsync(auth.uid, slug, setRecipe));
+    if (profile.uid) {
+      dispatch(fetchRecipeBySlugAsync(profile.uid, slug, setRecipe));
     }
-  }, [auth.uid, slug, dispatch]);
+  }, [profile.uid, slug, dispatch]);
 
   return (
     <Container>

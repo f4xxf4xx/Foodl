@@ -42,8 +42,6 @@ export function useStaggerEffect<T extends AnyElement>(
     }
   }, [point, relPoint]);
   
-  console.log('useStaggerEffect', delay, point, relPoint, ref ? ref.current : null);
-  
   return {
     ref,
     animate: isVisible ? "visible" : "hidden",

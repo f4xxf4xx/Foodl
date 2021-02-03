@@ -5,9 +5,9 @@ import { Redirect, Route, RouteProps } from "react-router-dom";
 import { Loading } from "layout/loading";
 
 export const PublicRoute: React.FC<RouteProps> = (props) => {
-  const auth = useSelector((state: ApplicationState) => state.firebase.auth);
+  const user = useSelector((state: ApplicationState) => state.user);
 
-  return auth.isLoaded
-    ? auth.isEmpty ? <Route {...props} /> : <Redirect to="/app" />
+  return !user.isLoading
+    ? !user.profile ? <Route {...props} /> : <Redirect to="/app" />
     : <Loading />;
 };
