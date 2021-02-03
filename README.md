@@ -35,10 +35,15 @@ Although many Firebase services can be emulated, some are purposely disabled, as
 
 2. Start the firebase emulators.
    ```
-   $ firebase emulators:start
+   $ firebase emulators:start --import=./test_data
    ```
    > You can now visit http://localhost:4000/ to view and edit Firestore emulator data. 
 3. Run `npm start`, as usual.
+
+4. If you want to save the Firestore db for the test user, use 
+   ```
+   $ firebase emulators:export ./test_data
+   ```
 
 ## TODOs
 
