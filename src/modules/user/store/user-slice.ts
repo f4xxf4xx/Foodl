@@ -31,7 +31,9 @@ function mapUserCredential(userCredential: firebase.auth.UserCredential): Profil
 export const logInWithGoogle = createAsyncThunk(
   "user/logInWithGoogle",
   async () => {
-    console.log('loginWithGoogle');
+    if (process.env.NODE_ENV !== "production") {
+      return mapUserCredential(await auth.signInWithCredential(firebase.auth.EmailAuthProvider.credential("test_user@test.com", "123456")))
+    }
     const provider = new firebase.auth.GoogleAuthProvider();
     return mapUserCredential(await auth.signInWithPopup(provider));
   }

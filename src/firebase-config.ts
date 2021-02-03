@@ -17,6 +17,7 @@ if (process.env.NODE_ENV !== "production") {
     host: "localhost:8080",
     ssl: false,
   });
+  auth.useEmulator('http://localhost:9099/');
 }
 
 export { auth, firestore, storage };
