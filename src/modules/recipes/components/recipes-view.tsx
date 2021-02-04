@@ -7,11 +7,17 @@ import { Recipe } from "modules/recipes/models";
 import AddRecipeForm from "modules/recipes/components/add-recipe-form";
 import {
   fetchRecipesAsync,
-  deleteRecipeAsync,
 } from "modules/recipes/store/recipes-actions";
 import { auth } from "firebase-config";
 import { Cookbook } from "modules/cookbooks/models";
 import { fetchCookbookAsync } from "modules/cookbooks/store/cookbooks-actions";
+import RecipeCard from "./recipe-card";
+import styled from "styled-components";
+import { Theme } from "theme";
+
+const StyledRecipes = styled.div<{ theme: Theme }>`
+  display: flex;
+`;
 
 const RecipesView = () => {
   const dispatch = useDispatch();
@@ -30,22 +36,12 @@ const RecipesView = () => {
   }, [uid, cookbookId, dispatch]);
 
   useEffect(() => {
-    dispatch(fetchCookbookAsync(uid, cookbookId, setCookbook));
+    if (cookbookId) {
+      dispatch(fetchCookbookAsync(uid, cookbookId, setCookbook));
+    } else {
+      setCookbook(null)
+    }
   }, [uid, cookbookId, dispatch]);
-
-  const deleteRecipe = (recipeId: string) => async () => {
-    dispatch(deleteRecipeAsync(recipeId));
-  };
-
-  const renderTags = (recipe: Recipe) => {
-    return recipe.tags
-      ? recipe.tags.map((tag, index) => (
-        <p className="recipe-card-tag" key={index}>
-          {tag}
-        </p>
-      ))
-      : null;
-  };
 
   const renderFilters = () => {
     /*
@@ -101,29 +97,9 @@ const RecipesView = () => {
     return (
       <>
         <div>{renderFilters()}</div>
-        <div className="recipes">
-          {isLoading ? (
-            <h1>Loading...</h1>
-          ) : (
-              recipes.map((recipe) => (
-                <div className="recipe-card" key={recipe.id}>
-                  <img
-                    src="https://via.placeholder.com/150"
-                    // src={recipe.imageFullPath}
-                    alt={recipe.name}
-                    title={recipe.name}
-                    onClick={() => history.push(`/app/recipe/${recipe.slug}`)}
-                  />
-                  <div>
-                    <p>{recipe.name}</p>
-                    <p>{recipe.description}</p>
-                    <div>{renderTags(recipe)}</div>
-                  </div>
-                  <button onClick={deleteRecipe(recipe.id)}>Delete</button>
-                </div>
-              ))
-            )}
-        </div>
+        <StyledRecipes>
+          {isLoading ? <h1>Loading...</h1> : recipes.map((recipe) => <RecipeCard key={recipe.id} recipe={recipe} />)}
+        </StyledRecipes>
       </>
     );
   };
@@ -132,7 +108,7 @@ const RecipesView = () => {
     <Container>
       <h5><button onClick={() => history.push(`/app/cookbooks`)}>&lt;My cookbooks</button></h5>
       <h3>{cookbook?.name}</h3>
-      <AddRecipeForm />
+      <AddRecipeForm cookbookId={cookbookId} />
       {renderRecipes()}
     </Container>
   );

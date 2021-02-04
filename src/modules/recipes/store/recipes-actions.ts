@@ -21,7 +21,10 @@ export const fetchRecipesAsync = (
 
   let recipesRef = firestore.collection("recipes")
     .where("uid", "==", uid)
-    .where("cookbookId", '==', cookbookId)
+
+  if (cookbookId) {
+    recipesRef = recipesRef.where("cookbookId", '==', cookbookId)
+  }
 
   if (filters) {
     if (filters.cuisine) {
@@ -65,6 +68,7 @@ export const deleteRecipeAsync = (recipeId: string) => async (dispatch) => {
 
 export const addRecipeAsync = (
   name: string,
+  cookbookId: string,
   uid: string,
   history: History
 ) => async (dispatch) => {
@@ -75,12 +79,12 @@ export const addRecipeAsync = (
       uid,
       name,
       slug,
-      cookbookId: "1" //temp
+      cookbookId
     };
 
     await firestore.collection("recipes").add(newRecipe);
     toast.success("Added!");
-    history.push(`/recipe/${slug}`);
+    history.push(`/app/recipe/${slug}`);
   } catch (error) {
     toast.error(error);
   } finally {
