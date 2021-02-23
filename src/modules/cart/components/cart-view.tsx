@@ -9,23 +9,24 @@ import {
   deleteCartItemAsync,
   deleteAllCartItemsAsync,
 } from "modules/cart/store/cart-actions";
+import { auth } from "firebase-config";
 
 const CartView = () => {
   const dispatch = useDispatch();
   const cart = useSelector((state: ApplicationState) => state.cart);
-  const profile = useSelector((state: ApplicationState) => state.user.profile);
   const [items, setItems] = useState([]);
+  const uid = auth.currentUser.uid;
 
   useEffect(() => {
-    dispatch(fetchCartItemsAsync(profile.uid, setItems));
-  }, [profile.uid, dispatch]);
+    dispatch(fetchCartItemsAsync(uid, setItems));
+  }, [uid, dispatch]);
 
   const deleteAllCartItems = () => async () => {
-    dispatch(deleteAllCartItemsAsync(profile.uid));
+    dispatch(deleteAllCartItemsAsync(uid));
   };
 
   const deleteCartItem = (cartItemName: string) => async () => {
-    dispatch(deleteCartItemAsync(profile.uid, cartItemName));
+    dispatch(deleteCartItemAsync(uid, cartItemName));
   };
 
   const renderCartItems = () => {

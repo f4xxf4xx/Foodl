@@ -1,19 +1,22 @@
 import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { RouteComponentProps, withRouter } from "react-router-dom";
+import { RouteComponentProps, useHistory, withRouter } from "react-router-dom";
 import { ApplicationState } from "index";
 import { addRecipeAsync } from "modules/recipes/store/recipes-actions";
+import { auth } from "firebase-config";
 
-type Props = RouteComponentProps;
+interface Props {
+  cookbookId: string;
+};
 
-const AddRecipeForm = (props: Props) => {
+const AddRecipeForm: React.FC<Props> = ({ cookbookId }) => {
   const dispatch = useDispatch();
+  const history = useHistory();
   const [newRecipeName, setNewRecipeName] = useState("");
-  //store
-  const profile = useSelector((state: ApplicationState) => state.user.profile);
   const updatingRecipes = useSelector(
     (state: ApplicationState) => state.recipes.isUpdating
   );
+  const uid = auth.currentUser.uid
 
   const updateRecipeName = (e: React.ChangeEvent<HTMLInputElement>) => {
     setNewRecipeName(e.target.value);
@@ -30,18 +33,14 @@ const AddRecipeForm = (props: Props) => {
       return;
     }
 
-    dispatch(addRecipeAsync(newRecipeName, profile.uid, props.history));
+    dispatch(addRecipeAsync(newRecipeName, cookbookId, uid, history));
     setNewRecipeName("");
-  };
-
-  const preventDefault = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
   };
 
   return (
     <div>
       <p>New recipe</p>
-      <form onSubmit={preventDefault}>
+      <form onSubmit={(e: React.FormEvent<HTMLFormElement>) => e.preventDefault()}>
         <div>
           <input
             id="input-recipe-name"
@@ -60,4 +59,4 @@ const AddRecipeForm = (props: Props) => {
   );
 };
 
-export default withRouter(AddRecipeForm);
+export default AddRecipeForm;

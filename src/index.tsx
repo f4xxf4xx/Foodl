@@ -9,6 +9,7 @@ import { userReducer, UserState } from "modules/user/store/user-slice";
 import { cartReducer, CartState } from "modules/cart/store/cart-reducer";
 import { recipeReducer, RecipeState } from "modules/recipes/store/recipe-reducer";
 import { recipesReducer, RecipesState } from "modules/recipes/store/recipes-reducer";
+import { cookbooksReducer, CookbooksState } from "modules/cookbooks/store/cookbooks-reducer";
 import "react-toastify/dist/ReactToastify.css";
 import 'index.css';
 
@@ -27,6 +28,7 @@ toast.configure({
 export interface ApplicationState {
   recipe: RecipeState;
   recipes: RecipesState;
+  cookbooks: CookbooksState;
   cart: CartState;
   user: UserState;
 }
@@ -35,6 +37,7 @@ const store = configureStore({
   reducer: {
     recipe: recipeReducer,
     recipes: recipesReducer,
+    cookbooks: cookbooksReducer,
     cart: cartReducer,
     user: userReducer
   },
